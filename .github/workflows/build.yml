@@ -12,9 +12,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
       - name: Grant execute permission
         run: chmod +x gradlew
-      - name: Submodule Update
-        run: git config --global --add safe.directory /__w/2026-Rebuilt/2026-Rebuilt && git submodule sync --recursive && git submodule update --init --recursive
       - name: Build robot code
         run: ./gradlew build
