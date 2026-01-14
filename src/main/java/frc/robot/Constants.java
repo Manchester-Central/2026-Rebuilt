@@ -28,4 +28,6 @@ public final class Constants {
     /** Replaying from a log file. */
     REPLAY
   }
+  public static final int LauncherCanId =1;
+  public static final String LauncherCanBus ="CanBus";
 }
