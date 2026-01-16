@@ -28,4 +28,16 @@ public final class Constants {
     /** Replaying from a log file. */
     REPLAY
   }
+
+  public static final String RioCanBus = "rio";
+
+  public static final class LauncherConstants {
+    public static final int LauncherCanId = 1;
+    public static final String LauncherCanBus = RioCanBus;
+  }
+  
+  public static final class IntakeConstants {
+    public static final int IntakeCanId = 10;
+    public static final String IntakeCanBus = RioCanBus;
+  }
 }
