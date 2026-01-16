@@ -13,19 +13,20 @@ public class Intake extends SubsystemBase {
   private ChaosTalonFx m_intakeMotor = new ChaosTalonFx(IntakeConstants.IntakeCanId, IntakeConstants.IntakeCanBus);
 
   /** Creates a new Intake. */
-  public Intake() {}
+  public Intake() {
+  }
 
-   /**
-     * Sets the speed of the intake between -1 and 1.
-     */
-    public void setIntakeSpeed (double speed) {
-        m_intakeMotor.setSpeed(speed);
-    }
+  /**
+   * Sets the speed of the intake between -1 and 1.
+   */
+  public void setIntakeSpeed(double speed) {
+    m_intakeMotor.setSpeed(speed);
+  }
 
-    /**
-    * Returns the intake speed.
-    */
-    public double getIntakeSpeed () {
-        return m_intakeMotor.get();
-    }
+  /**
+   * Returns the intake speed.
+   */
+  public double getIntakeSpeed() {
+    return m_intakeMotor.get();
+  }
 }
