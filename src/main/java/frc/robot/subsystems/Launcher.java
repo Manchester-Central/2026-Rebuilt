@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import com.chaos131.util.ChaosTalonFx;
+
 import frc.robot.Constants;
 
 public class Launcher {
@@ -7,7 +9,17 @@ public class Launcher {
 
     public Launcher () {} 
 
-    public void LauncherMotor100percent () {
-        m_launcherMotor.setSpeed(1.0);
+    /**
+     * Sets the speed of the launcher between -1 and 1.
+     */
+    public void setLauncherSpeed (double speed) {
+        m_launcherMotor.setSpeed(speed);
+    }
+    
+    /**
+    * Returns the launcher speed.
+    */
+    public double getLauncherSpeed () {
+        return m_launcherMotor.get();
     }
 }
