@@ -27,6 +27,7 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.util.FieldLocations;
 
 import static edu.wpi.first.units.Units.Inches;
 
@@ -49,10 +50,6 @@ public class RobotContainer {
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
-
-  //TODO: Reorganize :(
-  private final Translation2d BlueHubCenter = new Translation2d(Inches.of(181.56),Inches.of(158.32));
-  private final Translation2d RedHubCenter = new Translation2d(Inches.of(468.56),Inches.of(158.32));
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -159,10 +156,10 @@ public class RobotContainer {
                 () -> -controller.getLeftX(),
                 () -> {
                     Optional<Alliance> currAlliance = DriverStation.getAlliance();
-                    Translation2d targetPoint = BlueHubCenter;
+                    Translation2d targetPoint = FieldLocations.BlueHubCenter.toTranslation2d();
                     if (currAlliance.isEmpty()) {
                     } else if (currAlliance.get() == Alliance.Red) {
-                        targetPoint = RedHubCenter;
+                        targetPoint = FieldLocations.RedHubCenter.toTranslation2d();
                     }
                     return targetPoint.minus(drive.getPose().getTranslation()).getAngle();
                 }));
