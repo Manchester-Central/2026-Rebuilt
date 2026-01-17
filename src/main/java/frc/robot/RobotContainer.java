@@ -11,8 +11,10 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -27,6 +29,8 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 
 import static edu.wpi.first.units.Units.Inches;
+
+import java.util.Optional;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -47,7 +51,8 @@ public class RobotContainer {
   private final LoggedDashboardChooser<Command> autoChooser;
 
   //TODO: Reorganize :(
-  private final Translation2d HubCenter = new Translation2d(Inches.of(181.56),Inches.of(158.32));
+  private final Translation2d BlueHubCenter = new Translation2d(Inches.of(181.56),Inches.of(158.32));
+  private final Translation2d RedHubCenter = new Translation2d(Inches.of(468.56),Inches.of(158.32));
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -152,7 +157,15 @@ public class RobotContainer {
                 drive,
                 () -> -controller.getLeftY(),
                 () -> -controller.getLeftX(),
-                () -> HubCenter.minus(drive.getPose().getTranslation()).getAngle()));
+                () -> {
+                    Optional<Alliance> currAlliance = DriverStation.getAlliance();
+                    Translation2d targetPoint = BlueHubCenter;
+                    if (currAlliance.isEmpty()) {
+                    } else if (currAlliance.get() == Alliance.Red) {
+                        targetPoint = RedHubCenter;
+                    }
+                    return targetPoint.minus(drive.getPose().getTranslation()).getAngle();
+                }));
 
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
