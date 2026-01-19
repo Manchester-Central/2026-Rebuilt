@@ -7,8 +7,13 @@
 
 package frc.robot;
 
+import com.chaos131.poses.FieldPose2026;
+import com.chaos131.vision.CameraSpecs;
+import com.chaos131.vision.LimelightCamera;
+import com.chaos131.vision.LimelightCamera.LimelightVersion;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -21,17 +26,17 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.Camera;
+import frc.robot.subsystems.Quest;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
-import frc.robot.util.FieldLocations;
 
-import static edu.wpi.first.units.Units.Inches;
-
-import java.util.Optional;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -44,7 +49,8 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
-
+  private Quest quest;
+  private Camera camera;
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
 
@@ -65,6 +71,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
+        quest = new Quest(drive);
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
@@ -107,6 +114,13 @@ public class RobotContainer {
                 new ModuleIO() {});
         break;
     }
+    camera = new Camera("LimeLight",
+            LimelightVersion.LL3G,
+            LimelightCamera.LL3GSpecs(),
+            () -> drive.getPose(),
+            (data) -> drive.addVisionMeasurement(data.getPose2d(), data.getTimestampSeconds(), data.getDeviationMatrix()),
+            () -> drive.getSpeed().in(MetersPerSecond),
+            () -> drive.getRotationalSpeed().in(RotationsPerSecond));
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -155,12 +169,7 @@ public class RobotContainer {
                 () -> -controller.getLeftY(),
                 () -> -controller.getLeftX(),
                 () -> {
-                    Optional<Alliance> currAlliance = DriverStation.getAlliance();
-                    Translation2d targetPoint = FieldLocations.BlueHubCenter.toTranslation2d();
-                    if (currAlliance.isEmpty()) {
-                    } else if (currAlliance.get() == Alliance.Red) {
-                        targetPoint = FieldLocations.RedHubCenter.toTranslation2d();
-                    }
+                    Translation2d targetPoint = FieldPose2026.HubCenter.getCurrentAlliancePose().getTranslation();
                     return targetPoint.minus(drive.getPose().getTranslation()).getAngle();
                 }));
 

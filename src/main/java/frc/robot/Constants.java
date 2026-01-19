@@ -7,6 +7,11 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Inches;
+
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -39,5 +44,12 @@ public final class Constants {
   public static final class IntakeConstants {
     public static final int IntakeCanId = 10;
     public static final String IntakeCanBus = RioCanBus;
+  }
+
+  public static final class questconstants {
+    public static final Distance RobotToQuestXInches = Inches.of(5);
+    public static final Distance robottoquestyinches = Inches.of(5);
+    public static final Distance RobotToQuestZInches = Inches.of(5);
+    public static final Rotation3d ROBOTTOQUESTR_ROTATION2D = Rotation3d.kZero;
   }
 }
