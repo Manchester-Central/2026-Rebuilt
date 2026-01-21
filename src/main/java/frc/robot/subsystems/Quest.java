@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.drive.Drive;
 import gg.questnav.questnav.PoseFrame;
 import gg.questnav.questnav.QuestNav;
-import frc.robot.Constants.questconstants;
+import frc.robot.Constants.QuestConstants;
 
 /**
  * A wrapper for the vendordep version of the QuestNav system
@@ -32,10 +32,10 @@ public class Quest extends SubsystemBase {
   // Need to validate what the quest uses as its origin,
   // this may be wrong
   private Transform3d robotToQuest = new Transform3d(
-    questconstants.RobotToQuestXInches, 
-    questconstants.robottoquestyinches,
-    questconstants.RobotToQuestZInches,
-    questconstants.ROBOTTOQUESTR_ROTATION2D);
+    QuestConstants.RobotToQuestXInches, 
+    QuestConstants.RobotToQuestYInches,
+    QuestConstants.RobotToQuestZInches,
+    QuestConstants.RobotToQuestRotation);
   
   // To keep a reference of the swerve drive for sending pose updates
   private Drive m_swerveDrive;
