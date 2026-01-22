@@ -7,20 +7,23 @@
 
 package frc.robot;
 
+import com.chaos131.poses.FieldPose2026;
+import com.chaos131.vision.LimelightCamera;
+import com.chaos131.vision.LimelightCamera.LimelightVersion;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.Camera;
+import frc.robot.subsystems.Quest;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -28,9 +31,8 @@ import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 
-import static edu.wpi.first.units.Units.Inches;
-
-import java.util.Optional;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -43,16 +45,15 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
-
+  @SuppressWarnings("unused")
+  private Quest quest;
+  @SuppressWarnings("unused")
+  private Camera camera;
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
-
-  //TODO: Reorganize :(
-  private final Translation2d BlueHubCenter = new Translation2d(Inches.of(181.56),Inches.of(158.32));
-  private final Translation2d RedHubCenter = new Translation2d(Inches.of(468.56),Inches.of(158.32));
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -68,6 +69,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
+        quest = new Quest(drive);
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
@@ -110,6 +112,13 @@ public class RobotContainer {
                 new ModuleIO() {});
         break;
     }
+    camera = new Camera("LimeLight",
+            LimelightVersion.LL3G,
+            LimelightCamera.LL3GSpecs(),
+            () -> drive.getPose(),
+            (data) -> drive.addVisionMeasurement(data.getPose2d(), data.getTimestampSeconds(), data.getDeviationMatrix()),
+            () -> drive.getSpeed().in(MetersPerSecond),
+            () -> drive.getRotationalSpeed().in(RotationsPerSecond));
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -158,12 +167,7 @@ public class RobotContainer {
                 () -> -controller.getLeftY(),
                 () -> -controller.getLeftX(),
                 () -> {
-                    Optional<Alliance> currAlliance = DriverStation.getAlliance();
-                    Translation2d targetPoint = BlueHubCenter;
-                    if (currAlliance.isEmpty()) {
-                    } else if (currAlliance.get() == Alliance.Red) {
-                        targetPoint = RedHubCenter;
-                    }
+                    Translation2d targetPoint = FieldPose2026.HubCenter.getCurrentAlliancePose().getTranslation();
                     return targetPoint.minus(drive.getPose().getTranslation()).getAngle();
                 }));
 
