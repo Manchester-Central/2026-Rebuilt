@@ -37,10 +37,17 @@ public final class Constants {
   public static final String RioCanBus = "rio";
 
   public static final class LauncherConstants {
-    public static final int LauncherCanId = 1;
+    public static final int FlywheelCanId = 1;
     public static final String LauncherCanBus = RioCanBus;
+    public static final int IndexerCanId = 2;
+    public static final int TurretCanId = 3;
   }
   
+  public static final class ClimberConstants {
+    public static final String ClimberCanBus = RioCanBus;
+    public static final int ClimberCanId = 4;
+  }
+
   public static final class IntakeConstants {
     public static final int IntakeCanId = 10;
     public static final String IntakeCanBus = RioCanBus;
