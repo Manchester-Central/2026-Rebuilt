@@ -43,6 +43,11 @@ public final class Constants {
     public static final int TurretCanId = 3;
   }
   
+  public static final class ClimberConstants {
+    public static final String ClimberCanBus = RioCanBus;
+    public static final int ClimberCanId = 4;
+  }
+
   public static final class IntakeConstants {
     public static final int IntakeCanId = 10;
     public static final String IntakeCanBus = RioCanBus;
