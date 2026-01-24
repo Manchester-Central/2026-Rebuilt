@@ -19,10 +19,13 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Camera;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Quest;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -30,6 +33,7 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.launcher.Launcher;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
@@ -44,14 +48,20 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
  */
 public class RobotContainer {
   // Subsystems
-  private final Drive drive;
+  private final Drive m_swerveDrive;
   @SuppressWarnings("unused")
-  private Quest quest;
+  private Quest m_quest;
   @SuppressWarnings("unused")
-  private Camera camera;
+  private Camera m_camera;
+  private Climber m_climber;
+  private Launcher m_launcher;
+  private Intake m_intake;
   // Controller
-  private final CommandXboxController controller = new CommandXboxController(0);
+  private final CommandXboxController m_driver = new CommandXboxController(0);
+  private final CommandXboxController m_operator = new CommandXboxController(1);
 
+  private final boolean m_isManual = true;
+  private final Trigger m_isManualTrigger = new Trigger(() -> m_isManual);
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
@@ -62,14 +72,17 @@ public class RobotContainer {
         // Real robot, instantiate hardware IO implementations
         // ModuleIOTalonFX is intended for modules with TalonFX drive, TalonFX turn, and
         // a CANcoder
-        drive =
+        m_swerveDrive =
             new Drive(
                 new GyroIOPigeon2(),
                 new ModuleIOTalonFX(TunerConstants.FrontLeft),
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
-        quest = new Quest(drive);
+        m_quest = new Quest(m_swerveDrive);
+        m_climber = new Climber();
+        m_launcher = new Launcher();
+        m_intake = new Intake ();
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
@@ -92,7 +105,7 @@ public class RobotContainer {
 
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
-        drive =
+        m_swerveDrive =
             new Drive(
                 new GyroIO() {},
                 new ModuleIOSim(TunerConstants.FrontLeft),
@@ -103,7 +116,7 @@ public class RobotContainer {
 
       default:
         // Replayed robot, disable IO implementations
-        drive =
+        m_swerveDrive =
             new Drive(
                 new GyroIO() {},
                 new ModuleIO() {},
@@ -112,32 +125,32 @@ public class RobotContainer {
                 new ModuleIO() {});
         break;
     }
-    camera = new Camera("LimeLight",
+    m_camera = new Camera("LimeLight",
             LimelightVersion.LL3G,
             LimelightCamera.LL3GSpecs(),
-            () -> drive.getPose(),
-            (data) -> drive.addVisionMeasurement(data.getPose2d(), data.getTimestampSeconds(), data.getDeviationMatrix()),
-            () -> drive.getSpeed().in(MetersPerSecond),
-            () -> drive.getRotationalSpeed().in(RotationsPerSecond));
+            () -> m_swerveDrive.getPose(),
+            (data) -> m_swerveDrive.addVisionMeasurement(data.getPose2d(), data.getTimestampSeconds(), data.getDeviationMatrix()),
+            () -> m_swerveDrive.getSpeed().in(MetersPerSecond),
+            () -> m_swerveDrive.getRotationalSpeed().in(RotationsPerSecond));
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     // Set up SysId routines
     autoChooser.addOption(
-        "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
+        "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(m_swerveDrive));
     autoChooser.addOption(
-        "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
+        "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(m_swerveDrive));
     autoChooser.addOption(
         "Drive SysId (Quasistatic Forward)",
-        drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        m_swerveDrive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
         "Drive SysId (Quasistatic Reverse)",
-        drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        m_swerveDrive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
     autoChooser.addOption(
-        "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        "Drive SysId (Dynamic Forward)", m_swerveDrive.sysIdDynamic(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
-        "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        "Drive SysId (Dynamic Reverse)", m_swerveDrive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -151,39 +164,42 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Default command, normal field-relative drive
-    drive.setDefaultCommand(
+    m_swerveDrive.setDefaultCommand(
         DriveCommands.joystickDrive(
-            drive,
-            () -> -controller.getLeftY(),
-            () -> -controller.getLeftX(),
-            () -> -controller.getRightX()));
+            m_swerveDrive,
+            () -> -m_driver.getLeftY(),
+            () -> -m_driver.getLeftX(),
+            () -> -m_driver.getRightX()));
 
+    m_climber.setDefaultCommand();        
     // Lock to 0° when A button is held
-    controller
+    m_driver
         .a()
         .whileTrue(
             DriveCommands.joystickDriveAtAngle(
-                drive,
-                () -> -controller.getLeftY(),
-                () -> -controller.getLeftX(),
+                m_swerveDrive,
+                () -> -m_driver.getLeftY(),
+                () -> -m_driver.getLeftX(),
                 () -> {
                     Translation2d targetPoint = FieldPose2026.HubCenter.getCurrentAlliancePose().getTranslation();
-                    return targetPoint.minus(drive.getPose().getTranslation()).getAngle();
+                    return targetPoint.minus(m_swerveDrive.getPose().getTranslation()).getAngle();
                 }));
 
     // Switch to X pattern when X button is pressed
-    controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    m_driver.x().onTrue(Commands.runOnce(m_swerveDrive::stopWithX, m_swerveDrive));
 
     // Reset gyro to 0° when B button is pressed
-    controller
+    m_driver
         .b()
         .onTrue(
             Commands.runOnce(
                     () ->
-                        drive.setPose(
-                            new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
-                    drive)
+                        m_swerveDrive.setPose(
+                            new Pose2d(m_swerveDrive.getPose().getTranslation(), Rotation2d.kZero)),
+                    m_swerveDrive)
                 .ignoringDisable(true));
+
+    
   }
 
   /**
