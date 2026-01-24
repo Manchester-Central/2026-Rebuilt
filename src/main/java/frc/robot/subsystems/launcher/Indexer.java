@@ -8,7 +8,7 @@ public class Indexer {
     private ChaosTalonFx m_indexerMotor = new ChaosTalonFx(LauncherConstants.IndexerCanId, LauncherConstants.LauncherCanBus);
 
     public void setIndexerSpeed (double speed) {
-        m_indexerMotor.setSpeed (speed);
+        m_indexerMotor.set(speed);
     }
 
     public double getIndexerSpeed () {

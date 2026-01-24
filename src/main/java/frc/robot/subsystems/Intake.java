@@ -20,7 +20,7 @@ public class Intake extends SubsystemBase {
    * Sets the speed of the intake between -1 and 1.
    */
   public void setIntakeSpeed(double speed) {
-    m_intakeMotor.setSpeed(speed);
+    m_intakeMotor.set(speed);
   }
 
   /**

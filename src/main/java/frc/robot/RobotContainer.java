@@ -179,7 +179,7 @@ public class RobotContainer {
             () -> -m_driver.getLeftX(),
             () -> -m_driver.getRightX()));
 
-    m_climber.setDefaultCommand(new ClimberDefaultCommand(m_climber, () -> m_operator.getRightY(), m_isManualTrigger));        
+    m_climber.setDefaultCommand(new ClimberDefaultCommand(m_climber, m_operator::getRightY, m_isManualTrigger));        
     // Lock to 0° when A button is held
     m_driver
         .a()

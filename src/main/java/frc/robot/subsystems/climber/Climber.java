@@ -5,13 +5,17 @@
 package frc.robot.subsystems.climber;
 
 import static edu.wpi.first.units.Units.Amps;
-import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 
 import com.chaos131.util.ChaosTalonFx;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.sim.ChassisReference;
+import com.ctre.phoenix6.sim.TalonFXSimState.MotorType;
 
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.Constants.ClimberConstants;
@@ -34,12 +38,18 @@ public class Climber extends SubsystemBase implements IClimber {
     m_climberMotor.Configuration.MotorOutput.NeutralMode = ClimberConstants.NeutralMode;
 
     m_climberMotor.applyConfig();
+    
+    if (Robot.isSimulation()) {
+      var m_dcMotor = DCMotor.getKrakenX60(1); // TODO: double check
+      var m_dcMotorSim = new DCMotorSim(
+        LinearSystemId.createElevatorSystem(m_dcMotor, 2, 0.05, ClimberConstants.SensorToMechanismRatio), // TODO: double check
+        m_dcMotor
+      );
+      m_climberMotor.attachMotorSim(m_dcMotorSim, ClimberConstants.SensorToMechanismRatio, true, ChassisReference.CounterClockwise_Positive, MotorType.KrakenX60);
+    }
   }
 
   public Distance getHeight() {
-    if (Robot.isSimulation()) {
-      return Inches.of(8); // TODO: Replace with sim code
-    }
     return Meters.of(m_climberMotor.getPosition().getValueAsDouble());
   }
 
@@ -49,10 +59,15 @@ public class Climber extends SubsystemBase implements IClimber {
     } else if (getHeight().gt(ClimberConstants.MaxExtension) && speed > 0) {
       speed = 0;
     }
-    m_climberMotor.setSpeed(speed);
+    m_climberMotor.set(speed);
   }
 
   public double getClimberSpeed() {
     return m_climberMotor.get();
+  }
+
+  @Override
+  public void simulationPeriodic() {
+    m_climberMotor.simulationPeriodic();
   }
 }
