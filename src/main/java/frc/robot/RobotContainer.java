@@ -25,9 +25,10 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.commands.defaults.ClimberDefaultCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Camera;
-import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Quest;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.IClimber;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -54,7 +55,7 @@ public class RobotContainer {
   private Quest m_quest;
   @SuppressWarnings("unused")
   private Camera m_camera;
-  private Climber m_climber;
+  private IClimber m_climber;
   private Launcher m_launcher;
   private Intake m_intake;
   // Controller

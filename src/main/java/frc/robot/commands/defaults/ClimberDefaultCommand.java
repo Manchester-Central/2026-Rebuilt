@@ -9,16 +9,16 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ClimberConstants;
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.climber.IClimber;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ClimberDefaultCommand extends Command {
-  Climber m_climber;
+  IClimber m_climber;
   DoubleSupplier m_climberSpeed;
   BooleanSupplier m_isManualMode;
 
   /** Creates a new ClimberDefaultCommand. */
-  public ClimberDefaultCommand(Climber climber, DoubleSupplier climberSpeed, BooleanSupplier isManualMode) {
+  public ClimberDefaultCommand(IClimber climber, DoubleSupplier climberSpeed, BooleanSupplier isManualMode) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_climber = climber;
     m_climberSpeed = climberSpeed;
