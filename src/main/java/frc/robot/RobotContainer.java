@@ -28,6 +28,7 @@ import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Quest;
 import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.ClimberMech2D;
 import frc.robot.subsystems.climber.IClimber;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -56,6 +57,7 @@ public class RobotContainer {
   @SuppressWarnings("unused")
   private Camera m_camera;
   private IClimber m_climber;
+  private ClimberMech2D m_climberMech2d;
   private Launcher m_launcher;
   private Intake m_intake;
   // Controller
@@ -82,9 +84,6 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
         m_quest = new Quest(m_swerveDrive);
-        m_climber = new Climber();
-        m_launcher = new Launcher();
-        m_intake = new Intake ();
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
@@ -134,6 +133,13 @@ public class RobotContainer {
             (data) -> m_swerveDrive.addVisionMeasurement(data.getPose2d(), data.getTimestampSeconds(), data.getDeviationMatrix()),
             () -> m_swerveDrive.getSpeed().in(MetersPerSecond),
             () -> m_swerveDrive.getRotationalSpeed().in(RotationsPerSecond));
+
+    m_climber = new Climber();
+    m_climberMech2d = new ClimberMech2D(m_climber);
+
+    m_launcher = new Launcher();
+
+    m_intake = new Intake ();
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());

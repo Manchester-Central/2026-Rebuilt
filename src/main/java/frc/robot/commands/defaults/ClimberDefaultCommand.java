@@ -23,6 +23,7 @@ public class ClimberDefaultCommand extends Command {
     m_climber = climber;
     m_climberSpeed = climberSpeed;
     m_isManualMode = isManualMode;
+    System.out.println(climber);
 
     addRequirements(m_climber);
   }
