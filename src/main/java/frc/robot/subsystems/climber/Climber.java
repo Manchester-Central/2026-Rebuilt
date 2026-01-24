@@ -5,6 +5,7 @@
 package frc.robot.subsystems.climber;
 
 import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 
 import com.chaos131.util.ChaosTalonFx;
@@ -12,6 +13,7 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.Constants.ClimberConstants;
 
 public class Climber extends SubsystemBase implements IClimber {
@@ -35,6 +37,9 @@ public class Climber extends SubsystemBase implements IClimber {
   }
 
   public Distance getHeight() {
+    if (Robot.isSimulation()) {
+      return Inches.of(8); // TODO: Replace with sim code
+    }
     return Meters.of(m_climberMotor.getPosition().getValueAsDouble());
   }
 
