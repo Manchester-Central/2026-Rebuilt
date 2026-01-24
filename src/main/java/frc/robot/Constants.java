@@ -9,6 +9,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.Inches;
 
+import com.chaos131.util.DashboardNumber;
+
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.units.measure.Distance;
@@ -46,6 +48,8 @@ public final class Constants {
   public static final class ClimberConstants {
     public static final String ClimberCanBus = RioCanBus;
     public static final int ClimberCanId = 4;
+
+    public static final DashboardNumber ManualSpeedMultiplier = new DashboardNumber("Climber/ManualSpeedMultiplier", 0.1, true, (x) -> {});
   }
 
   public static final class IntakeConstants {

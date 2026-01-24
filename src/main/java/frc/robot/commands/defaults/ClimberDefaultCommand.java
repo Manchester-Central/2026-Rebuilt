@@ -4,13 +4,27 @@
 
 package frc.robot.commands.defaults;
 
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ClimberConstants;
+import frc.robot.subsystems.Climber;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ClimberDefaultCommand extends Command {
+  Climber m_climber;
+  DoubleSupplier m_climberSpeed;
+  BooleanSupplier m_isManualMode;
+
   /** Creates a new ClimberDefaultCommand. */
-  public ClimberDefaultCommand() {
+  public ClimberDefaultCommand(Climber climber, DoubleSupplier climberSpeed, BooleanSupplier isManualMode) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_climber = climber;
+    m_climberSpeed = climberSpeed;
+    m_isManualMode = isManualMode;
+
+    addRequirements(m_climber);
   }
 
   // Called when the command is initially scheduled.
@@ -19,7 +33,11 @@ public class ClimberDefaultCommand extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if (m_isManualMode.getAsBoolean()) {
+      m_climber.setClimberSpeed(m_climberSpeed.getAsDouble() * ClimberConstants.ManualSpeedMultiplier.get());
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override
