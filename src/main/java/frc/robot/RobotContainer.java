@@ -21,7 +21,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.drive.AbstractDrive;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.DriveMapleSim;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
@@ -42,7 +44,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
  */
 public class RobotContainer {
   // Subsystems
-  private final Drive drive;
+  private final AbstractDrive drive;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -97,6 +99,10 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
+        break;
+
+      case ARENA:
+        drive = new DriveMapleSim(new Pose2d());
         break;
 
       default:
