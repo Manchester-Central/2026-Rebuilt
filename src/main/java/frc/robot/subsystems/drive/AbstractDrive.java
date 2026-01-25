@@ -12,6 +12,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -50,6 +52,17 @@ public abstract class AbstractDrive extends SubsystemBase {
   public abstract Pose2d getPose();
 
   public abstract Rotation2d getRotation();
+  /**
+   * @return the robot relative velocity in vector form, units are in meters per second
+   */
+  public abstract Translation2d getVelocityVector();
+
+  /**
+   * @return the speed of the robot, based on the robot relative velocity vector
+   */
+  public abstract LinearVelocity getSpeed();
+
+  public abstract AngularVelocity getRotationalSpeed();
 
   public abstract void setPose(Pose2d pose);
 
