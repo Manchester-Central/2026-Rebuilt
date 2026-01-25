@@ -31,6 +31,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -151,7 +153,7 @@ public class Drive extends AbstractDrive {
 
     // Stop moving when disabled
     if (DriverStation.isDisabled()) {
-      for (var module : modules) {
+      for (var module : modules) { 
         module.stop();
       }
     }
@@ -220,6 +222,25 @@ public class Drive extends AbstractDrive {
 
     // Log optimized setpoints (runSetpoint mutates each state)
     Logger.recordOutput("SwerveStates/SetpointsOptimized", setpointStates);
+  }
+
+  /**
+   * @return the robot relative velocity in vector form, units are in meters per second
+   */
+  public Translation2d getVelocityVector() {
+    var chassisSpeeds = getChassisSpeeds();
+    return new Translation2d(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
+  }
+
+  /**
+   * @return the speed of the robot, based on the robot relative velocity vector
+   */
+  public LinearVelocity getSpeed() {
+    return MetersPerSecond.of(getVelocityVector().getNorm());
+  }
+
+  public AngularVelocity getRotationalSpeed() {
+    return RadiansPerSecond.of(getChassisSpeeds().omegaRadiansPerSecond);
   }
 
   /** Runs the drive in a straight line with the specified drive output. */
