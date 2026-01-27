@@ -86,7 +86,7 @@ public class Climber extends SubsystemBase implements IClimber {
       targetHeight = ClimberConstants.MinExtension;
     }
 
-    m_climberMotor.moveToPosition(height);
+    m_climberMotor.moveToPosition(height.in(Meters));
   }
 
   public void setClimberSpeed(double speed) {
