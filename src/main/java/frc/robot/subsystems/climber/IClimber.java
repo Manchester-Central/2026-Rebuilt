@@ -11,5 +11,6 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 public interface IClimber extends Subsystem {
     public void setClimberSpeed(double speed);
     public double getClimberSpeed();
+    public void setHeight(Distance height);
     public Distance getHeight();
 }
