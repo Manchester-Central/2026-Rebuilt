@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import com.chaos131.gamepads.Gamepad;
 import com.chaos131.poses.FieldPose2026;
 import com.chaos131.vision.LimelightCamera;
 import com.chaos131.vision.LimelightCamera.LimelightVersion;
@@ -63,8 +64,8 @@ public class RobotContainer {
   private Launcher m_launcher;
   private Intake m_intake;
   // Controller
-  private final CommandXboxController m_driver = new CommandXboxController(0);
-  private final CommandXboxController m_operator = new CommandXboxController(1);
+  private final Gamepad m_driver = new Gamepad(0);
+  private final Gamepad m_operator = new Gamepad(1);
 
   private final boolean m_isManual = true;
   private final Trigger m_isManualTrigger = new Trigger(() -> m_isManual);
