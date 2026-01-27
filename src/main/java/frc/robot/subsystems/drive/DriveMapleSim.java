@@ -1,5 +1,9 @@
 package frc.robot.subsystems.drive;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+
+import org.dyn4j.geometry.Vector2;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
 
@@ -15,6 +19,7 @@ import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.subsystems.MultiplayerSim.MultiplayerArena;
 
 public class DriveMapleSim extends AbstractDrive {
   private DriveTrainSimulationConfig m_swerveConfig;
@@ -22,6 +27,7 @@ public class DriveMapleSim extends AbstractDrive {
 
   public DriveMapleSim(Pose2d initialPose) {
     m_simSwerve = new SwerveDriveSimulation(m_swerveConfig, getPose());
+    MultiplayerArena.Instance.addDriveTrainSimulation(m_simSwerve);
   }
 
   @Override
@@ -97,21 +103,31 @@ public class DriveMapleSim extends AbstractDrive {
     return;
   }
 
+  /**
+   * Returns the velocity vector of the drive train,
+   * units come from getVelocity3dMPS in MapleSim.
+   */
   @Override
   public Translation2d getVelocityVector() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getVelocityVector'");
+    Vector2 lv = m_simSwerve.getLinearVelocity();
+    return new Translation2d(lv.x, lv.y);
   }
 
+  /**
+   * Returns the LinearSpeed unit form of getVelocityVector().
+   */
   @Override
   public LinearVelocity getSpeed() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getSpeed'");
+    return MetersPerSecond.of(getVelocityVector().getNorm());
   }
 
+  /**
+   * Returns the angular velocity of the simulated drive train,
+   * units come from omegaRadiansPerSecond in MapleSim.
+   */
   @Override
   public AngularVelocity getRotationalSpeed() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getRotationalSpeed'");
+    var av = m_simSwerve.getAngularVelocity();
+    return RadiansPerSecond.of(av);
   }
 }

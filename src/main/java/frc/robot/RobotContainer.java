@@ -72,7 +72,7 @@ public class RobotContainer {
   private final LoggedDashboardChooser<Command> autoChooser;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
+  public RobotContainer(int id, Pose2d startPose) {
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -118,7 +118,7 @@ public class RobotContainer {
         break;
 
       case ARENA:
-        m_swerveDrive = new DriveMapleSim(new Pose2d());
+        m_swerveDrive = new DriveMapleSim(startPose);
         break;
 
       default:

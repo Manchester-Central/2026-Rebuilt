@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.MultiplayerSim.MultiplayerArena;
@@ -73,7 +74,8 @@ public class Robot extends LoggedRobot {
 
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
-    robotContainer = new RobotContainer();
+    robotContainer = new RobotContainer(0, new Pose2d());
+    MultiplayerArena.init();
   }
 
   /** This function is called periodically during all modes. */
@@ -97,7 +99,9 @@ public class Robot extends LoggedRobot {
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    MultiplayerArena.Instance.prepareMatch();
+  }
 
   /** This function is called periodically when disabled. */
   @Override
@@ -148,7 +152,6 @@ public class Robot extends LoggedRobot {
   /** This function is called once when the robot is first started up. */
   @Override
   public void simulationInit() {
-    MultiplayerArena.init();
   }
 
   /** This function is called periodically whilst in simulation. */
