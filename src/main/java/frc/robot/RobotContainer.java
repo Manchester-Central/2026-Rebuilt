@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import com.chaos131.gamepads.Gamepad;
 import com.chaos131.poses.FieldPose2026;
 import com.chaos131.vision.LimelightCamera;
 import com.chaos131.vision.LimelightCamera.LimelightVersion;
@@ -25,9 +26,11 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.commands.defaults.ClimberDefaultCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Camera;
-import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Quest;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.ClimberMech2D;
+import frc.robot.subsystems.climber.IClimber;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -54,12 +57,13 @@ public class RobotContainer {
   private Quest m_quest;
   @SuppressWarnings("unused")
   private Camera m_camera;
-  private Climber m_climber;
+  private IClimber m_climber;
+  private ClimberMech2D m_climberMech2d;
   private Launcher m_launcher;
   private Intake m_intake;
   // Controller
-  private final CommandXboxController m_driver = new CommandXboxController(0);
-  private final CommandXboxController m_operator = new CommandXboxController(1);
+  private final Gamepad m_driver = new Gamepad(0);
+  private final Gamepad m_operator = new Gamepad(1);
 
   private final boolean m_isManual = true;
   private final Trigger m_isManualTrigger = new Trigger(() -> m_isManual);
@@ -81,9 +85,6 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
         m_quest = new Quest(m_swerveDrive);
-        m_climber = new Climber();
-        m_launcher = new Launcher();
-        m_intake = new Intake ();
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
@@ -134,6 +135,13 @@ public class RobotContainer {
             () -> m_swerveDrive.getSpeed().in(MetersPerSecond),
             () -> m_swerveDrive.getRotationalSpeed().in(RotationsPerSecond));
 
+    m_climber = new Climber();
+    m_climberMech2d = new ClimberMech2D(m_climber);
+
+    m_launcher = new Launcher();
+
+    m_intake = new Intake ();
+
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
@@ -172,7 +180,7 @@ public class RobotContainer {
             () -> -m_driver.getLeftX(),
             () -> -m_driver.getRightX()));
 
-    m_climber.setDefaultCommand(new ClimberDefaultCommand(m_climber, () -> m_operator.getRightY(), m_isManualTrigger));        
+    m_climber.setDefaultCommand(new ClimberDefaultCommand(m_climber, m_operator::getRightY, m_isManualTrigger));        
     // Lock to 0° when A button is held
     m_driver
         .a()

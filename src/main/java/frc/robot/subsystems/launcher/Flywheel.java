@@ -11,7 +11,7 @@ public class Flywheel {
      * Sets the speed of the flywheel between -1 and 1.
      */
     public void setFlywheelSpeed (double speed) {
-        m_flywheelMotor.setSpeed(speed);
+        m_flywheelMotor.set(speed);
     }
 
     /**
