@@ -66,10 +66,10 @@ public final class Constants {
     public static final Current StatorCurrentLimit = Amps.of(20); // TODO: Double Check
 
     // Slot 0 Configs
-    public static final double kP = 0;
-    public static final double kI = 0;
-    public static final double kD = 0;
-    public static final double kG = 0;
+    public static final double kP = 4; //TODO: CHECK THESE PLEASE
+    public static final double kI = 0.1;
+    public static final double kD = 1;
+    public static final double kG = 0.1;
     public static final double kS = 0;
     public static final double kV = 0;
     public static final double kA = 0;

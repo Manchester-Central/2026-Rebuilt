@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -39,6 +41,8 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.launcher.Launcher;
 
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
@@ -208,7 +212,8 @@ public class RobotContainer {
                     m_swerveDrive)
                 .ignoringDisable(true));
 
-    
+    m_driver.povUp().whileTrue(new RunCommand(() -> m_climber.setHeight(Inches.of(10)), m_climber));
+    m_driver.povDown().whileTrue(new RunCommand(() -> m_climber.setHeight(Inches.of(0)), m_climber));
   }
 
   /**

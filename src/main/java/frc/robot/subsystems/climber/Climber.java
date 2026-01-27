@@ -78,6 +78,17 @@ public class Climber extends SubsystemBase implements IClimber {
     return Meters.of(m_climberMotor.getPosition().getValueAsDouble());
   }
 
+  public void setHeight(Distance height) {
+    Distance targetHeight = height;
+    if (targetHeight.gt(ClimberConstants.MaxExtension)) {
+      targetHeight = ClimberConstants.MaxExtension;
+    } else if (targetHeight.lt(ClimberConstants.MinExtension)) {
+      targetHeight = ClimberConstants.MinExtension;
+    }
+
+    m_climberMotor.moveToPosition(height.in(Meters));
+  }
+
   public void setClimberSpeed(double speed) {
     if (getHeight().lt(ClimberConstants.MinExtension) && speed < 0) {
       speed = 0;
