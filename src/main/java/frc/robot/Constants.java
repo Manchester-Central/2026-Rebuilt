@@ -43,15 +43,17 @@ public final class Constants {
   public static final String RioCanBus = "rio";
 
   public static final class LauncherConstants {
-    public static final int FlywheelCanId = 1;
+    public static final int FlywheelCanId = 22;
     public static final String LauncherCanBus = RioCanBus;
-    public static final int IndexerCanId = 2;
-    public static final int TurretCanId = 3;
+    public static final int IndexerCanId = 23;
+    public static final int TurretCanId = 24;
+    public static final int HoodCanId = 25;
+    public static final int TurretCoderId = 30;
   }
   
   public static final class ClimberConstants {
     public static final String ClimberCanBus = RioCanBus;
-    public static final int ClimberCanId = 4;
+    public static final int ClimberCanId = 26;
 
     public static final double RotorToSensorRatio = 1; // TODO: Double Check
     public static final double SensorToMechanismRatio = 1; // TODO: Double Check
