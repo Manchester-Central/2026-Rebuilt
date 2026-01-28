@@ -8,24 +8,21 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.ClimberConstants;
-import frc.robot.subsystems.climber.IClimber;
+import frc.robot.subsystems.Intake;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ClimberDefaultCommand extends Command {
-  IClimber m_climber;
-  DoubleSupplier m_climberSpeed;
-  BooleanSupplier m_isManualMode;
-
-  /** Creates a new ClimberDefaultCommand. */
-  public ClimberDefaultCommand(IClimber climber, DoubleSupplier climberSpeed, BooleanSupplier isManualMode) {
+public class IntakeDefaultCommand extends Command {
+ private Intake m_intake;
+ private BooleanSupplier m_isManualMode;
+ private BooleanSupplier m_isRunIntake;
+  /** Creates a new IntakeDefaultCommand. */
+  public IntakeDefaultCommand(Intake intake, BooleanSupplier isManualMode, BooleanSupplier isRunIntake) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_climber = climber;
-    m_climberSpeed = climberSpeed;
+    m_intake = intake;
     m_isManualMode = isManualMode;
-    System.out.println(climber);
+    m_isRunIntake = isRunIntake;
 
-    addRequirements(m_climber);
+    addRequirements(m_intake);
   }
 
   // Called when the command is initially scheduled.
@@ -36,10 +33,14 @@ public class ClimberDefaultCommand extends Command {
   @Override
   public void execute() {
     if (m_isManualMode.getAsBoolean()) {
-      m_climber.setClimberSpeed(m_climberSpeed.getAsDouble() * ClimberConstants.ManualSpeedMultiplier.get());
-    } else {
-      m_climber.setClimberSpeed(0);
+      if (m_isRunIntake.getAsBoolean()) {
+        m_intake.setIntakeSpeed(0.1);
+      } else {
+        m_intake.setIntakeSpeed(0);
+      }
+      return;
     }
+    m_intake.setIntakeSpeed(0);
   }
 
   // Called once the command ends or is interrupted.

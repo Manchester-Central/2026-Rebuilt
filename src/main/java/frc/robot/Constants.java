@@ -78,8 +78,10 @@ public final class Constants {
   }
 
   public static final class IntakeConstants {
-    public static final int IntakeCanId = 10;
+    public static final int IntakeRollerCanId = 10;
     public static final String IntakeCanBus = RioCanBus;
+    public static final int IntakePivotCanId = 11;
+    public static final int IntakeKickerCanId = 12;
   }
 
   public static final class QuestConstants {

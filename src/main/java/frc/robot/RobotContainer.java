@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.defaults.ClimberDefaultCommand;
+import frc.robot.commands.defaults.IntakeDefaultCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Intake;
@@ -184,7 +185,8 @@ public class RobotContainer {
             () -> -m_driver.getLeftX(),
             () -> -m_driver.getRightX()));
 
-    m_climber.setDefaultCommand(new ClimberDefaultCommand(m_climber, m_operator::getRightY, m_isManualTrigger));        
+    m_climber.setDefaultCommand(new ClimberDefaultCommand(m_climber, m_operator::getRightY, m_isManualTrigger)); 
+    m_intake.setDefaultCommand(new IntakeDefaultCommand(m_intake, m_isManualTrigger, m_operator.leftTrigger()));       
     // Lock to 0° when A button is held
     m_driver
         .a()
