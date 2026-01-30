@@ -20,13 +20,15 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.defaults.ClimberDefaultCommand;
+import frc.robot.commands.defaults.IntakeDefaultCommand;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.drive.AbstractDrive;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Quest;
@@ -40,8 +42,12 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.interfaces.AbstractDrive;
+import frc.robot.subsystems.interfaces.IDrive;
 import frc.robot.subsystems.launcher.Launcher;
 
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
@@ -189,7 +195,8 @@ public class RobotContainer {
             () -> -m_driver.getLeftX(),
             () -> -m_driver.getRightX()));
 
-    m_climber.setDefaultCommand(new ClimberDefaultCommand(m_climber, m_operator::getRightY, m_isManualTrigger));        
+    m_climber.setDefaultCommand(new ClimberDefaultCommand(m_climber, m_operator::getRightY, m_isManualTrigger)); 
+    m_intake.setDefaultCommand(new IntakeDefaultCommand(m_intake, m_isManualTrigger, m_operator.leftTrigger()));       
     // Lock to 0° when A button is held
     m_driver
         .a()
@@ -217,7 +224,8 @@ public class RobotContainer {
                     m_swerveDrive)
                 .ignoringDisable(true));
 
-    
+    m_driver.povUp().whileTrue(new RunCommand(() -> m_climber.setHeight(Inches.of(10)), m_climber));
+    m_driver.povDown().whileTrue(new RunCommand(() -> m_climber.setHeight(Inches.of(0)), m_climber));
   }
 
   /**

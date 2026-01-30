@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.subsystems.MultiplayerSim.MultiplayerArena;
+import frc.robot.subsystems.interfaces.AbstractDrive;
 
 public class DriveMapleSim extends AbstractDrive {
   private DriveTrainSimulationConfig m_swerveConfig;
@@ -129,5 +130,17 @@ public class DriveMapleSim extends AbstractDrive {
   public AngularVelocity getRotationalSpeed() {
     var av = m_simSwerve.getAngularVelocity();
     return RadiansPerSecond.of(av);
+  }
+
+  @Override
+  public double getMaxLinearSpeedMetersPerSec() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'getMaxLinearSpeedMetersPerSec'");
+  }
+
+  @Override
+  public double getMaxAngularSpeedRadPerSec() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'getMaxAngularSpeedRadPerSec'");
   }
 }
