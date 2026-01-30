@@ -8,14 +8,14 @@ import com.chaos131.util.ChaosTalonFx;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.subsystems.interfaces.IIntake;
 
 public class Intake extends SubsystemBase implements IIntake {
   private ChaosTalonFx m_intakeRollerMotor = new ChaosTalonFx(IntakeConstants.IntakeRollerCanId, IntakeConstants.IntakeCanBus);
   private ChaosTalonFx m_intakePivotMotor = new ChaosTalonFx(IntakeConstants.IntakePivotCanId, IntakeConstants.IntakeCanBus);
   private ChaosTalonFx m_intakeKickerMotor = new ChaosTalonFx(IntakeConstants.IntakeKickerCanId, IntakeConstants.IntakeCanBus);
   /** Creates a new Intake. */
-  public Intake() {
-  }
+  public Intake() {}
 
   /**
    * Sets the speed of the intake between -1 and 1.
@@ -37,5 +37,23 @@ public class Intake extends SubsystemBase implements IIntake {
    */
   public double getIntakeKickerSpeed() {
     return m_intakeKickerMotor.get();
+  }
+
+  @Override
+  public void setIntakeSpeed(double roller, double kicker) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'setIntakeSpeed'");
+  }
+
+  @Override
+  public void deploy() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'deploy'");
+  }
+
+  @Override
+  public void retract() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'retract'");
   }
 }
