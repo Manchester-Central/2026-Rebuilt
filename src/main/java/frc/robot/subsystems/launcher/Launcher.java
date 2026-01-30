@@ -1,5 +1,8 @@
 package frc.robot.subsystems.launcher;
 
+import java.util.ArrayList;
+
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Launcher extends SubsystemBase {
@@ -28,5 +31,9 @@ public class Launcher extends SubsystemBase {
     }
     public void setTurretSpeed (double speed) {
         m_turret.setTurretSpeed (speed);
+    }
+
+    public ArrayList<Pose3d> generateMech3d() {
+        return new ArrayList<>();
     }
 }

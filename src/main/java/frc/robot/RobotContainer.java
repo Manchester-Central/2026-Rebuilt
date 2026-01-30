@@ -13,6 +13,7 @@ import com.chaos131.vision.LimelightCamera;
 import com.chaos131.vision.LimelightCamera.LimelightVersion;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -43,6 +44,8 @@ import frc.robot.subsystems.launcher.Launcher;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
+
+import java.util.ArrayList;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -224,5 +227,13 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return autoChooser.get();
+  }
+
+  public void logMech3d() {
+    // Generates poses for the turret
+    // - release pose at center of turret
+    // - doesn't include hood, or anything else
+    ArrayList<Pose3d> lst = m_launcher.generateMech3d();
+    // Now generate the pose for the intake
   }
 }
