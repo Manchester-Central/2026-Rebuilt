@@ -10,17 +10,23 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
 
+import com.chaos131.poses.FieldPose2026;
 import com.chaos131.util.DashboardNumber;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.LinearAcceleration;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 /**
  * This class defines the runtime mode used by AdvantageKit. The mode is always "real" when running
@@ -50,7 +56,13 @@ public final class Constants {
     public static final int IndexerCanId = 2;
     public static final int TurretCanId = 3;
 
-    public static final Distance LauncherToHubHeight = FieldDimensions.HubHeight.minus(RobotDimensions.LauncherHeight);
+    public static Distance SimpleLauncherHeight = Inches.of(16); //TODO: Verify
+    public static Angle SimpleLauncherAngle = Degrees.of(65);
+
+    public static final Distance LauncherToHubHeight = FieldDimensions.HubHeight.minus(SimpleLauncherHeight);
+
+    public static final FieldPose2026 LeftPassPoint = new FieldPose2026(Alliance.Blue, "LeftPassPoint", new Pose2d(Inches.of(120), Inches.of(260), Rotation2d.kZero));
+    public static final FieldPose2026 RightPassPoint = new FieldPose2026(Alliance.Blue, "RightPassPoint", new Pose2d(Inches.of(120), Inches.of(57.69), Rotation2d.kZero));
   }
   
   public static final class ClimberConstants {
@@ -117,6 +129,7 @@ public final class Constants {
    */
   public static final class GeneralConstants {
     // General Game Info Here!
+    public static final LinearAcceleration gravity = MetersPerSecondPerSecond.of(9.80665);
   }
 
   public static final class RobotDimensions {
@@ -128,10 +141,6 @@ public final class Constants {
     public static Distance FrameLength = Inches.of(30);
     // BumperWidth
     // BumperLength
-
-    public static Distance LauncherHeight = Inches.of(16); //TODO: Verify
-
-    public static Angle LauncherAngle = Degrees.of(65);
   }
 
   public static final class FieldDimensions {
