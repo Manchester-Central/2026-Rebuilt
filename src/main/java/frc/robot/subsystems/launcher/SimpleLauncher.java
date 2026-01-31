@@ -7,7 +7,6 @@ package frc.robot.subsystems.launcher;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.InchesPerSecond;
 import static edu.wpi.first.units.Units.InchesPerSecondPerSecond;
-import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Radians;
 
@@ -41,8 +40,12 @@ public class SimpleLauncher extends SubsystemBase implements ISimpleLauncher {
     m_flywheel.setFlywheelSpeed(speed);
   }
 
+  public void setFlywheelVelocity(LinearVelocity velocity) {
+    m_flywheel.setFlywheelVelocity(velocity);
+  }
+
   public LinearVelocity getFlywheelVelocity() {
-    return MetersPerSecond.of(m_flywheel.getFlywheelSpeed());
+    return MetersPerSecond.of(0); // TODO: Implement actual velocity getter
   }
 
   private LinearVelocity getVelocityForTarget(Pose2d currentPose, Pose2d targetPose, Distance targetHeight) {

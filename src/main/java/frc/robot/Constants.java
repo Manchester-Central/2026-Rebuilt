@@ -64,6 +64,31 @@ public final class Constants {
     public static final FieldPose2026 LeftPassPoint = new FieldPose2026(Alliance.Blue, "LeftPassPoint", new Pose2d(Inches.of(120), Inches.of(260), Rotation2d.kZero));
     public static final FieldPose2026 RightPassPoint = new FieldPose2026(Alliance.Blue, "RightPassPoint", new Pose2d(Inches.of(120), Inches.of(57.69), Rotation2d.kZero));
   }
+
+  public static final class FlywheelConstants {
+    public static final Distance FlyWheelDiameter = Inches.of(6); //TODO: Double Check
+
+    public static final double RotorToSensorRatio = 1; // TODO: Double Check
+    public static final double SensorToMechanismRatio = 1; // TODO: Double Check
+
+    public static final Distance MaxExtension = Inches.of(10); // TODO: Double Check
+    public static final Distance MinExtension = Inches.of(0); // TODO: Double Check
+
+    public static final InvertedValue MotorDirection = InvertedValue.Clockwise_Positive; // TODO: Double Check
+    public static final NeutralModeValue NeutralMode = NeutralModeValue.Brake; // TODO: Double Check
+
+    public static final Current SupplyCurrentLimit = Amps.of(20); // TODO: Double Check
+    public static final Current StatorCurrentLimit = Amps.of(20); // TODO: Double Check
+
+    // Slot 0 Configs
+    public static final double kP = 0; //TODO: CHECK THESE PLEASE
+    public static final double kI = 0;
+    public static final double kD = 0;
+    public static final double kG = 0;
+    public static final double kS = 0;
+    public static final double kV = 0;
+    public static final double kA = 0;
+  }
   
   public static final class ClimberConstants {
     public static final String ClimberCanBus = RioCanBus;
