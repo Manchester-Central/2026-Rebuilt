@@ -8,6 +8,7 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 
 import com.chaos131.util.DashboardNumber;
@@ -16,6 +17,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -47,6 +49,8 @@ public final class Constants {
     public static final String LauncherCanBus = RioCanBus;
     public static final int IndexerCanId = 2;
     public static final int TurretCanId = 3;
+
+    public static final Distance LauncherToHubHeight = FieldDimensions.HubHeight.minus(RobotDimensions.LauncherHeight);
   }
   
   public static final class ClimberConstants {
@@ -124,5 +128,13 @@ public final class Constants {
     public static Distance FrameLength = Inches.of(30);
     // BumperWidth
     // BumperLength
+
+    public static Distance LauncherHeight = Inches.of(16); //TODO: Verify
+
+    public static Angle LauncherAngle = Degrees.of(65);
+  }
+
+  public static final class FieldDimensions {
+    public static Distance HubHeight = Inches.of(72);
   }
 }
