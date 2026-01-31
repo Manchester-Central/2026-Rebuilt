@@ -10,8 +10,6 @@ import static edu.wpi.first.units.Units.InchesPerSecondPerSecond;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Radians;
 
-import java.util.ArrayList;
-
 import com.chaos131.poses.FieldPose;
 import com.chaos131.poses.FieldPose2026;
 
@@ -64,11 +62,8 @@ public class SimpleLauncher extends SubsystemBase implements ISimpleLauncher {
   }
 
   public LinearVelocity getPassVelocity(Pose2d currentPose) {
-    ArrayList<Pose2d> passPoses = new ArrayList<>();
-    passPoses.add(LauncherConstants.LeftPassPoint.getCurrentAlliancePose());
-    passPoses.add(LauncherConstants.RightPassPoint.getCurrentAlliancePose());
-
-    return getVelocityForTarget(currentPose, currentPose.nearest(passPoses), Inches.of(0));
+    FieldPose closestPose = FieldPose.getClosestPose(currentPose, LauncherConstants.LeftPassPoint, LauncherConstants.RightPassPoint);
+    return getVelocityForTarget(currentPose, closestPose.getCurrentAlliancePose(), Inches.of(0));
   }
 
   @Override
