@@ -69,7 +69,6 @@ public class Flywheel implements IFlywheel {
         slot0.kS = m_ks.get();
         slot0.kV = m_kv.get();
         slot0.kA = m_ka.get();
-        slot0.GravityType = GravityTypeValue.Elevator_Static;
 
         motor.Configuration.Slot0 = slot0;
     }

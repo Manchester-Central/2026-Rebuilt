@@ -11,6 +11,7 @@ import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
+import static edu.wpi.first.units.Units.Pounds;
 
 import com.chaos131.poses.FieldPose2026;
 import com.chaos131.util.DashboardNumber;
@@ -25,6 +26,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearAcceleration;
+import edu.wpi.first.units.measure.Mass;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
@@ -122,9 +124,54 @@ public final class Constants {
 
   public static final class IntakeConstants {
     public static final int IntakeRollerCanId = 10;
+    public static final int IntakeKickerCanId = 11;
+    public static final int IntakePivotCanId = 12;
     public static final String IntakeCanBus = RioCanBus;
-    public static final int IntakePivotCanId = 11;
-    public static final int IntakeKickerCanId = 12;
+
+    // Intake Dimensions
+    public static final Distance intakeLength = Inches.of(6);
+    public static final Mass intakeMass = Pounds.of(5);
+
+    // Roller config
+    public static final InvertedValue RollerMotorDirection = InvertedValue.Clockwise_Positive; // TODO: Double Check
+    public static final NeutralModeValue RollerNeutralMode = NeutralModeValue.Brake; // TODO: Double Check
+
+    public static final Current RollerSupplyCurrentLimit = Amps.of(20); // TODO: Double Check
+    public static final Current RollerStatorCurrentLimit = Amps.of(20); // TODO: Double Check
+
+    // Kicker config
+    public static final InvertedValue KickerMotorDirection = InvertedValue.Clockwise_Positive; // TODO: Double Check
+    public static final NeutralModeValue KickerNeutralMode = NeutralModeValue.Brake; // TODO: Double Check
+
+    public static final Current KickerSupplyCurrentLimit = Amps.of(20); // TODO: Double Check
+    public static final Current KickerStatorCurrentLimit = Amps.of(20); // TODO: Double Check
+
+    // Pivot Config
+    public static final double PivotRotorToSensorRatio = 1; // TODO: Double Check
+    public static final double PivotSensorToMechanismRatio = 1; // TODO: Double Check
+    public static final InvertedValue PivotMotorDirection = InvertedValue.Clockwise_Positive; // TODO: Double Check
+    public static final NeutralModeValue PivotNeutralMode = NeutralModeValue.Brake; // TODO: Double Check
+
+    public static final Current PivotSupplyCurrentLimit = Amps.of(20); // TODO: Double Check
+    public static final Current PivotStatorCurrentLimit = Amps.of(20); // TODO: Double Check
+    
+
+    // Pivot Slot 0 Configs
+    public static final double kP = 0; //TODO: CHECK THESE PLEASE
+    public static final double kI = 0;
+    public static final double kD = 0;
+    public static final double kG = 0;
+    public static final double kS = 0;
+    public static final double kV = 0;
+    public static final double kA = 0;
+
+    // Pivot Max / Min
+    public static final Angle PivotMaxAngle = Degrees.of(110); // TODO: Double Check
+    public static final Angle PivotMinAngle = Degrees.of(-15); // TODO: Double Check
+
+    // Target Angles / Speeds
+    public static final Angle PivotRetractAngle = Degrees.of(90); // TODO: Double Check
+    public static final Angle PivotDeployAngle = Degrees.of(-10); // TODO: Double Check
   }
 
   public static final class QuestConstants {
