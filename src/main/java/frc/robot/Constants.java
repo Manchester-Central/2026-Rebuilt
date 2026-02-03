@@ -11,6 +11,7 @@ import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
+import static edu.wpi.first.units.Units.Pounds;
 
 import com.chaos131.poses.FieldPose2026;
 import com.chaos131.util.DashboardNumber;
@@ -25,6 +26,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearAcceleration;
+import edu.wpi.first.units.measure.Mass;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
@@ -123,6 +125,10 @@ public final class Constants {
     public static final int IntakeKickerCanId = 11;
     public static final int IntakePivotCanId = 12;
     public static final String IntakeCanBus = RioCanBus;
+
+    // Intake Dimensions
+    public static final Distance intakeLength = Inches.of(6);
+    public static final Mass intakeMass = Pounds.of(5);
 
     // Roller config
     public static final InvertedValue RollerMotorDirection = InvertedValue.Clockwise_Positive; // TODO: Double Check

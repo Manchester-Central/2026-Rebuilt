@@ -5,6 +5,10 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Kilograms;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.Pounds;
 
 import com.chaos131.util.ChaosTalonFx;
 import com.chaos131.util.ChaosTalonFxTuner;
@@ -12,10 +16,18 @@ import com.chaos131.util.DashboardNumber;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.sim.ChassisReference;
+import com.ctre.phoenix6.sim.TalonFXSimState.MotorType;
 
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.Robot;
 import frc.robot.subsystems.interfaces.IIntake;
 
 public class Intake extends SubsystemBase implements IIntake {
@@ -79,6 +91,13 @@ public class Intake extends SubsystemBase implements IIntake {
     m_intakePivotMotor.Configuration.Slot0 = slot0;
 
     m_intakePivotMotor.applyConfig();
+
+    if (Robot.isSimulation()) {
+      var m_moi = SingleJointedArmSim.estimateMOI(IntakeConstants.intakeLength.in(Meters), IntakeConstants.intakeMass.in(Kilograms));
+      var m_dcMotor = DCMotor.getKrakenX60(1); // TODO: double check
+      var m_dcMotorSim = new DCMotorSim(LinearSystemId.createSingleJointedArmSystem(m_dcMotor, m_moi, IntakeConstants.PivotRotorToSensorRatio), m_dcMotor);
+      m_intakePivotMotor.attachMotorSim(m_dcMotorSim, IntakeConstants.PivotSensorToMechanismRatio, true, ChassisReference.CounterClockwise_Positive, MotorType.KrakenX60);
+    }
   }
 
   /**
