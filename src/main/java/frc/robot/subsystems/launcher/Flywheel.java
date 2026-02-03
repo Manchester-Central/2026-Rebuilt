@@ -19,9 +19,11 @@ import frc.robot.Constants.LauncherConstants;
 import frc.robot.subsystems.interfaces.IFlywheel;
 
 public class Flywheel implements IFlywheel {
+    private ChaosTalonFx m_leftFlywheelMotor = new ChaosTalonFx(LauncherConstants.LeftFlywheelCanId, LauncherConstants.LauncherCanBus);
+    private ChaosTalonFx m_rightFlywheelMotor = new ChaosTalonFx(LauncherConstants.RightFlywheelCanId, LauncherConstants.LauncherCanBus);
     private ChaosTalonFx[] m_flywheelMotor = {
-        new ChaosTalonFx(LauncherConstants.FlywheelCanId, LauncherConstants.LauncherCanBus),
-        new ChaosTalonFx(LauncherConstants.FlywheelCanId2, LauncherConstants.LauncherCanBus)
+        m_leftFlywheelMotor,
+        m_rightFlywheelMotor
     };
     private ChaosTalonFxTuner m_flywheelTuner = new ChaosTalonFxTuner("FlywheelTuner", m_flywheelMotor);
 
@@ -36,8 +38,8 @@ public class Flywheel implements IFlywheel {
     public Flywheel() {
         configureMotor(0);
         configureMotor(1);
-        m_flywheelMotor[0].Configuration.MotorOutput.Inverted = FlywheelConstants.MotorDirection[0];
-        m_flywheelMotor[1].Configuration.MotorOutput.Inverted = FlywheelConstants.MotorDirection[1];
+        m_leftFlywheelMotor.Configuration.MotorOutput.Inverted = FlywheelConstants.LeftMotorDirection;
+        m_rightFlywheelMotor.Configuration.MotorOutput.Inverted = FlywheelConstants.RightMotorDirection;
 
         for (var motor : m_flywheelMotor)
             motor.applyConfig();
