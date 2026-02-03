@@ -19,6 +19,7 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import com.chaos131.poses.FieldPose2026;
 import com.chaos131.util.DashboardNumber;
 
 /**
@@ -30,6 +31,8 @@ import com.chaos131.util.DashboardNumber;
 public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
+
+  private boolean m_fieldPosesInitialized;
 
   public Robot() {
     // Record metadata
@@ -67,6 +70,15 @@ public class Robot extends LoggedRobot {
         Logger.setReplaySource(new WPILOGReader(logPath));
         Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
         break;
+    }
+
+    while (m_fieldPosesInitialized) {
+      try {
+        FieldPose2026.initializeFieldPoses();
+        m_fieldPosesInitialized = true;
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
 
     // Start AdvantageKit logger

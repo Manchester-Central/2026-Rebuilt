@@ -13,6 +13,7 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.interfaces.IClimber;
 
 public class ClimberMech2D extends SubsystemBase {
   @AutoLogOutput(key = "Climber/ClimberMech2D")
