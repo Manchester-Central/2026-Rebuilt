@@ -51,7 +51,8 @@ public final class Constants {
   public static final String RioCanBus = "rio";
 
   public static final class LauncherConstants {
-    public static final int FlywheelCanId = 1;
+    public static final int LeftFlywheelCanId = 1;
+    public static final int RightFlywheelCanId = 5;
     public static final String LauncherCanBus = RioCanBus;
     public static final int IndexerCanId = 2;
     public static final int TurretCanId = 3;
@@ -74,7 +75,8 @@ public final class Constants {
     public static final Distance MaxExtension = Inches.of(10); // TODO: Double Check
     public static final Distance MinExtension = Inches.of(0); // TODO: Double Check
 
-    public static final InvertedValue MotorDirection = InvertedValue.Clockwise_Positive; // TODO: Double Check
+    public static final InvertedValue LeftMotorDirection = InvertedValue.Clockwise_Positive;
+    public static final InvertedValue RightMotorDirection = InvertedValue.Clockwise_Positive; // TODO: Double Check
     public static final NeutralModeValue NeutralMode = NeutralModeValue.Brake; // TODO: Double Check
 
     public static final Current SupplyCurrentLimit = Amps.of(20); // TODO: Double Check
