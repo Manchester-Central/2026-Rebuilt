@@ -21,11 +21,11 @@ import frc.robot.subsystems.interfaces.IFlywheel;
 public class Flywheel implements IFlywheel {
     private ChaosTalonFx m_leftFlywheelMotor = new ChaosTalonFx(LauncherConstants.LeftFlywheelCanId, LauncherConstants.LauncherCanBus);
     private ChaosTalonFx m_rightFlywheelMotor = new ChaosTalonFx(LauncherConstants.RightFlywheelCanId, LauncherConstants.LauncherCanBus);
-    private ChaosTalonFx[] m_flywheelMotor = {
+    private ChaosTalonFx[] m_flywheelMotors = {
         m_leftFlywheelMotor,
         m_rightFlywheelMotor
     };
-    private ChaosTalonFxTuner m_flywheelTuner = new ChaosTalonFxTuner("FlywheelTuner", m_flywheelMotor);
+    private ChaosTalonFxTuner m_flywheelTuner = new ChaosTalonFxTuner("FlywheelTuner", m_flywheelMotors);
 
     private DashboardNumber m_kp = m_flywheelTuner.tunable("kP", FlywheelConstants.kP, (config, newValue) -> config.Slot0.kP = newValue);
     private DashboardNumber m_ki = m_flywheelTuner.tunable("kI", FlywheelConstants.kI, (config, newValue) -> config.Slot0.kI = newValue);
@@ -36,12 +36,14 @@ public class Flywheel implements IFlywheel {
     private DashboardNumber m_ka = m_flywheelTuner.tunable("kA", FlywheelConstants.kA, (config, newValue) -> config.Slot0.kA = newValue);
 
     public Flywheel() {
-        configureMotor(0);
-        configureMotor(1);
+        prepareMotor(m_leftFlywheelMotor);
+        prepareMotor(m_rightFlywheelMotor);
+        // Keep these separate to control them independently.
+        // There's a 50-50 chance they're different!
         m_leftFlywheelMotor.Configuration.MotorOutput.Inverted = FlywheelConstants.LeftMotorDirection;
         m_rightFlywheelMotor.Configuration.MotorOutput.Inverted = FlywheelConstants.RightMotorDirection;
 
-        for (var motor : m_flywheelMotor)
+        for (var motor : m_flywheelMotors)
             motor.applyConfig();
     }
 
@@ -49,17 +51,15 @@ public class Flywheel implements IFlywheel {
      * Configures the common motor settings across all motors in the mechanism
      * @param idx index of the motor in the array
      */
-    private void configureMotor(int idx) {
-        m_flywheelMotor[idx].Configuration.Feedback.RotorToSensorRatio = FlywheelConstants.RotorToSensorRatio;
-        m_flywheelMotor[idx].Configuration.Feedback.SensorToMechanismRatio = FlywheelConstants.SensorToMechanismRatio;
-        m_flywheelMotor[idx].Configuration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; // TODO: dflywheelheck
-
-        m_flywheelMotor[idx].Configuration.CurrentLimits.SupplyCurrentLimit = FlywheelConstants.SupplyCurrentLimit.in(Amps);
-        m_flywheelMotor[idx].Configuration.CurrentLimits.SupplyCurrentLimitEnable = true;
-        m_flywheelMotor[idx].Configuration.CurrentLimits.StatorCurrentLimit = FlywheelConstants.StatorCurrentLimit.in(Amps);
-        m_flywheelMotor[idx].Configuration.CurrentLimits.StatorCurrentLimitEnable = true;
-        
-        m_flywheelMotor[idx].Configuration.MotorOutput.NeutralMode = FlywheelConstants.NeutralMode;
+    private void prepareMotor(ChaosTalonFx motor) {
+        motor.Configuration.Feedback.RotorToSensorRatio = FlywheelConstants.RotorToSensorRatio;
+        motor.Configuration.Feedback.SensorToMechanismRatio = FlywheelConstants.SensorToMechanismRatio;
+        motor.Configuration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; // TODO: dflywheelheck
+        motor.Configuration.CurrentLimits.SupplyCurrentLimit = FlywheelConstants.SupplyCurrentLimit.in(Amps);
+        motor.Configuration.CurrentLimits.SupplyCurrentLimitEnable = true;
+        motor.Configuration.CurrentLimits.StatorCurrentLimit = FlywheelConstants.StatorCurrentLimit.in(Amps);
+        motor.Configuration.CurrentLimits.StatorCurrentLimitEnable = true;
+        motor.Configuration.MotorOutput.NeutralMode = FlywheelConstants.NeutralMode;
 
         var slot0 = new Slot0Configs();
         slot0.kP = m_kp.get();
@@ -71,30 +71,30 @@ public class Flywheel implements IFlywheel {
         slot0.kA = m_ka.get();
         slot0.GravityType = GravityTypeValue.Elevator_Static;
 
-        m_flywheelMotor[idx].Configuration.Slot0 = slot0;
+        motor.Configuration.Slot0 = slot0;
     }
 
     public void setFlywheelVelocity (AngularVelocity velocity) {
-        for (var motor : m_flywheelMotor)
+        for (var motor : m_flywheelMotors)
             motor.moveAtVelocity(velocity);
     }
 
     public void setFlywheelVelocity (LinearVelocity linearVelocity) {
         AngularVelocity angularVelocity = RotationsPerSecond.of(linearVelocity.in(MetersPerSecond) / (Math.PI * FlywheelConstants.FlyWheelDiameter.in(Meters)));
-        for (var motor : m_flywheelMotor)
+        for (var motor : m_flywheelMotors)
             motor.moveAtVelocity(angularVelocity);
     }
  
     @Override
     public void setFlywheelSpeed (double speed) {
-        for (var motor : m_flywheelMotor)
+        for (var motor : m_flywheelMotors)
             motor.set(speed);
     }
 
     @Override
     public double getFlywheelSpeed () {
         // Because there's 2 motors doing the same thing, we're presuming they're going to return the same values.
-        // If this proves to be incorrect, we should make a separate function down the line.
-        return m_flywheelMotor[0].get();
+        // If this proves to be incorrect, we should make a separate function in the future.
+        return m_leftFlywheelMotor.get();
     }
 }
