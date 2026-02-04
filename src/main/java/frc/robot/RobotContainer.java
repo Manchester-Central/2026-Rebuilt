@@ -29,7 +29,6 @@ import frc.robot.commands.defaults.ClimberDefaultCommand;
 import frc.robot.commands.defaults.IntakeDefaultCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Camera;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Quest;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberMech2D;
@@ -39,6 +38,7 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.interfaces.IClimber;
 import frc.robot.subsystems.launcher.Launcher;
 

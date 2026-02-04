@@ -12,11 +12,13 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Pounds;
+import static edu.wpi.first.units.Units.Rotations;
 
 import com.chaos131.poses.FieldPose2026;
 import com.chaos131.util.DashboardNumber;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -126,6 +128,7 @@ public final class Constants {
     public static final int IntakeRollerCanId = 10;
     public static final int IntakeKickerCanId = 11;
     public static final int IntakePivotCanId = 12;
+    public static final int IntakePivotCanCoderId = 13;
     public static final String IntakeCanBus = RioCanBus;
 
     // Intake Dimensions
@@ -154,6 +157,11 @@ public final class Constants {
 
     public static final Current PivotSupplyCurrentLimit = Amps.of(20); // TODO: Double Check
     public static final Current PivotStatorCurrentLimit = Amps.of(20); // TODO: Double Check
+
+    // Pivot CanCoder Config
+    public static final SensorDirectionValue PivotCanCoderDirection = SensorDirectionValue.Clockwise_Positive; // TODO: Double Check
+    public static final Angle PivotCanCoderDiscontinuityPoint = Degrees.of(270); // TODO: Double Check
+    public static final Angle PivotCanCoderOffset = Rotations.of(0);
     
 
     // Pivot Slot 0 Configs

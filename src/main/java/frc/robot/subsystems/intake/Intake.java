@@ -2,14 +2,15 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot.subsystems.intake;
 
 import static edu.wpi.first.units.Units.Amps;
-import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.Pounds;
+import static edu.wpi.first.units.Units.Rotations;
 
+import com.chaos131.util.ChaosCanCoder;
+import com.chaos131.util.ChaosCanCoderTuner;
 import com.chaos131.util.ChaosTalonFx;
 import com.chaos131.util.ChaosTalonFxTuner;
 import com.chaos131.util.DashboardNumber;
@@ -25,7 +26,6 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Robot;
 import frc.robot.subsystems.interfaces.IIntake;
@@ -35,6 +35,8 @@ public class Intake extends SubsystemBase implements IIntake {
   private ChaosTalonFx m_intakeKickerMotor = new ChaosTalonFx(IntakeConstants.IntakeKickerCanId, IntakeConstants.IntakeCanBus);
   private ChaosTalonFx m_intakePivotMotor = new ChaosTalonFx(IntakeConstants.IntakePivotCanId, IntakeConstants.IntakeCanBus);
   private ChaosTalonFxTuner m_intakePivotTuner = new ChaosTalonFxTuner("PivotTuner", m_intakePivotMotor);
+  private ChaosCanCoder m_intakePivotCanCoder = new ChaosCanCoder(IntakeConstants.IntakePivotCanCoderId, IntakeConstants.IntakeCanBus);
+  private ChaosCanCoderTuner m_intakePivotCanCoderTuner = new ChaosCanCoderTuner("PivotCanCoderTuner", m_intakePivotCanCoder);
 
   private DashboardNumber m_kp = m_intakePivotTuner.tunable("kP", IntakeConstants.kP, (config, newValue) -> config.Slot0.kP = newValue);
   private DashboardNumber m_ki = m_intakePivotTuner.tunable("kI", IntakeConstants.kI, (config, newValue) -> config.Slot0.kI = newValue);
@@ -43,7 +45,6 @@ public class Intake extends SubsystemBase implements IIntake {
   private DashboardNumber m_ks = m_intakePivotTuner.tunable("kS", IntakeConstants.kS, (config, newValue) -> config.Slot0.kS = newValue);
   private DashboardNumber m_kv = m_intakePivotTuner.tunable("kV", IntakeConstants.kV, (config, newValue) -> config.Slot0.kV = newValue);
   private DashboardNumber m_ka = m_intakePivotTuner.tunable("kA", IntakeConstants.kA, (config, newValue) -> config.Slot0.kA = newValue);
-
 
   /** Creates a new Intake. */
   public Intake() {
@@ -77,6 +78,11 @@ public class Intake extends SubsystemBase implements IIntake {
 
     m_intakePivotMotor.Configuration.MotorOutput.Inverted = IntakeConstants.PivotMotorDirection;
     m_intakePivotMotor.Configuration.MotorOutput.NeutralMode = IntakeConstants.PivotNeutralMode;
+
+    // Pivot CanCoder config
+    m_intakePivotCanCoder.Configuration.MagnetSensor.SensorDirection = IntakeConstants.PivotCanCoderDirection;
+    m_intakePivotCanCoder.Configuration.MagnetSensor.AbsoluteSensorDiscontinuityPoint = IntakeConstants.PivotCanCoderDiscontinuityPoint.in(Rotations);
+    m_intakePivotCanCoder.Configuration.MagnetSensor.MagnetOffset = IntakeConstants.PivotCanCoderOffset.in(Rotations);
 
     var slot0 = new Slot0Configs();
     slot0.kP = m_kp.get();
@@ -162,7 +168,7 @@ public class Intake extends SubsystemBase implements IIntake {
    * Returns the intake pivot angle.
    */
   public Angle getIntakePivotAngle() {
-    return m_intakePivotMotor.getPosition().getValue();
+    return m_intakePivotCanCoder.getAbsolutePosition().getValue();
   }
 
   @Override
