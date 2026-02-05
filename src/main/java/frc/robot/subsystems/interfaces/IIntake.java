@@ -15,7 +15,7 @@ public interface IIntake {
      * @param roller double in the range of [-1.0, 1.0]
      * @param kicker double in the range of [-1.0, 1.0]
      */
-    public void setIntakeSpeed(double roller, double kicker);
+    // public void setIntakeSpeed(double roller, double kicker);
 
     /**
      * @return the current speed of the main intake roller, in the range of [-1.0, 1.0]
@@ -24,7 +24,7 @@ public interface IIntake {
     /**
      * @return the current speed of the intake's kicker roller, in the range of [-1.0, 1.0]
      */
-    public double getIntakeKickerSpeed();
+    // public double getIntakeKickerSpeed();
 
     /**
      * Deploys the Intake, if it isn't already.

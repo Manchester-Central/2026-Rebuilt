@@ -5,6 +5,7 @@
 package frc.robot.subsystems.intake;
 
 import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Rotations;
@@ -32,11 +33,15 @@ import frc.robot.subsystems.interfaces.IIntake;
 
 public class Intake extends SubsystemBase implements IIntake {
   private ChaosTalonFx m_intakeRollerMotor = new ChaosTalonFx(IntakeConstants.IntakeRollerCanId, IntakeConstants.IntakeCanBus);
-  private ChaosTalonFx m_intakeKickerMotor = new ChaosTalonFx(IntakeConstants.IntakeKickerCanId, IntakeConstants.IntakeCanBus);
+  // private ChaosTalonFx m_intakeKickerMotor = new ChaosTalonFx(IntakeConstants.IntakeKickerCanId, IntakeConstants.IntakeCanBus); TODO: delete if not added to robot
   private ChaosTalonFx m_intakePivotMotor = new ChaosTalonFx(IntakeConstants.IntakePivotCanId, IntakeConstants.IntakeCanBus);
   private ChaosTalonFxTuner m_intakePivotTuner = new ChaosTalonFxTuner("PivotTuner", m_intakePivotMotor);
   private ChaosCanCoder m_intakePivotCanCoder = new ChaosCanCoder(IntakeConstants.IntakePivotCanCoderId, IntakeConstants.IntakeCanBus);
   private ChaosCanCoderTuner m_intakePivotCanCoderTuner = new ChaosCanCoderTuner("PivotCanCoderTuner", m_intakePivotCanCoder);
+
+  private DashboardNumber m_canCoderOffsetDegrees = m_intakePivotCanCoderTuner.tunable("CANCoder Tuner",
+      IntakeConstants.PivotCanCoderOffset.in(Degrees), (config, newValue) -> 
+      config.MagnetSensor.MagnetOffset = Degrees.of(newValue).in(Rotations));
 
   private DashboardNumber m_kp = m_intakePivotTuner.tunable("kP", IntakeConstants.kP, (config, newValue) -> config.Slot0.kP = newValue);
   private DashboardNumber m_ki = m_intakePivotTuner.tunable("kI", IntakeConstants.kI, (config, newValue) -> config.Slot0.kI = newValue);
@@ -58,13 +63,13 @@ public class Intake extends SubsystemBase implements IIntake {
     m_intakeRollerMotor.Configuration.MotorOutput.NeutralMode = IntakeConstants.RollerNeutralMode;
 
     // Kicker motor config
-    m_intakeKickerMotor.Configuration.CurrentLimits.SupplyCurrentLimit = IntakeConstants.KickerSupplyCurrentLimit.in(Amps);
-    m_intakeKickerMotor.Configuration.CurrentLimits.SupplyCurrentLimitEnable = true;
-    m_intakeKickerMotor.Configuration.CurrentLimits.StatorCurrentLimit = IntakeConstants.KickerStatorCurrentLimit.in(Amps);
-    m_intakeKickerMotor.Configuration.CurrentLimits.StatorCurrentLimitEnable = true;
+    // m_intakeKickerMotor.Configuration.CurrentLimits.SupplyCurrentLimit = IntakeConstants.KickerSupplyCurrentLimit.in(Amps);
+    // m_intakeKickerMotor.Configuration.CurrentLimits.SupplyCurrentLimitEnable = true;
+    // m_intakeKickerMotor.Configuration.CurrentLimits.StatorCurrentLimit = IntakeConstants.KickerStatorCurrentLimit.in(Amps);
+    // m_intakeKickerMotor.Configuration.CurrentLimits.StatorCurrentLimitEnable = true;
     
-    m_intakeKickerMotor.Configuration.MotorOutput.Inverted = IntakeConstants.KickerMotorDirection;
-    m_intakeKickerMotor.Configuration.MotorOutput.NeutralMode = IntakeConstants.KickerNeutralMode;
+    // m_intakeKickerMotor.Configuration.MotorOutput.Inverted = IntakeConstants.KickerMotorDirection;
+    // m_intakeKickerMotor.Configuration.MotorOutput.NeutralMode = IntakeConstants.KickerNeutralMode;
 
     // Pivot motor config
     m_intakePivotMotor.Configuration.Feedback.RotorToSensorRatio = IntakeConstants.PivotRotorToSensorRatio;
@@ -82,7 +87,9 @@ public class Intake extends SubsystemBase implements IIntake {
     // Pivot CanCoder config
     m_intakePivotCanCoder.Configuration.MagnetSensor.SensorDirection = IntakeConstants.PivotCanCoderDirection;
     m_intakePivotCanCoder.Configuration.MagnetSensor.AbsoluteSensorDiscontinuityPoint = IntakeConstants.PivotCanCoderDiscontinuityPoint.in(Rotations);
-    m_intakePivotCanCoder.Configuration.MagnetSensor.MagnetOffset = IntakeConstants.PivotCanCoderOffset.in(Rotations);
+    m_intakePivotCanCoder.Configuration.MagnetSensor.MagnetOffset = Degrees.of(m_canCoderOffsetDegrees.get()).in(Rotations);
+
+    m_intakePivotCanCoder.applyConfig();
 
     var slot0 = new Slot0Configs();
     slot0.kP = m_kp.get();
@@ -111,22 +118,22 @@ public class Intake extends SubsystemBase implements IIntake {
    */
   public void setIntakeSpeed(double speed) {
     m_intakeRollerMotor.set(speed);
-    m_intakeKickerMotor.set(speed);
+    // m_intakeKickerMotor.set(speed);
   }
 
   /**
    * Sets the speed of the each intake motor between -1 and 1.
    */
-  public void setIntakeSpeed(double roller, double kicker) {
-    m_intakeRollerMotor.set(roller);
-    m_intakeKickerMotor.set(kicker);
-  }
+  // public void setIntakeSpeed(double roller, double kicker) {
+  //   m_intakeRollerMotor.set(roller);
+  //   m_intakeKickerMotor.set(kicker);
+  // }
 
   /**
    * Sets the speed of the pivot motor between -1 and 1.
    */
   public void setPivotSpeed(double speed) {
-    m_intakeKickerMotor.set(speed);
+    m_intakePivotMotor.set(speed);
   }
 
   /**
@@ -140,7 +147,7 @@ public class Intake extends SubsystemBase implements IIntake {
       targetAngle = IntakeConstants.PivotMinAngle;
     }
 
-    m_intakeKickerMotor.moveToPosition(targetAngle);
+    m_intakePivotMotor.moveToPosition(targetAngle);
   }
 
   /**
@@ -153,9 +160,9 @@ public class Intake extends SubsystemBase implements IIntake {
   /**
    * Returns the intake kicker speed.
    */
-  public double getIntakeKickerSpeed() {
-    return m_intakeKickerMotor.get();
-  }
+  // public double getIntakeKickerSpeed() {
+  //   return m_intakeKickerMotor.get();
+  // }
 
   /**
    * Returns the intake pivot speed.

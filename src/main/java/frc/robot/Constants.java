@@ -126,9 +126,9 @@ public final class Constants {
 
   public static final class IntakeConstants {
     public static final int IntakeRollerCanId = 10;
-    public static final int IntakeKickerCanId = 11;
-    public static final int IntakePivotCanId = 12;
-    public static final int IntakePivotCanCoderId = 13;
+    // public static final int IntakeKickerCanId = 13;
+    public static final int IntakePivotCanId = 11;
+    public static final int IntakePivotCanCoderId = 12;
     public static final String IntakeCanBus = RioCanBus;
 
     // Intake Dimensions
@@ -143,11 +143,11 @@ public final class Constants {
     public static final Current RollerStatorCurrentLimit = Amps.of(20); // TODO: Double Check
 
     // Kicker config
-    public static final InvertedValue KickerMotorDirection = InvertedValue.Clockwise_Positive; // TODO: Double Check
-    public static final NeutralModeValue KickerNeutralMode = NeutralModeValue.Brake; // TODO: Double Check
+    // public static final InvertedValue KickerMotorDirection = InvertedValue.Clockwise_Positive; // TODO: Double Check
+    // public static final NeutralModeValue KickerNeutralMode = NeutralModeValue.Brake; // TODO: Double Check
 
-    public static final Current KickerSupplyCurrentLimit = Amps.of(20); // TODO: Double Check
-    public static final Current KickerStatorCurrentLimit = Amps.of(20); // TODO: Double Check
+    // public static final Current KickerSupplyCurrentLimit = Amps.of(20); // TODO: Double Check
+    // public static final Current KickerStatorCurrentLimit = Amps.of(20); // TODO: Double Check
 
     // Pivot Config
     public static final double PivotRotorToSensorRatio = 1; // TODO: Double Check
