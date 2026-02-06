@@ -5,8 +5,8 @@ import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
-import com.chaos131.util.ChaosTalonFx;
-import com.chaos131.util.ChaosTalonFxTuner;
+import com.chaos131.ctre.ChaosTalonFx;
+import com.chaos131.ctre.ChaosTalonFxTuner;
 import com.chaos131.util.DashboardNumber;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -14,8 +14,8 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearVelocity;
-import frc.robot.Constants.FlywheelConstants;
-import frc.robot.Constants.LauncherConstants;
+import frc.robot.constants.LauncherConstants;
+import frc.robot.constants.LauncherConstants.FlywheelConstants;
 import frc.robot.subsystems.interfaces.IFlywheel;
 
 public class Flywheel implements IFlywheel {

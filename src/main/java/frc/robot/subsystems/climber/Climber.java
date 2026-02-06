@@ -7,8 +7,8 @@ package frc.robot.subsystems.climber;
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Meters;
 
-import com.chaos131.util.ChaosTalonFx;
-import com.chaos131.util.ChaosTalonFxTuner;
+import com.chaos131.ctre.ChaosTalonFx;
+import com.chaos131.ctre.ChaosTalonFxTuner;
 import com.chaos131.util.DashboardNumber;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -22,7 +22,7 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
-import frc.robot.Constants.ClimberConstants;
+import frc.robot.constants.ClimberConstants;
 import frc.robot.subsystems.interfaces.IClimber;
 
 public class Climber extends SubsystemBase implements IClimber {

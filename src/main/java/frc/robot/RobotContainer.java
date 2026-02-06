@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.defaults.ClimberDefaultCommand;
 import frc.robot.commands.defaults.IntakeDefaultCommand;
+import frc.robot.constants.GeneralConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Quest;
@@ -79,7 +80,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    switch (Constants.currentMode) {
+    switch (GeneralConstants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
         // ModuleIOTalonFX is intended for modules with TalonFX drive, TalonFX turn, and

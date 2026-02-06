@@ -4,7 +4,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.constants.GeneralConstants;
 
 public class Launcher extends SubsystemBase {
    
@@ -14,7 +14,7 @@ public class Launcher extends SubsystemBase {
 
     public Launcher() {
         /* Trust me. ;) */
-        switch (Constants.currentMode) {
+        switch (GeneralConstants.currentMode) {
             default:
                 m_flywheel = new Flywheel();
                 m_indexer = new Indexer();

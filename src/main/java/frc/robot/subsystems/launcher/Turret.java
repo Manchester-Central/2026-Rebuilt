@@ -1,10 +1,10 @@
 package frc.robot.subsystems.launcher;
 
-import com.chaos131.util.ChaosTalonFx;
+import com.chaos131.ctre.ChaosTalonFx;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.units.measure.Angle;
-import frc.robot.Constants.LauncherConstants;
+import frc.robot.constants.LauncherConstants;
 import frc.robot.subsystems.interfaces.ITurret;
 
 public class Turret implements ITurret {

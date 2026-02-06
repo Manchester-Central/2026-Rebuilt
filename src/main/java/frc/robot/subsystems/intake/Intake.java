@@ -10,10 +10,10 @@ import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Rotations;
 
-import com.chaos131.util.ChaosCanCoder;
-import com.chaos131.util.ChaosCanCoderTuner;
-import com.chaos131.util.ChaosTalonFx;
-import com.chaos131.util.ChaosTalonFxTuner;
+import com.chaos131.ctre.ChaosCanCoder;
+import com.chaos131.ctre.ChaosCanCoderTuner;
+import com.chaos131.ctre.ChaosTalonFx;
+import com.chaos131.ctre.ChaosTalonFxTuner;
 import com.chaos131.util.DashboardNumber;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -27,40 +27,42 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.IntakeConstants;
 import frc.robot.Robot;
+import frc.robot.constants.IntakeConstants;
+import frc.robot.constants.IntakeConstants.RollerConstants;
+import frc.robot.constants.IntakeConstants.PivotConstants;
 import frc.robot.subsystems.interfaces.IIntake;
 
 public class Intake extends SubsystemBase implements IIntake {
-  private ChaosTalonFx m_rollerMotor = new ChaosTalonFx(IntakeConstants.RollerCanId, IntakeConstants.CanBus);
+  private ChaosTalonFx m_rollerMotor = new ChaosTalonFx(RollerConstants.RollerCanId, IntakeConstants.CanBus);
   // private ChaosTalonFx m_intakeKickerMotor = new ChaosTalonFx(IntakeConstants.IntakeKickerCanId, IntakeConstants.IntakeCanBus); TODO: delete if not added to robot
-  private ChaosTalonFx m_pivotMotor = new ChaosTalonFx(IntakeConstants.PivotCanId, IntakeConstants.CanBus);
+  private ChaosTalonFx m_pivotMotor = new ChaosTalonFx(PivotConstants.PivotCanId, IntakeConstants.CanBus);
   private ChaosTalonFxTuner m_pivotTuner = new ChaosTalonFxTuner("PivotTuner", m_pivotMotor);
-  private ChaosCanCoder m_pivotCanCoder = new ChaosCanCoder(IntakeConstants.PivotCanCoderId, IntakeConstants.CanBus);
+  private ChaosCanCoder m_pivotCanCoder = new ChaosCanCoder(PivotConstants.PivotCanCoderId, IntakeConstants.CanBus);
   private ChaosCanCoderTuner m_pivotCanCoderTuner = new ChaosCanCoderTuner("PivotCanCoderTuner", m_pivotCanCoder);
 
   private DashboardNumber m_canCoderOffsetDegrees = m_pivotCanCoderTuner.tunable("CANCoder Tuner",
-      IntakeConstants.PivotCanCoderOffset.in(Degrees), (config, newValue) -> 
+      PivotConstants.CanCoderOffset.in(Degrees), (config, newValue) -> 
       config.MagnetSensor.MagnetOffset = Degrees.of(newValue).in(Rotations));
 
-  private DashboardNumber m_kp = m_pivotTuner.tunable("kP", IntakeConstants.kP, (config, newValue) -> config.Slot0.kP = newValue);
-  private DashboardNumber m_ki = m_pivotTuner.tunable("kI", IntakeConstants.kI, (config, newValue) -> config.Slot0.kI = newValue);
-  private DashboardNumber m_kd = m_pivotTuner.tunable("kD", IntakeConstants.kD, (config, newValue) -> config.Slot0.kD = newValue);
-  private DashboardNumber m_kg = m_pivotTuner.tunable("kG", IntakeConstants.kG, (config, newValue) -> config.Slot0.kG = newValue);
-  private DashboardNumber m_ks = m_pivotTuner.tunable("kS", IntakeConstants.kS, (config, newValue) -> config.Slot0.kS = newValue);
-  private DashboardNumber m_kv = m_pivotTuner.tunable("kV", IntakeConstants.kV, (config, newValue) -> config.Slot0.kV = newValue);
-  private DashboardNumber m_ka = m_pivotTuner.tunable("kA", IntakeConstants.kA, (config, newValue) -> config.Slot0.kA = newValue);
+  private DashboardNumber m_kp = m_pivotTuner.tunable("kP", PivotConstants.kP, (config, newValue) -> config.Slot0.kP = newValue);
+  private DashboardNumber m_ki = m_pivotTuner.tunable("kI", PivotConstants.kI, (config, newValue) -> config.Slot0.kI = newValue);
+  private DashboardNumber m_kd = m_pivotTuner.tunable("kD", PivotConstants.kD, (config, newValue) -> config.Slot0.kD = newValue);
+  private DashboardNumber m_kg = m_pivotTuner.tunable("kG", PivotConstants.kG, (config, newValue) -> config.Slot0.kG = newValue);
+  private DashboardNumber m_ks = m_pivotTuner.tunable("kS", PivotConstants.kS, (config, newValue) -> config.Slot0.kS = newValue);
+  private DashboardNumber m_kv = m_pivotTuner.tunable("kV", PivotConstants.kV, (config, newValue) -> config.Slot0.kV = newValue);
+  private DashboardNumber m_ka = m_pivotTuner.tunable("kA", PivotConstants.kA, (config, newValue) -> config.Slot0.kA = newValue);
 
   /** Creates a new Intake. */
   public Intake() {
     // Roller motor config
-    m_rollerMotor.Configuration.CurrentLimits.SupplyCurrentLimit = IntakeConstants.RollerSupplyCurrentLimit.in(Amps);
+    m_rollerMotor.Configuration.CurrentLimits.SupplyCurrentLimit = RollerConstants.SupplyCurrentLimit.in(Amps);
     m_rollerMotor.Configuration.CurrentLimits.SupplyCurrentLimitEnable = true;
-    m_rollerMotor.Configuration.CurrentLimits.StatorCurrentLimit = IntakeConstants.RollerStatorCurrentLimit.in(Amps);
+    m_rollerMotor.Configuration.CurrentLimits.StatorCurrentLimit = RollerConstants.StatorCurrentLimit.in(Amps);
     m_rollerMotor.Configuration.CurrentLimits.StatorCurrentLimitEnable = true;
     
-    m_rollerMotor.Configuration.MotorOutput.Inverted = IntakeConstants.RollerMotorDirection;
-    m_rollerMotor.Configuration.MotorOutput.NeutralMode = IntakeConstants.RollerNeutralMode;
+    m_rollerMotor.Configuration.MotorOutput.Inverted = RollerConstants.MotorDirection;
+    m_rollerMotor.Configuration.MotorOutput.NeutralMode = RollerConstants.NeutralMode;
 
     // Kicker motor config
     // m_intakeKickerMotor.Configuration.CurrentLimits.SupplyCurrentLimit = IntakeConstants.KickerSupplyCurrentLimit.in(Amps);
@@ -72,21 +74,21 @@ public class Intake extends SubsystemBase implements IIntake {
     // m_intakeKickerMotor.Configuration.MotorOutput.NeutralMode = IntakeConstants.KickerNeutralMode;
 
     // Pivot motor config
-    m_pivotMotor.Configuration.Feedback.RotorToSensorRatio = IntakeConstants.PivotRotorToSensorRatio;
-    m_pivotMotor.Configuration.Feedback.SensorToMechanismRatio = IntakeConstants.PivotSensorToMechanismRatio;
+    m_pivotMotor.Configuration.Feedback.RotorToSensorRatio = PivotConstants.RotorToSensorRatio;
+    m_pivotMotor.Configuration.Feedback.SensorToMechanismRatio = PivotConstants.SensorToMechanismRatio;
     m_pivotMotor.Configuration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; // TODO: double check
 
-    m_pivotMotor.Configuration.CurrentLimits.SupplyCurrentLimit = IntakeConstants.PivotSupplyCurrentLimit.in(Amps);
+    m_pivotMotor.Configuration.CurrentLimits.SupplyCurrentLimit = PivotConstants.SupplyCurrentLimit.in(Amps);
     m_pivotMotor.Configuration.CurrentLimits.SupplyCurrentLimitEnable = true;
-    m_pivotMotor.Configuration.CurrentLimits.StatorCurrentLimit = IntakeConstants.PivotStatorCurrentLimit.in(Amps);
+    m_pivotMotor.Configuration.CurrentLimits.StatorCurrentLimit = PivotConstants.StatorCurrentLimit.in(Amps);
     m_pivotMotor.Configuration.CurrentLimits.StatorCurrentLimitEnable = true;
 
-    m_pivotMotor.Configuration.MotorOutput.Inverted = IntakeConstants.PivotMotorDirection;
-    m_pivotMotor.Configuration.MotorOutput.NeutralMode = IntakeConstants.PivotNeutralMode;
+    m_pivotMotor.Configuration.MotorOutput.Inverted = PivotConstants.MotorDirection;
+    m_pivotMotor.Configuration.MotorOutput.NeutralMode = PivotConstants.NeutralMode;
 
     // Pivot CanCoder config
-    m_pivotCanCoder.Configuration.MagnetSensor.SensorDirection = IntakeConstants.PivotCanCoderDirection;
-    m_pivotCanCoder.Configuration.MagnetSensor.AbsoluteSensorDiscontinuityPoint = IntakeConstants.PivotCanCoderDiscontinuityPoint.in(Rotations);
+    m_pivotCanCoder.Configuration.MagnetSensor.SensorDirection = PivotConstants.CanCoderDirection;
+    m_pivotCanCoder.Configuration.MagnetSensor.AbsoluteSensorDiscontinuityPoint = PivotConstants.CanCoderDiscontinuityPoint.in(Rotations);
     m_pivotCanCoder.Configuration.MagnetSensor.MagnetOffset = Degrees.of(m_canCoderOffsetDegrees.get()).in(Rotations);
 
     m_pivotCanCoder.applyConfig();
@@ -110,8 +112,8 @@ public class Intake extends SubsystemBase implements IIntake {
     if (Robot.isSimulation()) {
       var m_moi = SingleJointedArmSim.estimateMOI(IntakeConstants.IntakeLength.in(Meters), IntakeConstants.IntakeMass.in(Kilograms));
       var m_dcMotor = DCMotor.getKrakenX60(1); // TODO: double check
-      var m_dcMotorSim = new DCMotorSim(LinearSystemId.createSingleJointedArmSystem(m_dcMotor, m_moi, IntakeConstants.PivotRotorToSensorRatio), m_dcMotor);
-      m_pivotMotor.attachMotorSim(m_dcMotorSim, IntakeConstants.PivotSensorToMechanismRatio, true, ChassisReference.CounterClockwise_Positive, MotorType.KrakenX60);
+      var m_dcMotorSim = new DCMotorSim(LinearSystemId.createSingleJointedArmSystem(m_dcMotor, m_moi, PivotConstants.RotorToSensorRatio), m_dcMotor);
+      m_pivotMotor.attachMotorSim(m_dcMotorSim, PivotConstants.SensorToMechanismRatio, true, ChassisReference.CounterClockwise_Positive, MotorType.KrakenX60);
     }
   }
 
@@ -136,9 +138,9 @@ public class Intake extends SubsystemBase implements IIntake {
    */
   public void setPivotSpeed(double speed) {
     double targetSpeed = speed;
-    if (getPivotAngle().gt(IntakeConstants.PivotMaxAngle)) {
+    if (getPivotAngle().gt(PivotConstants.MaxAngle)) {
       targetSpeed = Math.min(speed, 0);
-    } else if (getPivotAngle().lt(IntakeConstants.PivotMinAngle)) {
+    } else if (getPivotAngle().lt(PivotConstants.MinAngle)) {
       targetSpeed = Math.max(speed, 0);
     }
 
@@ -150,10 +152,10 @@ public class Intake extends SubsystemBase implements IIntake {
    */
   public void setPivotAngle(Angle angle) {
     Angle targetAngle = angle;
-    if (targetAngle.gt(IntakeConstants.PivotMaxAngle)) {
-      targetAngle = IntakeConstants.PivotMaxAngle;
-    } else if (targetAngle.lt(IntakeConstants.PivotMinAngle)) {
-      targetAngle = IntakeConstants.PivotMinAngle;
+    if (targetAngle.gt(PivotConstants.MaxAngle)) {
+      targetAngle = PivotConstants.MaxAngle;
+    } else if (targetAngle.lt(PivotConstants.MinAngle)) {
+      targetAngle = PivotConstants.MinAngle;
     }
 
     m_pivotMotor.moveToPosition(targetAngle);
@@ -189,12 +191,12 @@ public class Intake extends SubsystemBase implements IIntake {
 
   @Override
   public void deploy() {
-    setPivotAngle(IntakeConstants.PivotDeployAngle);
+    setPivotAngle(PivotConstants.DeployAngle);
   }
 
   @Override
   public void retract() {
-    setPivotAngle(IntakeConstants.PivotRetractAngle);
+    setPivotAngle(PivotConstants.RetractAngle);
   }
 
   @Override
