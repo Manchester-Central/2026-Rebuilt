@@ -37,14 +37,14 @@ public class IntakeDefaultCommand extends Command {
   public void execute() {
     if (m_isManualMode.getAsBoolean()) {
       if (m_isRunIntake.getAsBoolean()) {
-        m_intake.setIntakeSpeed(0.1);
+        m_intake.setRollerSpeed(0.1);
       } else {
-        m_intake.setIntakeSpeed(0);
+        m_intake.setRollerSpeed(0);
       }
       m_intake.setPivotSpeed(m_intakePivotSpeed.getAsDouble() * IntakeConstants.ManualPivotSpeedMultiplier.get());
       return;
     }
-    m_intake.setIntakeSpeed(0);
+    m_intake.setRollerSpeed(0);
     m_intake.setPivotSpeed(0);
   }
 

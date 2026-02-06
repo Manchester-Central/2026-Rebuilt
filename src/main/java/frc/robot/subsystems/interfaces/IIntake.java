@@ -9,7 +9,7 @@ public interface IIntake {
      * 
      * @param speed double in the range of [-1.0, 1.0]
      */
-    public void setIntakeSpeed(double speed);
+    public void setRollerSpeed(double speed);
 
     /**
      * Sets the speed of the intake mechanism.
@@ -30,7 +30,7 @@ public interface IIntake {
     /**
      * @return the current speed of the main intake roller, in the range of [-1.0, 1.0]
      */
-    public double getIntakeRollerSpeed();
+    public double getRollerSpeed();
 
     /**
      * @return the current speed of the intake's kicker roller, in the range of [-1.0, 1.0]
@@ -40,7 +40,7 @@ public interface IIntake {
     /**
      * @return the current angle of the main intake pivot
      */
-    public Angle getIntakePivotAngle();
+    public Angle getPivotAngle();
 
     /**
      * Deploys the Intake, if it isn't already.

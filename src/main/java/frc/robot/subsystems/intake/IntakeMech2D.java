@@ -35,6 +35,6 @@ public class IntakeMech2D extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    m_intakeLigament.setAngle(m_intake.getIntakePivotAngle());
+    m_intakeLigament.setAngle(m_intake.getPivotAngle());
   }
 }

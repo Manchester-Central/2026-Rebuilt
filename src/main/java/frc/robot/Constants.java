@@ -125,15 +125,15 @@ public final class Constants {
   }
 
   public static final class IntakeConstants {
-    public static final int IntakeRollerCanId = 10;
+    public static final int RollerCanId = 10;
     // public static final int IntakeKickerCanId = 13;
-    public static final int IntakePivotCanId = 11;
-    public static final int IntakePivotCanCoderId = 12;
-    public static final String IntakeCanBus = RioCanBus;
+    public static final int PivotCanId = 11;
+    public static final int PivotCanCoderId = 12;
+    public static final String CanBus = RioCanBus;
 
     // Intake Dimensions
-    public static final Distance intakeLength = Inches.of(6);
-    public static final Mass intakeMass = Pounds.of(5);
+    public static final Distance IntakeLength = Inches.of(6);
+    public static final Mass IntakeMass = Pounds.of(5);
 
     // Roller config
     public static final InvertedValue RollerMotorDirection = InvertedValue.Clockwise_Positive; // TODO: Double Check
