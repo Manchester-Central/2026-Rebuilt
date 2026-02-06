@@ -8,6 +8,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.intake.Intake;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -15,12 +16,14 @@ public class IntakeDefaultCommand extends Command {
  private Intake m_intake;
  private BooleanSupplier m_isManualMode;
  private BooleanSupplier m_isRunIntake;
+ private DoubleSupplier m_intakePivotSpeed;
   /** Creates a new IntakeDefaultCommand. */
-  public IntakeDefaultCommand(Intake intake, BooleanSupplier isManualMode, BooleanSupplier isRunIntake) {
+  public IntakeDefaultCommand(Intake intake, BooleanSupplier isManualMode, BooleanSupplier isRunIntake, DoubleSupplier intakePivotSpeed) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_intake = intake;
     m_isManualMode = isManualMode;
     m_isRunIntake = isRunIntake;
+    m_intakePivotSpeed = intakePivotSpeed;
 
     addRequirements(m_intake);
   }
@@ -38,9 +41,11 @@ public class IntakeDefaultCommand extends Command {
       } else {
         m_intake.setIntakeSpeed(0);
       }
+      m_intake.setPivotSpeed(m_intakePivotSpeed.getAsDouble() * IntakeConstants.ManualPivotSpeedMultiplier.get());
       return;
     }
     m_intake.setIntakeSpeed(0);
+    m_intake.setPivotSpeed(0);
   }
 
   // Called once the command ends or is interrupted.

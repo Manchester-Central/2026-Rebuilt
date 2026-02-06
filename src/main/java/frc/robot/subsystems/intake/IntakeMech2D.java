@@ -26,7 +26,7 @@ public class IntakeMech2D extends SubsystemBase {
   /** Creates a new IntakeMech2D. */
   public IntakeMech2D(IIntake intake) {
     m_intakeBase = new LoggedMechanism2d(Inches.of(26), Inches.of(28.5));
-    m_intakeRoot = m_intakeBase.getRoot("Intake", 0, 0.1);
+    m_intakeRoot = m_intakeBase.getRoot("Intake", 0, 0.2);
     m_intakeLigament = m_intakeRoot.append(new LoggedMechanismLigament2d("IntakeLigament", Inches.of(10), Degrees.of(90)));
 
     m_intake = intake;
@@ -35,5 +35,6 @@ public class IntakeMech2D extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    m_intakeLigament.setAngle(m_intake.getIntakePivotAngle());
   }
 }

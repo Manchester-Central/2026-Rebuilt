@@ -174,12 +174,15 @@ public final class Constants {
     public static final double kA = 0;
 
     // Pivot Max / Min
-    public static final Angle PivotMaxAngle = Degrees.of(110); // TODO: Double Check
-    public static final Angle PivotMinAngle = Degrees.of(-15); // TODO: Double Check
+    public static final Angle PivotMaxAngle = Degrees.of(190); // TODO: Double Check
+    public static final Angle PivotMinAngle = Degrees.of(95); // TODO: Double Check
 
     // Target Angles / Speeds
     public static final Angle PivotRetractAngle = Degrees.of(90); // TODO: Double Check
-    public static final Angle PivotDeployAngle = Degrees.of(-10); // TODO: Double Check
+    public static final Angle PivotDeployAngle = Degrees.of(180); // TODO: Double Check
+
+    // Manual Multipliers
+    public static final DashboardNumber ManualPivotSpeedMultiplier = new DashboardNumber("Intake/ManualPivotSpeedMultiplier", 0.1, true, (x) -> {});
   }
 
   public static final class QuestConstants {

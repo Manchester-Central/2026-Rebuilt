@@ -91,6 +91,8 @@ public class Intake extends SubsystemBase implements IIntake {
 
     m_intakePivotCanCoder.applyConfig();
 
+    m_intakePivotMotor.attachCanCoderSim(m_intakePivotCanCoder);
+
     var slot0 = new Slot0Configs();
     slot0.kP = m_kp.get();
     slot0.kI = m_ki.get();
@@ -133,7 +135,14 @@ public class Intake extends SubsystemBase implements IIntake {
    * Sets the speed of the pivot motor between -1 and 1.
    */
   public void setPivotSpeed(double speed) {
-    m_intakePivotMotor.set(speed);
+    double targetSpeed = speed;
+    if (getIntakePivotAngle().gt(IntakeConstants.PivotMaxAngle)) {
+      targetSpeed = Math.min(speed, 0);
+    } else if (getIntakePivotAngle().lt(IntakeConstants.PivotMinAngle)) {
+      targetSpeed = Math.max(speed, 0);
+    }
+
+    m_intakePivotMotor.set(targetSpeed);
   }
 
   /**
@@ -186,5 +195,10 @@ public class Intake extends SubsystemBase implements IIntake {
   @Override
   public void retract() {
     setPivotAngle(IntakeConstants.PivotRetractAngle);
+  }
+
+  @Override
+  public void simulationPeriodic() {
+    m_intakePivotMotor.simulationPeriodic();
   }
 }
