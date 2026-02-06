@@ -19,9 +19,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
@@ -42,10 +40,13 @@ import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeMech2D;
 import frc.robot.subsystems.interfaces.IClimber;
-import frc.robot.subsystems.launcher.Launcher;
+import frc.robot.subsystems.interfaces.IIntake;
+import frc.robot.subsystems.interfaces.ISimpleLauncher;
+import frc.robot.subsystems.launcher.Flywheel;
+import frc.robot.subsystems.launcher.Indexer;
+import frc.robot.subsystems.launcher.SimpleLauncher;
 
 import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
@@ -67,8 +68,8 @@ public class RobotContainer {
   private IClimber m_climber;
   private ClimberMech2D m_climberMech2d;
   private IntakeMech2D m_intakeMech2d;
-  private Launcher m_launcher;
-  private Intake m_intake;
+  private ISimpleLauncher m_launcher;
+  private IIntake m_intake;
   // Controller
   private final Gamepad m_driver = new Gamepad(0);
   private final Gamepad m_operator = new Gamepad(1);
@@ -149,7 +150,7 @@ public class RobotContainer {
     m_intake = new Intake ();
     m_intakeMech2d = new IntakeMech2D(m_intake);
 
-    m_launcher = new Launcher();
+    m_launcher = new SimpleLauncher(new Flywheel(), new Indexer());
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());

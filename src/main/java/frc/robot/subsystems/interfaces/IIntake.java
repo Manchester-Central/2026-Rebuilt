@@ -1,8 +1,9 @@
 package frc.robot.subsystems.interfaces;
 
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 
-public interface IIntake {
+public interface IIntake extends Subsystem {
     /**
      * Sets the speed of the intake mechanism.
      * Applies the same speed to both the main and kicker roller (but not the pivot roller)
