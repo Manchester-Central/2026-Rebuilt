@@ -12,11 +12,13 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Pounds;
+import static edu.wpi.first.units.Units.Rotations;
 
 import com.chaos131.poses.FieldPose2026;
 import com.chaos131.util.DashboardNumber;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -123,14 +125,15 @@ public final class Constants {
   }
 
   public static final class IntakeConstants {
-    public static final int IntakeRollerCanId = 10;
-    public static final int IntakeKickerCanId = 11;
-    public static final int IntakePivotCanId = 12;
-    public static final String IntakeCanBus = RioCanBus;
+    public static final int RollerCanId = 10;
+    // public static final int IntakeKickerCanId = 13;
+    public static final int PivotCanId = 11;
+    public static final int PivotCanCoderId = 12;
+    public static final String CanBus = RioCanBus;
 
     // Intake Dimensions
-    public static final Distance intakeLength = Inches.of(6);
-    public static final Mass intakeMass = Pounds.of(5);
+    public static final Distance IntakeLength = Inches.of(6);
+    public static final Mass IntakeMass = Pounds.of(5);
 
     // Roller config
     public static final InvertedValue RollerMotorDirection = InvertedValue.Clockwise_Positive; // TODO: Double Check
@@ -140,11 +143,11 @@ public final class Constants {
     public static final Current RollerStatorCurrentLimit = Amps.of(20); // TODO: Double Check
 
     // Kicker config
-    public static final InvertedValue KickerMotorDirection = InvertedValue.Clockwise_Positive; // TODO: Double Check
-    public static final NeutralModeValue KickerNeutralMode = NeutralModeValue.Brake; // TODO: Double Check
+    // public static final InvertedValue KickerMotorDirection = InvertedValue.Clockwise_Positive; // TODO: Double Check
+    // public static final NeutralModeValue KickerNeutralMode = NeutralModeValue.Brake; // TODO: Double Check
 
-    public static final Current KickerSupplyCurrentLimit = Amps.of(20); // TODO: Double Check
-    public static final Current KickerStatorCurrentLimit = Amps.of(20); // TODO: Double Check
+    // public static final Current KickerSupplyCurrentLimit = Amps.of(20); // TODO: Double Check
+    // public static final Current KickerStatorCurrentLimit = Amps.of(20); // TODO: Double Check
 
     // Pivot Config
     public static final double PivotRotorToSensorRatio = 1; // TODO: Double Check
@@ -154,6 +157,11 @@ public final class Constants {
 
     public static final Current PivotSupplyCurrentLimit = Amps.of(20); // TODO: Double Check
     public static final Current PivotStatorCurrentLimit = Amps.of(20); // TODO: Double Check
+
+    // Pivot CanCoder Config
+    public static final SensorDirectionValue PivotCanCoderDirection = SensorDirectionValue.Clockwise_Positive; // TODO: Double Check
+    public static final Angle PivotCanCoderDiscontinuityPoint = Degrees.of(270); // TODO: Double Check
+    public static final Angle PivotCanCoderOffset = Rotations.of(0);
     
 
     // Pivot Slot 0 Configs
@@ -166,12 +174,15 @@ public final class Constants {
     public static final double kA = 0;
 
     // Pivot Max / Min
-    public static final Angle PivotMaxAngle = Degrees.of(110); // TODO: Double Check
-    public static final Angle PivotMinAngle = Degrees.of(-15); // TODO: Double Check
+    public static final Angle PivotMaxAngle = Degrees.of(190); // TODO: Double Check
+    public static final Angle PivotMinAngle = Degrees.of(95); // TODO: Double Check
 
     // Target Angles / Speeds
     public static final Angle PivotRetractAngle = Degrees.of(90); // TODO: Double Check
-    public static final Angle PivotDeployAngle = Degrees.of(-10); // TODO: Double Check
+    public static final Angle PivotDeployAngle = Degrees.of(180); // TODO: Double Check
+
+    // Manual Multipliers
+    public static final DashboardNumber ManualPivotSpeedMultiplier = new DashboardNumber("Intake/ManualPivotSpeedMultiplier", 0.1, true, (x) -> {});
   }
 
   public static final class QuestConstants {

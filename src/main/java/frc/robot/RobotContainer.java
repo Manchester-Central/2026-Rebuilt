@@ -29,7 +29,6 @@ import frc.robot.commands.defaults.ClimberDefaultCommand;
 import frc.robot.commands.defaults.IntakeDefaultCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Camera;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Quest;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberMech2D;
@@ -39,6 +38,8 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeMech2D;
 import frc.robot.subsystems.interfaces.IClimber;
 import frc.robot.subsystems.launcher.Launcher;
 
@@ -64,6 +65,7 @@ public class RobotContainer {
   private Camera m_camera;
   private IClimber m_climber;
   private ClimberMech2D m_climberMech2d;
+  private IntakeMech2D m_intakeMech2d;
   private Launcher m_launcher;
   private Intake m_intake;
   // Controller
@@ -143,9 +145,10 @@ public class RobotContainer {
     m_climber = new Climber();
     m_climberMech2d = new ClimberMech2D(m_climber);
 
-    m_launcher = new Launcher();
-
     m_intake = new Intake ();
+    m_intakeMech2d = new IntakeMech2D(m_intake);
+
+    m_launcher = new Launcher();
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -185,8 +188,8 @@ public class RobotContainer {
             () -> -m_driver.getLeftX(),
             () -> -m_driver.getRightX()));
 
-    m_climber.setDefaultCommand(new ClimberDefaultCommand(m_climber, m_operator::getRightY, m_isManualTrigger)); 
-    m_intake.setDefaultCommand(new IntakeDefaultCommand(m_intake, m_isManualTrigger, m_operator.leftTrigger()));       
+    m_climber.setDefaultCommand(new ClimberDefaultCommand(m_climber, m_operator::getLeftY, m_isManualTrigger)); 
+    m_intake.setDefaultCommand(new IntakeDefaultCommand(m_intake, m_isManualTrigger, m_operator.leftTrigger(), m_operator::getRightY));       
     // Lock to 0° when A button is held
     m_driver
         .a()
