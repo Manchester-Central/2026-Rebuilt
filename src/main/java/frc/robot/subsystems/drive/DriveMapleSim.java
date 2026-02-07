@@ -24,11 +24,11 @@ import frc.robot.subsystems.interfaces.AbstractDrive;
 
 public class DriveMapleSim extends AbstractDrive {
   private DriveTrainSimulationConfig m_swerveConfig;
-  private SwerveDriveSimulation m_simSwerve;
+  public SwerveDriveSimulation sim;
 
   public DriveMapleSim(Pose2d initialPose) {
-    m_simSwerve = new SwerveDriveSimulation(m_swerveConfig, getPose());
-    MultiplayerArena.Instance.addDriveTrainSimulation(m_simSwerve);
+    sim = new SwerveDriveSimulation(m_swerveConfig, getPose());
+    MultiplayerArena.Instance.addDriveTrainSimulation(sim);
   }
 
   @Override
@@ -38,7 +38,12 @@ public class DriveMapleSim extends AbstractDrive {
     // ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
     // SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
     // SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, TunerConstants.kSpeedAt12Volts);
-    m_simSwerve.setRobotSpeeds(speeds);
+    sim.setRobotSpeeds(speeds);
+  }
+
+  @Override
+  public ChassisSpeeds getChassisSpeeds() {
+    return sim.getDriveTrainSimulatedChassisSpeedsFieldRelative();
   }
 
   @Override
@@ -55,7 +60,7 @@ public class DriveMapleSim extends AbstractDrive {
   @Override
   public void stopWithX() {
     // Maybe add a lot of mass?
-    m_simSwerve.setRobotSpeeds(new ChassisSpeeds());
+    sim.setRobotSpeeds(new ChassisSpeeds());
   }
 
   @Override
@@ -84,7 +89,7 @@ public class DriveMapleSim extends AbstractDrive {
 
   @Override
   public Pose2d getPose() {
-    return m_simSwerve.getSimulatedDriveTrainPose();
+    return sim.getSimulatedDriveTrainPose();
   }
 
   @Override
@@ -94,7 +99,7 @@ public class DriveMapleSim extends AbstractDrive {
 
   @Override
   public void setPose(Pose2d pose) {
-    m_simSwerve.setSimulationWorldPose(pose);
+    sim.setSimulationWorldPose(pose);
   }
 
   @Override
@@ -110,7 +115,7 @@ public class DriveMapleSim extends AbstractDrive {
    */
   @Override
   public Translation2d getVelocityVector() {
-    Vector2 lv = m_simSwerve.getLinearVelocity();
+    Vector2 lv = sim.getLinearVelocity();
     return new Translation2d(lv.x, lv.y);
   }
 
@@ -128,7 +133,7 @@ public class DriveMapleSim extends AbstractDrive {
    */
   @Override
   public AngularVelocity getRotationalSpeed() {
-    var av = m_simSwerve.getAngularVelocity();
+    var av = sim.getAngularVelocity();
     return RadiansPerSecond.of(av);
   }
 }

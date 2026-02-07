@@ -30,11 +30,10 @@ import frc.robot.subsystems.interfaces.AbstractDrive;
 public class MultiplayerArena extends Arena2026Rebuilt {
   // Statics
   public static MultiplayerArena Instance;
-  public static void init() {
-    if (Instance == null) {
-      Instance = new MultiplayerArena(MatchState.TRANSITION_SHIFT);
-    }
+  static {
+    Instance = new MultiplayerArena(MatchState.TRANSITION_SHIFT);
   }
+  
   // Match Phase Times
   public static final Time DurationAutonomous = Seconds.of(20);
   public static final Time DurationPhasePause = Seconds.of(5); 

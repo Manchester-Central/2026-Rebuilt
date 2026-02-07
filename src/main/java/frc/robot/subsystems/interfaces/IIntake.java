@@ -52,4 +52,17 @@ public interface IIntake extends Subsystem {
      * Retracts the Intake, if it isn't already.
      */
     public void retract();
+
+    /**
+     * NOTE: Only functional during simulation, there's no way for the robot to know how
+     * many game pieces it has.
+     * @return the number of game pieces in the robot (from the intake to the launcher)
+     */
+    public int getNumGamePieces();
+
+    /**
+     * Attempts to take a game piece from the intake/hopper
+     * @return true if a piece was claimed
+     */
+    public boolean claimGamePiece();
 }

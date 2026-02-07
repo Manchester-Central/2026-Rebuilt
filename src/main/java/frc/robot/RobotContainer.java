@@ -104,6 +104,9 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
         m_quest = new Quest(m_swerveDrive);
+        m_intake = new Intake(id);
+        m_launcher = new SimpleLauncher(new Flywheel(id), new Indexer(id));
+        m_climber = new Climber();
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
@@ -133,10 +136,17 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
+        m_intake = new Intake(id);
+        m_launcher = new SimpleLauncher(new Flywheel(id), new Indexer(id));
+        m_climber = new Climber();
         break;
 
       case ARENA:
-        m_swerveDrive = new DriveMapleSim(startPose);
+        var drive = new DriveMapleSim(startPose);
+        m_intake = new MapleSimtake(id, drive);
+        m_launcher = new SimpleLauncher(new MapleSimFlywheel(id, drive, m_intake), new Indexer(id));
+        m_climber = new Climber();
+        m_swerveDrive = drive;
         break;
 
       default:
@@ -148,6 +158,9 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
+        m_intake = new Intake(id);
+        m_launcher = new SimpleLauncher(new Flywheel(id), new Indexer(id));
+        m_climber = new Climber();
         break;
     }
     m_camera = new Camera("LimeLight",
@@ -158,22 +171,10 @@ public class RobotContainer {
             () -> m_swerveDrive.getSpeed().in(MetersPerSecond),
             () -> m_swerveDrive.getRotationalSpeed().in(RotationsPerSecond));
 
-    m_climber = new Climber();
-    m_climberMech2d = new ClimberMech2D(m_climber);
-
-    if (GeneralConstants.currentMode != Mode.ARENA) {
-      // Real Robot mechanisms
-      m_intake = new Intake(id);
-      m_launcher = new SimpleLauncher(new Flywheel(id), new Indexer(id));
-    } else {
-      // Simulation Enhanced mechanisms
-      m_intake = new MapleSimtake(id);
-      m_launcher = new SimpleLauncher(new MapleSimFlywheel(id, m_intake), new Indexer(id));
-    }
-
     // Setup Mech2ds
     m_intakeMech2d = new IntakeMech2D(m_intake);
     m_launcherMech2D = new LauncherMech2D(m_launcher);
+    m_climberMech2d = new ClimberMech2D(m_climber);
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());

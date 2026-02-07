@@ -19,6 +19,7 @@ public interface IDrive {
      * @param speeds Speeds in meters/sec
      */
     public void runVelocity(ChassisSpeeds speeds);
+    public ChassisSpeeds getChassisSpeeds();
     /** The robot relative velocity in vector form, units are in meters per second. */
     public Translation2d getVelocityVector();
     /** The speed of the robot, based on the robot relative velocity vector. */

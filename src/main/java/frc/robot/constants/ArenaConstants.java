@@ -24,4 +24,6 @@ public final class ArenaConstants {
     {CanId.ID_40, CanId.ID_41, CanId.ID_42, CanId.ID_43, CanId.ID_44},
     {CanId.ID_45, CanId.ID_46, CanId.ID_47, CanId.ID_48, CanId.ID_49},
   };
+
+  public static int HopperSize = 50;
 }

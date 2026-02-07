@@ -293,8 +293,9 @@ public class Drive extends AbstractDrive {
   }
 
   /** Returns the measured chassis speeds of the robot. */
+  @Override
   @AutoLogOutput(key = "SwerveChassisSpeeds/Measured")
-  private ChassisSpeeds getChassisSpeeds() {
+  public ChassisSpeeds getChassisSpeeds() {
     return kinematics.toChassisSpeeds(getModuleStates());
   }
 

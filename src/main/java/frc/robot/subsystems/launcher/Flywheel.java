@@ -23,8 +23,8 @@ public class Flywheel extends SubsystemBase implements IFlywheel {
     };
     
     private ChaosTalonFxTuner m_flywheelTuner = new ChaosTalonFxTuner("FlywheelTuner", m_flywheelMotors);
-    private LinearVelocity targetVelocity;
-    private LinearVelocity targetVelocityTolerance; 
+    protected LinearVelocity targetVelocity;
+    protected LinearVelocity targetVelocityTolerance; 
 
     public Flywheel(int id) {
         m_flywheelTuner.tunableSlot0(FlywheelConstants.LeftConfig.Slot0); // Will use left config initial values, but changes will be applied to all motors

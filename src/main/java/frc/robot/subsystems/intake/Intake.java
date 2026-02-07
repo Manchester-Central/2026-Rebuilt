@@ -141,4 +141,14 @@ public class Intake extends SubsystemBase implements IIntake {
   public void simulationPeriodic() {
     m_pivotMotor.simulationPeriodic();
   }
+
+  @Override
+  public int getNumGamePieces() {
+    return 1;
+  }
+
+  @Override
+  public boolean claimGamePiece() {
+    return true;
+  }
 }
