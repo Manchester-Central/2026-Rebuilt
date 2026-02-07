@@ -131,16 +131,4 @@ public class DriveMapleSim extends AbstractDrive {
     var av = m_simSwerve.getAngularVelocity();
     return RadiansPerSecond.of(av);
   }
-
-  @Override
-  public double getMaxLinearSpeedMetersPerSec() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getMaxLinearSpeedMetersPerSec'");
-  }
-
-  @Override
-  public double getMaxAngularSpeedRadPerSec() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getMaxAngularSpeedRadPerSec'");
-  }
 }
