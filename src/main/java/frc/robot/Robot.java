@@ -70,15 +70,6 @@ public class Robot extends LoggedRobot {
         break;
     }
 
-    while (m_fieldPosesInitialized) {
-      try {
-        FieldPose2026.initializeFieldPoses();
-        m_fieldPosesInitialized = true;
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
-
     // Start AdvantageKit logger
     Logger.start();
 
