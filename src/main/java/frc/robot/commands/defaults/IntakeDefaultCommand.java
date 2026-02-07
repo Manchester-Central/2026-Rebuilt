@@ -9,16 +9,16 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.IntakeConstants;
-import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.interfaces.IIntake;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class IntakeDefaultCommand extends Command {
- private Intake m_intake;
+ private IIntake m_intake;
  private BooleanSupplier m_isManualMode;
  private BooleanSupplier m_isRunIntake;
  private DoubleSupplier m_intakePivotSpeed;
   /** Creates a new IntakeDefaultCommand. */
-  public IntakeDefaultCommand(Intake intake, BooleanSupplier isManualMode, BooleanSupplier isRunIntake, DoubleSupplier intakePivotSpeed) {
+  public IntakeDefaultCommand(IIntake intake, BooleanSupplier isManualMode, BooleanSupplier isRunIntake, DoubleSupplier intakePivotSpeed) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_intake = intake;
     m_isManualMode = isManualMode;
