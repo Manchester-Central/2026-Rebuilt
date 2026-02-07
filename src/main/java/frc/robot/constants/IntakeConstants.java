@@ -41,6 +41,9 @@ public final class IntakeConstants {
   // Manual Multipliers
   public static final DashboardNumber ManualPivotSpeedMultiplier = new DashboardNumber("Intake/ManualPivotSpeedMultiplier", 0.1, true, (x) -> {});
 
+  // Speeds
+  public static final DashboardNumber RollerSpeed = new DashboardNumber("Intake/RollerSpeed", 0.2, true, (x) -> {});
+
   public static final class RollerConstants {
     public static final CanId RollerCanId = CanId.ID_30;
 
@@ -80,10 +83,10 @@ public final class IntakeConstants {
             .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor)
         )
         .withSlot0(new Slot0Configs() //TODO: CHECK THESE PLEASE
-            .withKP(0)
+            .withKP(0.1)
             .withKI(0)
             .withKD(0)
-            .withKG(0)
+            .withKG(0.001)
             .withKS(0)
             .withKV(0)
             .withKA(0)
@@ -101,10 +104,10 @@ public final class IntakeConstants {
 
     // Pivot Max / Min
     public static final Angle MaxAngle = Degrees.of(190); // TODO: Double Check
-    public static final Angle MinAngle = Degrees.of(95); // TODO: Double Check
+    public static final Angle MinAngle = Degrees.of(85); // TODO: Double Check
 
     // Target Angles / Speeds
-    public static final Angle RetractAngle = Degrees.of(90); // TODO: Double Check
     public static final Angle DeployAngle = Degrees.of(180); // TODO: Double Check
+    public static final Angle RetractAngle = Degrees.of(90); // TODO: Double Check
   }
 }

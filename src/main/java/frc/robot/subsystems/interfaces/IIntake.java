@@ -21,6 +21,11 @@ public interface IIntake extends Subsystem {
     public void setPivotSpeed(double speed);
 
     /**
+    * Sets the angle of the pivot motor.
+    */
+    public void setPivotAngle(Angle angle);
+
+    /**
      * Sets the speed of the intake mechanism. Controls the roller and kicker independently.
      * 
      * @param roller double in the range of [-1.0, 1.0]
