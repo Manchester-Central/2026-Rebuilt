@@ -44,5 +44,5 @@ public final class GeneralConstants {
   }
 
   // General Game Info Here!
-  public static final LinearAcceleration gravity = MetersPerSecondPerSecond.of(9.80665);
+  public static final LinearAcceleration gravity = MetersPerSecondPerSecond.of(-9.80665);
 }

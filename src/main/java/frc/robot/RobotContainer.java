@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DeployIntake;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.TargetHubVelocityAndLaunch;
 import frc.robot.commands.defaults.ClimberDefaultCommand;
 import frc.robot.commands.defaults.IntakeDefaultCommand;
 import frc.robot.commands.defaults.SimpleLauncherDefaultCommand;
@@ -215,7 +216,16 @@ public class RobotContainer {
                     Translation2d targetPoint = FieldPose2026.HubCenter.getCurrentAlliancePose().getTranslation();
                     return targetPoint.minus(m_swerveDrive.getPose().getTranslation()).getAngle();
                 }));
-    m_driver.rightTrigger();
+    m_driver.rightTrigger().and(m_isAutomaticTrigger).whileTrue(new TargetHubVelocityAndLaunch(m_launcher, m_swerveDrive::getPose).alongWith(
+        DriveCommands.joystickDriveAtAngle(
+            m_swerveDrive,
+            () -> m_driver.getLeftY(),
+            () -> -m_driver.getLeftX(),
+            () -> {
+                Translation2d targetPoint = FieldPose2026.HubCenter.getCurrentAlliancePose().getTranslation();
+                return targetPoint.minus(m_swerveDrive.getPose().getTranslation()).getAngle();
+            })
+    ));
 
     // Switch to X pattern when X button is pressed
     m_driver.x().onTrue(Commands.runOnce(m_swerveDrive::stopWithX, m_swerveDrive));
