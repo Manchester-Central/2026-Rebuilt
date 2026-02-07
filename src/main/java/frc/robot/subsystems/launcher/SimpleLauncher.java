@@ -17,17 +17,21 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.FieldDimensions;
-import frc.robot.Constants.GeneralConstants;
-import frc.robot.Constants.LauncherConstants;
+import frc.robot.constants.FieldDimensions;
+import frc.robot.constants.GeneralConstants;
+import frc.robot.constants.LauncherConstants;
+import frc.robot.subsystems.interfaces.IFlywheel;
+import frc.robot.subsystems.interfaces.IIndexer;
 import frc.robot.subsystems.interfaces.ISimpleLauncher;
 
 public class SimpleLauncher extends SubsystemBase implements ISimpleLauncher {
-  Flywheel m_flywheel;
+  IFlywheel m_flywheel = new Flywheel();
+  IIndexer m_indexer = new Indexer();
 
   /** Creates a new SimpleLauncher. */
-  public SimpleLauncher(Flywheel flywheel) {
+  public SimpleLauncher(IFlywheel flywheel, IIndexer indexer) {
     m_flywheel = flywheel;
+    m_indexer = indexer;
   }
 
   public double getFlywheelSpeed() {

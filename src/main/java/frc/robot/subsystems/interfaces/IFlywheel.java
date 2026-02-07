@@ -1,5 +1,8 @@
 package frc.robot.subsystems.interfaces;
 
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.LinearVelocity;
+
 public interface IFlywheel {
     /**
      * Sets the speed of the flywheel
@@ -11,4 +14,16 @@ public interface IFlywheel {
      * @return the current speed of the flywheel, in the range of [-1.0, 1.0]
      */
     public double getFlywheelSpeed();
+
+    /**
+     * Sets the target velocity of the flywheel 
+     * @param angularVelocity the desired angular velocity
+     */
+    public void setFlywheelVelocity(AngularVelocity angularVelocity);
+
+    /**
+     * Sets the target velocity of the flywheel 
+     * @param linearVelocity the desired linear velocity
+     */
+    public void setFlywheelVelocity(LinearVelocity linearVelocity);
 }
