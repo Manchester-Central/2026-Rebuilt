@@ -12,6 +12,8 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
 
+import com.chaos131.util.Color;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.ISimpleLauncher;
 
@@ -37,5 +39,7 @@ public class LauncherMech2D extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    m_indexerLigament.setColor(Color.fromDutyCycle(m_launcher.getIndexerSpeed()));
+    m_launcherLigament.setColor(Color.fromDutyCycle(m_launcher.getFlywheelSpeed()));
   }
 }

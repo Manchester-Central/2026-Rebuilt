@@ -21,7 +21,7 @@ public class SimpleLauncherDefaultCommand extends Command {
     // Use addRequirements() here to declare subsystem dependencies.=
     m_launcher = launcher;
     m_isManualMode = isManualMode;
-    m_isRunLauncher = isRunFeeder;
+    m_isRunLauncher = isRunLauncher;
     m_isRunIndexer = isRunFeeder;
 
     addRequirements(m_launcher);

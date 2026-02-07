@@ -12,6 +12,8 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
 
+import com.chaos131.util.Color;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.IIntake;
 
@@ -36,5 +38,6 @@ public class IntakeMech2D extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     m_intakeLigament.setAngle(m_intake.getPivotAngle());
+    m_intakeLigament.setColor(Color.fromDutyCycle(m_intake.getRollerSpeed()));
   }
 }
