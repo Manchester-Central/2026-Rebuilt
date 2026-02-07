@@ -25,8 +25,8 @@ import frc.robot.subsystems.interfaces.IIndexer;
 import frc.robot.subsystems.interfaces.ISimpleLauncher;
 
 public class SimpleLauncher extends SubsystemBase implements ISimpleLauncher {
-  IFlywheel m_flywheel = new Flywheel();
-  IIndexer m_indexer = new Indexer();
+  IFlywheel m_flywheel;
+  IIndexer m_indexer;
 
   /** Creates a new SimpleLauncher. */
   public SimpleLauncher(IFlywheel flywheel, IIndexer indexer) {
@@ -38,8 +38,16 @@ public class SimpleLauncher extends SubsystemBase implements ISimpleLauncher {
     return m_flywheel.getFlywheelSpeed();
   }
 
+  public double getIndexerSpeed() {
+    return m_indexer.getIndexerSpeed();
+  }
+
   public void setFlywheelSpeed(double speed) {
     m_flywheel.setFlywheelSpeed(speed);
+  }
+
+  public void setIndexerSpeed(double speed) {
+    m_indexer.setIndexerSpeed(speed);
   }
 
   public void setFlywheelVelocity(LinearVelocity velocity) {

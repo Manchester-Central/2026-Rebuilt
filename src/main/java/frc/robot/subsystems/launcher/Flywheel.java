@@ -20,6 +20,7 @@ public class Flywheel implements IFlywheel {
         m_leftFlywheelMotor,
         m_rightFlywheelMotor
     };
+    
     private ChaosTalonFxTuner m_flywheelTuner = new ChaosTalonFxTuner("FlywheelTuner", m_flywheelMotors);
 
     public Flywheel() {

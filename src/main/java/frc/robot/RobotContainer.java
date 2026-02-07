@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.defaults.ClimberDefaultCommand;
 import frc.robot.commands.defaults.IntakeDefaultCommand;
+import frc.robot.commands.defaults.SimpleLauncherDefaultCommand;
 import frc.robot.constants.GeneralConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Camera;
@@ -44,6 +45,7 @@ import frc.robot.subsystems.interfaces.IIntake;
 import frc.robot.subsystems.interfaces.ISimpleLauncher;
 import frc.robot.subsystems.launcher.Flywheel;
 import frc.robot.subsystems.launcher.Indexer;
+import frc.robot.subsystems.launcher.LauncherMech2D;
 import frc.robot.subsystems.launcher.SimpleLauncher;
 
 import static edu.wpi.first.units.Units.Inches;
@@ -68,8 +70,10 @@ public class RobotContainer {
   private IClimber m_climber;
   private ClimberMech2D m_climberMech2d;
   private IntakeMech2D m_intakeMech2d;
+  private LauncherMech2D m_launcherMech2D;
   private ISimpleLauncher m_launcher;
   private IIntake m_intake;
+
   // Controller
   private final Gamepad m_driver = new Gamepad(0);
   private final Gamepad m_operator = new Gamepad(1);
@@ -151,6 +155,7 @@ public class RobotContainer {
     m_intakeMech2d = new IntakeMech2D(m_intake);
 
     m_launcher = new SimpleLauncher(new Flywheel(), new Indexer());
+    m_launcherMech2D = new LauncherMech2D(m_launcher);
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -186,19 +191,21 @@ public class RobotContainer {
     m_swerveDrive.setDefaultCommand(
         DriveCommands.joystickDrive(
             m_swerveDrive,
-            () -> -m_driver.getLeftY(),
+            () -> m_driver.getLeftY(),
             () -> -m_driver.getLeftX(),
             () -> -m_driver.getRightX()));
 
     m_climber.setDefaultCommand(new ClimberDefaultCommand(m_climber, m_operator::getLeftY, m_isManualTrigger)); 
-    m_intake.setDefaultCommand(new IntakeDefaultCommand(m_intake, m_isManualTrigger, m_operator.leftTrigger(), m_operator::getRightY));       
+    m_intake.setDefaultCommand(new IntakeDefaultCommand(m_intake, m_isManualTrigger, m_operator.leftTrigger(), m_operator::getRightY));    
+    m_launcher.setDefaultCommand(new SimpleLauncherDefaultCommand(m_launcher, m_isManualTrigger, m_operator.rightTrigger(), m_operator.rightBumper()));
+    
     // Lock to 0° when A button is held
     m_driver
-        .a()
+        .rightBumper()
         .whileTrue(
             DriveCommands.joystickDriveAtAngle(
                 m_swerveDrive,
-                () -> -m_driver.getLeftY(),
+                () -> m_driver.getLeftY(),
                 () -> -m_driver.getLeftX(),
                 () -> {
                     Translation2d targetPoint = FieldPose2026.HubCenter.getCurrentAlliancePose().getTranslation();

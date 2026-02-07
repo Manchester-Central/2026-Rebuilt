@@ -37,7 +37,7 @@ public class ClimberDefaultCommand extends Command {
     if (m_isManualMode.getAsBoolean()) {
       m_climber.setClimberSpeed(m_climberSpeed.getAsDouble() * ClimberConstants.ManualSpeedMultiplier.get());
     } else {
-      m_climber.setClimberSpeed(0);
+      m_climber.setClimberSpeed(0); 
     }
   }
 
