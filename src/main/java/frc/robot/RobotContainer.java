@@ -204,7 +204,6 @@ public class RobotContainer {
     m_intake.setDefaultCommand(new IntakeDefaultCommand(m_intake, m_isManualTrigger, m_operator.leftTrigger(), m_operator::getRightY));    
     m_launcher.setDefaultCommand(new SimpleLauncherDefaultCommand(m_launcher, m_isManualTrigger, m_operator.rightTrigger(), m_operator.rightBumper()));
     
-    // Lock to 0° when A button is held
     m_driver
         .rightBumper()
         .whileTrue(
@@ -216,6 +215,7 @@ public class RobotContainer {
                     Translation2d targetPoint = FieldPose2026.HubCenter.getCurrentAlliancePose().getTranslation();
                     return targetPoint.minus(m_swerveDrive.getPose().getTranslation()).getAngle();
                 }));
+    m_driver.rightTrigger();
 
     // Switch to X pattern when X button is pressed
     m_driver.x().onTrue(Commands.runOnce(m_swerveDrive::stopWithX, m_swerveDrive));
