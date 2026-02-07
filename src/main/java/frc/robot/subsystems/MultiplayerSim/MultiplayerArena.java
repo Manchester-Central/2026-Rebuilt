@@ -120,6 +120,11 @@ public class MultiplayerArena extends Arena2026Rebuilt {
   }
 
   public void changePhase(MatchState newstate) {
+    switch (m_matchState) {
+      default:
+        break;
+    }
+
     m_matchState = newstate;
     phaseTimer.restart();
   }
@@ -242,7 +247,7 @@ M    MMMMMMMMMMMMMMMMMMMMM:<$$$$c  "$ J$$$$$$$PF" ."$$$$$$$$P" .
 
       case END_GAME:
         // Both teams again!
-        setShouldRunClock(true);
+        setShouldRunClock(false);
         break;
 
       case COMPLETED:
