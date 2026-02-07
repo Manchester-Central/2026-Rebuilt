@@ -20,14 +20,12 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.constants.IntakeConstants.RollerConstants;
 import frc.robot.constants.IntakeConstants.PivotConstants;
-import frc.robot.subsystems.interfaces.IIntake;
 
-public class Intake extends SubsystemBase implements IIntake {
+public class MapleSimtake extends Intake {
   private ChaosTalonFx m_rollerMotor = new ChaosTalonFx(RollerConstants.RollerCanId, IntakeConstants.CanBus, RollerConstants.Config);
   // private ChaosTalonFx m_intakeKickerMotor = new ChaosTalonFx(IntakeConstants.IntakeKickerCanId, IntakeConstants.IntakeCanBus); TODO: delete if not added to robot
   private ChaosTalonFx m_pivotMotor = new ChaosTalonFx(PivotConstants.PivotCanId, IntakeConstants.CanBus, PivotConstants.TalonConfig);
@@ -36,23 +34,8 @@ public class Intake extends SubsystemBase implements IIntake {
   private ChaosCanCoderTuner m_pivotCanCoderTuner = new ChaosCanCoderTuner("PivotCanCoderTuner", m_pivotCanCoder);
 
   /** Creates a new Intake. */
-  public Intake(int id) {
-
-    m_pivotCanCoder.applyConfig();
-    m_pivotMotor.applyConfig();
-    m_rollerMotor.applyConfig();
-
-    m_pivotTuner.tunableSlot0(PivotConstants.TalonConfig.Slot0);
-    m_pivotCanCoderTuner.tunableMagnetSensor(PivotConstants.CanCoderConfig.MagnetSensor);
-
-    m_pivotMotor.attachCanCoderSim(m_pivotCanCoder);
-
-    if (Robot.isSimulation()) {
-      var m_moi = SingleJointedArmSim.estimateMOI(IntakeConstants.IntakeLength.in(Meters), IntakeConstants.IntakeMass.in(Kilograms));
-      var m_dcMotor = DCMotor.getKrakenX60(1); // TODO: double check
-      var m_dcMotorSim = new DCMotorSim(LinearSystemId.createSingleJointedArmSystem(m_dcMotor, m_moi, PivotConstants.SensorToMechanismRatio), m_dcMotor);
-      m_pivotMotor.attachMotorSim(m_dcMotorSim, PivotConstants.SensorToMechanismRatio, true, ChassisReference.CounterClockwise_Positive, MotorType.KrakenX60);
-    }
+  public MapleSimtake(int id) {
+    super(id);
   }
 
   /**

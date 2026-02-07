@@ -27,6 +27,7 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.commands.defaults.ClimberDefaultCommand;
 import frc.robot.commands.defaults.IntakeDefaultCommand;
 import frc.robot.constants.GeneralConstants;
+import frc.robot.constants.GeneralConstants.Mode;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Quest;
@@ -42,11 +43,13 @@ import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.interfaces.AbstractDrive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeMech2D;
+import frc.robot.subsystems.intake.MapleSimtake;
 import frc.robot.subsystems.interfaces.IClimber;
 import frc.robot.subsystems.interfaces.IIntake;
 import frc.robot.subsystems.interfaces.ISimpleLauncher;
 import frc.robot.subsystems.launcher.Flywheel;
 import frc.robot.subsystems.launcher.Indexer;
+import frc.robot.subsystems.launcher.MapleSimFlywheel;
 import frc.robot.subsystems.launcher.SimpleLauncher;
 
 import static edu.wpi.first.units.Units.Inches;
@@ -154,11 +157,17 @@ public class RobotContainer {
     m_climber = new Climber();
     m_climberMech2d = new ClimberMech2D(m_climber);
 
-    m_intake = new Intake ();
+    if (GeneralConstants.currentMode != Mode.ARENA) {
+      // Real Robot mechanisms
+      m_intake = new Intake(id);
+      m_launcher = new SimpleLauncher(new Flywheel(id), new Indexer(id));
+    } else {
+      // Simulation Enhanced mechanisms
+      m_intake = new MapleSimtake(id);
+      m_launcher = new SimpleLauncher(new MapleSimFlywheel(id, m_intake), new Indexer(id));
+    }
     m_intakeMech2d = new IntakeMech2D(m_intake);
-
-    m_launcher = new SimpleLauncher(new Flywheel(), new Indexer());
-
+    
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 

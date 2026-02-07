@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.Degrees;
 
 import edu.wpi.first.units.measure.Angle;
 
+@Deprecated
 public class TurretMapleSim extends NaivePIDMechanism implements Iturret {
     private Angle minAngle = Degrees.of(-180);
     private Angle maxAngle = Degrees.of(-180);

@@ -1,8 +1,9 @@
-package frc.robot.subsystems.launcher;
+package frc.robot.subsystems.interfaces;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+@Deprecated
 public class NaivePIDMechanism extends SubsystemBase {
     // We should be using actual motor APIs here, but because there's too
     // many motors we would use all the canbus IDs, we're doing this with

@@ -9,11 +9,12 @@ import com.chaos131.ctre.ChaosTalonFxTuner;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.LauncherConstants;
 import frc.robot.constants.LauncherConstants.FlywheelConstants;
 import frc.robot.subsystems.interfaces.IFlywheel;
 
-public class Flywheel implements IFlywheel {
+public class Flywheel extends SubsystemBase implements IFlywheel {
     private ChaosTalonFx m_leftFlywheelMotor = new ChaosTalonFx(FlywheelConstants.LeftFlywheelCanId, LauncherConstants.LauncherCanBus, FlywheelConstants.LeftConfig);
     private ChaosTalonFx m_rightFlywheelMotor = new ChaosTalonFx(FlywheelConstants.RightFlywheelCanId, LauncherConstants.LauncherCanBus, FlywheelConstants.RightConfig);
     private ChaosTalonFx[] m_flywheelMotors = {
@@ -22,7 +23,7 @@ public class Flywheel implements IFlywheel {
     };
     private ChaosTalonFxTuner m_flywheelTuner = new ChaosTalonFxTuner("FlywheelTuner", m_flywheelMotors);
 
-    public Flywheel() {
+    public Flywheel(int id) {
         m_flywheelTuner.tunableSlot0(FlywheelConstants.LeftConfig.Slot0); // Will use left config initial values, but changes will be applied to all motors
         for (var motor : m_flywheelMotors)
             motor.applyConfig();
