@@ -37,7 +37,7 @@ public class IntakeDefaultCommand extends Command {
   public void execute() {
     if (m_isManualMode.getAsBoolean()) {
       if (m_isRunIntake.getAsBoolean()) {
-        m_intake.setRollerSpeed(0.1);
+        m_intake.setRollerSpeed(0.1); // TODO: add dashboard number
       } else {
         m_intake.setRollerSpeed(0);
       }

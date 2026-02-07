@@ -38,8 +38,16 @@ public class SimpleLauncher extends SubsystemBase implements ISimpleLauncher {
     return m_flywheel.getFlywheelSpeed();
   }
 
+  public double getIndexerSpeed() {
+    return m_indexer.getIndexerSpeed();
+  }
+
   public void setFlywheelSpeed(double speed) {
     m_flywheel.setFlywheelSpeed(speed);
+  }
+
+  public void setIndexerSpeed(double speed) {
+    m_indexer.setIndexerSpeed(speed);
   }
 
   public void setFlywheelVelocity(LinearVelocity velocity) {
