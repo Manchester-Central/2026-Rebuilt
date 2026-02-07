@@ -16,9 +16,9 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.IDrive;
+import frc.robot.constants.QuestConstants;
 import gg.questnav.questnav.PoseFrame;
 import gg.questnav.questnav.QuestNav;
-import frc.robot.Constants.QuestConstants;
 
 /**
  * A wrapper for the vendordep version of the QuestNav system

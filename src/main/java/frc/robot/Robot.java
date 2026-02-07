@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.MultiplayerSim.MultiplayerArena;
+import frc.robot.constants.GeneralConstants;
 
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -50,7 +51,7 @@ public class Robot extends LoggedRobot {
         });
 
     // Set up data receivers & replay source
-    switch (Constants.currentMode) {
+    switch (GeneralConstants.currentMode) {
       case REAL:
         // Running on a real robot, log to a USB stick ("/U/logs")
         Logger.addDataReceiver(new WPILOGWriter());

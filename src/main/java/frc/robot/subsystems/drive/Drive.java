@@ -40,8 +40,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.Constants;
-import frc.robot.Constants.Mode;
+import frc.robot.constants.GeneralConstants;
+import frc.robot.constants.GeneralConstants.Mode;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.interfaces.AbstractDrive;
 import frc.robot.util.LocalADStarAK;
@@ -196,7 +196,7 @@ public class Drive extends AbstractDrive {
     }
 
     // Update gyro alert
-    gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
+    gyroDisconnectedAlert.set(!gyroInputs.connected && GeneralConstants.currentMode != Mode.SIM);
   }
 
   /**
