@@ -38,6 +38,9 @@ public final class GeneralConstants {
     /** Running a physics simulator. */
     SIM,
 
+    /** Runs the full multiplayer arena mode */
+    ARENA,
+
     /** Replaying from a log file. */
     REPLAY
   }
