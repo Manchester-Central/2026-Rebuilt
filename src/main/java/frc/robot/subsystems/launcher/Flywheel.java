@@ -19,8 +19,6 @@ import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.robot.Robot;
-import frc.robot.constants.IntakeConstants;
-import frc.robot.constants.IntakeConstants.PivotConstants;
 import frc.robot.constants.LauncherConstants;
 import frc.robot.constants.LauncherConstants.FlywheelConstants;
 import frc.robot.subsystems.interfaces.IFlywheel;
@@ -32,15 +30,14 @@ public class Flywheel implements IFlywheel {
         m_leftFlywheelMotor,
         m_rightFlywheelMotor
     };
-    
-    private ChaosTalonFxTuner m_flywheelTuner = new ChaosTalonFxTuner("FlywheelTuner", m_flywheelMotors);
+
+    @SuppressWarnings("unused")
+    private ChaosTalonFxTuner m_flywheelTuner = new ChaosTalonFxTuner("Launcher/Flywheel/Flywheel Motors", m_flywheelMotors).withAllConfigs();
+
     private LinearVelocity targetVelocity = MetersPerSecond.of(0);
     private LinearVelocity targetVelocityTolerance = FlywheelConstants.TargetVelocityTolerance;
 
-    
-
     public Flywheel() {
-        m_flywheelTuner.tunableSlot0(FlywheelConstants.LeftConfig.Slot0); // Will use left config initial values, but changes will be applied to all motors
         for (var motor : m_flywheelMotors) {
             motor.applyConfig();
             if (Robot.isSimulation()) {
@@ -101,9 +98,5 @@ public class Flywheel implements IFlywheel {
         Logger.recordOutput("Launcher/LeftFlywheelVelocity", getLeftLinearVelocity().in(MetersPerSecond));
         Logger.recordOutput("Launcher/RightFlywheelVelocity", getRightLinearVelocity().in(MetersPerSecond));
         Logger.recordOutput("Launcher/FlywheelTargetVelocity", targetVelocity.in(MetersPerSecond));
-
-        for (ChaosTalonFx motor : m_flywheelMotors) {
-            motor.simulationPeriodic();
-        }
     }
 }
