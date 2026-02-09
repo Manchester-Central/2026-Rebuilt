@@ -46,7 +46,7 @@ public final class LauncherConstants {
   public static final FieldPose2026 LeftPassPoint = new FieldPose2026(Alliance.Blue, "LeftPassPoint", new Pose2d(Inches.of(120), Inches.of(260), Rotation2d.kZero));
   public static final FieldPose2026 RightPassPoint = new FieldPose2026(Alliance.Blue, "RightPassPoint", new Pose2d(Inches.of(120), Inches.of(57.69), Rotation2d.kZero));
 
-  public static final DashboardUnit<AngleUnit, Angle> AimYawTolerance = new DashboardUnit<>("AimYawTolerance", Degrees.of(1));
+  public static final DashboardUnit<AngleUnit, Angle> AimYawTolerance = new DashboardUnit<>("Launcher/AimYawTolerance", Degrees.of(1));
 
   public static final class FlywheelConstants {
     public static final CanId LeftFlywheelCanId = CanId.ID_40;
@@ -94,7 +94,7 @@ public final class LauncherConstants {
   public static final class IndexerConstants {
     public static final CanId IndexerCanId = CanId.ID_42;
 
-    public static final DashboardNumber IndexerSpeed = new DashboardNumber("Indexer/IndexerSpeed", 0.4, true, (x) -> {});
+    public static final DashboardNumber IndexerSpeed = new DashboardNumber("Launcher/Indexer/IndexerSpeed", 0.4);
 
     public static final TalonFXConfiguration Config = new TalonFXConfiguration()
       .withMotorOutput(new MotorOutputConfigs()
