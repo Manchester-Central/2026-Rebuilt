@@ -4,7 +4,11 @@
 
 package frc.robot.commands;
 
+import static edu.wpi.first.units.Units.Degrees;
+
 import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.Logger;
 
 import com.chaos131.poses.FieldPose2026;
 
@@ -34,10 +38,15 @@ public class TargetHubVelocityAndLaunch extends Command {
   public void initialize() {}
 
   private boolean isFacingTarget() {
-    Translation2d currentAngleTrans2d = m_currentPoseSupplier.get().getTranslation();
+    Translation2d currentTrans2d = m_currentPoseSupplier.get().getTranslation();
+    Angle currentAngle = m_currentPoseSupplier.get().getRotation().getMeasure();
     Translation2d targetPoint = FieldPose2026.HubCenter.getCurrentAlliancePose().getTranslation();
-    Angle targetAngle = targetPoint.minus(currentAngleTrans2d).getAngle().getMeasure();
-    return targetAngle.isNear(currentAngleTrans2d.getAngle().getMeasure(), LauncherConstants.AimYawTolerance.get()); // TODO: Fix in sim
+    Angle targetAngle = targetPoint.minus(currentTrans2d).getAngle().getMeasure();
+
+    Logger.recordOutput("Launcher/TargetAngle", targetAngle.in(Degrees));
+    Logger.recordOutput("Launcher/CurrentAngle", m_currentPoseSupplier.get().getRotation().getDegrees());
+    Logger.recordOutput("Launcher/AngleDif", targetAngle.minus(currentAngle));
+    return targetAngle.isNear(currentAngle, LauncherConstants.AimYawTolerance.get()); // TODO: Fix in sim
   }
 
   // Called every time the scheduler runs while the command is scheduled.
