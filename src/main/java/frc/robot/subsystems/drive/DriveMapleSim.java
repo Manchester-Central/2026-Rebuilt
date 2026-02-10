@@ -1,11 +1,20 @@
 package frc.robot.subsystems.drive;
 
+import static edu.wpi.first.units.Units.KilogramSquareMeters;
+import static edu.wpi.first.units.Units.Kilograms;
+import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.Volts;
 
 import org.dyn4j.geometry.Vector2;
+import org.ironmaple.simulation.SimulatedArena;
+import org.ironmaple.simulation.drivesims.COTS;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
+import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -14,20 +23,36 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.MultiplayerSim.MultiplayerArena;
 import frc.robot.subsystems.interfaces.AbstractDrive;
 
 public class DriveMapleSim extends AbstractDrive {
-  private DriveTrainSimulationConfig m_swerveConfig;
+  private DriveTrainSimulationConfig m_swerveConfig = DriveTrainSimulationConfig.Default()
+        .withRobotMass(Kilograms.of(54))
+        .withCustomModuleTranslations(getModuleTranslations())
+        .withGyro(COTS.ofPigeon2())
+        .withSwerveModule(new SwerveModuleSimulationConfig(
+                          DCMotor.getKrakenX60(1),
+                          DCMotor.getKrakenX60(1),
+                          TunerConstants.FrontLeft.DriveMotorGearRatio,
+                          TunerConstants.FrontLeft.SteerMotorGearRatio,
+                          Volts.of(TunerConstants.FrontLeft.DriveFrictionVoltage),
+                          Volts.of(TunerConstants.FrontLeft.SteerFrictionVoltage),
+                          Meters.of(TunerConstants.FrontLeft.WheelRadius),
+                          KilogramSquareMeters.of(TunerConstants.FrontLeft.SteerInertia),
+                          1.2));
   public SwerveDriveSimulation sim;
 
   public DriveMapleSim(Pose2d initialPose) {
-    sim = new SwerveDriveSimulation(m_swerveConfig, getPose());
+    sim = new SwerveDriveSimulation(m_swerveConfig, initialPose);
+    // SimulatedArena.getInstance().addDriveTrainSimulation(sim);
     MultiplayerArena.Instance.addDriveTrainSimulation(sim);
   }
 
@@ -38,12 +63,15 @@ public class DriveMapleSim extends AbstractDrive {
     // ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
     // SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
     // SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, TunerConstants.kSpeedAt12Volts);
-    sim.setRobotSpeeds(speeds);
+    Logger.recordOutput("Robot0/ChassisSpeeds", speeds);
+    sim.setRobotSpeeds(ChassisSpeeds.fromRobotRelativeSpeeds(speeds, getRotation()));
   }
 
   @Override
+  @AutoLogOutput(key = "Robot0/getChassisSpeeds")
   public ChassisSpeeds getChassisSpeeds() {
-    return sim.getDriveTrainSimulatedChassisSpeedsFieldRelative();
+    // return sim.getDriveTrainSimulatedChassisSpeedsFieldRelative();
+    return sim.getDriveTrainSimulatedChassisSpeedsRobotRelative();
   }
 
   @Override
@@ -54,7 +82,7 @@ public class DriveMapleSim extends AbstractDrive {
 
   @Override
   public void stop() {
-    runVelocity(new ChassisSpeeds());
+    sim.setRobotSpeeds(new ChassisSpeeds());
   }
 
   @Override

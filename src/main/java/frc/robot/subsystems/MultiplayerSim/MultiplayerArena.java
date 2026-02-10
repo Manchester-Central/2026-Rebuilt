@@ -7,7 +7,9 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 
 import java.util.Random;
+import java.util.function.Supplier;
 
+import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.seasonspecific.rebuilt2026.Arena2026Rebuilt;
 import org.ironmaple.simulation.seasonspecific.rebuilt2026.RebuiltFuelOnFly;
 import org.littletonrobotics.junction.Logger;
@@ -24,7 +26,13 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.RobotContainer;
+import frc.robot.constants.ArenaConstants;
 import frc.robot.subsystems.interfaces.AbstractDrive;
 
 public class MultiplayerArena extends Arena2026Rebuilt {
@@ -32,6 +40,7 @@ public class MultiplayerArena extends Arena2026Rebuilt {
   public static MultiplayerArena Instance;
   static {
     Instance = new MultiplayerArena(MatchState.TRANSITION_SHIFT);
+    SimulatedArena.overrideInstance(Instance);
   }
   
   // Match Phase Times
@@ -53,13 +62,7 @@ public class MultiplayerArena extends Arena2026Rebuilt {
 
   // Other Robots
   private RobotContainer[] robots;
-  private Pose2d[] startPosition = {
-    new Pose2d(Meters.of(-1), Meters.of(0), Rotation2d.kZero),
-    new Pose2d(Meters.of(-2), Meters.of(0), Rotation2d.kZero),
-    new Pose2d(Meters.of(17), Meters.of(0), Rotation2d.k180deg),
-    new Pose2d(Meters.of(18), Meters.of(0), Rotation2d.k180deg),
-    new Pose2d(Meters.of(19), Meters.of(0), Rotation2d.k180deg)
-  };
+  private SendableChooser<Command>[] choosers;
 
   private enum MatchState {
     PREPARE, /* matchRunning == false */
@@ -92,11 +95,14 @@ public class MultiplayerArena extends Arena2026Rebuilt {
     // autonomous into this at some point, but I fear that would
     // require an external process to act as FMS.
     m_firstAlliance = Alliance.Blue;
-    robots = new RobotContainer[5];
-    for (int idx = 0; idx < 5; idx++) {
+  }
+
+  public void loadAdditionalRobots() {
+    robots = new RobotContainer[ArenaConstants.numAdditionalRobots];
+    for (int idx = 0; idx < ArenaConstants.numAdditionalRobots; idx++) {
       // Actual robot container is id 0, rest of player alliance is 1-2
       // opposition is 3-5.
-      robots[idx] = new RobotContainer(idx+1, startPosition[idx]);
+      robots[idx] = new RobotContainer(idx+1, ArenaConstants.startingPoses[idx+1]);
     }
   }
 
@@ -256,8 +262,11 @@ M    MMMMMMMMMMMMMMMMMMMMM:<$$$$c  "$ J$$$$$$$PF" ."$$$$$$$$P" .
         break;
     }
 
+    // Do the game tick
+    simulationPeriodic();
+
     // Finally, log the game state
-    ArenaLogging();
+    arenaLogging();
   }
 
   private Alliance getWinner() {
@@ -331,7 +340,7 @@ M    MMMMMMMMMMMMMMMMMMMMM:<$$$$c  "$ J$$$$$$$PF" ."$$$$$$$$P" .
   /**
    * Logs overall match and field information.
    */
-  public void ArenaLogging() {
+  public void arenaLogging() {
     Logger.recordOutput("Arena/ScoreBlue", getScore(Alliance.Blue));
     Logger.recordOutput("Arena/ScoreRed", getScore(Alliance.Red));
     Logger.recordOutput("Arena/GameState", m_matchState);

@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.MultiplayerSim.MultiplayerArena;
+import frc.robot.constants.ArenaConstants;
 import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.GeneralConstants.Mode;
 
@@ -76,7 +77,8 @@ public class Robot extends LoggedRobot {
 
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
-    robotContainer = new RobotContainer(0, new Pose2d());
+    robotContainer = new RobotContainer(0, ArenaConstants.startingPoses[0]);
+    MultiplayerArena.Instance.loadAdditionalRobots();
   }
 
   /** This function is called periodically during all modes. */
@@ -122,7 +124,9 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    MultiplayerArena.Instance.periodic();
+  }
 
   /** This function is called once when teleop is enabled. */
   @Override
@@ -139,7 +143,9 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    MultiplayerArena.Instance.periodic();
+  }
 
   /** This function is called once when test mode is enabled. */
   @Override
@@ -159,6 +165,10 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {
-    MultiplayerArena.Instance.periodic();
+    // MultiplayerArena.Instance.periodic();
+    // Logs on the main robot
+    robotContainer.containerLogging();
+    // This is done in MultiplayerArena::periodic() now
+    // MultiplayerArena.Instance.arenaLogging();
   }
 }

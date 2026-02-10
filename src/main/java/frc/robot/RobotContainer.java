@@ -16,17 +16,22 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.defaults.ClimberDefaultCommand;
 import frc.robot.commands.defaults.IntakeDefaultCommand;
 import frc.robot.commands.defaults.SimpleLauncherDefaultCommand;
+import frc.robot.constants.ArenaConstants;
 import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.GeneralConstants.Mode;
 import frc.robot.generated.TunerConstants;
@@ -58,6 +63,9 @@ import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
+import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -67,6 +75,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  protected int id;
   // Subsystems
   private final AbstractDrive m_swerveDrive;
   @SuppressWarnings("unused")
@@ -87,10 +96,11 @@ public class RobotContainer {
   private final boolean m_isManual = true;
   private final Trigger m_isManualTrigger = new Trigger(() -> m_isManual);
   // Dashboard inputs
-  private final LoggedDashboardChooser<Command> autoChooser;
+  private LoggedDashboardChooser<Command> autoChooser;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer(int id, Pose2d startPose) {
+    this.id = id;
     switch (GeneralConstants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -176,24 +186,45 @@ public class RobotContainer {
     m_launcherMech2D = new LauncherMech2D(m_launcher);
     m_climberMech2d = new ClimberMech2D(m_climber);
 
-    // Set up auto routines
-    autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+    if (GeneralConstants.currentMode != Mode.ARENA) {
+      // Set up auto routines
+      autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
-    // Set up SysId routines
-    autoChooser.addOption(
-        "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(m_swerveDrive));
-    autoChooser.addOption(
-        "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(m_swerveDrive));
-    autoChooser.addOption(
-        "Drive SysId (Quasistatic Forward)",
-        m_swerveDrive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    autoChooser.addOption(
-        "Drive SysId (Quasistatic Reverse)",
-        m_swerveDrive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    autoChooser.addOption(
-        "Drive SysId (Dynamic Forward)", m_swerveDrive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    autoChooser.addOption(
-        "Drive SysId (Dynamic Reverse)", m_swerveDrive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+      // Set up SysId routines
+      autoChooser.addOption(
+          "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(m_swerveDrive));
+      autoChooser.addOption(
+          "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(m_swerveDrive));
+      autoChooser.addOption(
+          "Drive SysId (Quasistatic Forward)",
+          m_swerveDrive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+      autoChooser.addOption(
+          "Drive SysId (Quasistatic Reverse)",
+          m_swerveDrive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+      autoChooser.addOption(
+          "Drive SysId (Dynamic Forward)", m_swerveDrive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+      autoChooser.addOption(
+          "Drive SysId (Dynamic Reverse)", m_swerveDrive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    } else if(id > 0) {
+      // Additional bots get a behavior chooser
+      SendableChooser<Command> behaviorChooser = new SendableChooser<>();
+      final Supplier<Command> disable =
+          () -> Commands.runOnce(() -> m_swerveDrive.setPose(ArenaConstants.startingPoses[id+1]))
+                        .andThen(Commands.runOnce(
+                          () -> m_swerveDrive.runVelocity(new ChassisSpeeds())))
+                        .ignoringDisable(true);
+      // List of options
+      behaviorChooser.setDefaultOption("Disable", disable.get());
+      // behaviorChooser.addOption("Joystick Drive", joystickDrive(m_driver));
+
+      // Setup functionality
+      behaviorChooser.onChange((Command::schedule));
+      RobotModeTriggers.teleop()
+                      .onTrue(Commands.runOnce(
+                          () -> behaviorChooser.getSelected().schedule()));
+      RobotModeTriggers.disabled().onTrue(disable.get());
+      SmartDashboard.putData("FieldSimulation/Robot"+this.id+"/Behavior", behaviorChooser);
+    }
 
     // Configure the button bindings
     configureButtonBindings();
@@ -264,5 +295,9 @@ public class RobotContainer {
     // - doesn't include hood, or anything else
     // ArrayList<Pose3d> lst = m_launcher.generateMech3d();
     // Now generate the pose for the intake
+  }
+
+  public void containerLogging() {
+    Logger.recordOutput("Robot"+id+"/Pose2d", m_swerveDrive.getPose());
   }
 }
