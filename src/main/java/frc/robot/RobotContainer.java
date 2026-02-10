@@ -8,6 +8,7 @@
 package frc.robot;
 
 import com.chaos131.gamepads.Gamepad;
+import com.chaos131.poses.FieldPose;
 import com.chaos131.poses.FieldPose2026;
 import com.chaos131.vision.LimelightCamera;
 import com.chaos131.vision.LimelightCamera.LimelightVersion;
@@ -26,12 +27,14 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DeployIntake;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.TargetHubVelocityAndLaunch;
+import frc.robot.commands.TargetPassVelocityAndLaunch;
 import frc.robot.commands.defaults.ClimberDefaultCommand;
 import frc.robot.commands.defaults.IntakeDefaultCommand;
 import frc.robot.commands.defaults.SimpleLauncherDefaultCommand;
 import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.constants.IntakeConstants.PivotConstants;
+import frc.robot.constants.LauncherConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Quest;
@@ -223,6 +226,18 @@ public class RobotContainer {
             () -> -m_driver.getLeftX(),
             () -> {
                 Translation2d targetPoint = FieldPose2026.HubCenter.getCurrentAlliancePose().getTranslation();
+                return targetPoint.minus(m_swerveDrive.getPose().getTranslation()).getAngle();
+            })
+    ));
+
+    m_driver.leftBumper().and(m_isAutomaticTrigger).whileTrue(new TargetPassVelocityAndLaunch(m_launcher, m_swerveDrive::getPose).alongWith(
+        DriveCommands.joystickDriveAtAngle(
+            m_swerveDrive,
+            () -> m_driver.getLeftY(),
+            () -> -m_driver.getLeftX(),
+            () -> {
+                Pose2d targetPose = FieldPose.getClosestPose(m_swerveDrive.getPose(), LauncherConstants.LeftPassPoint, LauncherConstants.RightPassPoint).getCurrentAlliancePose();
+                Translation2d targetPoint = targetPose.getTranslation();
                 return targetPoint.minus(m_swerveDrive.getPose().getTranslation()).getAngle();
             })
     ));
