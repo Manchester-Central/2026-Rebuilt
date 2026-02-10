@@ -8,6 +8,7 @@
 package frc.robot;
 
 import com.chaos131.gamepads.Gamepad;
+import com.chaos131.poses.FieldPose;
 import com.chaos131.poses.FieldPose2026;
 import com.chaos131.vision.LimelightCamera;
 import com.chaos131.vision.LimelightCamera.LimelightVersion;
@@ -23,17 +24,24 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.commands.DeployIntake;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.TargetHubVelocityAndLaunch;
+import frc.robot.commands.TargetPassVelocityAndLaunch;
 import frc.robot.commands.defaults.ClimberDefaultCommand;
 import frc.robot.commands.defaults.IntakeDefaultCommand;
 import frc.robot.commands.defaults.SimpleLauncherDefaultCommand;
 import frc.robot.constants.ArenaConstants;
 import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.GeneralConstants.Mode;
+import frc.robot.constants.IntakeConstants;
+import frc.robot.constants.IntakeConstants.PivotConstants;
+import frc.robot.constants.LauncherConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Quest;
@@ -93,8 +101,9 @@ public class RobotContainer {
   private final Gamepad m_driver = new Gamepad(0);
   private final Gamepad m_operator = new Gamepad(1);
 
-  private final boolean m_isManual = true;
+  private boolean m_isManual = false;
   private final Trigger m_isManualTrigger = new Trigger(() -> m_isManual);
+  private final Trigger m_isAutomaticTrigger = m_isManualTrigger.negate();
   // Dashboard inputs
   private LoggedDashboardChooser<Command> autoChooser;
 
@@ -249,7 +258,6 @@ public class RobotContainer {
     m_intake.setDefaultCommand(new IntakeDefaultCommand(m_intake, m_isManualTrigger, m_operator.leftTrigger(), m_operator::getRightY));    
     m_launcher.setDefaultCommand(new SimpleLauncherDefaultCommand(m_launcher, m_isManualTrigger, m_operator.rightTrigger(), m_operator.rightBumper()));
     
-    // Lock to 0° when A button is held
     m_driver
         .rightBumper()
         .whileTrue(
@@ -261,13 +269,35 @@ public class RobotContainer {
                     Translation2d targetPoint = FieldPose2026.HubCenter.getCurrentAlliancePose().getTranslation();
                     return targetPoint.minus(m_swerveDrive.getPose().getTranslation()).getAngle();
                 }));
+    m_driver.rightTrigger().and(m_isAutomaticTrigger).whileTrue(new TargetHubVelocityAndLaunch(m_launcher, m_swerveDrive::getPose).alongWith(
+        DriveCommands.joystickDriveAtAngle(
+            m_swerveDrive,
+            () -> m_driver.getLeftY(),
+            () -> -m_driver.getLeftX(),
+            () -> {
+                Translation2d targetPoint = FieldPose2026.HubCenter.getCurrentAlliancePose().getTranslation();
+                return targetPoint.minus(m_swerveDrive.getPose().getTranslation()).getAngle();
+            })
+    ));
+
+    m_driver.leftBumper().and(m_isAutomaticTrigger).whileTrue(new TargetPassVelocityAndLaunch(m_launcher, m_swerveDrive::getPose).alongWith(
+        DriveCommands.joystickDriveAtAngle(
+            m_swerveDrive,
+            () -> m_driver.getLeftY(),
+            () -> -m_driver.getLeftX(),
+            () -> {
+                Pose2d targetPose = FieldPose.getClosestPose(m_swerveDrive.getPose(), LauncherConstants.LeftPassPoint, LauncherConstants.RightPassPoint).getCurrentAlliancePose();
+                Translation2d targetPoint = targetPose.getTranslation();
+                return targetPoint.minus(m_swerveDrive.getPose().getTranslation()).getAngle();
+            })
+    ));
 
     // Switch to X pattern when X button is pressed
     m_driver.x().onTrue(Commands.runOnce(m_swerveDrive::stopWithX, m_swerveDrive));
 
     // Reset gyro to 0° when B button is pressed
     m_driver
-        .b()
+        .povUp()
         .onTrue(
             Commands.runOnce(
                     () ->
@@ -275,9 +305,24 @@ public class RobotContainer {
                             new Pose2d(m_swerveDrive.getPose().getTranslation(), Rotation2d.kZero)),
                     m_swerveDrive)
                 .ignoringDisable(true));
+    
+    m_driver.leftTrigger().and(m_isAutomaticTrigger).whileTrue(new DeployIntake(m_intake));
 
-    m_driver.povUp().whileTrue(new RunCommand(() -> m_climber.setHeight(Inches.of(10)), m_climber));
-    m_driver.povDown().whileTrue(new RunCommand(() -> m_climber.setHeight(Inches.of(0)), m_climber));
+    m_driver.a().and(m_isAutomaticTrigger).whileTrue(new RunCommand(() -> m_intake.setPivotAngle(PivotConstants.RetractAngle), m_intake));
+
+    m_driver.leftStick().or(m_driver.rightStick()).toggleOnTrue(
+        DriveCommands.joystickDrive(
+            m_swerveDrive,
+            () -> m_driver.getLeftY() * GeneralConstants.SlowModeMultiplier,
+            () -> -m_driver.getLeftX() * GeneralConstants.SlowModeMultiplier,
+            () -> -m_driver.getRightX() * GeneralConstants.SlowModeMultiplier)
+    );
+
+    m_operator.povUp().and(m_isAutomaticTrigger).whileTrue(new RunCommand(() -> m_climber.setHeight(Inches.of(10)), m_climber));
+    m_operator.povDown().and(m_isAutomaticTrigger).whileTrue(new RunCommand(() -> m_climber.setHeight(Inches.of(0)), m_climber));
+
+    m_operator.start().onTrue(new InstantCommand((() -> m_isManual = true)));
+    m_operator.back().onTrue(new InstantCommand((() -> m_isManual = false)));
   }
 
   /**

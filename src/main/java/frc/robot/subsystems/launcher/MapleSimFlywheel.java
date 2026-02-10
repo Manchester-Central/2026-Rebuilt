@@ -1,6 +1,7 @@
 package frc.robot.subsystems.launcher;
 
 import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -54,14 +55,14 @@ public class MapleSimFlywheel extends Flywheel {
         if (atTargetLeft() && leftBallTimer.hasElapsed(ballLaunchInterval)) {
             if (intake.claimGamePiece()) {
                 leftBallTimer.reset();
-                launchGamePiece(drive.getPose(), leftOffset, targetVelocity);
+                launchGamePiece(drive.getPose(), leftOffset, MetersPerSecond.of(10));
             }
         }
 
         if (atTargetRight() && rightBallTimer.hasElapsed(ballLaunchInterval)) {
             if (intake.claimGamePiece()) {
                 rightBallTimer.reset();
-                launchGamePiece(drive.getPose(), rightOffset, targetVelocity);
+                launchGamePiece(drive.getPose(), rightOffset, MetersPerSecond.of(10));
             }
         }
     }

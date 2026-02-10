@@ -50,4 +50,6 @@ public interface IFlywheel {
      * @return true if within tolerance
      */
     public boolean atTargetRight();
+
+    public void periodic();
 }
