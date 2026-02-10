@@ -12,4 +12,5 @@ public interface ISimpleLauncher extends Subsystem {
     public void setFlywheelVelocity(LinearVelocity velocity);
     public LinearVelocity getScoringVelocity(Pose2d currentPose);
     public boolean atTargetFlywheelVelocity();
+    public LinearVelocity getPassVelocity(Pose2d currentPose);
 }
