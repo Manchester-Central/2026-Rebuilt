@@ -77,7 +77,7 @@ public class RobotContainer {
   private Camera m_camera;
   private IClimber m_climber;
   @SuppressWarnings("unused")
-private ClimberMech2D m_climberMech2d;
+  private ClimberMech2D m_climberMech2d;
   @SuppressWarnings("unused")
   private IntakeMech2D m_intakeMech2d;
   @SuppressWarnings("unused")
