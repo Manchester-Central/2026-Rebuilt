@@ -10,6 +10,8 @@ import static edu.wpi.first.units.Units.InchesPerSecondPerSecond;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Radians;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.chaos131.poses.FieldPose;
 import com.chaos131.poses.FieldPose2026;
 
@@ -55,17 +57,22 @@ public class SimpleLauncher extends SubsystemBase implements ISimpleLauncher {
   }
 
   public LinearVelocity getFlywheelVelocity() {
-    return MetersPerSecond.of(0); // TODO: Implement actual velocity getter
+    return m_flywheel.getLeftLinearVelocity(); // TODO: Implement actual velocity getter
+  }
+
+  public boolean atTargetFlywheelVelocity() {
+    return m_flywheel.atTargetRight() && m_flywheel.atTargetLeft();
   }
 
   private LinearVelocity getVelocityForTarget(Pose2d currentPose, Pose2d targetPose, Distance targetHeight) {
     double groundDisplacementInches = FieldPose.getDistanceFromLocations(currentPose, targetPose).in(Inches);
     double thetaRadians = LauncherConstants.SimpleLauncherAngle.in(Radians);
     double deltaHeightInches = targetHeight.minus(LauncherConstants.SimpleLauncherHeight).in(Inches);
+    
+    double numerator = GeneralConstants.gravity.in(InchesPerSecondPerSecond) * Math.pow(groundDisplacementInches, 2);
+    double denomenator = 2 * Math.pow(Math.cos(thetaRadians), 2) * (deltaHeightInches - groundDisplacementInches * Math.tan(thetaRadians));
 
-    double velocity = Math.sqrt(
-      (GeneralConstants.gravity.in(InchesPerSecondPerSecond) * Math.pow(groundDisplacementInches, 2)) /
-      (2 * Math.pow(Math.cos(thetaRadians), 2) * (deltaHeightInches - groundDisplacementInches * Math.tan(thetaRadians))));
+    double velocity = Math.sqrt(numerator / denomenator);
     return InchesPerSecond.of(velocity);
   }
 
@@ -80,6 +87,6 @@ public class SimpleLauncher extends SubsystemBase implements ISimpleLauncher {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    m_flywheel.periodic();
   }
 }

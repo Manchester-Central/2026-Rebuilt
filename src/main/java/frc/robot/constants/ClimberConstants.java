@@ -65,7 +65,5 @@ public final class ClimberConstants {
             .withGravityType(GravityTypeValue.Elevator_Static)
         );
 
-
-
-    public static final DashboardNumber ManualSpeedMultiplier = new DashboardNumber("Climber/ManualSpeedMultiplier", 0.1, true, (x) -> {});
+    public static final DashboardNumber ManualSpeedMultiplier = new DashboardNumber("Climber/ManualSpeedMultiplier", 0.1);
 }

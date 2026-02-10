@@ -31,9 +31,14 @@ public class Intake extends SubsystemBase implements IIntake {
   private ChaosTalonFx m_rollerMotor = new ChaosTalonFx(RollerConstants.RollerCanId, IntakeConstants.CanBus, RollerConstants.Config);
   // private ChaosTalonFx m_intakeKickerMotor = new ChaosTalonFx(IntakeConstants.IntakeKickerCanId, IntakeConstants.IntakeCanBus); TODO: delete if not added to robot
   private ChaosTalonFx m_pivotMotor = new ChaosTalonFx(PivotConstants.PivotCanId, IntakeConstants.CanBus, PivotConstants.TalonConfig);
-  private ChaosTalonFxTuner m_pivotTuner = new ChaosTalonFxTuner("PivotTuner", m_pivotMotor);
   private ChaosCanCoder m_pivotCanCoder = new ChaosCanCoder(PivotConstants.PivotCanCoderId, IntakeConstants.CanBus, PivotConstants.CanCoderConfig);
-  private ChaosCanCoderTuner m_pivotCanCoderTuner = new ChaosCanCoderTuner("PivotCanCoderTuner", m_pivotCanCoder);
+
+  @SuppressWarnings("unused")
+  private ChaosTalonFxTuner m_rollerTuner = new ChaosTalonFxTuner("Intake/Roller Motor", m_pivotMotor).withCurrentLimits();
+  @SuppressWarnings("unused")
+  private ChaosTalonFxTuner m_pivotTuner = new ChaosTalonFxTuner("Intake/Pivot Motor", m_pivotMotor).withAllConfigs();
+  @SuppressWarnings("unused")
+  private ChaosCanCoderTuner m_pivotCanCoderTuner = new ChaosCanCoderTuner("Intake/Pivot CanCoder", m_pivotCanCoder).withMagnetSensor();
 
   /** Creates a new Intake. */
   public Intake() {
@@ -41,9 +46,6 @@ public class Intake extends SubsystemBase implements IIntake {
     m_pivotCanCoder.applyConfig();
     m_pivotMotor.applyConfig();
     m_rollerMotor.applyConfig();
-
-    m_pivotTuner.tunableSlot0(PivotConstants.TalonConfig.Slot0);
-    m_pivotCanCoderTuner.tunableMagnetSensor(PivotConstants.CanCoderConfig.MagnetSensor);
 
     m_pivotMotor.attachCanCoderSim(m_pivotCanCoder);
 
@@ -135,10 +137,5 @@ public class Intake extends SubsystemBase implements IIntake {
   @Override
   public void retract() {
     setPivotAngle(PivotConstants.RetractAngle);
-  }
-
-  @Override
-  public void simulationPeriodic() {
-    m_pivotMotor.simulationPeriodic();
   }
 }

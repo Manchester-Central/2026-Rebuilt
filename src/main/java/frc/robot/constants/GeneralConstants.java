@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 public final class GeneralConstants {
   public static final Mode simMode = Mode.SIM;
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
+  public static final double SlowModeMultiplier = 0.5;
 
   public static enum Mode {
     /** Running on a real robot. */
@@ -43,5 +44,5 @@ public final class GeneralConstants {
   }
 
   // General Game Info Here!
-  public static final LinearAcceleration gravity = MetersPerSecondPerSecond.of(9.80665);
+  public static final LinearAcceleration gravity = MetersPerSecondPerSecond.of(-9.80665);
 }

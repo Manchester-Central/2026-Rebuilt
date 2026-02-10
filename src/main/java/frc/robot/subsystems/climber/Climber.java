@@ -24,12 +24,13 @@ import frc.robot.subsystems.interfaces.IClimber;
 
 public class Climber extends SubsystemBase implements IClimber {
   private ChaosTalonFx m_climberMotor = new ChaosTalonFx(ClimberConstants.ClimberCanId, ClimberConstants.ClimberCanBus, ClimberConstants.Config);
-  private ChaosTalonFxTuner m_climberTuner = new ChaosTalonFxTuner("ClimberTuner", m_climberMotor);
+
+  @SuppressWarnings("unused")
+  private ChaosTalonFxTuner m_climberTuner = new ChaosTalonFxTuner("Climber/Climber Motor", m_climberMotor).withAllConfigs();
 
   /** Creates a new Climber. */
   public Climber() {
     m_climberMotor.applyConfig();
-    m_climberTuner.tunableSlot0(ClimberConstants.Config.Slot0);
 
     if (Robot.isSimulation()) {
       var m_dcMotor = DCMotor.getKrakenX60(1); // TODO: double check
@@ -67,10 +68,5 @@ public class Climber extends SubsystemBase implements IClimber {
 
   public double getClimberSpeed() {
     return m_climberMotor.get();
-  }
-
-  @Override
-  public void simulationPeriodic() {
-    m_climberMotor.simulationPeriodic();
   }
 }
