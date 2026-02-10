@@ -13,7 +13,6 @@ import org.littletonrobotics.junction.Logger;
 import com.chaos131.poses.FieldPose2026;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.LauncherConstants;
@@ -38,15 +37,14 @@ public class TargetHubVelocityAndLaunch extends Command {
   public void initialize() {}
 
   private boolean isFacingTarget() {
-    Translation2d currentTrans2d = m_currentPoseSupplier.get().getTranslation();
-    Angle currentAngle = m_currentPoseSupplier.get().getRotation().getMeasure();
-    Translation2d targetPoint = FieldPose2026.HubCenter.getCurrentAlliancePose().getTranslation();
-    Angle targetAngle = targetPoint.minus(currentTrans2d).getAngle().getMeasure();
+    Pose2d currentPose = m_currentPoseSupplier.get();
+    Angle currentAngle = currentPose.getRotation().getMeasure();
+    Angle targetAngle = FieldPose2026.HubCenter.getTargetAngleForRobot(currentPose).getMeasure();
 
     Logger.recordOutput("Launcher/TargetAngle", targetAngle.in(Degrees));
-    Logger.recordOutput("Launcher/CurrentAngle", m_currentPoseSupplier.get().getRotation().getDegrees());
-    Logger.recordOutput("Launcher/AngleDif", targetAngle.minus(currentAngle));
-    return targetAngle.isNear(currentAngle, LauncherConstants.AimYawTolerance.get()); // TODO: Fix in sim
+    Logger.recordOutput("Launcher/CurrentAngle", currentAngle.in(Degrees));
+    Logger.recordOutput("Launcher/AngleDif", targetAngle.minus(currentAngle).in(Degrees));
+    return targetAngle.isNear(currentAngle, LauncherConstants.AimYawTolerance.get());
   }
 
   // Called every time the scheduler runs while the command is scheduled.

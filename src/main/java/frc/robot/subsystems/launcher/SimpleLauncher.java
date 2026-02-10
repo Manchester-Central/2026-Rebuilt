@@ -81,7 +81,7 @@ public class SimpleLauncher extends SubsystemBase implements ISimpleLauncher {
   }
 
   public LinearVelocity getPassVelocity(Pose2d currentPose) {
-    FieldPose closestPose = FieldPose.getClosestPose(currentPose, LauncherConstants.LeftPassPoint, LauncherConstants.RightPassPoint);
+    FieldPose closestPose = FieldPose.getClosestPose(currentPose, LauncherConstants.PassPoints);
     return getVelocityForTarget(currentPose, closestPose.getCurrentAlliancePose(), Inches.of(0));
   }
 
