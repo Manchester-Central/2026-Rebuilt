@@ -7,10 +7,7 @@ package frc.robot.subsystems.launcher;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.InchesPerSecond;
 import static edu.wpi.first.units.Units.InchesPerSecondPerSecond;
-import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Radians;
-
-import org.littletonrobotics.junction.Logger;
 
 import com.chaos131.poses.FieldPose;
 import com.chaos131.poses.FieldPose2026;
