@@ -4,9 +4,18 @@
 
 package frc.robot.constants;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 
+import com.pathplanner.lib.path.PathConstraints;
+
+import edu.wpi.first.units.measure.AngularAcceleration;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearAcceleration;
+import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.units.measure.Velocity;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /*
@@ -42,6 +51,14 @@ public final class GeneralConstants {
     /** Replaying from a log file. */
     REPLAY
   }
+
+  // Path Constraints
+  public static final LinearVelocity PathVelocityConstraint = MetersPerSecond.of(3.0); // TODO: update values
+  public static final LinearAcceleration PathAccelerationConstraint = MetersPerSecondPerSecond.of(4.0); // TODO: update values
+  public static final AngularVelocity PathAngularVelocity = RotationsPerSecond.of(1.5); // TODO: update values
+  public static final AngularAcceleration PathAngularAcceleration = RotationsPerSecondPerSecond.of(2); // TODO: update values
+
+  public static final PathConstraints pathConstraints = new PathConstraints(PathVelocityConstraint, PathAccelerationConstraint, PathAngularVelocity, PathAngularAcceleration);
 
   // General Game Info Here!
   public static final LinearAcceleration gravity = MetersPerSecondPerSecond.of(-9.80665);

@@ -53,6 +53,7 @@ import frc.robot.subsystems.launcher.Flywheel;
 import frc.robot.subsystems.launcher.Indexer;
 import frc.robot.subsystems.launcher.LauncherMech2D;
 import frc.robot.subsystems.launcher.SimpleLauncher;
+import frc.robot.util.PathUtil;
 
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.MetersPerSecond;
@@ -253,6 +254,8 @@ public class RobotContainer {
     m_driver.leftTrigger().and(m_isAutomaticTrigger).whileTrue(new DeployIntake(m_intake));
 
     m_driver.a().and(m_isAutomaticTrigger).whileTrue(new RunCommand(() -> m_intake.setPivotAngle(PivotConstants.RetractAngle), m_intake));
+    
+    m_driver.y().and(m_isAutomaticTrigger).whileTrue(PathUtil.driveToPoseCommand(LauncherConstants.SafeLaunchePoint, m_swerveDrive));
 
     m_driver.leftStick().or(m_driver.rightStick()).toggleOnTrue(
         DriveCommands.joystickDrive(
