@@ -181,7 +181,13 @@ public class RobotContainer {
     m_launcherMech2D = new LauncherMech2D(m_launcher);
 
     NamedCommands.registerCommand("Intake", new IntakeCommand(m_intake));
-
+    NamedCommands.registerCommand("Outtake", new InstantCommand());
+    NamedCommands.registerCommand("DeployIntake", new InstantCommand());
+    NamedCommands.registerCommand("RetractIntake", new InstantCommand());
+    NamedCommands.registerCommand("LaunchHub", new InstantCommand());
+    NamedCommands.registerCommand("LaunchPass", new InstantCommand());
+    NamedCommands.registerCommand("ClimbReach", new InstantCommand());
+    NamedCommands.registerCommand("ClimbEngage", new InstantCommand());
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
