@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.climb.SetClimberHeight;
 import frc.robot.commands.defaults.ClimberDefaultCommand;
 import frc.robot.commands.defaults.IntakeDefaultCommand;
 import frc.robot.commands.defaults.SimpleLauncherDefaultCommand;
@@ -190,8 +191,8 @@ public class RobotContainer {
             .alongWith(getAimAtFieldPosesCommand(FieldPose2026.HubCenter)));
     NamedCommands.registerCommand("LaunchPass", new TargetPassVelocityAndLaunch(m_launcher, m_swerveDrive::getPose)
             .alongWith(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
-    NamedCommands.registerCommand("ClimbReach", new InstantCommand());
-    NamedCommands.registerCommand("ClimbEngage", new InstantCommand());
+    NamedCommands.registerCommand("ClimbReach", new SetClimberHeight(m_climber, ClimberConstants.MaxExtension));
+    NamedCommands.registerCommand("ClimbEngage", new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension));
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -278,9 +279,9 @@ public class RobotContainer {
             m_getDriverRotationSlow)
     );
 
-    m_operator.povUp().and(m_isAutomaticTrigger).whileTrue(new RunCommand(() -> m_climber.setHeight(ClimberConstants.MaxExtension), m_climber));
-    m_operator.povRight().and(m_isAutomaticTrigger).whileTrue(new RunCommand(() -> m_climber.setHeight(ClimberConstants.ClimbExtension), m_climber));
-    m_operator.povDown().and(m_isAutomaticTrigger).whileTrue(new RunCommand(() -> m_climber.setHeight(ClimberConstants.MinExtension), m_climber));
+    m_operator.povUp().and(m_isAutomaticTrigger).whileTrue(new SetClimberHeight(m_climber, ClimberConstants.MaxExtension));
+    m_operator.povRight().and(m_isAutomaticTrigger).whileTrue(new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension));
+    m_operator.povDown().and(m_isAutomaticTrigger).whileTrue(new SetClimberHeight(m_climber, ClimberConstants.MinExtension));
 
     m_operator.start().onTrue(new InstantCommand((() -> m_isManual = true)));
     m_operator.back().onTrue(new InstantCommand((() -> m_isManual = false)));
