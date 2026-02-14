@@ -33,6 +33,7 @@ import frc.robot.commands.TargetPassVelocityAndLaunch;
 import frc.robot.commands.defaults.ClimberDefaultCommand;
 import frc.robot.commands.defaults.IntakeDefaultCommand;
 import frc.robot.commands.defaults.SimpleLauncherDefaultCommand;
+import frc.robot.constants.ClimberConstants;
 import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.IntakeConstants.PivotConstants;
 import frc.robot.constants.LauncherConstants;
@@ -58,7 +59,6 @@ import frc.robot.subsystems.launcher.LauncherMech2D;
 import frc.robot.subsystems.launcher.SimpleLauncher;
 import frc.robot.util.PathUtil;
 
-import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
@@ -231,27 +231,7 @@ public class RobotContainer {
     m_intake.setDefaultCommand(new IntakeDefaultCommand(m_intake, m_isManualTrigger, m_operator.leftTrigger(), m_operator::getRightY));    
     m_launcher.setDefaultCommand(new SimpleLauncherDefaultCommand(m_launcher, m_isManualTrigger, m_operator.rightTrigger(), m_operator.rightBumper()));
     
-    m_driver
-        .rightBumper()
-        .whileTrue(getAimAtFieldPosesCommand(FieldPose2026.HubCenter));
-
-    m_driver
-        .rightTrigger()
-        .and(m_isAutomaticTrigger)
-        .whileTrue(
-            new TargetHubVelocityAndLaunch(m_launcher, m_swerveDrive::getPose)
-            .alongWith(getAimAtFieldPosesCommand(FieldPose2026.HubCenter)));
-
-    m_driver
-        .leftBumper()
-        .and(m_isAutomaticTrigger)
-        .whileTrue(
-            new TargetPassVelocityAndLaunch(m_launcher, m_swerveDrive::getPose)
-            .alongWith(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
-
-    // Switch to X pattern when X button is pressed
-    m_driver.x().onTrue(Commands.runOnce(m_swerveDrive::stopWithX, m_swerveDrive));
-
+    
     // Reset gyro to 0° when B button is pressed
     m_driver
         .povUp()
@@ -262,11 +242,28 @@ public class RobotContainer {
                             new Pose2d(m_swerveDrive.getPose().getTranslation(), Rotation2d.kZero)),
                     m_swerveDrive)
                 .ignoringDisable(true));
+
+    m_driver
+        .leftBumper()
+        .and(m_isAutomaticTrigger)
+        .whileTrue(
+            new TargetPassVelocityAndLaunch(m_launcher, m_swerveDrive::getPose)
+            .alongWith(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
+    m_driver
+        .rightBumper()
+        .whileTrue(getAimAtFieldPosesCommand(FieldPose2026.HubCenter));
+
     
     m_driver.leftTrigger().and(m_isAutomaticTrigger).whileTrue(new DeployIntake(m_intake));
+    m_driver
+        .rightTrigger()
+        .and(m_isAutomaticTrigger)
+        .whileTrue(
+            new TargetHubVelocityAndLaunch(m_launcher, m_swerveDrive::getPose)
+            .alongWith(getAimAtFieldPosesCommand(FieldPose2026.HubCenter)));
 
     m_driver.a().and(m_isAutomaticTrigger).whileTrue(new RunCommand(() -> m_intake.setPivotAngle(PivotConstants.RetractAngle), m_intake));
-    
+    m_driver.x().onTrue(Commands.runOnce(m_swerveDrive::stopWithX, m_swerveDrive));
     m_driver.y().and(m_isAutomaticTrigger).whileTrue(PathUtil.driveToPoseCommand(LauncherConstants.SafeLaunchePoint, m_swerveDrive));
 
     m_driver.leftStick().or(m_driver.rightStick()).toggleOnTrue(
@@ -277,8 +274,9 @@ public class RobotContainer {
             m_getDriverRotationSlow)
     );
 
-    m_operator.povUp().and(m_isAutomaticTrigger).whileTrue(new RunCommand(() -> m_climber.setHeight(Inches.of(10)), m_climber));
-    m_operator.povDown().and(m_isAutomaticTrigger).whileTrue(new RunCommand(() -> m_climber.setHeight(Inches.of(0)), m_climber));
+    m_operator.povUp().and(m_isAutomaticTrigger).whileTrue(new RunCommand(() -> m_climber.setHeight(ClimberConstants.MaxExtension), m_climber));
+    m_operator.povRight().and(m_isAutomaticTrigger).whileTrue(new RunCommand(() -> m_climber.setHeight(ClimberConstants.ClimbExtension), m_climber));
+    m_operator.povDown().and(m_isAutomaticTrigger).whileTrue(new RunCommand(() -> m_climber.setHeight(ClimberConstants.MinExtension), m_climber));
 
     m_operator.start().onTrue(new InstantCommand((() -> m_isManual = true)));
     m_operator.back().onTrue(new InstantCommand((() -> m_isManual = false)));
