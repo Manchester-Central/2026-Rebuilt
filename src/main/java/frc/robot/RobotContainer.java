@@ -17,6 +17,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -186,8 +187,10 @@ public class RobotContainer {
     NamedCommands.registerCommand("DeployOuttake", new DeployOuttake(m_intake));
     NamedCommands.registerCommand("DeployIntake", new DeployIntake(m_intake));
     NamedCommands.registerCommand("RetractIntake", new RetractIntake(m_intake));
-    NamedCommands.registerCommand("LaunchHub", new InstantCommand());
-    NamedCommands.registerCommand("LaunchPass", new InstantCommand());
+    NamedCommands.registerCommand("LaunchHub", new TargetHubVelocityAndLaunch(m_launcher, m_swerveDrive::getPose)
+            .alongWith(getAimAtFieldPosesCommand(FieldPose2026.HubCenter)));
+    NamedCommands.registerCommand("LaunchPass", new TargetPassVelocityAndLaunch(m_launcher, m_swerveDrive::getPose)
+            .alongWith(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
     NamedCommands.registerCommand("ClimbReach", new InstantCommand());
     NamedCommands.registerCommand("ClimbEngage", new InstantCommand());
 
@@ -289,8 +292,8 @@ public class RobotContainer {
   private Command getAimAtFieldPosesCommand(FieldPose2026... poses) {
     return DriveCommands.joystickDriveAtAngle(
         m_swerveDrive,
-        m_getDriverXTranslation,
-        m_getDriverYTranslation,
+       DriverStation.isAutonomous() ? () -> 0 :  m_getDriverXTranslation,
+       DriverStation.isAutonomous() ? () -> 0 : m_getDriverYTranslation,
         () -> {
             FieldPose targetPose = FieldPose.getClosestPose(m_swerveDrive.getPose(), poses);
             return targetPose.getTargetAngleForRobot(m_swerveDrive.getPose());
