@@ -278,6 +278,8 @@ public class RobotContainer {
     m_operator.povRight().and(m_isAutomaticTrigger).whileTrue(new RunCommand(() -> m_climber.setHeight(ClimberConstants.ClimbExtension), m_climber));
     m_operator.povDown().and(m_isAutomaticTrigger).whileTrue(new RunCommand(() -> m_climber.setHeight(ClimberConstants.MinExtension), m_climber));
 
+    m_operator.y().whileTrue(new InstantCommand(() -> m_quest.resetPose(m_camera.getBotPose3d())));
+
     m_operator.start().onTrue(new InstantCommand((() -> m_isManual = true)));
     m_operator.back().onTrue(new InstantCommand((() -> m_isManual = false)));
   }
@@ -301,5 +303,17 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return autoChooser.get();
+  }
+
+  public Camera getCamera() {
+    return m_camera;
+  }
+
+  public Drive getSwerveDrive() {
+    return m_swerveDrive;
+  }
+
+  public Quest getQuest() {
+    return m_quest;
   }
 }
