@@ -13,6 +13,8 @@ import com.chaos131.poses.FieldPose2026;
 import com.chaos131.vision.LimelightCamera;
 import com.chaos131.vision.LimelightCamera.LimelightVersion;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -25,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DeployIntake;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.TargetHubVelocityAndLaunch;
 import frc.robot.commands.TargetPassVelocityAndLaunch;
 import frc.robot.commands.defaults.ClimberDefaultCommand;
@@ -176,6 +179,15 @@ public class RobotContainer {
 
     m_launcher = new SimpleLauncher(new Flywheel(), new Indexer());
     m_launcherMech2D = new LauncherMech2D(m_launcher);
+
+    NamedCommands.registerCommand("Intake", new IntakeCommand(m_intake));
+    NamedCommands.registerCommand("Outtake", new InstantCommand());
+    NamedCommands.registerCommand("DeployIntake", new InstantCommand());
+    NamedCommands.registerCommand("RetractIntake", new InstantCommand());
+    NamedCommands.registerCommand("LaunchHub", new InstantCommand());
+    NamedCommands.registerCommand("LaunchPass", new InstantCommand());
+    NamedCommands.registerCommand("ClimbReach", new InstantCommand());
+    NamedCommands.registerCommand("ClimbEngage", new InstantCommand());
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
