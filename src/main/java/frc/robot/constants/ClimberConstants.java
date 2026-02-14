@@ -24,11 +24,16 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Mass;
+import edu.wpi.first.wpilibj.AnalogInput;
 
 /** Add your docs here. */
 public final class ClimberConstants {
     public static final CanBusName ClimberCanBus = CanBusName.RIO;
     public static final CanId ClimberCanId = CanId.ID_20;
+
+    public static final AnalogInput StringPotInput = new AnalogInput(0); // TODO: Double Check
+    public static final Distance StringPotRange = Inches.of(10.0); // TODO: Double Check
+    public static final Distance StringPotStartPoint = Inches.of(0); // TODO: Double Check
 
     public static final Distance MaxExtension = Inches.of(10); // TODO: Double Check
     public static final Distance ClimbExtension = Inches.of(6); // TODO: Double Check

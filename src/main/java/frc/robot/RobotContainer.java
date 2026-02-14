@@ -56,7 +56,6 @@ import frc.robot.subsystems.launcher.LauncherMech2D;
 import frc.robot.subsystems.launcher.SimpleLauncher;
 import frc.robot.util.PathUtil;
 
-import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
