@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.QuestConstants;
 import frc.robot.subsystems.drive.Drive;
@@ -84,7 +85,7 @@ public class Quest extends SubsystemBase {
       0.035 // Trust down to 2 degrees rotational
     );
 
-    if (questNav.isConnected() && questNav.isTracking()) {
+    if (questNav.isConnected() && questNav.isTracking() && DriverStation.isEnabled()) {
       // Loop over the pose data frames and send them to the pose estimator
       for (PoseFrame questFrame : poseFrames) {
         // Get the pose of the Quest
@@ -96,7 +97,7 @@ public class Quest extends SubsystemBase {
         robotPose = questPose3d.transformBy(robotToQuest.inverse());
 
         // Add the measurement to our estimator
-        m_swerveDrive.addVisionMeasurement(robotPose.toPose2d(),timestamp,QUESTNAV_STD_DEVS);
+        m_swerveDrive.addVisionMeasurement(robotPose.toPose2d(), timestamp, QUESTNAV_STD_DEVS);
       }
     } 
   }

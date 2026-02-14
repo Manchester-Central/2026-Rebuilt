@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.GeneralConstants;
@@ -27,6 +28,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
+  private boolean hasEnabled = false;
 
   public Robot() {
     // Record metadata
@@ -93,11 +95,19 @@ public class Robot extends LoggedRobot {
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    if (!hasEnabled) {
+      robotContainer.getCamera().setUseForOdometry(true);
+    }
+  }
 
   /** This function is called periodically when disabled. */
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    if (!hasEnabled) {
+      robotContainer.getQuest().resetPose(new Pose3d(robotContainer.getSwerveDrive().getPose()));
+    }
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
@@ -108,6 +118,9 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(autonomousCommand);
     }
+
+    robotContainer.getCamera().setUseForOdometry(false);
+    hasEnabled = true;
   }
 
   /** This function is called periodically during autonomous. */
@@ -124,6 +137,9 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+
+    robotContainer.getCamera().setUseForOdometry(false);
+    hasEnabled = true;
   }
 
   /** This function is called periodically during operator control. */

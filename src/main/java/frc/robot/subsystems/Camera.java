@@ -36,6 +36,14 @@ public class Camera extends LimelightCamera {
         robotRotationSpeedSupplier);
   }
 
+  public Pose3d getBotPose3d() {
+    var botPoseArray = m_botpose.getDoubleArray(new double[0]);
+    if (botPoseArray.length > 6) {
+      return null;
+    }
+    return LimelightHelpers.toPose3D(botPoseArray);
+  }
+
   public Pose3d getTargetPose3dRobotSpace() {
     return LimelightHelpers.getTargetPose3d_RobotSpace(m_name);
   }
