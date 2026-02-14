@@ -17,6 +17,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,14 +26,16 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.commands.DeployIntake;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.TargetHubVelocityAndLaunch;
-import frc.robot.commands.TargetPassVelocityAndLaunch;
+import frc.robot.commands.climb.SetClimberHeight;
 import frc.robot.commands.defaults.ClimberDefaultCommand;
 import frc.robot.commands.defaults.IntakeDefaultCommand;
 import frc.robot.commands.defaults.SimpleLauncherDefaultCommand;
+import frc.robot.commands.intake.DeployIntake;
+import frc.robot.commands.intake.DeployOuttake;
+import frc.robot.commands.intake.RetractIntake;
+import frc.robot.commands.launcher.TargetHubVelocityAndLaunch;
+import frc.robot.commands.launcher.TargetPassVelocityAndLaunch;
 import frc.robot.constants.ClimberConstants;
 import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.IntakeConstants.PivotConstants;
@@ -180,14 +183,16 @@ public class RobotContainer {
     m_launcher = new SimpleLauncher(new Flywheel(), new Indexer());
     m_launcherMech2D = new LauncherMech2D(m_launcher);
 
-    NamedCommands.registerCommand("Intake", new IntakeCommand(m_intake));
-    NamedCommands.registerCommand("Outtake", new InstantCommand());
-    NamedCommands.registerCommand("DeployIntake", new InstantCommand());
-    NamedCommands.registerCommand("RetractIntake", new InstantCommand());
-    NamedCommands.registerCommand("LaunchHub", new InstantCommand());
-    NamedCommands.registerCommand("LaunchPass", new InstantCommand());
-    NamedCommands.registerCommand("ClimbReach", new InstantCommand());
-    NamedCommands.registerCommand("ClimbEngage", new InstantCommand());
+    
+    NamedCommands.registerCommand("DeployOuttake", new DeployOuttake(m_intake));
+    NamedCommands.registerCommand("DeployIntake", new DeployIntake(m_intake));
+    NamedCommands.registerCommand("RetractIntake", new RetractIntake(m_intake));
+    NamedCommands.registerCommand("LaunchHub", new TargetHubVelocityAndLaunch(m_launcher, m_swerveDrive::getPose)
+            .alongWith(getAimAtFieldPosesCommand(FieldPose2026.HubCenter)));
+    NamedCommands.registerCommand("LaunchPass", new TargetPassVelocityAndLaunch(m_launcher, m_swerveDrive::getPose)
+            .alongWith(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
+    NamedCommands.registerCommand("ClimbReach", new SetClimberHeight(m_climber, ClimberConstants.MaxExtension));
+    NamedCommands.registerCommand("ClimbEngage", new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension));
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -274,9 +279,9 @@ public class RobotContainer {
             m_getDriverRotationSlow)
     );
 
-    m_operator.povUp().and(m_isAutomaticTrigger).whileTrue(new RunCommand(() -> m_climber.setHeight(ClimberConstants.MaxExtension), m_climber));
-    m_operator.povRight().and(m_isAutomaticTrigger).whileTrue(new RunCommand(() -> m_climber.setHeight(ClimberConstants.ClimbExtension), m_climber));
-    m_operator.povDown().and(m_isAutomaticTrigger).whileTrue(new RunCommand(() -> m_climber.setHeight(ClimberConstants.MinExtension), m_climber));
+    m_operator.povUp().and(m_isAutomaticTrigger).whileTrue(new SetClimberHeight(m_climber, ClimberConstants.MaxExtension));
+    m_operator.povRight().and(m_isAutomaticTrigger).whileTrue(new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension));
+    m_operator.povDown().and(m_isAutomaticTrigger).whileTrue(new SetClimberHeight(m_climber, ClimberConstants.MinExtension));
 
     m_operator.start().onTrue(new InstantCommand((() -> m_isManual = true)));
     m_operator.back().onTrue(new InstantCommand((() -> m_isManual = false)));
@@ -285,8 +290,8 @@ public class RobotContainer {
   private Command getAimAtFieldPosesCommand(FieldPose2026... poses) {
     return DriveCommands.joystickDriveAtAngle(
         m_swerveDrive,
-        m_getDriverXTranslation,
-        m_getDriverYTranslation,
+       DriverStation.isAutonomous() ? () -> 0 :  m_getDriverXTranslation,
+       DriverStation.isAutonomous() ? () -> 0 : m_getDriverYTranslation,
         () -> {
             FieldPose targetPose = FieldPose.getClosestPose(m_swerveDrive.getPose(), poses);
             return targetPose.getTargetAngleForRobot(m_swerveDrive.getPose());
