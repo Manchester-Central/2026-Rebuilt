@@ -139,7 +139,7 @@ public class Robot extends LoggedRobot {
     }
 
     robotContainer.getCamera().setUseForOdometry(false);
-    hasEnabled = false;
+    hasEnabled = true;
   }
 
   /** This function is called periodically during operator control. */
