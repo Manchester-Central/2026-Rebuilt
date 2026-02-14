@@ -9,6 +9,7 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Pounds;
+import static edu.wpi.first.units.Units.Seconds;
 
 import com.chaos131.can.CanConstants.CanBusName;
 import com.chaos131.can.CanConstants.CanId;
@@ -27,10 +28,12 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.AngleUnit;
+import edu.wpi.first.units.TimeUnit;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Mass;
+import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 /** Add your docs here. */
@@ -50,6 +53,7 @@ public final class LauncherConstants {
 
   public static final DashboardUnit<AngleUnit, Angle> AimYawTolerance = new DashboardUnit<>("Launcher/AimYawTolerance", Degrees.of(1));
 
+  public static final DashboardUnit<TimeUnit, Time> AutoLaunchTime = new DashboardUnit<>("Launcher/AutoLaunchTime", Seconds.of(4.0));
   public static final class FlywheelConstants {
     public static final CanId LeftFlywheelCanId = CanId.ID_40;
     public static final CanId RightFlywheelCanId = CanId.ID_41;

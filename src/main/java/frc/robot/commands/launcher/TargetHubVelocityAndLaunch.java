@@ -5,6 +5,7 @@
 package frc.robot.commands.launcher;
 
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Seconds;
 
 import java.util.function.Supplier;
 
@@ -14,6 +15,8 @@ import com.chaos131.poses.FieldPose2026;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.LauncherConstants;
 import frc.robot.constants.LauncherConstants.IndexerConstants;
@@ -23,6 +26,7 @@ import frc.robot.subsystems.interfaces.ISimpleLauncher;
 public class TargetHubVelocityAndLaunch extends Command {
   ISimpleLauncher m_launcher;
   Supplier<Pose2d> m_currentPoseSupplier;
+  Timer m_launchTimer = new Timer();
   /** Creates a new AimHubAndLaunch. */
   public TargetHubVelocityAndLaunch(ISimpleLauncher launcher, Supplier<Pose2d> currentPoseSupplier) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -34,7 +38,10 @@ public class TargetHubVelocityAndLaunch extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_launchTimer.stop();
+    m_launchTimer.reset();
+  }
 
   private boolean isFacingTarget() {
     Pose2d currentPose = m_currentPoseSupplier.get();
@@ -53,9 +60,11 @@ public class TargetHubVelocityAndLaunch extends Command {
     m_launcher.setFlywheelVelocity(m_launcher.getScoringVelocity(m_currentPoseSupplier.get()));
     if (m_launcher.atTargetFlywheelVelocity() && isFacingTarget()) {
       m_launcher.setIndexerSpeed(IndexerConstants.IndexerSpeed.get());
+      m_launchTimer.start();
     } else {
       m_launcher.setIndexerSpeed(0);
     }
+    Logger.recordOutput("Launcher/TimerSeconds", m_launchTimer.get()); 
   }
 
   // Called once the command ends or is interrupted.
@@ -65,6 +74,9 @@ public class TargetHubVelocityAndLaunch extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+  if (DriverStation.isAutonomous()){
+    return m_launchTimer.get() > LauncherConstants.AutoLaunchTime.get().in(Seconds);
+  }
+    return false; 
   }
 }
