@@ -31,6 +31,7 @@ public final class ClimberConstants {
     public static final CanId ClimberCanId = CanId.ID_20;
 
     public static final Distance MaxExtension = Inches.of(10); // TODO: Double Check
+    public static final Distance ClimbExtension = Inches.of(6); // TODO: Double Check
     public static final Distance MinExtension = Inches.of(0); // TODO: Double Check
 
     public static final Mass ClimberMass = Kilogram.of(2); // TODO: Double Check
