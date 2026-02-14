@@ -25,14 +25,16 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.commands.DeployIntake;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.TargetHubVelocityAndLaunch;
-import frc.robot.commands.TargetPassVelocityAndLaunch;
 import frc.robot.commands.defaults.ClimberDefaultCommand;
 import frc.robot.commands.defaults.IntakeDefaultCommand;
 import frc.robot.commands.defaults.SimpleLauncherDefaultCommand;
+import frc.robot.commands.intake.DeployIntake;
+import frc.robot.commands.intake.DeployOuttake;
+import frc.robot.commands.intake.RetractIntake;
+import frc.robot.commands.intake.DeployIntake;
+import frc.robot.commands.launcher.TargetHubVelocityAndLaunch;
+import frc.robot.commands.launcher.TargetPassVelocityAndLaunch;
 import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.IntakeConstants.PivotConstants;
 import frc.robot.constants.LauncherConstants;
@@ -180,10 +182,10 @@ public class RobotContainer {
     m_launcher = new SimpleLauncher(new Flywheel(), new Indexer());
     m_launcherMech2D = new LauncherMech2D(m_launcher);
 
-    NamedCommands.registerCommand("Intake", new IntakeCommand(m_intake));
-    NamedCommands.registerCommand("Outtake", new InstantCommand());
-    NamedCommands.registerCommand("DeployIntake", new InstantCommand());
-    NamedCommands.registerCommand("RetractIntake", new InstantCommand());
+    
+    NamedCommands.registerCommand("DeployOuttake", new DeployOuttake(m_intake));
+    NamedCommands.registerCommand("DeployIntake", new DeployIntake(m_intake));
+    NamedCommands.registerCommand("RetractIntake", new RetractIntake(m_intake));
     NamedCommands.registerCommand("LaunchHub", new InstantCommand());
     NamedCommands.registerCommand("LaunchPass", new InstantCommand());
     NamedCommands.registerCommand("ClimbReach", new InstantCommand());
