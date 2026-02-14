@@ -5,9 +5,9 @@ import frc.robot.constants.IntakeConstants;
 import frc.robot.subsystems.interfaces.IIntake;
 
 public class IntakeCommand extends Command {
-private IIntake intake;
+private IIntake m_intake;
 public IntakeCommand(IIntake intake){
-    this.intake=intake;
+    m_intake = intake;
     addRequirements(intake);
 }
 @Override
@@ -15,8 +15,8 @@ public void initialize(){}
 
 @Override
 public void execute(){
-    intake.setRollerSpeed(IntakeConstants.RollerSpeed.get());
-    intake.deploy();
+    m_intake.setRollerSpeed(IntakeConstants.RollerSpeed.get());
+    m_intake.deploy();
 } 
 
 @Override
