@@ -32,7 +32,7 @@ import edu.wpi.first.units.measure.Mass;
 
 /** Add your docs here. */
 public final class IntakeConstants {
-  public static final CanBusName CanBus = CanBusName.RIO;
+  public static final CanBusName CanBus = CanBusName.CTRE;
 
   // Intake Dimensions
   public static final Distance IntakeLength = Inches.of(6); // TODO: Double Check

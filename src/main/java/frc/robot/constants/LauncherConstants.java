@@ -38,7 +38,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 /** Add your docs here. */
 public final class LauncherConstants {
-  public static final CanBusName LauncherCanBus = CanBusName.RIO;
+  public static final CanBusName LauncherCanBus = CanBusName.CTRE;
   // public static final CanId TurretCanId = CanId.ID_43;
 
   public static Distance SimpleLauncherHeight = Inches.of(16); // TODO: Verify

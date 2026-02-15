@@ -28,7 +28,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 
 /** Add your docs here. */
 public final class ClimberConstants {
-    public static final CanBusName ClimberCanBus = CanBusName.RIO;
+    public static final CanBusName ClimberCanBus = CanBusName.CTRE;
     public static final CanId ClimberCanId = CanId.ID_20;
 
     public static final AnalogInput StringPotInput = new AnalogInput(0); // TODO: Double Check
