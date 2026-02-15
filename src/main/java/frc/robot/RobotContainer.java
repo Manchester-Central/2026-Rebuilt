@@ -96,9 +96,9 @@ public class RobotContainer {
   private final Gamepad m_driver = new Gamepad(0);
   private final Gamepad m_operator = new Gamepad(1);
 
-  private final DoubleSupplier m_getDriverXTranslation = () -> m_driver.getLeftY();
-  private final DoubleSupplier m_getDriverYTranslation = () -> -m_driver.getLeftX();
-  private final DoubleSupplier m_getDriverRotation = () -> -m_driver.getRightX();
+  private final DoubleSupplier m_getDriverXTranslation = () -> m_driver.getLeftY() * 0.4;
+  private final DoubleSupplier m_getDriverYTranslation = () -> -m_driver.getLeftX() * 0.4;
+  private final DoubleSupplier m_getDriverRotation = () -> -m_driver.getRightX() * 0.4;
   private final DoubleSupplier m_getDriverXTranslationSlow = () -> m_getDriverXTranslation.getAsDouble() * GeneralConstants.SlowModeMultiplier;
   private final DoubleSupplier m_getDriverYTranslationSlow = () -> m_getDriverYTranslation.getAsDouble() * GeneralConstants.SlowModeMultiplier;
   private final DoubleSupplier m_getDriverRotationSlow = () -> m_getDriverRotation.getAsDouble() *  GeneralConstants.SlowModeMultiplier;
