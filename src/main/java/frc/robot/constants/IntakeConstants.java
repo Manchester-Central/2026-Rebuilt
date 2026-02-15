@@ -25,6 +25,7 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.revrobotics.encoder.config.DetachedEncoderConfig;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
@@ -96,12 +97,7 @@ public final class IntakeConstants {
 
     public static final Angle CanCoderOffset = Rotations.of(0);
 
-    public static final CANcoderConfiguration CanCoderConfig = new CANcoderConfiguration()
-      .withMagnetSensor(new MagnetSensorConfigs()
-        .withSensorDirection(SensorDirectionValue.Clockwise_Positive) // TODO: Double Check
-        .withAbsoluteSensorDiscontinuityPoint(Degrees.of(270))
-        .withMagnetOffset(CanCoderOffset) // TODO: Double Check
-      );
+    public static final DetachedEncoderConfig pivotEncoderConfig = new DetachedEncoderConfig().inverted(false).dutyCycleOffset(0);
 
     // Pivot Max / Min
     public static final Angle MaxAngle = Degrees.of(190); // TODO: Double Check
