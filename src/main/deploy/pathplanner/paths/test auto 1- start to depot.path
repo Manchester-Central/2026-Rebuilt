@@ -1,0 +1,71 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.6694337349397586,
+        "y": 7.586506024096385
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.0030722891566262,
+        "y": 7.5318674698795185
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.123277108433735,
+        "y": 5.9473493975903615
+      },
+      "prevControl": {
+        "x": 3.982720760359556,
+        "y": 6.063797329116753
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "test auto 1-depot"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.8059701492537041,
+      "rotationDegrees": 0.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "deploy intake",
+      "waypointRelativePos": 0.3444168734491291,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "DeployIntake"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "Test autos",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "useDefaultConstraints": true
+}

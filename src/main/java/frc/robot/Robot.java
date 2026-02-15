@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.MultiplayerSim.MultiplayerArena;
@@ -33,6 +34,7 @@ import com.chaos131.util.DashboardNumber;
 public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
+  private boolean hasEnabled = false;
 
   public Robot() {
     // Record metadata
@@ -103,11 +105,19 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledInit() {
     MultiplayerArena.Instance.prepareMatch();
+  
+    if (!hasEnabled) {
+      robotContainer.getCamera().setUseForOdometry(true);
+    }
   }
 
   /** This function is called periodically when disabled. */
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    if (!hasEnabled) {
+      robotContainer.getQuest().resetPose(new Pose3d(robotContainer.getSwerveDrive().getPose()));
+    }
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
@@ -119,6 +129,9 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(autonomousCommand);
     }
+
+    robotContainer.getCamera().setUseForOdometry(false);
+    hasEnabled = true;
   }
 
   /** This function is called periodically during autonomous. */
@@ -138,6 +151,9 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+
+    robotContainer.getCamera().setUseForOdometry(false);
+    hasEnabled = true;
   }
 
   /** This function is called periodically during operator control. */

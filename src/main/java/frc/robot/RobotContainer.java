@@ -13,11 +13,14 @@ import com.chaos131.poses.FieldPose2026;
 import com.chaos131.vision.LimelightCamera;
 import com.chaos131.vision.LimelightCamera.LimelightVersion;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -29,10 +32,8 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.commands.DeployIntake;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.TargetHubVelocityAndLaunch;
-import frc.robot.commands.TargetPassVelocityAndLaunch;
+import frc.robot.commands.climb.SetClimberHeight;
 import frc.robot.commands.defaults.ClimberDefaultCommand;
 import frc.robot.commands.defaults.IntakeDefaultCommand;
 import frc.robot.commands.defaults.SimpleLauncherDefaultCommand;
@@ -40,6 +41,13 @@ import frc.robot.constants.ArenaConstants;
 import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.GeneralConstants.Mode;
 import frc.robot.constants.IntakeConstants;
+import frc.robot.commands.intake.DeployIntake;
+import frc.robot.commands.intake.DeployOuttake;
+import frc.robot.commands.intake.RetractIntake;
+import frc.robot.commands.launcher.TargetHubVelocityAndLaunch;
+import frc.robot.commands.launcher.TargetPassVelocityAndLaunch;
+import frc.robot.constants.ClimberConstants;
+import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.IntakeConstants.PivotConstants;
 import frc.robot.constants.LauncherConstants;
 import frc.robot.generated.TunerConstants;
@@ -66,14 +74,16 @@ import frc.robot.subsystems.launcher.Indexer;
 import frc.robot.subsystems.launcher.MapleSimFlywheel;
 import frc.robot.subsystems.launcher.LauncherMech2D;
 import frc.robot.subsystems.launcher.SimpleLauncher;
+import frc.robot.util.PathUtil;
 
-import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import java.util.function.Supplier;
 
 import org.littletonrobotics.junction.Logger;
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -86,13 +96,14 @@ public class RobotContainer {
   protected int id;
   // Subsystems
   private final AbstractDrive m_swerveDrive;
-  @SuppressWarnings("unused")
   private Quest m_quest;
-  @SuppressWarnings("unused")
   private Camera m_camera;
   private IClimber m_climber;
+  @SuppressWarnings("unused")
   private ClimberMech2D m_climberMech2d;
+  @SuppressWarnings("unused")
   private IntakeMech2D m_intakeMech2d;
+  @SuppressWarnings("unused")
   private LauncherMech2D m_launcherMech2D;
   private ISimpleLauncher m_launcher;
   private IIntake m_intake;
@@ -100,6 +111,13 @@ public class RobotContainer {
   // Controller
   private final Gamepad m_driver = new Gamepad(0);
   private final Gamepad m_operator = new Gamepad(1);
+
+  private final DoubleSupplier m_getDriverXTranslation = () -> m_driver.getLeftY();
+  private final DoubleSupplier m_getDriverYTranslation = () -> -m_driver.getLeftX();
+  private final DoubleSupplier m_getDriverRotation = () -> -m_driver.getRightX();
+  private final DoubleSupplier m_getDriverXTranslationSlow = () -> m_getDriverXTranslation.getAsDouble() * GeneralConstants.SlowModeMultiplier;
+  private final DoubleSupplier m_getDriverYTranslationSlow = () -> m_getDriverYTranslation.getAsDouble() * GeneralConstants.SlowModeMultiplier;
+  private final DoubleSupplier m_getDriverRotationSlow = () -> m_getDriverRotation.getAsDouble() *  GeneralConstants.SlowModeMultiplier;
 
   private boolean m_isManual = false;
   private final Trigger m_isManualTrigger = new Trigger(() -> m_isManual);
@@ -196,6 +214,16 @@ public class RobotContainer {
     m_climberMech2d = new ClimberMech2D(m_climber);
 
     if (GeneralConstants.currentMode != Mode.ARENA) {
+      NamedCommands.registerCommand("DeployOuttake", new DeployOuttake(m_intake));
+      NamedCommands.registerCommand("DeployIntake", new DeployIntake(m_intake));
+      NamedCommands.registerCommand("RetractIntake", new RetractIntake(m_intake));
+      NamedCommands.registerCommand("LaunchHub", new TargetHubVelocityAndLaunch(m_launcher, m_swerveDrive::getPose)
+              .alongWith(getAimAtFieldPosesCommand(FieldPose2026.HubCenter)));
+      NamedCommands.registerCommand("LaunchPass", new TargetPassVelocityAndLaunch(m_launcher, m_swerveDrive::getPose)
+              .alongWith(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
+      NamedCommands.registerCommand("ClimbReach", new SetClimberHeight(m_climber, ClimberConstants.MaxExtension));
+      NamedCommands.registerCommand("ClimbEngage", new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension));
+
       // Set up auto routines
       autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
@@ -250,51 +278,15 @@ public class RobotContainer {
     m_swerveDrive.setDefaultCommand(
         DriveCommands.joystickDrive(
             m_swerveDrive,
-            () -> m_driver.getLeftY(),
-            () -> -m_driver.getLeftX(),
-            () -> -m_driver.getRightX()));
+            m_getDriverXTranslation,
+            m_getDriverYTranslation,
+            m_getDriverRotation));
 
     m_climber.setDefaultCommand(new ClimberDefaultCommand(m_climber, m_operator::getLeftY, m_isManualTrigger)); 
     m_intake.setDefaultCommand(new IntakeDefaultCommand(m_intake, m_isManualTrigger, m_operator.leftTrigger(), m_operator::getRightY));    
     m_launcher.setDefaultCommand(new SimpleLauncherDefaultCommand(m_launcher, m_isManualTrigger, m_operator.rightTrigger(), m_operator.rightBumper()));
     
-    m_driver
-        .rightBumper()
-        .whileTrue(
-            DriveCommands.joystickDriveAtAngle(
-                m_swerveDrive,
-                () -> m_driver.getLeftY(),
-                () -> -m_driver.getLeftX(),
-                () -> {
-                    Translation2d targetPoint = FieldPose2026.HubCenter.getCurrentAlliancePose().getTranslation();
-                    return targetPoint.minus(m_swerveDrive.getPose().getTranslation()).getAngle();
-                }));
-    m_driver.rightTrigger().and(m_isAutomaticTrigger).whileTrue(new TargetHubVelocityAndLaunch(m_launcher, m_swerveDrive::getPose).alongWith(
-        DriveCommands.joystickDriveAtAngle(
-            m_swerveDrive,
-            () -> m_driver.getLeftY(),
-            () -> -m_driver.getLeftX(),
-            () -> {
-                Translation2d targetPoint = FieldPose2026.HubCenter.getCurrentAlliancePose().getTranslation();
-                return targetPoint.minus(m_swerveDrive.getPose().getTranslation()).getAngle();
-            })
-    ));
-
-    m_driver.leftBumper().and(m_isAutomaticTrigger).whileTrue(new TargetPassVelocityAndLaunch(m_launcher, m_swerveDrive::getPose).alongWith(
-        DriveCommands.joystickDriveAtAngle(
-            m_swerveDrive,
-            () -> m_driver.getLeftY(),
-            () -> -m_driver.getLeftX(),
-            () -> {
-                Pose2d targetPose = FieldPose.getClosestPose(m_swerveDrive.getPose(), LauncherConstants.LeftPassPoint, LauncherConstants.RightPassPoint).getCurrentAlliancePose();
-                Translation2d targetPoint = targetPose.getTranslation();
-                return targetPoint.minus(m_swerveDrive.getPose().getTranslation()).getAngle();
-            })
-    ));
-
-    // Switch to X pattern when X button is pressed
-    m_driver.x().onTrue(Commands.runOnce(m_swerveDrive::stopWithX, m_swerveDrive));
-
+    
     // Reset gyro to 0° when B button is pressed
     m_driver
         .povUp()
@@ -305,24 +297,58 @@ public class RobotContainer {
                             new Pose2d(m_swerveDrive.getPose().getTranslation(), Rotation2d.kZero)),
                     m_swerveDrive)
                 .ignoringDisable(true));
+
+    m_driver
+        .leftBumper()
+        .and(m_isAutomaticTrigger)
+        .whileTrue(
+            new TargetPassVelocityAndLaunch(m_launcher, m_swerveDrive::getPose)
+            .alongWith(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
+    m_driver
+        .rightBumper()
+        .whileTrue(getAimAtFieldPosesCommand(FieldPose2026.HubCenter));
+
     
     m_driver.leftTrigger().and(m_isAutomaticTrigger).whileTrue(new DeployIntake(m_intake));
+    m_driver
+        .rightTrigger()
+        .and(m_isAutomaticTrigger)
+        .whileTrue(
+            new TargetHubVelocityAndLaunch(m_launcher, m_swerveDrive::getPose)
+            .alongWith(getAimAtFieldPosesCommand(FieldPose2026.HubCenter)));
 
     m_driver.a().and(m_isAutomaticTrigger).whileTrue(new RunCommand(() -> m_intake.setPivotAngle(PivotConstants.RetractAngle), m_intake));
+    m_driver.x().onTrue(Commands.runOnce(m_swerveDrive::stopWithX, m_swerveDrive));
+    m_driver.y().and(m_isAutomaticTrigger).whileTrue(PathUtil.driveToPoseCommand(LauncherConstants.SafeLaunchePoint, m_swerveDrive));
 
     m_driver.leftStick().or(m_driver.rightStick()).toggleOnTrue(
         DriveCommands.joystickDrive(
             m_swerveDrive,
-            () -> m_driver.getLeftY() * GeneralConstants.SlowModeMultiplier,
-            () -> -m_driver.getLeftX() * GeneralConstants.SlowModeMultiplier,
-            () -> -m_driver.getRightX() * GeneralConstants.SlowModeMultiplier)
+            m_getDriverXTranslationSlow,
+            m_getDriverYTranslationSlow,
+            m_getDriverRotationSlow)
     );
 
-    m_operator.povUp().and(m_isAutomaticTrigger).whileTrue(new RunCommand(() -> m_climber.setHeight(Inches.of(10)), m_climber));
-    m_operator.povDown().and(m_isAutomaticTrigger).whileTrue(new RunCommand(() -> m_climber.setHeight(Inches.of(0)), m_climber));
+    m_operator.povUp().and(m_isAutomaticTrigger).whileTrue(new SetClimberHeight(m_climber, ClimberConstants.MaxExtension));
+    m_operator.povRight().and(m_isAutomaticTrigger).whileTrue(new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension));
+    m_operator.povDown().and(m_isAutomaticTrigger).whileTrue(new SetClimberHeight(m_climber, ClimberConstants.MinExtension));
+
+    m_operator.y().whileTrue(new InstantCommand(() -> m_quest.resetPose(m_camera.getBotPose3d())));
 
     m_operator.start().onTrue(new InstantCommand((() -> m_isManual = true)));
     m_operator.back().onTrue(new InstantCommand((() -> m_isManual = false)));
+  }
+
+  private Command getAimAtFieldPosesCommand(FieldPose2026... poses) {
+    return DriveCommands.joystickDriveAtAngle(
+        m_swerveDrive,
+       DriverStation.isAutonomous() ? () -> 0 :  m_getDriverXTranslation,
+       DriverStation.isAutonomous() ? () -> 0 : m_getDriverYTranslation,
+        () -> {
+            FieldPose targetPose = FieldPose.getClosestPose(m_swerveDrive.getPose(), poses);
+            return targetPose.getTargetAngleForRobot(m_swerveDrive.getPose());
+        }
+    );
   }
 
   /**
@@ -344,5 +370,17 @@ public class RobotContainer {
 
   public void containerLogging() {
     Logger.recordOutput("Robot"+id+"/Pose2d", m_swerveDrive.getPose());
+  }
+
+  public Camera getCamera() {
+    return m_camera;
+  }
+
+  public AbstractDrive getSwerveDrive() {
+    return m_swerveDrive;
+  }
+
+  public Quest getQuest() {
+    return m_quest;
   }
 }

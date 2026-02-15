@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.launcher;
 
 import static edu.wpi.first.units.Units.Degrees;
 
@@ -11,8 +11,8 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 import com.chaos131.poses.FieldPose;
+
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.LauncherConstants;
@@ -37,16 +37,15 @@ public class TargetPassVelocityAndLaunch extends Command {
   public void initialize() {}
 
   private boolean isFacingTarget() {
-    Translation2d currentTrans2d = m_currentPoseSupplier.get().getTranslation();
-    Angle currentAngle = m_currentPoseSupplier.get().getRotation().getMeasure();
-    Pose2d targetPose = FieldPose.getClosestPose(m_currentPoseSupplier.get(), LauncherConstants.LeftPassPoint, LauncherConstants.RightPassPoint).getCurrentAlliancePose();
-    Translation2d targetPoint = targetPose.getTranslation();
-    Angle targetAngle = targetPoint.minus(currentTrans2d).getAngle().getMeasure();
+    Pose2d currentPose = m_currentPoseSupplier.get();
+    Angle currentAngle = currentPose.getRotation().getMeasure();
+    FieldPose targetPose = FieldPose.getClosestPose(m_currentPoseSupplier.get(), LauncherConstants.PassPoints);
+    Angle targetAngle = targetPose.getTargetAngleForRobot(currentPose).getMeasure();
 
     Logger.recordOutput("Launcher/TargetAngle", targetAngle.in(Degrees));
-    Logger.recordOutput("Launcher/CurrentAngle", m_currentPoseSupplier.get().getRotation().getDegrees());
-    Logger.recordOutput("Launcher/AngleDif", targetAngle.minus(currentAngle));
-    return targetAngle.isNear(currentAngle, LauncherConstants.AimYawTolerance.get()); // TODO: Fix in sim
+    Logger.recordOutput("Launcher/CurrentAngle", currentAngle.in(Degrees));
+    Logger.recordOutput("Launcher/AngleDif", targetAngle.minus(currentAngle).in(Degrees));
+    return targetAngle.isNear(currentAngle, LauncherConstants.AimYawTolerance.get());
   }
 
   // Called every time the scheduler runs while the command is scheduled.

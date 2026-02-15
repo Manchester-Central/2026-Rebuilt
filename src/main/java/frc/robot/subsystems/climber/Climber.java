@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.climber;
 
+import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Kilogram;
 import static edu.wpi.first.units.Units.Meters;
 
@@ -16,6 +17,7 @@ import com.ctre.phoenix6.sim.TalonFXSimState.MotorType;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -24,6 +26,7 @@ import frc.robot.subsystems.interfaces.IClimber;
 
 public class Climber extends SubsystemBase implements IClimber {
   private ChaosTalonFx m_climberMotor = new ChaosTalonFx(ClimberConstants.ClimberCanId, ClimberConstants.ClimberCanBus, ClimberConstants.Config);
+  private AnalogPotentiometer m_climberPot = new AnalogPotentiometer(ClimberConstants.StringPotInput, ClimberConstants.StringPotRange.in(Inches), ClimberConstants.StringPotStartPoint.in(Inches));
 
   @SuppressWarnings("unused")
   private ChaosTalonFxTuner m_climberTuner = new ChaosTalonFxTuner("Climber/Climber Motor", m_climberMotor).withAllConfigs();
@@ -40,6 +43,8 @@ public class Climber extends SubsystemBase implements IClimber {
       );
       m_climberMotor.attachMotorSim(m_dcMotorSim, ClimberConstants.SensorToMechanismRatio, true, ChassisReference.CounterClockwise_Positive, MotorType.KrakenX60);
     }
+
+    m_climberMotor.setPosition(m_climberPot.get());
   }
 
   public Distance getHeight() {
