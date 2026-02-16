@@ -36,7 +36,7 @@ public class Intake extends SubsystemBase implements IIntake {
   private ChaosTalonFx m_rollerMotor = new ChaosTalonFx(RollerConstants.RollerCanId, IntakeConstants.CanBus, RollerConstants.Config);
   // private ChaosTalonFx m_intakeKickerMotor = new ChaosTalonFx(IntakeConstants.IntakeKickerCanId, IntakeConstants.IntakeCanBus); TODO: delete if not added to robot
   private ChaosTalonFx m_pivotMotor = new ChaosTalonFx(PivotConstants.PivotCanId, IntakeConstants.CanBus, PivotConstants.TalonConfig);
-  private SplineEncoder m_pivotEncoder = new SplineEncoder(PivotConstants.PivotCanCoderId.id);
+  // private SplineEncoder m_pivotEncoder = new SplineEncoder(PivotConstants.PivotCanCoderId.id);
 
   @SuppressWarnings("unused")
   private ChaosTalonFxTuner m_rollerTuner = new ChaosTalonFxTuner("Intake/Roller Motor", m_pivotMotor).withCurrentLimits();
@@ -49,7 +49,7 @@ public class Intake extends SubsystemBase implements IIntake {
     m_pivotMotor.applyConfig();
     m_rollerMotor.applyConfig();
 
-    m_pivotEncoder.configure(PivotConstants.pivotEncoderConfig, ResetMode.kResetSafeParameters);
+    // m_pivotEncoder.configure(PivotConstants.pivotEncoderConfig, ResetMode.kResetSafeParameters);
 
     if (Robot.isSimulation()) {
       var m_moi = SingleJointedArmSim.estimateMOI(IntakeConstants.IntakeLength.in(Meters), IntakeConstants.IntakeMass.in(Kilograms));
@@ -137,7 +137,7 @@ public class Intake extends SubsystemBase implements IIntake {
    * Returns pivot encoder angle
    */
   public Angle getAbsolutePivotAngle() {
-    return Rotations.of(m_pivotEncoder.getAngle());
+    return Rotations.of(0); // Rotations.of(m_pivotEncoder.getAngle());
   }
 
   @Override
