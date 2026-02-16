@@ -88,7 +88,7 @@ public class Intake extends SubsystemBase implements IIntake {
       targetSpeed = Math.max(speed, 0);
     }
 
-    m_pivotMotor.set(targetSpeed);
+    // m_pivotMotor.set(targetSpeed);
   }
 
   /**
@@ -102,7 +102,7 @@ public class Intake extends SubsystemBase implements IIntake {
       targetAngle = PivotConstants.MinAngle;
     }
 
-    m_pivotMotor.moveToPosition(targetAngle);
+    // m_pivotMotor.moveToPosition(targetAngle);
   }
 
   /**

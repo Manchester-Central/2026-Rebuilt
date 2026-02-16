@@ -43,15 +43,15 @@ public final class IntakeConstants {
   public static final DashboardNumber ManualPivotSpeedMultiplier = new DashboardNumber("Intake/ManualPivotSpeedMultiplier", 0.1);
 
   // Speeds
-  public static final DashboardNumber IntakeRollerSpeed = new DashboardNumber("Intake/IntakeRollerSpeed", 0.2);
-  public static final DashboardNumber OuttakeRollerSpeed = new DashboardNumber("Intake/OuttakeRollerSpeed", -0.2);
+  public static final DashboardNumber IntakeRollerSpeed = new DashboardNumber("Intake/IntakeRollerSpeed", 0.4);
+  public static final DashboardNumber OuttakeRollerSpeed = new DashboardNumber("Intake/OuttakeRollerSpeed", -0.4);
 
   public static final class RollerConstants {
     public static final CanId RollerCanId = CanId.ID_30;
 
     public static final TalonFXConfiguration Config = new TalonFXConfiguration()
       .withMotorOutput(new MotorOutputConfigs()
-          .withInverted(InvertedValue.Clockwise_Positive)
+          .withInverted(InvertedValue.CounterClockwise_Positive)
           .withNeutralMode(NeutralModeValue.Brake)
       )
       .withCurrentLimits(new CurrentLimitsConfigs()
