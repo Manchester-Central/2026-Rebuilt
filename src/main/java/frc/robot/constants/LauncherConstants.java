@@ -38,11 +38,13 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 /** Add your docs here. */
 public final class LauncherConstants {
-  public static final CanBusName LauncherCanBus = CanBusName.RIO;
+  public static final CanBusName LauncherCanBus = CanBusName.CTRE;
   // public static final CanId TurretCanId = CanId.ID_43;
 
   public static Distance SimpleLauncherHeight = Inches.of(16); // TODO: Verify
   public static Angle SimpleLauncherAngle = Degrees.of(65);
+
+  public static final DashboardNumber LauncherSpeed = new DashboardNumber("Launcher/ManualLaunchSpeed", 0.6); 
 
   public static final Distance LauncherToHubHeight = FieldDimensions.HubHeight.minus(SimpleLauncherHeight);
 
@@ -65,7 +67,7 @@ public final class LauncherConstants {
 
     // Keep these separate to control them independently.
     // There's a 50-50 chance their directions are different!
-    public static final TalonFXConfiguration LeftConfig = GenerateFlywheelConfig(InvertedValue.Clockwise_Positive);
+    public static final TalonFXConfiguration LeftConfig = GenerateFlywheelConfig(InvertedValue.CounterClockwise_Positive);
     public static final TalonFXConfiguration RightConfig = GenerateFlywheelConfig(InvertedValue.Clockwise_Positive);
 
     private static TalonFXConfiguration GenerateFlywheelConfig(InvertedValue motorDirection) {
@@ -75,8 +77,9 @@ public final class LauncherConstants {
             .withNeutralMode(NeutralModeValue.Brake)
         )
         .withCurrentLimits(new CurrentLimitsConfigs()
-            .withSupplyCurrentLimit(Amps.of(20)) // TODO: Double Check
-            .withStatorCurrentLimit(Amps.of(20)) // TODO: Double Check
+            .withSupplyCurrentLimit(Amps.of(60))
+            .withStatorCurrentLimit(Amps.of(60))
+            .withSupplyCurrentLowerLimit(Amps.of(80))
             .withSupplyCurrentLimitEnable(true)
             .withStatorCurrentLimitEnable(true)
         )
@@ -86,12 +89,12 @@ public final class LauncherConstants {
             .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor)
         )
         .withSlot0(new Slot0Configs() //TODO: CHECK THESE PLEASE
-            .withKP(0.1)
+            .withKP(0)
             .withKI(0)
             .withKD(0)
             .withKG(0)
-            .withKS(0.1)
-            .withKV(0.115)
+            .withKS(0)
+            .withKV(0)
             .withKA(0)
         );
     }
@@ -100,16 +103,17 @@ public final class LauncherConstants {
   public static final class IndexerConstants {
     public static final CanId IndexerCanId = CanId.ID_42;
 
-    public static final DashboardNumber IndexerSpeed = new DashboardNumber("Launcher/Indexer/IndexerSpeed", 0.4);
+    public static final DashboardNumber IndexerSpeed = new DashboardNumber("Launcher/Indexer/IndexerSpeed", 0.6);
 
     public static final TalonFXConfiguration Config = new TalonFXConfiguration()
       .withMotorOutput(new MotorOutputConfigs()
-          .withInverted(InvertedValue.Clockwise_Positive)
+          .withInverted(InvertedValue.CounterClockwise_Positive)
           .withNeutralMode(NeutralModeValue.Brake)
       )
       .withCurrentLimits(new CurrentLimitsConfigs()
-          .withSupplyCurrentLimit(Amps.of(20)) // TODO: Double Check
-          .withStatorCurrentLimit(Amps.of(20)) // TODO: Double Check
+          .withSupplyCurrentLimit(Amps.of(60)) // TODO: Double Check
+          .withStatorCurrentLimit(Amps.of(60)) // TODO: Double Check
+          .withSupplyCurrentLowerLimit(Amps.of(80))
           .withSupplyCurrentLimitEnable(true)
           .withStatorCurrentLimitEnable(true)
       );

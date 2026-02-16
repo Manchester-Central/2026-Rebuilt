@@ -25,15 +25,15 @@ import frc.robot.constants.ClimberConstants;
 import frc.robot.subsystems.interfaces.IClimber;
 
 public class Climber extends SubsystemBase implements IClimber {
-  private ChaosTalonFx m_climberMotor = new ChaosTalonFx(ClimberConstants.ClimberCanId, ClimberConstants.ClimberCanBus, ClimberConstants.Config);
-  private AnalogPotentiometer m_climberPot = new AnalogPotentiometer(ClimberConstants.StringPotInput, ClimberConstants.StringPotRange.in(Inches), ClimberConstants.StringPotStartPoint.in(Inches));
+  // private ChaosTalonFx m_climberMotor = new ChaosTalonFx(ClimberConstants.ClimberCanId, ClimberConstants.ClimberCanBus, ClimberConstants.Config);
+  // private AnalogPotentiometer m_climberPot = new AnalogPotentiometer(ClimberConstants.StringPotInput, ClimberConstants.StringPotRange.in(Inches), ClimberConstants.StringPotStartPoint.in(Inches));
 
   @SuppressWarnings("unused")
-  private ChaosTalonFxTuner m_climberTuner = new ChaosTalonFxTuner("Climber/Climber Motor", m_climberMotor).withAllConfigs();
+  // private ChaosTalonFxTuner m_climberTuner = new ChaosTalonFxTuner("Climber/Climber Motor", m_climberMotor).withAllConfigs();
 
   /** Creates a new Climber. */
   public Climber() {
-    m_climberMotor.applyConfig();
+    // m_climberMotor.applyConfig();
 
     if (Robot.isSimulation()) {
       var m_dcMotor = DCMotor.getKrakenX60(1); // TODO: double check
@@ -41,37 +41,39 @@ public class Climber extends SubsystemBase implements IClimber {
         LinearSystemId.createElevatorSystem(m_dcMotor, ClimberConstants.ClimberMass.in(Kilogram), ClimberConstants.DrivingDrumRadius.in(Meters), ClimberConstants.SensorToMechanismRatio),
         m_dcMotor
       );
-      m_climberMotor.attachMotorSim(m_dcMotorSim, ClimberConstants.SensorToMechanismRatio, true, ChassisReference.CounterClockwise_Positive, MotorType.KrakenX60);
+      // m_climberMotor.attachMotorSim(m_dcMotorSim, ClimberConstants.SensorToMechanismRatio, true, ChassisReference.CounterClockwise_Positive, MotorType.KrakenX60);
     }
 
-    m_climberMotor.setPosition(m_climberPot.get());
+    // m_climberMotor.setPosition(m_climberPot.get());
   }
 
   public Distance getHeight() {
-    return Meters.of(m_climberMotor.getPosition().getValueAsDouble());
+    // return Meters.of(m_climberMotor.getPosition().getValueAsDouble());
+    return Meters.of(0);
   }
 
   public void setHeight(Distance height) {
-    Distance targetHeight = height;
-    if (targetHeight.gt(ClimberConstants.MaxExtension)) {
-      targetHeight = ClimberConstants.MaxExtension;
-    } else if (targetHeight.lt(ClimberConstants.MinExtension)) {
-      targetHeight = ClimberConstants.MinExtension;
-    }
+    // Distance targetHeight = height;
+    // if (targetHeight.gt(ClimberConstants.MaxExtension)) {
+    //   targetHeight = ClimberConstants.MaxExtension;
+    // } else if (targetHeight.lt(ClimberConstants.MinExtension)) {
+    //   targetHeight = ClimberConstants.MinExtension;
+    // }
 
-    m_climberMotor.moveToPosition(height.in(Meters));
+    // m_climberMotor.moveToPosition(height.in(Meters));
   }
 
   public void setClimberSpeed(double speed) {
-    if (getHeight().lt(ClimberConstants.MinExtension) && speed < 0) {
-      speed = 0;
-    } else if (getHeight().gt(ClimberConstants.MaxExtension) && speed > 0) {
-      speed = 0;
-    }
-    m_climberMotor.set(speed);
+    // if (getHeight().lt(ClimberConstants.MinExtension) && speed < 0) {
+    //   speed = 0;
+    // } else if (getHeight().gt(ClimberConstants.MaxExtension) && speed > 0) {
+    //   speed = 0;
+    // }
+    // m_climberMotor.set(speed);
   }
 
   public double getClimberSpeed() {
-    return m_climberMotor.get();
+    // return m_climberMotor.get();
+    return 0.0;
   }
 }

@@ -25,6 +25,7 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.revrobotics.encoder.config.DetachedEncoderConfig;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
@@ -32,7 +33,7 @@ import edu.wpi.first.units.measure.Mass;
 
 /** Add your docs here. */
 public final class IntakeConstants {
-  public static final CanBusName CanBus = CanBusName.RIO;
+  public static final CanBusName CanBus = CanBusName.CTRE;
 
   // Intake Dimensions
   public static final Distance IntakeLength = Inches.of(6); // TODO: Double Check
@@ -42,20 +43,21 @@ public final class IntakeConstants {
   public static final DashboardNumber ManualPivotSpeedMultiplier = new DashboardNumber("Intake/ManualPivotSpeedMultiplier", 0.1);
 
   // Speeds
-  public static final DashboardNumber IntakeRollerSpeed = new DashboardNumber("Intake/IntakeRollerSpeed", 0.2);
-  public static final DashboardNumber OuttakeRollerSpeed = new DashboardNumber("Intake/OuttakeRollerSpeed", -0.2);
+  public static final DashboardNumber IntakeRollerSpeed = new DashboardNumber("Intake/IntakeRollerSpeed", 0.4);
+  public static final DashboardNumber OuttakeRollerSpeed = new DashboardNumber("Intake/OuttakeRollerSpeed", -0.4);
 
   public static final class RollerConstants {
     public static final CanId RollerCanId = CanId.ID_30;
 
     public static final TalonFXConfiguration Config = new TalonFXConfiguration()
       .withMotorOutput(new MotorOutputConfigs()
-          .withInverted(InvertedValue.Clockwise_Positive)
+          .withInverted(InvertedValue.CounterClockwise_Positive)
           .withNeutralMode(NeutralModeValue.Brake)
       )
       .withCurrentLimits(new CurrentLimitsConfigs()
-          .withSupplyCurrentLimit(Amps.of(20)) // TODO: Double Check
-          .withStatorCurrentLimit(Amps.of(20)) // TODO: Double Check
+          .withSupplyCurrentLimit(Amps.of(40)) // TODO: Double Check
+          .withStatorCurrentLimit(Amps.of(40)) // TODO: Double Check
+          .withSupplyCurrentLowerLimit(Amps.of(60))
           .withSupplyCurrentLimitEnable(true)
           .withStatorCurrentLimitEnable(true)
       );
@@ -84,10 +86,10 @@ public final class IntakeConstants {
             .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor)
         )
         .withSlot0(new Slot0Configs() //TODO: CHECK THESE PLEASE
-            .withKP(0.1)
+            .withKP(0)
             .withKI(0)
             .withKD(0)
-            .withKG(0.001)
+            .withKG(0)
             .withKS(0)
             .withKV(0)
             .withKA(0)
@@ -96,12 +98,7 @@ public final class IntakeConstants {
 
     public static final Angle CanCoderOffset = Rotations.of(0);
 
-    public static final CANcoderConfiguration CanCoderConfig = new CANcoderConfiguration()
-      .withMagnetSensor(new MagnetSensorConfigs()
-        .withSensorDirection(SensorDirectionValue.Clockwise_Positive) // TODO: Double Check
-        .withAbsoluteSensorDiscontinuityPoint(Degrees.of(270))
-        .withMagnetOffset(CanCoderOffset) // TODO: Double Check
-      );
+    public static final DetachedEncoderConfig pivotEncoderConfig = new DetachedEncoderConfig().inverted(false).dutyCycleOffset(0);
 
     // Pivot Max / Min
     public static final Angle MaxAngle = Degrees.of(190); // TODO: Double Check
