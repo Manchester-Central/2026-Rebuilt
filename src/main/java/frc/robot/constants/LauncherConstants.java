@@ -111,8 +111,9 @@ public final class LauncherConstants {
           .withNeutralMode(NeutralModeValue.Brake)
       )
       .withCurrentLimits(new CurrentLimitsConfigs()
-          .withSupplyCurrentLimit(Amps.of(40)) // TODO: Double Check
-          .withStatorCurrentLimit(Amps.of(40)) // TODO: Double Check
+          .withSupplyCurrentLimit(Amps.of(60)) // TODO: Double Check
+          .withStatorCurrentLimit(Amps.of(60)) // TODO: Double Check
+          .withSupplyCurrentLowerLimit(Amps.of(80))
           .withSupplyCurrentLimitEnable(true)
           .withStatorCurrentLimitEnable(true)
       );

@@ -55,8 +55,9 @@ public final class IntakeConstants {
           .withNeutralMode(NeutralModeValue.Brake)
       )
       .withCurrentLimits(new CurrentLimitsConfigs()
-          .withSupplyCurrentLimit(Amps.of(20)) // TODO: Double Check
-          .withStatorCurrentLimit(Amps.of(20)) // TODO: Double Check
+          .withSupplyCurrentLimit(Amps.of(40)) // TODO: Double Check
+          .withStatorCurrentLimit(Amps.of(40)) // TODO: Double Check
+          .withSupplyCurrentLowerLimit(Amps.of(60))
           .withSupplyCurrentLimitEnable(true)
           .withStatorCurrentLimitEnable(true)
       );
