@@ -19,16 +19,16 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.LauncherConstants;
-import frc.robot.constants.LauncherConstants.IndexerConstants;
-import frc.robot.subsystems.interfaces.ISimpleLauncher;
+import frc.robot.constants.LauncherConstants.FeederConstants;
+import frc.robot.subsystems.interfaces.ILauncher;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class TargetHubVelocityAndLaunch extends Command {
-  ISimpleLauncher m_launcher;
+  ILauncher m_launcher;
   Supplier<Pose2d> m_currentPoseSupplier;
   Timer m_launchTimer = new Timer();
   /** Creates a new AimHubAndLaunch. */
-  public TargetHubVelocityAndLaunch(ISimpleLauncher launcher, Supplier<Pose2d> currentPoseSupplier) {
+  public TargetHubVelocityAndLaunch(ILauncher launcher, Supplier<Pose2d> currentPoseSupplier) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_launcher = launcher;
     m_currentPoseSupplier = currentPoseSupplier;
@@ -59,10 +59,10 @@ public class TargetHubVelocityAndLaunch extends Command {
   public void execute() {
     m_launcher.setFlywheelVelocity(m_launcher.getScoringVelocity(m_currentPoseSupplier.get()));
     if (m_launcher.atTargetFlywheelVelocity() && isFacingTarget()) {
-      m_launcher.setIndexerSpeed(IndexerConstants.IndexerSpeed.get());
+      m_launcher.setFeederSpeed(FeederConstants.FeederSpeed.get());
       m_launchTimer.start();
     } else {
-      m_launcher.setIndexerSpeed(0);
+      m_launcher.setFeederSpeed(0);
     }
     Logger.recordOutput("Launcher/TimerSeconds", m_launchTimer.get()); 
   }
