@@ -37,7 +37,7 @@ public class Climber extends SubsystemBase implements IClimber {
 
   /** Creates a new Climber. */
   public Climber() {
-    // m_climberMotor.applyConfig();
+    m_climberMotor.applyConfig();
 
     if (Robot.isSimulation()) {
       var m_dcMotor = DCMotor.getKrakenX60(1); // TODO: double check
@@ -78,23 +78,26 @@ public class Climber extends SubsystemBase implements IClimber {
     }
   }
 
+  public boolean getClimberAtBottom() {
+    return m_limSwitch.get();
+  }
+
   public double getClimberSpeed() {
-    // return m_climberMotor.get();
-    return 0.0;
+    return m_climberMotor.get();
   }
 
   @Override
   public void periodic() {
     if (!m_hasTouchedBottom && DriverStation.isEnabled()) {
-      m_climberMotor.set(-0.1);
+      m_climberMotor.set(ClimberConstants.NotTouchedBottomSpeed.get());
     }
 
-    if (m_limSwitch.get()) {
+    if (getClimberAtBottom()) {
       m_climberMotor.setPosition(0);
       m_hasTouchedBottom = true;
     }
 
     Logger.recordOutput("Climber/hasTouchedBottom", m_hasTouchedBottom);
-    Logger.recordOutput("Climber/limitSwitchActive", m_limSwitch.get());
+    Logger.recordOutput("Climber/climberAtBottom", getClimberAtBottom());
   }
 }
