@@ -1,0 +1,79 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "test auto2-start to launch"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchHub"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "test auto2 launch to depot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DeployIntake"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RetractIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "test auto 1-launch"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchHub"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "test auto1-hub to climb"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ClimbReach"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ClimbEngage"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
