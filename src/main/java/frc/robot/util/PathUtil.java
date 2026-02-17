@@ -13,16 +13,16 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import frc.robot.constants.DriveConstants;
-import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.interfaces.AbstractDrive;
 
 /** Add your docs here. */
 public class PathUtil {
-  public static Command driveToPoseCommand(Pose2d targetPose, Drive swerveDrive) {
+  public static Command driveToPoseCommand(Pose2d targetPose, AbstractDrive swerveDrive) {
     return new DeferredCommand(
       () -> AutoBuilder.pathfindToPose(targetPose, DriveConstants.pathConstraints), Set.of(swerveDrive));
   }
 
-  public static Command driveToPoseCommand(FieldPose2026 targetPose, Drive swerveDrive) {
+  public static Command driveToPoseCommand(FieldPose2026 targetPose, AbstractDrive swerveDrive) {
     return new DeferredCommand(
       () -> AutoBuilder.pathfindToPose(targetPose.getCurrentAlliancePose(), DriveConstants.pathConstraints), Set.of(swerveDrive));
   }
