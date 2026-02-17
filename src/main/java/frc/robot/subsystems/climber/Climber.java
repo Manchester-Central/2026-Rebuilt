@@ -92,7 +92,7 @@ public class Climber extends SubsystemBase implements IClimber {
       m_climberMotor.set(ClimberConstants.NotTouchedBottomSpeed.get());
     }
 
-    if (getClimberAtBottom()) {
+    if (getClimberAtBottom() && !m_hasTouchedBottom) {
       m_climberMotor.setPosition(0);
       m_hasTouchedBottom = true;
     }
