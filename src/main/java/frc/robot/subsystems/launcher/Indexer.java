@@ -13,7 +13,7 @@ public class Indexer implements IIndexer {
     private ChaosTalonFx m_indexerMotor;
 
     @SuppressWarnings("unused")
-    private ChaosTalonFxTuner m_flywheelTuner = new ChaosTalonFxTuner("Launcher/Indexer/Indexer Motor", m_indexerMotor).withCurrentLimits();
+    private ChaosTalonFxTuner m_flywheelTuner;
 
     public Indexer(int id) {
         if (id == 0) {
@@ -21,6 +21,7 @@ public class Indexer implements IIndexer {
         } else {
             m_indexerMotor = new ChaosTalonFx(ArenaConstants.motorCanIDs[id][MotorIDs.Indexer.canIdx], LauncherConstants.LauncherCanBus, IndexerConstants.Config);
         }
+        m_flywheelTuner = new ChaosTalonFxTuner("Launcher/Indexer/Indexer Motor", m_indexerMotor).withCurrentLimits();
     }
 
     public Indexer() {

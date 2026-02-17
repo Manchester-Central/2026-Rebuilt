@@ -6,22 +6,23 @@ package frc.robot.subsystems.intake;
 
 import org.ironmaple.simulation.IntakeSimulation;
 import org.ironmaple.simulation.IntakeSimulation.IntakeSide;
+import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 
 import frc.robot.constants.ArenaConstants;
+import frc.robot.constants.IntakeConstants.PivotConstants;
 import frc.robot.constants.RobotDimensions;
-import frc.robot.subsystems.drive.DriveMapleSim;
 
 public class MapleSimtake extends Intake {
-  protected DriveMapleSim drive;
+  protected SwerveDriveSimulation drive;
   protected IntakeSimulation intakeSim;
 
-  public MapleSimtake(int id, DriveMapleSim drive) {
+  public MapleSimtake(int id, SwerveDriveSimulation drive) {
     super(id);
     this.drive = drive;
 
     intakeSim = IntakeSimulation.OverTheBumperIntake(
       "Fuel",
-      drive.sim,
+      drive,
       RobotDimensions.FrameWidth,
       RobotDimensions.IntakeRange,
       IntakeSide.BACK,
@@ -36,5 +37,16 @@ public class MapleSimtake extends Intake {
   @Override
   public boolean claimGamePiece() {
     return intakeSim.obtainGamePieceFromIntake();
+  }
+
+  @Override
+  public void periodic() {
+    super.periodic();
+
+    if (atTargetAngle(PivotConstants.DeployAngle)) {
+      intakeSim.startIntake();
+    } else {
+      intakeSim.stopIntake();
+    }
   }
 }

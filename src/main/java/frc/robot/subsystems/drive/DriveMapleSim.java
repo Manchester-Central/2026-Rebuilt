@@ -46,7 +46,7 @@ public class DriveMapleSim extends AbstractDrive {
                           Volts.of(TunerConstants.FrontLeft.DriveFrictionVoltage),
                           Volts.of(TunerConstants.FrontLeft.SteerFrictionVoltage),
                           Meters.of(TunerConstants.FrontLeft.WheelRadius),
-                          KilogramSquareMeters.of(TunerConstants.FrontLeft.SteerInertia),
+                          KilogramSquareMeters.of(0.005), //KilogramSquareMeters.of(TunerConstants.FrontLeft.SteerInertia),
                           1.2));
   public SwerveDriveSimulation sim;
 

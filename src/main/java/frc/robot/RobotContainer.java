@@ -180,7 +180,7 @@ public class RobotContainer {
 
       case ARENA:
         var drive = new DriveMapleSim(startPose);
-        m_intake = new MapleSimtake(id, drive);
+        m_intake = new MapleSimtake(id, drive.sim);
         m_launcher = new SimpleLauncher(new MapleSimFlywheel(id, drive, m_intake), new Indexer(id));
         m_climber = new Climber();
         m_swerveDrive = drive;
