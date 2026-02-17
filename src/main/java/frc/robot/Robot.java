@@ -114,7 +114,7 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically when disabled. */
   @Override
   public void disabledPeriodic() {
-    if (!hasEnabled) {
+    if (!hasEnabled && robotContainer.getQuest() != null) {
       robotContainer.getQuest().resetPose(new Pose3d(robotContainer.getSwerveDrive().getPose()));
     }
   }

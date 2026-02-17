@@ -6,6 +6,7 @@ package frc.robot.subsystems.intake;
 
 import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.Rotations;
 
 import com.chaos131.ctre.ChaosCanCoder;
 import com.chaos131.ctre.ChaosCanCoderTuner;
@@ -14,10 +15,14 @@ import com.chaos131.ctre.ChaosTalonFxTuner;
 
 import com.ctre.phoenix6.sim.ChassisReference;
 import com.ctre.phoenix6.sim.TalonFXSimState.MotorType;
+import com.revrobotics.ResetMode;
+import com.revrobotics.encoder.SplineEncoder;
+import com.revrobotics.encoder.config.DetachedEncoderConfig;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -31,23 +36,20 @@ public class Intake extends SubsystemBase implements IIntake {
   private ChaosTalonFx m_rollerMotor = new ChaosTalonFx(RollerConstants.RollerCanId, IntakeConstants.CanBus, RollerConstants.Config);
   // private ChaosTalonFx m_intakeKickerMotor = new ChaosTalonFx(IntakeConstants.IntakeKickerCanId, IntakeConstants.IntakeCanBus); TODO: delete if not added to robot
   private ChaosTalonFx m_pivotMotor = new ChaosTalonFx(PivotConstants.PivotCanId, IntakeConstants.CanBus, PivotConstants.TalonConfig);
-  private ChaosCanCoder m_pivotCanCoder = new ChaosCanCoder(PivotConstants.PivotCanCoderId, IntakeConstants.CanBus, PivotConstants.CanCoderConfig);
+  // private SplineEncoder m_pivotEncoder = new SplineEncoder(PivotConstants.PivotCanCoderId.id);
 
   @SuppressWarnings("unused")
-  private ChaosTalonFxTuner m_rollerTuner = new ChaosTalonFxTuner("Intake/Roller Motor", m_pivotMotor).withCurrentLimits();
+  private ChaosTalonFxTuner m_rollerTuner = new ChaosTalonFxTuner("Intake/Roller Motor", m_rollerMotor).withCurrentLimits();
   @SuppressWarnings("unused")
   private ChaosTalonFxTuner m_pivotTuner = new ChaosTalonFxTuner("Intake/Pivot Motor", m_pivotMotor).withAllConfigs();
-  @SuppressWarnings("unused")
-  private ChaosCanCoderTuner m_pivotCanCoderTuner = new ChaosCanCoderTuner("Intake/Pivot CanCoder", m_pivotCanCoder).withMagnetSensor();
 
   /** Creates a new Intake. */
   public Intake(int id) {
 
-    m_pivotCanCoder.applyConfig();
     m_pivotMotor.applyConfig();
     m_rollerMotor.applyConfig();
 
-    m_pivotMotor.attachCanCoderSim(m_pivotCanCoder);
+    // m_pivotEncoder.configure(PivotConstants.pivotEncoderConfig, ResetMode.kResetSafeParameters);
 
     if (Robot.isSimulation()) {
       var m_moi = SingleJointedArmSim.estimateMOI(IntakeConstants.IntakeLength.in(Meters), IntakeConstants.IntakeMass.in(Kilograms));
@@ -55,6 +57,8 @@ public class Intake extends SubsystemBase implements IIntake {
       var m_dcMotorSim = new DCMotorSim(LinearSystemId.createSingleJointedArmSystem(m_dcMotor, m_moi, PivotConstants.SensorToMechanismRatio), m_dcMotor);
       m_pivotMotor.attachMotorSim(m_dcMotorSim, PivotConstants.SensorToMechanismRatio, true, ChassisReference.CounterClockwise_Positive, MotorType.KrakenX60);
     }
+
+    m_pivotMotor.setPosition(getAbsolutePivotAngle());
   }
 
   /**
@@ -84,7 +88,7 @@ public class Intake extends SubsystemBase implements IIntake {
       targetSpeed = Math.max(speed, 0);
     }
 
-    m_pivotMotor.set(targetSpeed);
+    // m_pivotMotor.set(targetSpeed);
   }
 
   /**
@@ -98,7 +102,7 @@ public class Intake extends SubsystemBase implements IIntake {
       targetAngle = PivotConstants.MinAngle;
     }
 
-    m_pivotMotor.moveToPosition(targetAngle);
+    // m_pivotMotor.moveToPosition(targetAngle);
   }
 
   /**
@@ -126,7 +130,14 @@ public class Intake extends SubsystemBase implements IIntake {
    * Returns the intake pivot angle.
    */
   public Angle getPivotAngle() {
-    return m_pivotCanCoder.getAbsolutePosition().getValue();
+    return m_pivotMotor.getPosition().getValue();
+  }
+
+  /**
+   * Returns pivot encoder angle
+   */
+  public Angle getAbsolutePivotAngle() {
+    return Rotations.of(0); // Rotations.of(m_pivotEncoder.getAngle());
   }
 
   @Override

@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.KilogramSquareMeters;
 import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
+import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecondPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
@@ -49,7 +50,7 @@ public final class DriveConstants {
   }
 
   // PathPlanner config constants - these values should match the settings in the PathPlanner UI. 
-  public static final Mass RobotMass = Kilograms.of(74.088); // TODO: confirm
+  public static final Mass RobotMass = Pounds.of(96 + 15); // TODO: confirm with bumpers
   public static final MomentOfInertia RobotMoi = KilogramSquareMeters.of(6.883); // TODO: confirm
   public static final double WheelCof = 1.2; // TODO: confirm
   public static final PIDConstants TranslationalControlPIDConstants = new PIDConstants(5.0, 0.0, 0.0); // TODO: confirm

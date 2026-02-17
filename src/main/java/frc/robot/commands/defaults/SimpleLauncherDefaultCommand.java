@@ -7,6 +7,8 @@ package frc.robot.commands.defaults;
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.LauncherConstants;
+import frc.robot.constants.LauncherConstants.IndexerConstants;
 import frc.robot.subsystems.interfaces.ISimpleLauncher;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -36,12 +38,12 @@ public class SimpleLauncherDefaultCommand extends Command {
   public void execute() {
     if (m_isManualMode.getAsBoolean()) {
       if (m_isRunLauncher.getAsBoolean()) {
-        m_launcher.setFlywheelSpeed(0.2); // TODO: add dashboard number
+        m_launcher.setFlywheelSpeed(LauncherConstants.LauncherSpeed.get()); // TODO: add dashboard number
       } else {
         m_launcher.setFlywheelSpeed(0);
       }
       if (m_isRunIndexer.getAsBoolean()) {
-        m_launcher.setIndexerSpeed(0.2); // TODO: add dashboard number
+        m_launcher.setIndexerSpeed(IndexerConstants.IndexerSpeed.get()); // TODO: add dashboard number
       } else {
         m_launcher.setIndexerSpeed(0);
       }

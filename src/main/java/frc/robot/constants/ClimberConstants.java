@@ -28,7 +28,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 
 /** Add your docs here. */
 public final class ClimberConstants {
-    public static final CanBusName ClimberCanBus = CanBusName.RIO;
+    public static final CanBusName ClimberCanBus = CanBusName.CTRE;
     public static final CanId ClimberCanId = CanId.ID_20;
 
     public static final AnalogInput StringPotInput = new AnalogInput(0); // TODO: Double Check
@@ -38,6 +38,8 @@ public final class ClimberConstants {
     public static final Distance MaxExtension = Inches.of(10); // TODO: Double Check
     public static final Distance ClimbExtension = Inches.of(6); // TODO: Double Check
     public static final Distance MinExtension = Inches.of(0); // TODO: Double Check
+
+    public static final DashboardNumber NotTouchedBottomSpeed = new DashboardNumber("Climber/NotTouchedBottomSpeed", -0.1);
 
     public static final Mass ClimberMass = Kilogram.of(2); // TODO: Double Check
     public static final Distance DrivingDrumRadius = Meters.of(0.05); // TODO: Double Check
@@ -61,10 +63,10 @@ public final class ClimberConstants {
             .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor)
         )
         .withSlot0(new Slot0Configs() //TODO: CHECK THESE PLEASE
-            .withKP(4)
-            .withKI(0.1)
-            .withKD(1)
-            .withKG(0.1)
+            .withKP(0)
+            .withKI(0)
+            .withKD(0)
+            .withKG(0)
             .withKS(0)
             .withKV(0)
             .withKA(0)
