@@ -25,15 +25,15 @@ import frc.robot.constants.ClimberConstants;
 import frc.robot.subsystems.interfaces.IClimber;
 
 public class Climber extends SubsystemBase implements IClimber {
-  // private ChaosTalonFx m_climberMotor = new ChaosTalonFx(ClimberConstants.ClimberCanId, ClimberConstants.ClimberCanBus, ClimberConstants.Config);
+  private ChaosTalonFx m_climberMotor = new ChaosTalonFx(ClimberConstants.ClimberCanId, ClimberConstants.ClimberCanBus, ClimberConstants.Config);
   // private AnalogPotentiometer m_climberPot = new AnalogPotentiometer(ClimberConstants.StringPotInput, ClimberConstants.StringPotRange.in(Inches), ClimberConstants.StringPotStartPoint.in(Inches));
 
   @SuppressWarnings("unused")
-  // private ChaosTalonFxTuner m_climberTuner = new ChaosTalonFxTuner("Climber/Climber Motor", m_climberMotor).withAllConfigs();
+  private ChaosTalonFxTuner m_climberTuner = new ChaosTalonFxTuner("Climber/Climber Motor", m_climberMotor).withAllConfigs();
 
   /** Creates a new Climber. */
   public Climber() {
-    // m_climberMotor.applyConfig();
+    m_climberMotor.applyConfig();
 
     if (Robot.isSimulation()) {
       var m_dcMotor = DCMotor.getKrakenX60(1); // TODO: double check
@@ -64,16 +64,15 @@ public class Climber extends SubsystemBase implements IClimber {
   }
 
   public void setClimberSpeed(double speed) {
-    // if (getHeight().lt(ClimberConstants.MinExtension) && speed < 0) {
-    //   speed = 0;
-    // } else if (getHeight().gt(ClimberConstants.MaxExtension) && speed > 0) {
-    //   speed = 0;
-    // }
-    // m_climberMotor.set(speed);
+    if (getHeight().lt(ClimberConstants.MinExtension) && speed < 0) {
+      speed = 0;
+    } else if (getHeight().gt(ClimberConstants.MaxExtension) && speed > 0) {
+      speed = 0;
+    }
+    m_climberMotor.set(speed);
   }
 
   public double getClimberSpeed() {
-    // return m_climberMotor.get();
-    return 0.0;
+    return m_climberMotor.get();
   }
 }

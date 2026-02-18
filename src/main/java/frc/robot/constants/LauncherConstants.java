@@ -103,7 +103,8 @@ public final class LauncherConstants {
   public static final class IndexerConstants {
     public static final CanId IndexerCanId = CanId.ID_42;
 
-    public static final DashboardNumber IndexerSpeed = new DashboardNumber("Launcher/Indexer/IndexerSpeed", 0.6);
+    public static final DashboardNumber IndexerSpeed = new DashboardNumber("Launcher/Indexer/IndexerSpeed", 1);
+    public static final DashboardNumber UnjamSpeed = new DashboardNumber("Launcher/Indexer/UnjamSpeed", -1);
 
     public static final TalonFXConfiguration Config = new TalonFXConfiguration()
       .withMotorOutput(new MotorOutputConfigs()

@@ -18,13 +18,15 @@ public class SimpleLauncherDefaultCommand extends Command {
   private BooleanSupplier m_isManualMode;
   private BooleanSupplier m_isRunLauncher;
   private BooleanSupplier m_isRunIndexer;
+  private BooleanSupplier m_isRunUnjam;
 
-  public SimpleLauncherDefaultCommand(ISimpleLauncher launcher, BooleanSupplier isManualMode, BooleanSupplier isRunLauncher, BooleanSupplier isRunFeeder) {
+  public SimpleLauncherDefaultCommand(ISimpleLauncher launcher, BooleanSupplier isManualMode, BooleanSupplier isRunLauncher, BooleanSupplier isRunFeeder, BooleanSupplier isRunUnjam) {
     // Use addRequirements() here to declare subsystem dependencies.=
     m_launcher = launcher;
     m_isManualMode = isManualMode;
     m_isRunLauncher = isRunLauncher;
     m_isRunIndexer = isRunFeeder;
+    m_isRunUnjam = isRunUnjam;
 
     addRequirements(m_launcher);
   }
@@ -44,9 +46,12 @@ public class SimpleLauncherDefaultCommand extends Command {
       }
       if (m_isRunIndexer.getAsBoolean()) {
         m_launcher.setIndexerSpeed(IndexerConstants.IndexerSpeed.get()); // TODO: add dashboard number
+      } else if (m_isRunUnjam.getAsBoolean()) {
+        m_launcher.setIndexerSpeed(IndexerConstants.UnjamSpeed.get());
       } else {
         m_launcher.setIndexerSpeed(0);
       }
+      
       return;
     }
     m_launcher.setFlywheelSpeed(0);
