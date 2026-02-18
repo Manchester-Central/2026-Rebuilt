@@ -39,6 +39,8 @@ public final class ClimberConstants {
     public static final Distance ClimbExtension = Inches.of(6); // TODO: Double Check
     public static final Distance MinExtension = Inches.of(0); // TODO: Double Check
 
+    public static final DashboardNumber NotTouchedBottomSpeed = new DashboardNumber("Climber/NotTouchedBottomSpeed", -0.1);
+
     public static final Mass ClimberMass = Kilogram.of(2); // TODO: Double Check
     public static final Distance DrivingDrumRadius = Meters.of(0.05); // TODO: Double Check
 

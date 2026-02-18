@@ -4,9 +4,10 @@
 
 package frc.robot.subsystems.climber;
 
-import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Kilogram;
 import static edu.wpi.first.units.Units.Meters;
+
+import org.littletonrobotics.junction.Logger;
 
 import com.chaos131.ctre.ChaosTalonFx;
 import com.chaos131.ctre.ChaosTalonFxTuner;
@@ -17,7 +18,8 @@ import com.ctre.phoenix6.sim.TalonFXSimState.MotorType;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -26,7 +28,9 @@ import frc.robot.subsystems.interfaces.IClimber;
 
 public class Climber extends SubsystemBase implements IClimber {
   private ChaosTalonFx m_climberMotor = new ChaosTalonFx(ClimberConstants.ClimberCanId, ClimberConstants.ClimberCanBus, ClimberConstants.Config);
-  // private AnalogPotentiometer m_climberPot = new AnalogPotentiometer(ClimberConstants.StringPotInput, ClimberConstants.StringPotRange.in(Inches), ClimberConstants.StringPotStartPoint.in(Inches));
+  private DigitalInput m_limSwitch = new DigitalInput(0); // TODO: check input channel
+  
+  private boolean m_hasTouchedBottom = false;
 
   @SuppressWarnings("unused")
   private ChaosTalonFxTuner m_climberTuner = new ChaosTalonFxTuner("Climber/Climber Motor", m_climberMotor).withAllConfigs();
@@ -41,26 +45,25 @@ public class Climber extends SubsystemBase implements IClimber {
         LinearSystemId.createElevatorSystem(m_dcMotor, ClimberConstants.ClimberMass.in(Kilogram), ClimberConstants.DrivingDrumRadius.in(Meters), ClimberConstants.SensorToMechanismRatio),
         m_dcMotor
       );
-      // m_climberMotor.attachMotorSim(m_dcMotorSim, ClimberConstants.SensorToMechanismRatio, true, ChassisReference.CounterClockwise_Positive, MotorType.KrakenX60);
+      m_climberMotor.attachMotorSim(m_dcMotorSim, ClimberConstants.SensorToMechanismRatio, true, ChassisReference.CounterClockwise_Positive, MotorType.KrakenX60);
     }
-
-    // m_climberMotor.setPosition(m_climberPot.get());
   }
 
   public Distance getHeight() {
-    // return Meters.of(m_climberMotor.getPosition().getValueAsDouble());
-    return Meters.of(0);
+    return Meters.of(m_climberMotor.getPosition().getValueAsDouble());
   }
 
   public void setHeight(Distance height) {
-    // Distance targetHeight = height;
-    // if (targetHeight.gt(ClimberConstants.MaxExtension)) {
-    //   targetHeight = ClimberConstants.MaxExtension;
-    // } else if (targetHeight.lt(ClimberConstants.MinExtension)) {
-    //   targetHeight = ClimberConstants.MinExtension;
-    // }
+    Distance targetHeight = height;
+    if (targetHeight.gt(ClimberConstants.MaxExtension)) {
+      targetHeight = ClimberConstants.MaxExtension;
+    } else if (targetHeight.lt(ClimberConstants.MinExtension)) {
+      targetHeight = ClimberConstants.MinExtension;
+    }
 
-    // m_climberMotor.moveToPosition(height.in(Meters));
+    if (m_hasTouchedBottom) {
+      m_climberMotor.moveToPosition(height.in(Meters));
+    }
   }
 
   public void setClimberSpeed(double speed) {
@@ -69,10 +72,32 @@ public class Climber extends SubsystemBase implements IClimber {
     } else if (getHeight().gt(ClimberConstants.MaxExtension) && speed > 0) {
       speed = 0;
     }
-    m_climberMotor.set(speed);
+
+    if (m_hasTouchedBottom) {
+      m_climberMotor.set(speed);
+    }
+  }
+
+  public boolean getClimberAtBottom() {
+    return m_limSwitch.get();
   }
 
   public double getClimberSpeed() {
     return m_climberMotor.get();
+  }
+
+  @Override
+  public void periodic() {
+    if (!m_hasTouchedBottom && DriverStation.isEnabled()) {
+      // m_climberMotor.set(ClimberConstants.NotTouchedBottomSpeed.get());
+    }
+
+    if (getClimberAtBottom() && !m_hasTouchedBottom) {
+      m_climberMotor.setPosition(0);
+      m_hasTouchedBottom = true;
+    }
+
+    Logger.recordOutput("Climber/hasTouchedBottom", m_hasTouchedBottom);
+    Logger.recordOutput("Climber/climberAtBottom", getClimberAtBottom());
   }
 }
