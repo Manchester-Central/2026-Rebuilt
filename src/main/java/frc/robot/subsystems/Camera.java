@@ -51,4 +51,9 @@ public class Camera extends LimelightCamera {
   public Pose3d getBotPose3dTargetSpace() {
     return LimelightHelpers.getBotPose3d_TargetSpace(m_name);
   }
+
+  protected double[] calculateTranslationalDeviations(double distance, double tagCount) {
+    double[] basic_deviations = super.calculateTranslationalDeviations(distance, tagCount);
+    return new double[]{10,10,10}; // TODO: Fix me John! Fix me!
+  }
 }
