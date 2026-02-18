@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "test auto 3- start to launch"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchHub"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "test auto3-launch to climb"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ClimbReach"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ClimbEngage"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
