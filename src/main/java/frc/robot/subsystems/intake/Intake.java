@@ -4,9 +4,12 @@
 
 package frc.robot.subsystems.intake;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Rotations;
+
+import org.littletonrobotics.junction.Logger;
 
 import com.chaos131.ctre.ChaosCanCoder;
 import com.chaos131.ctre.ChaosCanCoderTuner;
@@ -148,5 +151,12 @@ public class Intake extends SubsystemBase implements IIntake {
   @Override
   public void retract() {
     setPivotAngle(PivotConstants.RetractAngle);
+  }
+
+  @Override
+  public void periodic() {
+    Logger.recordOutput("Intake/PivotAngleDegrees", getPivotAngle().in(Degrees));
+    Logger.recordOutput("Intake/AbsolutePivotAngleDegrees", getAbsolutePivotAngle().in(Degrees));
+    Logger.recordOutput("Intake/RollerSpeed", getRollerSpeed());
   }
 }

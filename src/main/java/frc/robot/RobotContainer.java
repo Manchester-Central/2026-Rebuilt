@@ -78,9 +78,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
   // Subsystems
   private final Drive m_swerveDrive;
-  @SuppressWarnings("unused")
   private Quest m_quest;
-  @SuppressWarnings("unused")
   private Camera m_camera;
   private IClimber m_climber;
   @SuppressWarnings("unused")
