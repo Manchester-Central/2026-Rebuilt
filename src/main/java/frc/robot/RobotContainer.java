@@ -233,7 +233,7 @@ public class RobotContainer {
             m_getDriverRotation));
 
     m_climber.setDefaultCommand(new ClimberDefaultCommand(m_climber, m_operator::getLeftY, m_isManualTrigger)); 
-    m_intake.setDefaultCommand(new IntakeDefaultCommand(m_intake, m_isManualTrigger, m_operator.leftTrigger(), m_operator::getRightY));    
+    m_intake.setDefaultCommand(new IntakeDefaultCommand(m_intake, m_isManualTrigger, m_operator.leftTrigger(), m_operator::getRightY, m_operator.a()));    
     m_launcher.setDefaultCommand(new LauncherDefaultCommand(m_launcher, m_isManualTrigger, m_operator.rightTrigger(), m_operator.rightBumper(), m_operator.b()));
     
     
