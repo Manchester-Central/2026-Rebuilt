@@ -123,7 +123,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
-        m_quest = new Quest(m_swerveDrive);
+        //  m_quest = new Quest(m_swerveDrive);
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
@@ -283,7 +283,7 @@ public class RobotContainer {
     m_operator.povRight().and(m_isAutomaticTrigger).whileTrue(new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension));
     m_operator.povDown().and(m_isAutomaticTrigger).whileTrue(new SetClimberHeight(m_climber, ClimberConstants.MinExtension));
 
-    m_operator.y().whileTrue(new InstantCommand(() -> m_quest.resetPose(m_camera.getBotPose3d())));
+    // m_operator.y().whileTrue(new InstantCommand(() -> m_quest.resetPose(m_camera.getBotPose3d())));
 
     m_operator.start().onTrue(new InstantCommand((() -> m_isManual = true)));
     m_operator.back().onTrue(new InstantCommand((() -> m_isManual = false)));
@@ -318,7 +318,7 @@ public class RobotContainer {
     return m_swerveDrive;
   }
 
-  public Quest getQuest() {
-    return m_quest;
-  }
+  // public Quest getQuest() {
+  //   return m_quest;
+  // }
 }
