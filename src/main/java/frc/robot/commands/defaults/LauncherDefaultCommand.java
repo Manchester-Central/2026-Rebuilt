@@ -18,13 +18,15 @@ public class LauncherDefaultCommand extends Command {
   private BooleanSupplier m_isManualMode;
   private BooleanSupplier m_isRunLauncher;
   private BooleanSupplier m_isRunFeeder;
+  private BooleanSupplier m_isRunUnjam;
 
-  public LauncherDefaultCommand(ILauncher launcher, BooleanSupplier isManualMode, BooleanSupplier isRunLauncher, BooleanSupplier isRunFeeder) {
+  public LauncherDefaultCommand(ILauncher launcher, BooleanSupplier isManualMode, BooleanSupplier isRunLauncher, BooleanSupplier isRunFeeder, BooleanSupplier isRunUnjam) {
     // Use addRequirements() here to declare subsystem dependencies.=
     m_launcher = launcher;
     m_isManualMode = isManualMode;
     m_isRunLauncher = isRunLauncher;
     m_isRunFeeder = isRunFeeder;
+    m_isRunUnjam = isRunUnjam;
 
     addRequirements(m_launcher);
   }
@@ -44,9 +46,12 @@ public class LauncherDefaultCommand extends Command {
       }
       if (m_isRunFeeder.getAsBoolean()) {
         m_launcher.setFeederSpeed(FeederConstants.FeederSpeed.get()); // TODO: add dashboard number
+      } else if (m_isRunUnjam.getAsBoolean()) {
+        m_launcher.setFeederSpeed(FeederConstants.UnjamSpeed.get());
       } else {
         m_launcher.setFeederSpeed(0);
       }
+      
       return;
     }
     m_launcher.setFlywheelSpeed(0);

@@ -123,7 +123,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
-        m_quest = new Quest(m_swerveDrive);
+        //  m_quest = new Quest(m_swerveDrive);
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
@@ -166,7 +166,7 @@ public class RobotContainer {
                 new ModuleIO() {});
         break;
     }
-    m_camera = new Camera("LimeLight",
+    m_camera = new Camera("limelight",
             LimelightVersion.LL3G,
             LimelightCamera.LL3GSpecs(),
             () -> m_swerveDrive.getPose(),
@@ -233,8 +233,8 @@ public class RobotContainer {
             m_getDriverRotation));
 
     m_climber.setDefaultCommand(new ClimberDefaultCommand(m_climber, m_operator::getLeftY, m_isManualTrigger)); 
-    m_intake.setDefaultCommand(new IntakeDefaultCommand(m_intake, m_isManualTrigger, m_operator.leftTrigger(), m_operator::getRightY));    
-    m_launcher.setDefaultCommand(new LauncherDefaultCommand(m_launcher, m_isManualTrigger, m_operator.rightTrigger(), m_operator.rightBumper()));
+    m_intake.setDefaultCommand(new IntakeDefaultCommand(m_intake, m_isManualTrigger, m_operator.leftTrigger(), m_operator::getRightY, m_operator.a()));    
+    m_launcher.setDefaultCommand(new LauncherDefaultCommand(m_launcher, m_isManualTrigger, m_operator.rightTrigger(), m_operator.rightBumper(), m_operator.b()));
     
     
     // Reset gyro to 0° when B button is pressed
@@ -283,7 +283,7 @@ public class RobotContainer {
     m_operator.povRight().and(m_isAutomaticTrigger).whileTrue(new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension));
     m_operator.povDown().and(m_isAutomaticTrigger).whileTrue(new SetClimberHeight(m_climber, ClimberConstants.MinExtension));
 
-    m_operator.y().whileTrue(new InstantCommand(() -> m_quest.resetPose(m_camera.getBotPose3d())));
+    // m_operator.y().whileTrue(new InstantCommand(() -> m_quest.resetPose(m_camera.getBotPose3d())));
 
     m_operator.start().onTrue(new InstantCommand((() -> m_isManual = true)));
     m_operator.back().onTrue(new InstantCommand((() -> m_isManual = false)));
@@ -318,7 +318,7 @@ public class RobotContainer {
     return m_swerveDrive;
   }
 
-  public Quest getQuest() {
-    return m_quest;
-  }
+  // public Quest getQuest() {
+  //   return m_quest;
+  // }
 }

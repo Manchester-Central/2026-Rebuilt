@@ -88,7 +88,7 @@ public class Intake extends SubsystemBase implements IIntake {
       targetSpeed = Math.max(speed, 0);
     }
 
-    // m_pivotMotor.set(targetSpeed);
+    m_pivotMotor.set(speed); // TODO: Change to targetSpeed
   }
 
   /**
