@@ -20,33 +20,33 @@ import frc.robot.constants.FieldDimensions;
 import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.LauncherConstants;
 import frc.robot.subsystems.interfaces.IFlywheel;
-import frc.robot.subsystems.interfaces.IIndexer;
-import frc.robot.subsystems.interfaces.ISimpleLauncher;
+import frc.robot.subsystems.interfaces.IFeeder;
+import frc.robot.subsystems.interfaces.ILauncher;
 
-public class SimpleLauncher extends SubsystemBase implements ISimpleLauncher {
+public class Launcher extends SubsystemBase implements ILauncher {
   IFlywheel m_flywheel;
-  IIndexer m_indexer;
+  IFeeder m_feeder;
 
-  /** Creates a new SimpleLauncher. */
-  public SimpleLauncher(IFlywheel flywheel, IIndexer indexer) {
+  /** Creates a new Launcher. */
+  public Launcher(IFlywheel flywheel, IFeeder feeder) {
     m_flywheel = flywheel;
-    m_indexer = indexer;
+    m_feeder = feeder;
   }
 
   public double getFlywheelSpeed() {
     return m_flywheel.getFlywheelSpeed();
   }
 
-  public double getIndexerSpeed() {
-    return m_indexer.getIndexerSpeed();
+  public double getFeederSpeed() {
+    return m_feeder.getFeederSpeed();
   }
 
   public void setFlywheelSpeed(double speed) {
     m_flywheel.setFlywheelSpeed(speed);
   }
 
-  public void setIndexerSpeed(double speed) {
-    m_indexer.setIndexerSpeed(speed);
+  public void setFeederSpeed(double speed) {
+    m_feeder.setFeederSpeed(speed);
   }
 
   public void setFlywheelVelocity(LinearVelocity velocity) {
@@ -63,8 +63,8 @@ public class SimpleLauncher extends SubsystemBase implements ISimpleLauncher {
 
   private LinearVelocity getVelocityForTarget(Pose2d currentPose, Pose2d targetPose, Distance targetHeight) {
     double groundDisplacementInches = FieldPose.getDistanceFromLocations(currentPose, targetPose).in(Inches);
-    double thetaRadians = LauncherConstants.SimpleLauncherAngle.in(Radians);
-    double deltaHeightInches = targetHeight.minus(LauncherConstants.SimpleLauncherHeight).in(Inches);
+    double thetaRadians = LauncherConstants.LauncherAngle.in(Radians);
+    double deltaHeightInches = targetHeight.minus(LauncherConstants.LauncherHeight).in(Inches);
     
     double numerator = GeneralConstants.gravity.in(InchesPerSecondPerSecond) * Math.pow(groundDisplacementInches, 2);
     double denomenator = 2 * Math.pow(Math.cos(thetaRadians), 2) * (deltaHeightInches - groundDisplacementInches * Math.tan(thetaRadians));

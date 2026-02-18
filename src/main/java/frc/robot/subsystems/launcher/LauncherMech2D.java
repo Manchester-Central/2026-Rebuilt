@@ -15,23 +15,23 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
 import com.chaos131.util.Color;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.interfaces.ISimpleLauncher;
+import frc.robot.subsystems.interfaces.ILauncher;
 
 public class LauncherMech2D extends SubsystemBase {
   @AutoLogOutput(key = "Launcher/LauncherMech2D")
   LoggedMechanism2d m_launcherBase;
   LoggedMechanismRoot2d m_launcherRoot;
-  LoggedMechanismLigament2d m_indexerLigament;
+  LoggedMechanismLigament2d m_feederLigament;
   LoggedMechanismLigament2d m_launcherLigament;
 
-  ISimpleLauncher m_launcher;
+  ILauncher m_launcher;
 
   /** Creates a new IntakeMech2D. */
-  public LauncherMech2D(ISimpleLauncher launcher) {
+  public LauncherMech2D(ILauncher launcher) {
     m_launcherBase = new LoggedMechanism2d(Inches.of(26), Inches.of(28.5));
     m_launcherRoot = m_launcherBase.getRoot("Launcher", 0.7, 0.4);
-    m_indexerLigament = m_launcherRoot.append(new LoggedMechanismLigament2d("IndexerLigament", Inches.of(8), Degrees.of(75)));
-    m_launcherLigament = m_indexerLigament.append(new LoggedMechanismLigament2d("LauncherLigament", Inches.of(6), Degrees.of(-20)));
+    m_feederLigament = m_launcherRoot.append(new LoggedMechanismLigament2d("FeederLigament", Inches.of(8), Degrees.of(75)));
+    m_launcherLigament = m_feederLigament.append(new LoggedMechanismLigament2d("LauncherLigament", Inches.of(6), Degrees.of(-20)));
 
     m_launcher = launcher;
   }
@@ -39,7 +39,7 @@ public class LauncherMech2D extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    m_indexerLigament.setColor(Color.fromDutyCycle(m_launcher.getIndexerSpeed()));
+    m_feederLigament.setColor(Color.fromDutyCycle(m_launcher.getFeederSpeed()));
     m_launcherLigament.setColor(Color.fromDutyCycle(m_launcher.getFlywheelSpeed()));
   }
 }

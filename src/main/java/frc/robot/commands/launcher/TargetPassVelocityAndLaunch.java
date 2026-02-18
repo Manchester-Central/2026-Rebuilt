@@ -16,15 +16,15 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.LauncherConstants;
-import frc.robot.constants.LauncherConstants.IndexerConstants;
-import frc.robot.subsystems.interfaces.ISimpleLauncher;
+import frc.robot.constants.LauncherConstants.FeederConstants;
+import frc.robot.subsystems.interfaces.ILauncher;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class TargetPassVelocityAndLaunch extends Command {
-  ISimpleLauncher m_launcher;
+  ILauncher m_launcher;
   Supplier<Pose2d> m_currentPoseSupplier;
   /** Creates a new AimHubAndLaunch. */
-  public TargetPassVelocityAndLaunch(ISimpleLauncher launcher, Supplier<Pose2d> currentPoseSupplier) {
+  public TargetPassVelocityAndLaunch(ILauncher launcher, Supplier<Pose2d> currentPoseSupplier) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_launcher = launcher;
     m_currentPoseSupplier = currentPoseSupplier;
@@ -53,9 +53,9 @@ public class TargetPassVelocityAndLaunch extends Command {
   public void execute() {
     m_launcher.setFlywheelVelocity(m_launcher.getPassVelocity(m_currentPoseSupplier.get()));
     if (m_launcher.atTargetFlywheelVelocity() && isFacingTarget()) {
-      m_launcher.setIndexerSpeed(IndexerConstants.IndexerSpeed.get());
+      m_launcher.setFeederSpeed(FeederConstants.FeederSpeed.get());
     } else {
-      m_launcher.setIndexerSpeed(0);
+      m_launcher.setFeederSpeed(0);
     }
   }
 

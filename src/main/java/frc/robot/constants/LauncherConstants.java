@@ -41,12 +41,12 @@ public final class LauncherConstants {
   public static final CanBusName LauncherCanBus = CanBusName.CTRE;
   // public static final CanId TurretCanId = CanId.ID_43;
 
-  public static Distance SimpleLauncherHeight = Inches.of(16); // TODO: Verify
-  public static Angle SimpleLauncherAngle = Degrees.of(65);
+  public static Distance LauncherHeight = Inches.of(16); // TODO: Verify
+  public static Angle LauncherAngle = Degrees.of(65);
 
   public static final DashboardNumber LauncherSpeed = new DashboardNumber("Launcher/ManualLaunchSpeed", 0.6); 
 
-  public static final Distance LauncherToHubHeight = FieldDimensions.HubHeight.minus(SimpleLauncherHeight);
+  public static final Distance LauncherToHubHeight = FieldDimensions.HubHeight.minus(LauncherHeight);
 
   public static final FieldPose2026 SafeLaunchePoint = new FieldPose2026(Alliance.Blue, "SafeLaunchPoint", new Pose2d(Inches.of(80), Inches.of(158.845), Rotation2d.kZero));
   public static final FieldPose2026 LeftPassPoint = new FieldPose2026(Alliance.Blue, "LeftPassPoint", new Pose2d(Inches.of(120), Inches.of(260), Rotation2d.kZero));
@@ -100,10 +100,10 @@ public final class LauncherConstants {
     }
   }
 
-  public static final class IndexerConstants {
-    public static final CanId IndexerCanId = CanId.ID_42;
+  public static final class FeederConstants {
+    public static final CanId FeederCanId = CanId.ID_42;
 
-    public static final DashboardNumber IndexerSpeed = new DashboardNumber("Launcher/Indexer/IndexerSpeed", 0.6);
+    public static final DashboardNumber FeederSpeed = new DashboardNumber("Launcher/Feeder/FeederSpeed", 0.6);
 
     public static final TalonFXConfiguration Config = new TalonFXConfiguration()
       .withMotorOutput(new MotorOutputConfigs()

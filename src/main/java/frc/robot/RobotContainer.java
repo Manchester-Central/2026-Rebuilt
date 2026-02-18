@@ -30,7 +30,7 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.commands.climb.SetClimberHeight;
 import frc.robot.commands.defaults.ClimberDefaultCommand;
 import frc.robot.commands.defaults.IntakeDefaultCommand;
-import frc.robot.commands.defaults.SimpleLauncherDefaultCommand;
+import frc.robot.commands.defaults.LauncherDefaultCommand;
 import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.DeployOuttake;
 import frc.robot.commands.intake.RetractIntake;
@@ -55,11 +55,11 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeMech2D;
 import frc.robot.subsystems.interfaces.IClimber;
 import frc.robot.subsystems.interfaces.IIntake;
-import frc.robot.subsystems.interfaces.ISimpleLauncher;
+import frc.robot.subsystems.interfaces.ILauncher;
 import frc.robot.subsystems.launcher.Flywheel;
-import frc.robot.subsystems.launcher.Indexer;
+import frc.robot.subsystems.launcher.Feeder;
 import frc.robot.subsystems.launcher.LauncherMech2D;
-import frc.robot.subsystems.launcher.SimpleLauncher;
+import frc.robot.subsystems.launcher.Launcher;
 import frc.robot.util.PathUtil;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
@@ -89,7 +89,7 @@ public class RobotContainer {
   private IntakeMech2D m_intakeMech2d;
   @SuppressWarnings("unused")
   private LauncherMech2D m_launcherMech2D;
-  private ISimpleLauncher m_launcher;
+  private ILauncher m_launcher;
   private IIntake m_intake;
 
   // Controller
@@ -180,7 +180,7 @@ public class RobotContainer {
     m_intake = new Intake ();
     m_intakeMech2d = new IntakeMech2D(m_intake);
 
-    m_launcher = new SimpleLauncher(new Flywheel(), new Indexer());
+    m_launcher = new Launcher(new Flywheel(), new Feeder());
     m_launcherMech2D = new LauncherMech2D(m_launcher);
 
     
@@ -234,7 +234,7 @@ public class RobotContainer {
 
     m_climber.setDefaultCommand(new ClimberDefaultCommand(m_climber, m_operator::getLeftY, m_isManualTrigger)); 
     m_intake.setDefaultCommand(new IntakeDefaultCommand(m_intake, m_isManualTrigger, m_operator.leftTrigger(), m_operator::getRightY));    
-    m_launcher.setDefaultCommand(new SimpleLauncherDefaultCommand(m_launcher, m_isManualTrigger, m_operator.rightTrigger(), m_operator.rightBumper()));
+    m_launcher.setDefaultCommand(new LauncherDefaultCommand(m_launcher, m_isManualTrigger, m_operator.rightTrigger(), m_operator.rightBumper()));
     
     
     // Reset gyro to 0° when B button is pressed
