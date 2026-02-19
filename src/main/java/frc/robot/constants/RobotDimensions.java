@@ -13,9 +13,9 @@ public final class RobotDimensions {
   // Thickness of just the bumpers
   public static Distance BumperThickness = Inches.of(1.5);
   // From left to right
-  public static Distance FrameWidth = Inches.of(30);
+  public static Distance FrameWidth = Inches.of(28);
   // From front to back
-  public static Distance FrameLength = Inches.of(30);
+  public static Distance FrameLength = Inches.of(25.5);
   // BumperWidth
   // BumperLength
 }
