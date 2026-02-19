@@ -67,7 +67,7 @@ public final class IntakeConstants {
     public static final CanId PivotCanId = CanId.ID_31;
     public static final CanId PivotCanCoderId = CanId.ID_32;
 
-    public static double SensorToMechanismRatio = 1;
+    public static double SensorToMechanismRatio = -43.077; //TODO: tune 
 
     public static final TalonFXConfiguration TalonConfig = new TalonFXConfiguration()
         .withMotorOutput(new MotorOutputConfigs()
@@ -98,7 +98,9 @@ public final class IntakeConstants {
 
     public static final Angle CanCoderOffset = Rotations.of(0);
 
-    public static final DetachedEncoderConfig pivotEncoderConfig = new DetachedEncoderConfig().inverted(false).dutyCycleOffset(0);
+    public static final DetachedEncoderConfig pivotEncoderConfig = new DetachedEncoderConfig()
+        .inverted(false)
+        .dutyCycleOffset(Degrees.of(226).in(Rotations));
 
     // Pivot Max / Min
     public static final Angle MaxAngle = Degrees.of(190); // TODO: Double Check

@@ -121,7 +121,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
-        //  m_quest = new Quest(m_swerveDrive);
+         m_quest = new Quest(m_swerveDrive);
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
@@ -316,7 +316,7 @@ public class RobotContainer {
     return m_swerveDrive;
   }
 
-  // public Quest getQuest() {
-  //   return m_quest;
-  // }
+  public Quest getQuest() {
+    return m_quest;
+  }
 }
