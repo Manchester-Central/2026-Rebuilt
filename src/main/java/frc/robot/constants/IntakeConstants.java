@@ -98,7 +98,9 @@ public final class IntakeConstants {
 
     public static final Angle CanCoderOffset = Rotations.of(0);
 
-    public static final DetachedEncoderConfig pivotEncoderConfig = new DetachedEncoderConfig().inverted(false).dutyCycleOffset(0);
+    public static final DetachedEncoderConfig pivotEncoderConfig = new DetachedEncoderConfig()
+        .inverted(false)
+        .dutyCycleOffset(Degrees.of(226).in(Rotations));
 
     // Pivot Max / Min
     public static final Angle MaxAngle = Degrees.of(190); // TODO: Double Check
