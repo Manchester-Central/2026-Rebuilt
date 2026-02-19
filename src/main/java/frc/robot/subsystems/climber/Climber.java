@@ -31,7 +31,7 @@ public class Climber extends SubsystemBase implements IClimber {
   private DigitalInput m_limSwitch = new DigitalInput(0); // TODO: check input channel
   
   private boolean m_hasTouchedBottom = false;
-  private Distance m_targetHeight;
+  private Distance m_targetHeight = ClimberConstants.MinExtension;
 
   @SuppressWarnings("unused")
   private ChaosTalonFxTuner m_climberTuner = new ChaosTalonFxTuner("Climber/Climber Motor", m_climberMotor).withAllConfigs();
