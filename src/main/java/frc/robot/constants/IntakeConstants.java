@@ -67,7 +67,7 @@ public final class IntakeConstants {
     public static final CanId PivotCanId = CanId.ID_31;
     public static final CanId PivotCanCoderId = CanId.ID_32;
 
-    public static double SensorToMechanismRatio = 1;
+    public static double SensorToMechanismRatio = -42.128; //TODO: tune 
 
     public static final TalonFXConfiguration TalonConfig = new TalonFXConfiguration()
         .withMotorOutput(new MotorOutputConfigs()
