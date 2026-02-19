@@ -63,7 +63,7 @@ public class Climber extends SubsystemBase implements IClimber {
     }
 
     if (m_hasTouchedBottom) {
-      m_climberMotor.moveToPosition(height.in(Meters));
+      m_climberMotor.moveToPosition(m_targetHeight.in(Meters));
     }
   }
 

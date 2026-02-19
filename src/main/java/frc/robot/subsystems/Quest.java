@@ -56,6 +56,7 @@ public class Quest extends SubsystemBase {
 
   public void setUseForOdometry(boolean isEnabled) {
     useForOdometry = isEnabled;
+    Logger.recordOutput("Quest/useForOdometry", useForOdometry);
   }
 
   @Override
