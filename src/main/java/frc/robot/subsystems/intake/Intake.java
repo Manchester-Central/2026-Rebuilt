@@ -39,12 +39,13 @@ public class Intake extends SubsystemBase implements IIntake {
   private ChaosTalonFx m_rollerMotor = new ChaosTalonFx(RollerConstants.RollerCanId, IntakeConstants.CanBus, RollerConstants.Config);
   // private ChaosTalonFx m_intakeKickerMotor = new ChaosTalonFx(IntakeConstants.IntakeKickerCanId, IntakeConstants.IntakeCanBus); TODO: delete if not added to robot
   private ChaosTalonFx m_pivotMotor = new ChaosTalonFx(PivotConstants.PivotCanId, IntakeConstants.CanBus, PivotConstants.TalonConfig);
-  // private SplineEncoder m_pivotEncoder = new SplineEncoder(PivotConstants.PivotCanCoderId.id);
+  private SplineEncoder m_pivotEncoder = new SplineEncoder(PivotConstants.PivotCanCoderId.id);
 
   @SuppressWarnings("unused")
   private ChaosTalonFxTuner m_rollerTuner = new ChaosTalonFxTuner("Intake/Roller Motor", m_rollerMotor).withCurrentLimits();
   @SuppressWarnings("unused")
   private ChaosTalonFxTuner m_pivotTuner = new ChaosTalonFxTuner("Intake/Pivot Motor", m_pivotMotor).withAllConfigs();
+  private Angle m_targetAngle = PivotConstants.RetractAngle;
 
   /** Creates a new Intake. */
   public Intake() {
@@ -52,7 +53,7 @@ public class Intake extends SubsystemBase implements IIntake {
     m_pivotMotor.applyConfig();
     m_rollerMotor.applyConfig();
 
-    // m_pivotEncoder.configure(PivotConstants.pivotEncoderConfig, ResetMode.kResetSafeParameters);
+    m_pivotEncoder.configure(PivotConstants.pivotEncoderConfig, ResetMode.kResetSafeParameters);
 
     if (Robot.isSimulation()) {
       var m_moi = SingleJointedArmSim.estimateMOI(IntakeConstants.IntakeLength.in(Meters), IntakeConstants.IntakeMass.in(Kilograms));
@@ -91,21 +92,21 @@ public class Intake extends SubsystemBase implements IIntake {
       targetSpeed = Math.max(speed, 0);
     }
 
-    m_pivotMotor.set(speed); // TODO: Change to targetSpeed
+    m_pivotMotor.set(targetSpeed); // TODO: Change to targetSpeed
   }
 
   /**
    * Sets the angle of the pivot motor.
    */
   public void setPivotAngle(Angle angle) {
-    Angle targetAngle = angle;
-    if (targetAngle.gt(PivotConstants.MaxAngle)) {
-      targetAngle = PivotConstants.MaxAngle;
-    } else if (targetAngle.lt(PivotConstants.MinAngle)) {
-      targetAngle = PivotConstants.MinAngle;
+    m_targetAngle = angle;
+    if (m_targetAngle.gt(PivotConstants.MaxAngle)) {
+      m_targetAngle = PivotConstants.MaxAngle;
+    } else if (m_targetAngle.lt(PivotConstants.MinAngle)) {
+      m_targetAngle = PivotConstants.MinAngle;
     }
 
-    // m_pivotMotor.moveToPosition(targetAngle);
+    m_pivotMotor.moveToPosition(m_targetAngle);
   }
 
   /**
@@ -140,7 +141,7 @@ public class Intake extends SubsystemBase implements IIntake {
    * Returns pivot encoder angle
    */
   public Angle getAbsolutePivotAngle() {
-    return Rotations.of(0); // Rotations.of(m_pivotEncoder.getAngle());
+    return Rotations.of(m_pivotEncoder.getAngle());
   }
 
   @Override
@@ -158,5 +159,6 @@ public class Intake extends SubsystemBase implements IIntake {
     Logger.recordOutput("Intake/PivotAngleDegrees", getPivotAngle().in(Degrees));
     Logger.recordOutput("Intake/AbsolutePivotAngleDegrees", getAbsolutePivotAngle().in(Degrees));
     Logger.recordOutput("Intake/RollerSpeed", getRollerSpeed());
+    Logger.recordOutput("intake/targetAngle", m_targetAngle.in(Degrees));
   }
 }
