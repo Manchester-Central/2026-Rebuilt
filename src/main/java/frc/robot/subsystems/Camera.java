@@ -9,6 +9,7 @@ import com.chaos131.vision.LimelightCamera;
 import com.chaos131.vision.VisionData;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.LimelightHelpers;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -50,5 +51,14 @@ public class Camera extends LimelightCamera {
 
   public Pose3d getBotPose3dTargetSpace() {
     return LimelightHelpers.getBotPose3d_TargetSpace(m_name);
+  }
+
+  protected double[] calculateTranslationalDeviations(double distance, double tagCount) {
+    double[] basic_deviations = super.calculateTranslationalDeviations(distance, tagCount);
+    return new double[] {
+      basic_deviations[0] * Timer.getFPGATimestamp(),
+      basic_deviations[1] * Timer.getFPGATimestamp(),
+      basic_deviations[2] * Timer.getFPGATimestamp() 
+    };
   }
 }

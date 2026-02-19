@@ -31,6 +31,7 @@ public class Climber extends SubsystemBase implements IClimber {
   private DigitalInput m_limSwitch = new DigitalInput(0); // TODO: check input channel
   
   private boolean m_hasTouchedBottom = false;
+  private Distance m_targetHeight;
 
   @SuppressWarnings("unused")
   private ChaosTalonFxTuner m_climberTuner = new ChaosTalonFxTuner("Climber/Climber Motor", m_climberMotor).withAllConfigs();
@@ -54,15 +55,15 @@ public class Climber extends SubsystemBase implements IClimber {
   }
 
   public void setHeight(Distance height) {
-    Distance targetHeight = height;
-    if (targetHeight.gt(ClimberConstants.MaxExtension)) {
-      targetHeight = ClimberConstants.MaxExtension;
-    } else if (targetHeight.lt(ClimberConstants.MinExtension)) {
-      targetHeight = ClimberConstants.MinExtension;
+    m_targetHeight = height;
+    if (m_targetHeight.gt(ClimberConstants.MaxExtension)) {
+      m_targetHeight = ClimberConstants.MaxExtension;
+    } else if (m_targetHeight.lt(ClimberConstants.MinExtension)) {
+      m_targetHeight = ClimberConstants.MinExtension;
     }
 
     if (m_hasTouchedBottom) {
-      m_climberMotor.moveToPosition(height.in(Meters));
+      m_climberMotor.moveToPosition(m_targetHeight.in(Meters));
     }
   }
 
@@ -99,5 +100,7 @@ public class Climber extends SubsystemBase implements IClimber {
 
     Logger.recordOutput("Climber/hasTouchedBottom", m_hasTouchedBottom);
     Logger.recordOutput("Climber/climberAtBottom", getClimberAtBottom());
+    Logger.recordOutput("Climber/HeightMeters", getHeight().in(Meters));
+    Logger.recordOutput("Climber/TargetHeightMeters", m_targetHeight.in(Meters));
   }
 }

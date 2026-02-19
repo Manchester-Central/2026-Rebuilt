@@ -78,9 +78,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
   // Subsystems
   private final Drive m_swerveDrive;
-  @SuppressWarnings("unused")
   private Quest m_quest;
-  @SuppressWarnings("unused")
   private Camera m_camera;
   private IClimber m_climber;
   @SuppressWarnings("unused")
@@ -292,8 +290,8 @@ public class RobotContainer {
   private Command getAimAtFieldPosesCommand(FieldPose2026... poses) {
     return DriveCommands.joystickDriveAtAngle(
         m_swerveDrive,
-       DriverStation.isAutonomous() ? () -> 0 :  m_getDriverXTranslation,
-       DriverStation.isAutonomous() ? () -> 0 : m_getDriverYTranslation,
+        DriverStation.isAutonomous() ? () -> 0 :  m_getDriverXTranslation,
+        DriverStation.isAutonomous() ? () -> 0 : m_getDriverYTranslation,
         () -> {
             FieldPose targetPose = FieldPose.getClosestPose(m_swerveDrive.getPose(), poses);
             return targetPose.getTargetAngleForRobot(m_swerveDrive.getPose());

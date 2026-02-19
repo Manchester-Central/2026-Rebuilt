@@ -27,6 +27,7 @@ import gg.questnav.questnav.QuestNav;
 public class Quest extends SubsystemBase {
   /** Creates a new Quest. */
   private QuestNav questNav = new QuestNav();
+  private boolean useForOdometry = true;
 
   // Transformation from the robot origin to the quest center,
   // defined as the point in the center of the front panel
@@ -53,6 +54,11 @@ public class Quest extends SubsystemBase {
     questNav.setPose(questPose);
   }
 
+  public void setUseForOdometry(boolean isEnabled) {
+    useForOdometry = isEnabled;
+    Logger.recordOutput("Quest/useForOdometry", useForOdometry);
+  }
+
   @Override
   public void periodic() {
     questNav.commandPeriodic();
@@ -61,17 +67,17 @@ public class Quest extends SubsystemBase {
     Logger.recordOutput("Quest/isConnected", questNav.isConnected());
     Logger.recordOutput("Quest/isTracking", questNav.isTracking());
     Logger.recordOutput("Quest/battery", battery.isPresent() ? battery.getAsInt() : 0);
-    // Logger.recordOutput("Quest/hasSetPose", hasSetPose);
     // Logger.recordOutput("Quest/isResetActive", isResetActive);
-    // Logger.recordOutput("Quest/planB", planB);
 
     robotPose = null;
     questPose = null;
 
     if (poseFrames.length > 0) {
-    //    questPose = poseFrames[poseFrames.length - 1].questPose();
-       questPose = poseFrames[poseFrames.length - 1].questPose3d();
-       robotPose = questPose.transformBy(robotToQuest.inverse());
+      // Only logs the most recent (if multiple) poses from the quest in the
+      // "Quest/robotPose" topic listed below. Bails from the function if we
+      // fail to make a robot pose.
+      questPose = poseFrames[poseFrames.length - 1].questPose3d();
+      robotPose = questPose.transformBy(robotToQuest.inverse());
     }
     if (robotPose == null) {
       return;
@@ -85,7 +91,7 @@ public class Quest extends SubsystemBase {
       0.035 // Trust down to 2 degrees rotational
     );
 
-    if (questNav.isConnected() && questNav.isTracking() && DriverStation.isEnabled()) {
+    if (questNav.isConnected() && questNav.isTracking() && DriverStation.isEnabled() && useForOdometry) {
       // Loop over the pose data frames and send them to the pose estimator
       for (PoseFrame questFrame : poseFrames) {
         // Get the pose of the Quest
