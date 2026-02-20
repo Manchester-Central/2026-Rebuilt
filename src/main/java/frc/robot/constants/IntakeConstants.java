@@ -67,11 +67,11 @@ public final class IntakeConstants {
     public static final CanId PivotCanId = CanId.ID_31;
     public static final CanId PivotCanCoderId = CanId.ID_32;
 
-    public static double SensorToMechanismRatio = -43.077; //TODO: tune 
+    public static double SensorToMechanismRatio = 42.603; //TODO: tune 
 
     public static final TalonFXConfiguration TalonConfig = new TalonFXConfiguration()
         .withMotorOutput(new MotorOutputConfigs()
-            .withInverted(InvertedValue.Clockwise_Positive)
+            .withInverted(InvertedValue.CounterClockwise_Positive)
             .withNeutralMode(NeutralModeValue.Brake)
         )
         .withCurrentLimits(new CurrentLimitsConfigs()
@@ -103,11 +103,11 @@ public final class IntakeConstants {
         .dutyCycleOffset(Degrees.of(226).in(Rotations));
 
     // Pivot Max / Min
-    public static final Angle MaxAngle = Degrees.of(190); // TODO: Double Check
-    public static final Angle MinAngle = Degrees.of(85); // TODO: Double Check
+    public static final Angle MaxAngle = Degrees.of(188); // TODO: Double Check
+    public static final Angle MinAngle = Degrees.of(66); // TODO: Double Check
 
     // Target Angles / Speeds
-    public static final Angle DeployAngle = Degrees.of(180); // TODO: Double Check
-    public static final Angle RetractAngle = Degrees.of(90); // TODO: Double Check
+    public static final Angle DeployAngle = Degrees.of(185); // TODO: Double Check
+    public static final Angle RetractAngle = Degrees.of(66); // TODO: Double Check
   }
 }
