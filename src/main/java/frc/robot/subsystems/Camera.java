@@ -39,7 +39,7 @@ public class Camera extends LimelightCamera {
 
   public Pose3d getBotPose3d() {
     var botPoseArray = m_botpose.getDoubleArray(new double[0]);
-    if (botPoseArray.length > 6) {
+    if (botPoseArray.length < 6) {
       return null;
     }
     return LimelightHelpers.toPose3D(botPoseArray);
