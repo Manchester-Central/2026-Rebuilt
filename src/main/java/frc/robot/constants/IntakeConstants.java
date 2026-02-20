@@ -52,7 +52,7 @@ public final class IntakeConstants {
     public static final TalonFXConfiguration Config = new TalonFXConfiguration()
       .withMotorOutput(new MotorOutputConfigs()
           .withInverted(InvertedValue.CounterClockwise_Positive)
-          .withNeutralMode(NeutralModeValue.Brake)
+          .withNeutralMode(NeutralModeValue.Coast)
       )
       .withCurrentLimits(new CurrentLimitsConfigs()
           .withSupplyCurrentLimit(Amps.of(40)) // TODO: Double Check
