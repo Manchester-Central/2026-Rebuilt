@@ -61,4 +61,13 @@ public class Camera extends LimelightCamera {
       basic_deviations[2] * Timer.getFPGATimestamp() 
     };
   }
+
+  @Override
+  public double calculateConfidence(Pose3d pose, int tagCount, double distance, double deviation) {
+    if (pose.equals(new Pose3d())) {
+      return 0;   
+    }
+    return super.calculateConfidence(pose, tagCount, distance, deviation);
+  }
+
 }
