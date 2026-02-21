@@ -265,9 +265,9 @@ public class RobotContainer {
             new TargetHubVelocityAndLaunch(m_launcher, m_swerveDrive::getPose)
             .alongWith(getAimAtFieldPosesCommand(FieldPose2026.HubCenter)));
 
-    m_driver.a().and(m_isAutomaticTrigger).whileTrue(new RunCommand(() -> m_intake.setPivotAngle(PivotConstants.RetractAngle), m_intake));
+    m_driver.a().and(m_isAutomaticTrigger).whileTrue(new RetractIntake(m_intake));
     m_driver.x().onTrue(Commands.runOnce(m_swerveDrive::stopWithX, m_swerveDrive));
-    m_driver.y().and(m_isAutomaticTrigger).whileTrue(PathUtil.driveToPoseCommand(LauncherConstants.SafeLaunchePoint, m_swerveDrive));
+    m_driver.y().whileTrue(PathUtil.driveToPoseCommand(LauncherConstants.SafeLaunchePoint, m_swerveDrive));
 
     m_driver.leftStick().or(m_driver.rightStick()).toggleOnTrue(
         DriveCommands.joystickDrive(
