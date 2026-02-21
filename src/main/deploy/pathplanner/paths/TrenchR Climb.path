@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.9863373493975898,
+        "y": 0.6146265060240967
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.8882168674698794,
+        "y": 0.7566867469879516
+      },
+      "isLocked": false,
+      "linkedName": "TrenchR"
+    },
+    {
+      "anchor": {
+        "x": 1.5713132530120486,
+        "y": 3.2809879518072296
+      },
+      "prevControl": {
+        "x": 3.0793373493975897,
+        "y": 3.4449036144578313
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "ClimbR"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "reversed": false,
+  "folder": "Week0",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "useDefaultConstraints": true
+}
