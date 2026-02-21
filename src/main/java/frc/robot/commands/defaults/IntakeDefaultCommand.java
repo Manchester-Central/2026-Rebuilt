@@ -45,7 +45,7 @@ public class IntakeDefaultCommand extends Command {
       } else {
         m_intake.setRollerSpeed(0);
       }
-      m_intake.setPivotSpeed(m_intakePivotSpeed.getAsDouble() * IntakeConstants.ManualPivotSpeedMultiplier.get());
+      m_intake.setPivotSpeed(m_intakePivotSpeed.getAsDouble() * -1.0 * IntakeConstants.ManualPivotSpeedMultiplier.get());
       return;
     }
     m_intake.setRollerSpeed(0);

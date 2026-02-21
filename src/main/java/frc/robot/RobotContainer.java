@@ -265,9 +265,9 @@ public class RobotContainer {
             new TargetHubVelocityAndLaunch(m_launcher, m_swerveDrive::getPose)
             .alongWith(getAimAtFieldPosesCommand(FieldPose2026.HubCenter)));
 
-    m_driver.a().and(m_isAutomaticTrigger).whileTrue(new RunCommand(() -> m_intake.setPivotAngle(PivotConstants.RetractAngle), m_intake));
+    m_driver.a().and(m_isAutomaticTrigger).whileTrue(new RetractIntake(m_intake));
     m_driver.x().onTrue(Commands.runOnce(m_swerveDrive::stopWithX, m_swerveDrive));
-    m_driver.y().and(m_isAutomaticTrigger).whileTrue(PathUtil.driveToPoseCommand(LauncherConstants.SafeLaunchePoint, m_swerveDrive));
+    m_driver.y().whileTrue(PathUtil.driveToPoseCommand(LauncherConstants.SafeLaunchePoint, m_swerveDrive));
 
     m_driver.leftStick().or(m_driver.rightStick()).toggleOnTrue(
         DriveCommands.joystickDrive(
@@ -281,7 +281,15 @@ public class RobotContainer {
     m_operator.povRight().and(m_isAutomaticTrigger).whileTrue(new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension));
     m_operator.povDown().and(m_isAutomaticTrigger).whileTrue(new SetClimberHeight(m_climber, ClimberConstants.MinExtension));
 
-    // m_operator.y().whileTrue(new InstantCommand(() -> m_quest.resetPose(m_camera.getBotPose3d())));
+    m_operator.y().whileTrue(new RunCommand(() -> {
+      var botpose = m_camera.getBotPose3d();
+      if (botpose != null){
+        m_quest.resetPose(botpose);
+        m_swerveDrive.setPose(botpose.toPose2d());
+      }
+     
+    }).ignoringDisable(true));
+
 
     m_operator.start().onTrue(new InstantCommand((() -> m_isManual = true)));
     m_operator.back().onTrue(new InstantCommand((() -> m_isManual = false)));

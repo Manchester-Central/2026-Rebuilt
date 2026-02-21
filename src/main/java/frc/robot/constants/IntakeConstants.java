@@ -40,10 +40,10 @@ public final class IntakeConstants {
   public static final Mass IntakeMass = Pounds.of(5); // TODO: Double Check
 
   // Manual Multipliers
-  public static final DashboardNumber ManualPivotSpeedMultiplier = new DashboardNumber("Intake/ManualPivotSpeedMultiplier", 0.1);
+  public static final DashboardNumber ManualPivotSpeedMultiplier = new DashboardNumber("Intake/ManualPivotSpeedMultiplier", 0.4);
 
   // Speeds
-  public static final DashboardNumber IntakeRollerSpeed = new DashboardNumber("Intake/IntakeRollerSpeed", 0.4);
+  public static final DashboardNumber IntakeRollerSpeed = new DashboardNumber("Intake/IntakeRollerSpeed", 0.65);
   public static final DashboardNumber OuttakeRollerSpeed = new DashboardNumber("Intake/OuttakeRollerSpeed", -0.4);
 
   public static final class RollerConstants {
@@ -52,7 +52,7 @@ public final class IntakeConstants {
     public static final TalonFXConfiguration Config = new TalonFXConfiguration()
       .withMotorOutput(new MotorOutputConfigs()
           .withInverted(InvertedValue.CounterClockwise_Positive)
-          .withNeutralMode(NeutralModeValue.Brake)
+          .withNeutralMode(NeutralModeValue.Coast)
       )
       .withCurrentLimits(new CurrentLimitsConfigs()
           .withSupplyCurrentLimit(Amps.of(40)) // TODO: Double Check
@@ -67,11 +67,11 @@ public final class IntakeConstants {
     public static final CanId PivotCanId = CanId.ID_31;
     public static final CanId PivotCanCoderId = CanId.ID_32;
 
-    public static double SensorToMechanismRatio = -43.077; //TODO: tune 
+    public static double SensorToMechanismRatio = 42.603; //TODO: tune 
 
     public static final TalonFXConfiguration TalonConfig = new TalonFXConfiguration()
         .withMotorOutput(new MotorOutputConfigs()
-            .withInverted(InvertedValue.Clockwise_Positive)
+            .withInverted(InvertedValue.CounterClockwise_Positive)
             .withNeutralMode(NeutralModeValue.Brake)
         )
         .withCurrentLimits(new CurrentLimitsConfigs()
@@ -103,11 +103,11 @@ public final class IntakeConstants {
         .dutyCycleOffset(Degrees.of(226).in(Rotations));
 
     // Pivot Max / Min
-    public static final Angle MaxAngle = Degrees.of(190); // TODO: Double Check
-    public static final Angle MinAngle = Degrees.of(85); // TODO: Double Check
+    public static final Angle MaxAngle = Degrees.of(188); // TODO: Double Check
+    public static final Angle MinAngle = Degrees.of(66); // TODO: Double Check
 
     // Target Angles / Speeds
-    public static final Angle DeployAngle = Degrees.of(180); // TODO: Double Check
-    public static final Angle RetractAngle = Degrees.of(90); // TODO: Double Check
+    public static final Angle DeployAngle = Degrees.of(185); // TODO: Double Check
+    public static final Angle RetractAngle = Degrees.of(66); // TODO: Double Check
   }
 }

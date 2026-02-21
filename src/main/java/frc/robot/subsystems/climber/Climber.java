@@ -68,15 +68,15 @@ public class Climber extends SubsystemBase implements IClimber {
   }
 
   public void setClimberSpeed(double speed) {
-    if (getHeight().lt(ClimberConstants.MinExtension) && speed < 0) {
-      speed = 0;
-    } else if (getHeight().gt(ClimberConstants.MaxExtension) && speed > 0) {
-      speed = 0;
-    }
+    //if (getHeight().lt(ClimberConstants.MinExtension) && speed < 0) {
+     // speed = 0;
+   // } else if (getHeight().gt(ClimberConstants.MaxExtension) && speed > 0) {
+   //   speed = 0;
+    //}
 
-    if (m_hasTouchedBottom) {
+   // if (m_hasTouchedBottom) {
       m_climberMotor.set(speed);
-    }
+    //}
   }
 
   public boolean getClimberAtBottom() {
