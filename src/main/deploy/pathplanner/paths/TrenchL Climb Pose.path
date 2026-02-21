@@ -3,33 +3,47 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.9863373493975898,
-        "y": 0.6146265060240967
+        "x": 3.5710843373493972,
+        "y": 7.378879518072289
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8882168674698794,
-        "y": 0.7566867469879516
+        "x": 1.2434819277108429,
+        "y": 7.477228915662651
       },
       "isLocked": false,
-      "linkedName": "TrenchR"
+      "linkedName": "TrenchL"
     },
     {
       "anchor": {
-        "x": 1.5713132530120486,
-        "y": 3.2809879518072296
+        "x": 1.5494578313253013,
+        "y": 4.155204819277109
       },
       "prevControl": {
-        "x": 3.0793373493975897,
-        "y": 3.4449036144578313
+        "x": 3.254180722891566,
+        "y": 3.9694337349397593
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "ClimbR"
+      "linkedName": "ClimbL"
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.85,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 0.6,
+        "maxAcceleration": 1.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -47,8 +61,8 @@
   "reversed": false,
   "folder": "Week0",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 90.0
+    "velocity": 0.0,
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

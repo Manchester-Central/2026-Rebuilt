@@ -27,7 +27,7 @@ import gg.questnav.questnav.QuestNav;
 public class Quest extends SubsystemBase {
   /** Creates a new Quest. */
   private QuestNav questNav = new QuestNav();
-  private boolean useForOdometry = true;
+  private boolean useForOdometry;
 
   // Transformation from the robot origin to the quest center,
   // defined as the point in the center of the front panel
@@ -46,6 +46,7 @@ public class Quest extends SubsystemBase {
   // Constructor
   public Quest(Drive swerveDrive) {
     m_swerveDrive = swerveDrive;
+    setUseForOdometry(true);
   }
 
   public void resetPose(Pose3d newRobotPose) {

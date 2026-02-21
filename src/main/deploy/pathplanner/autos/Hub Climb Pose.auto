@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Hub Climb"
+            "pathName": "Hub Climb Pose"
           }
         }
       ]
     }
   },
-  "resetOdom": true,
+  "resetOdom": false,
   "folder": "Week0",
   "choreoAuto": false
 }

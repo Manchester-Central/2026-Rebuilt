@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "TrenchR Climb"
+            "pathName": "TrenchR Climb Pose"
           }
         }
       ]
     }
   },
-  "resetOdom": true,
+  "resetOdom": false,
   "folder": "Week0",
   "choreoAuto": false
 }
