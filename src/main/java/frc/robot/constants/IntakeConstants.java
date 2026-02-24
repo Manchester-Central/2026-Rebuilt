@@ -13,6 +13,7 @@ import static edu.wpi.first.units.Units.Rotations;
 import com.chaos131.can.CanConstants.CanBusName;
 import com.chaos131.can.CanConstants.CanId;
 import com.chaos131.util.DashboardNumber;
+import com.chaos131.util.DashboardUnit;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
@@ -27,6 +28,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.encoder.config.DetachedEncoderConfig;
 
+import edu.wpi.first.units.AngleUnit;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Mass;
@@ -75,8 +77,9 @@ public final class IntakeConstants {
             .withNeutralMode(NeutralModeValue.Brake)
         )
         .withCurrentLimits(new CurrentLimitsConfigs()
-            .withSupplyCurrentLimit(Amps.of(20)) // TODO: Double Check
-            .withStatorCurrentLimit(Amps.of(20)) // TODO: Double Check
+            .withSupplyCurrentLimit(Amps.of(50)) // TODO: Double Check
+            .withStatorCurrentLimit(Amps.of(50)) // TODO: Double Check
+            .withSupplyCurrentLowerLimit(Amps.of(60))
             .withSupplyCurrentLimitEnable(true)
             .withStatorCurrentLimitEnable(true)
         )
@@ -86,11 +89,11 @@ public final class IntakeConstants {
             .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor)
         )
         .withSlot0(new Slot0Configs() //TODO: CHECK THESE PLEASE
-            .withKP(0)
+            .withKP(60)
             .withKI(0)
             .withKD(0)
-            .withKG(0)
-            .withKS(0)
+            .withKG(0.39)
+            .withKS(0.29)
             .withKV(0)
             .withKA(0)
             .withGravityType(GravityTypeValue.Arm_Cosine)
@@ -107,7 +110,7 @@ public final class IntakeConstants {
     public static final Angle MinAngle = Degrees.of(66); // TODO: Double Check
 
     // Target Angles / Speeds
-    public static final Angle DeployAngle = Degrees.of(185); // TODO: Double Check
-    public static final Angle RetractAngle = Degrees.of(66); // TODO: Double Check
+    public static final DashboardUnit<AngleUnit,Angle> DeployAngle = new DashboardUnit<>("Intake/DeployAngle", Degrees.of(185)); // TODO: Double Check
+    public static final DashboardUnit<AngleUnit,Angle> RetractAngle = new DashboardUnit<>("Intake/RetractAngle", Degrees.of(66)); // TODO: Double Check
   }
 }

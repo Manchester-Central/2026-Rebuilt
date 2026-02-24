@@ -45,7 +45,7 @@ public class Intake extends SubsystemBase implements IIntake {
   private ChaosTalonFxTuner m_rollerTuner = new ChaosTalonFxTuner("Intake/Roller Motor", m_rollerMotor).withCurrentLimits();
   @SuppressWarnings("unused")
   private ChaosTalonFxTuner m_pivotTuner = new ChaosTalonFxTuner("Intake/Pivot Motor", m_pivotMotor).withAllConfigs();
-  private Angle m_targetAngle = PivotConstants.RetractAngle;
+  private Angle m_targetAngle = PivotConstants.RetractAngle.get();
 
   /** Creates a new Intake. */
   public Intake() {
@@ -146,12 +146,12 @@ public class Intake extends SubsystemBase implements IIntake {
 
   @Override
   public void deploy() {
-    setPivotAngle(PivotConstants.DeployAngle);
+    setPivotAngle(PivotConstants.DeployAngle.get());
   }
 
   @Override
   public void retract() {
-    setPivotAngle(PivotConstants.RetractAngle);
+    setPivotAngle(PivotConstants.RetractAngle.get());
   }
 
   @Override
