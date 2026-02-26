@@ -74,7 +74,7 @@ public class Launcher extends SubsystemBase implements ILauncher {
   }
 
   public LinearVelocity getScoringVelocity(Pose2d currentPose) {
-    return getVelocityForTarget(currentPose, FieldPose2026.HubCenter.getCurrentAlliancePose(), FieldDimensions.HubHeight);
+    return getVelocityForTarget(currentPose, FieldPose2026.HubCenter.getCurrentAlliancePose(), FieldDimensions.HubHeight).times(4);
   }
 
   public LinearVelocity getPassVelocity(Pose2d currentPose) {

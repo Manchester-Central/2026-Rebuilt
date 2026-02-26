@@ -28,6 +28,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.AngleUnit;
+import edu.wpi.first.units.LinearVelocityUnit;
 import edu.wpi.first.units.TimeUnit;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
@@ -53,7 +54,7 @@ public final class LauncherConstants {
   public static final FieldPose2026 RightPassPoint = new FieldPose2026(Alliance.Blue, "RightPassPoint", new Pose2d(Inches.of(120), Inches.of(57.69), Rotation2d.kZero));
   public static final FieldPose2026[] PassPoints = new FieldPose2026[] {LeftPassPoint, RightPassPoint};
 
-  public static final DashboardUnit<AngleUnit, Angle> AimYawTolerance = new DashboardUnit<>("Launcher/AimYawTolerance", Degrees.of(1));
+  public static final DashboardUnit<AngleUnit, Angle> AimYawTolerance = new DashboardUnit<>("Launcher/AimYawTolerance", Degrees.of(1)); // tested with 3
 
   public static final DashboardUnit<TimeUnit, Time> AutoLaunchTime = new DashboardUnit<>("Launcher/AutoLaunchTime", Seconds.of(4.0));
   public static final class FlywheelConstants {
@@ -63,7 +64,7 @@ public final class LauncherConstants {
     public static final Distance FlyWheelDiameter = Inches.of(6); //  TODO: Double Check
     public static final Mass FlywheelMass = Pounds.of(0.4);
 
-    public static final LinearVelocity TargetVelocityTolerance = MetersPerSecond.of(0.2); // TODO: Double Check
+    public static final DashboardUnit<LinearVelocityUnit, LinearVelocity> TargetVelocityTolerance = new DashboardUnit<>("Launcher/TargetVelocityTolerance", MetersPerSecond.of(0.4)); // TODO: Tested with 2
 
     // Keep these separate to control them independently.
     // There's a 50-50 chance their directions are different!
@@ -89,12 +90,12 @@ public final class LauncherConstants {
             .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor)
         )
         .withSlot0(new Slot0Configs() //TODO: CHECK THESE PLEASE
-            .withKP(0)
+            .withKP(0.15)
             .withKI(0)
-            .withKD(0)
+            .withKD(0.02)
             .withKG(0)
-            .withKS(0)
-            .withKV(0)
+            .withKS(0.1)
+            .withKV(0.12)
             .withKA(0)
         );
     }
