@@ -35,7 +35,6 @@ public class Flywheel implements IFlywheel {
     private ChaosTalonFxTuner m_flywheelTuner = new ChaosTalonFxTuner("Launcher/Flywheel/Flywheel Motors", m_flywheelMotors).withAllConfigs();
 
     private LinearVelocity targetVelocity = MetersPerSecond.of(0);
-    private LinearVelocity targetVelocityTolerance = FlywheelConstants.TargetVelocityTolerance;
 
     public Flywheel() {
         for (var motor : m_flywheelMotors) {
@@ -68,7 +67,7 @@ public class Flywheel implements IFlywheel {
 
     public boolean atTargetLeft() {
         if (targetVelocity == null) return false;
-        return getLeftLinearVelocity().isNear(targetVelocity, targetVelocityTolerance);
+        return getLeftLinearVelocity().isNear(targetVelocity, FlywheelConstants.TargetVelocityTolerance.get());
     }
 
     public LinearVelocity getRightLinearVelocity() {
@@ -78,7 +77,7 @@ public class Flywheel implements IFlywheel {
 
     public boolean atTargetRight() {
         if (targetVelocity == null) return false;
-        return getRightLinearVelocity().isNear(targetVelocity, targetVelocityTolerance);
+        return getRightLinearVelocity().isNear(targetVelocity, FlywheelConstants.TargetVelocityTolerance.get());
     }
 
     @Override
