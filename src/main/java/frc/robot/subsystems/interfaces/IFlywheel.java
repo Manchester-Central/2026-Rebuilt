@@ -28,28 +28,16 @@ public interface IFlywheel {
     public void setFlywheelVelocity(LinearVelocity linearVelocity);
 
     /**
-     * Returns the linear velocity of the left side motor
+     * Returns the linear velocity of the motors
      * @return that linear velocity
      */
-    public LinearVelocity getLeftLinearVelocity();
+    public LinearVelocity getLinearVelocity();
 
     /**
      * Checks if the specific motor is at the target linear velocity
      * @return true if within tolerance
      */
-    public boolean atTargetLeft();
-
-    /**
-     * Returns the linear velocity of the left side motor
-     * @return that linear velocity
-     */
-    public LinearVelocity getRightLinearVelocity();
-
-    /**
-     * Checks if the specific motor is at the target linear velocity
-     * @return true if within tolerance
-     */
-    public boolean atTargetRight();
+    public boolean atTarget();
 
     public void periodic();
 }

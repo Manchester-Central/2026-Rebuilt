@@ -9,6 +9,7 @@ import org.littletonrobotics.junction.Logger;
 
 import com.chaos131.ctre.ChaosTalonFx;
 import com.chaos131.ctre.ChaosTalonFxTuner;
+import com.ctre.phoenix6.controls.StrictFollower;
 import com.ctre.phoenix6.sim.ChassisReference;
 import com.ctre.phoenix6.sim.TalonFXSimState.MotorType;
 
@@ -37,53 +38,58 @@ public class Flywheel implements IFlywheel {
     private LinearVelocity targetVelocity = MetersPerSecond.of(0);
 
     public Flywheel() {
-        for (var motor : m_flywheelMotors) {
-            motor.applyConfig();
-            if (Robot.isSimulation()) {
-                var m_dcMotor = DCMotor.getKrakenX60(1); // TODO: double check
-                var m_moi = SingleJointedArmSim.estimateMOI(FlywheelConstants.FlyWheelDiameter.in(Meters) / 2.0, FlywheelConstants.FlywheelMass.in(Kilograms));
-                var m_dcMotorSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(m_dcMotor, m_moi, motor.Configuration.Feedback.SensorToMechanismRatio), m_dcMotor);
-                motor.attachMotorSim(m_dcMotorSim, motor.Configuration.Feedback.SensorToMechanismRatio, true, ChassisReference.CounterClockwise_Positive, MotorType.KrakenX60);
-            }
+        m_rightFlywheelMotor.applyConfig();
+        m_leftFlywheelMotor.applyConfig();
+
+        if (Robot.isSimulation()) {
+            var m_dcMotor = DCMotor.getKrakenX60(2); // TODO: double check
+            var m_moi = SingleJointedArmSim.estimateMOI(FlywheelConstants.FlyWheelDiameter.in(Meters) / 2.0, FlywheelConstants.FlywheelMass.in(Kilograms));
+            var m_dcMotorSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(m_dcMotor, m_moi, m_leftFlywheelMotor.Configuration.Feedback.SensorToMechanismRatio), m_dcMotor);
+            m_leftFlywheelMotor.attachMotorSim(m_dcMotorSim, m_leftFlywheelMotor.Configuration.Feedback.SensorToMechanismRatio, true, ChassisReference.CounterClockwise_Positive, MotorType.KrakenX60);
         }
+
+        m_rightFlywheelMotor.setControl(new StrictFollower(m_leftFlywheelMotor.getDeviceID()));
+        // //for (var motor : m_flywheelMotors) {
+        //     motor.applyConfig();
+        //     if (Robot.isSimulation()) {
+        //         var m_dcMotor = DCMotor.getKrakenX60(1); // TODO: double check
+        //         var m_moi = SingleJointedArmSim.estimateMOI(FlywheelConstants.FlyWheelDiameter.in(Meters) / 2.0, FlywheelConstants.FlywheelMass.in(Kilograms));
+        //         var m_dcMotorSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(m_dcMotor, m_moi, motor.Configuration.Feedback.SensorToMechanismRatio), m_dcMotor);
+        //         motor.attachMotorSim(m_dcMotorSim, motor.Configuration.Feedback.SensorToMechanismRatio, true, ChassisReference.CounterClockwise_Positive, MotorType.KrakenX60);
+        //     }
+        // }
     }
 
     public void setFlywheelVelocity(AngularVelocity velocity) {
-        for (var motor : m_flywheelMotors)
-            motor.moveAtVelocity(velocity);
+        // for (var motor : m_flywheelMotors)
+        //     motor.moveAtVelocity(velocity);
+        m_leftFlywheelMotor.moveAtVelocity(velocity);
     }
 
     public void setFlywheelVelocity(LinearVelocity linearVelocity) {
         targetVelocity = linearVelocity;
         AngularVelocity angularVelocity = RotationsPerSecond.of(linearVelocity.in(MetersPerSecond) / (Math.PI * FlywheelConstants.FlyWheelDiameter.in(Meters)));
-        for (var motor : m_flywheelMotors)
-            motor.moveAtVelocity(angularVelocity);
+        // for (var motor : m_flywheelMotors)
+        //     motor.moveAtVelocity(angularVelocity);
+        m_leftFlywheelMotor.moveAtVelocity(angularVelocity);
     }
 
-    public LinearVelocity getLeftLinearVelocity() {
+    public LinearVelocity getLinearVelocity() {
         AngularVelocity angularVelocity = m_leftFlywheelMotor.getVelocity().getValue();
         return MetersPerSecond.of( angularVelocity.in(RotationsPerSecond) * (Math.PI * FlywheelConstants.FlyWheelDiameter.in(Meters)) );
     }
 
-    public boolean atTargetLeft() {
+    public boolean atTarget() {
         if (targetVelocity == null) return false;
-        return getLeftLinearVelocity().isNear(targetVelocity, FlywheelConstants.TargetVelocityTolerance.get());
+        return getLinearVelocity().isNear(targetVelocity, FlywheelConstants.TargetVelocityTolerance.get());
     }
 
-    public LinearVelocity getRightLinearVelocity() {
-        AngularVelocity angularVelocity = m_rightFlywheelMotor.getVelocity().getValue();
-        return MetersPerSecond.of( angularVelocity.in(RotationsPerSecond) * (Math.PI * FlywheelConstants.FlyWheelDiameter.in(Meters)) );
-    }
-
-    public boolean atTargetRight() {
-        if (targetVelocity == null) return false;
-        return getRightLinearVelocity().isNear(targetVelocity, FlywheelConstants.TargetVelocityTolerance.get());
-    }
-
+   
     @Override
     public void setFlywheelSpeed(double speed) {
-        for (var motor : m_flywheelMotors)
-            motor.set(speed);
+        // for (var motor : m_flywheelMotors)
+        //     motor.set(speed);
+        m_leftFlywheelMotor.set(speed);
     }
 
     @Override
@@ -94,8 +100,8 @@ public class Flywheel implements IFlywheel {
     }
 
     public void periodic() {
-        Logger.recordOutput("Launcher/LeftFlywheelVelocity", getLeftLinearVelocity().in(MetersPerSecond));
-        Logger.recordOutput("Launcher/RightFlywheelVelocity", getRightLinearVelocity().in(MetersPerSecond));
+        Logger.recordOutput("Launcher/FlywheelVelocity", getLinearVelocity().in(MetersPerSecond));
+        
         Logger.recordOutput("Launcher/FlywheelTargetVelocity", targetVelocity.in(MetersPerSecond));
     }
 }

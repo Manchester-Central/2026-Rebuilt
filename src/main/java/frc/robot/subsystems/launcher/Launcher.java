@@ -54,11 +54,11 @@ public class Launcher extends SubsystemBase implements ILauncher {
   }
 
   public LinearVelocity getFlywheelVelocity() {
-    return m_flywheel.getLeftLinearVelocity(); // TODO: Implement actual velocity getter
+    return m_flywheel.getLinearVelocity(); // TODO: Implement actual velocity getter
   }
 
   public boolean atTargetFlywheelVelocity() {
-    return m_flywheel.atTargetRight() && m_flywheel.atTargetLeft();
+    return m_flywheel.atTarget();
   }
 
   private LinearVelocity getVelocityForTarget(Pose2d currentPose, Pose2d targetPose, Distance targetHeight) {
