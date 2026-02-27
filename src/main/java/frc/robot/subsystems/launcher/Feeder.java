@@ -11,23 +11,26 @@ import frc.robot.constants.LauncherConstants.FeederConstants;
 import frc.robot.subsystems.interfaces.IFeeder;
 
 public class Feeder extends SubsystemBase implements IFeeder {
-    private ChaosTalonFx m_feederMotor = new ChaosTalonFx(FeederConstants.FeederCanId, LauncherConstants.LauncherCanBus, FeederConstants.Config);
+    private ChaosTalonFx m_topFeederMotor = new ChaosTalonFx(FeederConstants.TopFeederCanId, LauncherConstants.LauncherCanBus, FeederConstants.TopConfig);
+    private ChaosTalonFx m_bottomFeederMotor = new ChaosTalonFx(FeederConstants.BottomFeederCanId, LauncherConstants.LauncherCanBus, FeederConstants.BottomConfig);
 
     @SuppressWarnings("unused")
-    private ChaosTalonFxTuner m_flywheelTuner = new ChaosTalonFxTuner("Launcher/Feeder/Feeder Motor", m_feederMotor).withCurrentLimits();
+    private ChaosTalonFxTuner m_flywheelTuner = new ChaosTalonFxTuner("Launcher/Feeder/Feeder Motors", m_topFeederMotor, m_bottomFeederMotor).withCurrentLimits();
 
     public Feeder() {
-        m_feederMotor.applyConfig();
+        m_topFeederMotor.applyConfig();
+        m_bottomFeederMotor.applyConfig();
     }
 
     @Override
     public void setFeederSpeed (double speed) {
-        m_feederMotor.set(speed);
+        m_topFeederMotor.set(speed);
+        m_bottomFeederMotor.set(speed);
     }
 
     @Override
     public double getFeederSpeed () {
-        return m_feederMotor.get();
+        return m_topFeederMotor.get();
     }
 
     @Override

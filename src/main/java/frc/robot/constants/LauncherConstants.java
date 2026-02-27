@@ -102,12 +102,13 @@ public final class LauncherConstants {
   }
 
   public static final class FeederConstants {
-    public static final CanId FeederCanId = CanId.ID_42;
+    public static final CanId TopFeederCanId = CanId.ID_42;
+    public static final CanId BottomFeederCanId = CanId.ID_43;
 
     public static final DashboardNumber UnjamSpeed = new DashboardNumber("Launcher/Feeder/UnjamSpeed", -1.0);
     public static final DashboardNumber FeederSpeed = new DashboardNumber("Launcher/Feeder/FeederSpeed", 1.0);
 
-    public static final TalonFXConfiguration Config = new TalonFXConfiguration()
+    public static final TalonFXConfiguration TopConfig = new TalonFXConfiguration()
       .withMotorOutput(new MotorOutputConfigs()
           .withInverted(InvertedValue.CounterClockwise_Positive)
           .withNeutralMode(NeutralModeValue.Brake)
@@ -119,5 +120,18 @@ public final class LauncherConstants {
           .withSupplyCurrentLimitEnable(true)
           .withStatorCurrentLimitEnable(true)
       );
+     public static final TalonFXConfiguration BottomConfig = new TalonFXConfiguration()
+      .withMotorOutput(new MotorOutputConfigs()
+          .withInverted(InvertedValue.CounterClockwise_Positive)
+          .withNeutralMode(NeutralModeValue.Brake)
+      )
+      .withCurrentLimits(new CurrentLimitsConfigs()
+          .withSupplyCurrentLimit(Amps.of(60)) // TODO: Double Check
+          .withStatorCurrentLimit(Amps.of(60)) // TODO: Double Check
+          .withSupplyCurrentLowerLimit(Amps.of(80))
+          .withSupplyCurrentLimitEnable(true)
+          .withStatorCurrentLimitEnable(true)
+      );
+      
   }
 }
