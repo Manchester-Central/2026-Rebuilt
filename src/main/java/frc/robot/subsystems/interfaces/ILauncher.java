@@ -13,4 +13,6 @@ public interface ILauncher extends Subsystem {
     public LinearVelocity getScoringVelocity(Pose2d currentPose);
     public boolean atTargetFlywheelVelocity();
     public LinearVelocity getPassVelocity(Pose2d currentPose);
+    public double getHoodSpeed();
+    public void setHoodSpeed(double speed);
 }

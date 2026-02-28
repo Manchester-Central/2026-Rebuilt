@@ -57,6 +57,7 @@ import frc.robot.subsystems.interfaces.IClimber;
 import frc.robot.subsystems.interfaces.IIntake;
 import frc.robot.subsystems.interfaces.ILauncher;
 import frc.robot.subsystems.launcher.Flywheel;
+import frc.robot.subsystems.launcher.Hood;
 import frc.robot.subsystems.launcher.Feeder;
 import frc.robot.subsystems.launcher.LauncherMech2D;
 import frc.robot.subsystems.launcher.Launcher;
@@ -178,7 +179,7 @@ public class RobotContainer {
     m_intake = new Intake ();
     m_intakeMech2d = new IntakeMech2D(m_intake);
 
-    m_launcher = new Launcher(new Flywheel(), new Feeder());
+    m_launcher = new Launcher(new Flywheel(), new Feeder(), new Hood());
     m_launcherMech2D = new LauncherMech2D(m_launcher);
 
     
@@ -232,7 +233,13 @@ public class RobotContainer {
 
     m_climber.setDefaultCommand(new ClimberDefaultCommand(m_climber, m_operator::getLeftY, m_isManualTrigger)); 
     m_intake.setDefaultCommand(new IntakeDefaultCommand(m_intake, m_isManualTrigger, m_operator.leftTrigger(), m_operator::getRightY, m_operator.a()));    
-    m_launcher.setDefaultCommand(new LauncherDefaultCommand(m_launcher, m_isManualTrigger, m_operator.rightTrigger(), m_operator.rightBumper(), m_operator.b()));
+    m_launcher.setDefaultCommand(new LauncherDefaultCommand(
+      m_launcher, 
+      m_isManualTrigger,
+      m_operator.rightTrigger(),
+      m_operator.rightBumper(), 
+      m_operator.b(),
+      ()-> m_operator.leftBumper().getAsBoolean() ? 1 : (m_operator.x().getAsBoolean() ? -1 :0 )));
     
     
     // Reset gyro to 0° when B button is pressed

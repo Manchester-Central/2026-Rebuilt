@@ -20,17 +20,21 @@ import frc.robot.constants.FieldDimensions;
 import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.LauncherConstants;
 import frc.robot.subsystems.interfaces.IFlywheel;
+import frc.robot.subsystems.interfaces.IHood;
 import frc.robot.subsystems.interfaces.IFeeder;
 import frc.robot.subsystems.interfaces.ILauncher;
 
 public class Launcher extends SubsystemBase implements ILauncher {
   IFlywheel m_flywheel;
   IFeeder m_feeder;
+  IHood m_hood; 
+
 
   /** Creates a new Launcher. */
-  public Launcher(IFlywheel flywheel, IFeeder feeder) {
+  public Launcher(IFlywheel flywheel, IFeeder feeder, IHood hood) {
     m_flywheel = flywheel;
     m_feeder = feeder;
+    m_hood = hood; 
   }
 
   public double getFlywheelSpeed() {
@@ -39,6 +43,14 @@ public class Launcher extends SubsystemBase implements ILauncher {
 
   public double getFeederSpeed() {
     return m_feeder.getFeederSpeed();
+  }
+
+  public double getHoodSpeed() {
+    return m_hood.getHoodSpeed();
+  }
+
+  public void setHoodSpeed(double speed) {
+    m_hood.setHoodSpeed(speed);
   }
 
   public void setFlywheelSpeed(double speed) {
@@ -82,8 +94,4 @@ public class Launcher extends SubsystemBase implements ILauncher {
     return getVelocityForTarget(currentPose, closestPose.getCurrentAlliancePose(), Inches.of(0));
   }
 
-  @Override
-  public void periodic() {
-    m_flywheel.periodic();
-  }
-}
+ }
