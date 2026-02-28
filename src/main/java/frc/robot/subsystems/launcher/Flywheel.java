@@ -19,12 +19,13 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.LauncherConstants;
 import frc.robot.constants.LauncherConstants.FlywheelConstants;
 import frc.robot.subsystems.interfaces.IFlywheel;
 
-public class Flywheel implements IFlywheel {
+public class Flywheel extends SubsystemBase implements IFlywheel {
     private ChaosTalonFx m_leftFlywheelMotor = new ChaosTalonFx(FlywheelConstants.LeftFlywheelCanId, LauncherConstants.LauncherCanBus, FlywheelConstants.LeftConfig);
     private ChaosTalonFx m_rightFlywheelMotor = new ChaosTalonFx(FlywheelConstants.RightFlywheelCanId, LauncherConstants.LauncherCanBus, FlywheelConstants.RightConfig);
     private ChaosTalonFx[] m_flywheelMotors = {
@@ -84,6 +85,7 @@ public class Flywheel implements IFlywheel {
         return m_leftFlywheelMotor.get();
     }
 
+    @Override
     public void periodic() {
         Logger.recordOutput("Launcher/FlywheelVelocity", getLinearVelocity().in(MetersPerSecond));     
         Logger.recordOutput("Launcher/FlywheelTargetVelocity", targetVelocity.in(MetersPerSecond));

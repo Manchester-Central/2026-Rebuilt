@@ -57,6 +57,7 @@ import frc.robot.subsystems.interfaces.IClimber;
 import frc.robot.subsystems.interfaces.IIntake;
 import frc.robot.subsystems.interfaces.ILauncher;
 import frc.robot.subsystems.launcher.Flywheel;
+import frc.robot.subsystems.launcher.Hood;
 import frc.robot.subsystems.launcher.Feeder;
 import frc.robot.subsystems.launcher.LauncherMech2D;
 import frc.robot.subsystems.launcher.Launcher;
@@ -178,7 +179,7 @@ public class RobotContainer {
     m_intake = new Intake ();
     m_intakeMech2d = new IntakeMech2D(m_intake);
 
-    m_launcher = new Launcher(new Flywheel(), new Feeder());
+    m_launcher = new Launcher(new Flywheel(), new Feeder(), new Hood());
     m_launcherMech2D = new LauncherMech2D(m_launcher);
 
     

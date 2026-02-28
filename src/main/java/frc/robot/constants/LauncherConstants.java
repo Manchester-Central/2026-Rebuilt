@@ -101,6 +101,22 @@ public final class LauncherConstants {
     }
   }
 
+  public static final class HoodConstants {
+    public static final CanId HoodCanId = CanId.ID_44;
+    public static final TalonFXConfiguration HoodConfig = new TalonFXConfiguration()
+        .withMotorOutput(new MotorOutputConfigs()
+            .withInverted(InvertedValue.Clockwise_Positive) //TODO: check
+            .withNeutralMode(NeutralModeValue.Brake)
+      )
+      .withCurrentLimits(new CurrentLimitsConfigs()
+          .withSupplyCurrentLimit(Amps.of(20)) //TODO: Double CHek
+          .withStatorCurrentLimit(Amps.of(20)) //TODO: Double Check
+          .withSupplyCurrentLowerLimit(Amps.of(40))
+          .withSupplyCurrentLimitEnable(true)
+          .withStatorCurrentLimitEnable(true)
+      ); //TODO: add slot zero
+  }
+
   public static final class FeederConstants {
     public static final CanId TopFeederCanId = CanId.ID_42;
     public static final CanId BottomFeederCanId = CanId.ID_43;
