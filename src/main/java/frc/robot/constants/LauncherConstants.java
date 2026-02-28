@@ -103,6 +103,7 @@ public final class LauncherConstants {
 
   public static final class HoodConstants {
     public static final CanId HoodCanId = CanId.ID_44;
+    public static final DashboardNumber HoodSpeed = new DashboardNumber("Launcher/Hood/HoodSpeed", 0.2);
     public static final TalonFXConfiguration HoodConfig = new TalonFXConfiguration()
         .withMotorOutput(new MotorOutputConfigs()
             .withInverted(InvertedValue.Clockwise_Positive) //TODO: check
