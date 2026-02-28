@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.interfaces;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 /** Add your docs here. */
@@ -18,6 +19,10 @@ public interface IHood extends Subsystem {
      * @return the current speed of the hood, in the range of [-1.0, 1.0]
      */
     public double getHoodSpeed();
+
+    public void setHoodAngle(Angle targetAngle);
+
+    public Angle getHoodAngle();
 } 
 
 

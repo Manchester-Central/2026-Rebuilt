@@ -41,5 +41,6 @@ public class LauncherMech2D extends SubsystemBase {
     // This method will be called once per scheduler run
     m_feederLigament.setColor(Color.fromDutyCycle(m_launcher.getFeederSpeed()));
     m_launcherLigament.setColor(Color.fromDutyCycle(m_launcher.getFlywheelSpeed()));
+    m_launcherLigament.setAngle(m_launcher.getHoodAngle());
   }
 }
