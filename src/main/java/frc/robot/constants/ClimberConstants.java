@@ -52,8 +52,9 @@ public final class ClimberConstants {
             .withNeutralMode(NeutralModeValue.Brake)
         )
         .withCurrentLimits(new CurrentLimitsConfigs()
-            .withSupplyCurrentLimit(Amps.of(20)) // TODO: Double Check
-            .withStatorCurrentLimit(Amps.of(20)) // TODO: Double Check
+            .withSupplyCurrentLimit(Amps.of(60)) // TODO: Double Check
+            .withStatorCurrentLimit(Amps.of(60)) // TODO: Double Check
+            .withSupplyCurrentLowerLimit(Amps.of(80))
             .withSupplyCurrentLimitEnable(true)
             .withStatorCurrentLimitEnable(true)
         )
@@ -73,5 +74,5 @@ public final class ClimberConstants {
             .withGravityType(GravityTypeValue.Elevator_Static)
         );
 
-    public static final DashboardNumber ManualSpeedMultiplier = new DashboardNumber("Climber/ManualSpeedMultiplier", 0.1);
+    public static final DashboardNumber ManualSpeedMultiplier = new DashboardNumber("Climber/ManualSpeedMultiplier", 1);
 }

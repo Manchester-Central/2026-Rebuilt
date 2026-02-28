@@ -76,6 +76,7 @@ public class Robot extends LoggedRobot {
 
     // Start AdvantageKit logger
     Logger.start();
+    Logger.recordOutput("Robot/currentMode", GeneralConstants.currentMode);
 
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
@@ -99,6 +100,8 @@ public class Robot extends LoggedRobot {
 
     // Return to non-RT thread priority (do not modify the first argument)
     // Threads.setCurrentThreadPriority(false, 10);
+
+    Logger.recordOutput("Robot/hasEnabled", hasEnabled);
   }
 
   /** This function is called once when the robot is disabled. */

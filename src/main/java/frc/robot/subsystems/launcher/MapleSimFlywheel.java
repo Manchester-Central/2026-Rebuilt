@@ -52,17 +52,10 @@ public class MapleSimFlywheel extends Flywheel {
 
     @Override
     public void periodic() {
-        if (atTargetLeft() && leftBallTimer.hasElapsed(ballLaunchInterval)) {
+        if (atTarget() && leftBallTimer.hasElapsed(ballLaunchInterval)) {
             if (intake.claimGamePiece()) {
                 leftBallTimer.reset();
                 launchGamePiece(drive.getPose(), leftOffset, MetersPerSecond.of(10));
-            }
-        }
-
-        if (atTargetRight() && rightBallTimer.hasElapsed(ballLaunchInterval)) {
-            if (intake.claimGamePiece()) {
-                rightBallTimer.reset();
-                launchGamePiece(drive.getPose(), rightOffset, MetersPerSecond.of(10));
             }
         }
     }

@@ -17,13 +17,15 @@ public class IntakeDefaultCommand extends Command {
  private BooleanSupplier m_isManualMode;
  private BooleanSupplier m_isRunIntake;
  private DoubleSupplier m_intakePivotSpeed;
+ private BooleanSupplier m_isRunUnjam;
   /** Creates a new IntakeDefaultCommand. */
-  public IntakeDefaultCommand(IIntake intake, BooleanSupplier isManualMode, BooleanSupplier isRunIntake, DoubleSupplier intakePivotSpeed) {
+  public IntakeDefaultCommand(IIntake intake, BooleanSupplier isManualMode, BooleanSupplier isRunIntake, DoubleSupplier intakePivotSpeed, BooleanSupplier isRunUnjam) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_intake = intake;
     m_isManualMode = isManualMode;
     m_isRunIntake = isRunIntake;
     m_intakePivotSpeed = intakePivotSpeed;
+    m_isRunUnjam = isRunUnjam;
 
     addRequirements(m_intake);
   }
@@ -38,10 +40,12 @@ public class IntakeDefaultCommand extends Command {
     if (m_isManualMode.getAsBoolean()) {
       if (m_isRunIntake.getAsBoolean()) {
         m_intake.setRollerSpeed(IntakeConstants.IntakeRollerSpeed.get()); // TODO: add dashboard number
+      } else if (m_isRunUnjam.getAsBoolean()) {
+        m_intake.setRollerSpeed(IntakeConstants.OuttakeRollerSpeed.get());
       } else {
         m_intake.setRollerSpeed(0);
       }
-      m_intake.setPivotSpeed(m_intakePivotSpeed.getAsDouble() * IntakeConstants.ManualPivotSpeedMultiplier.get());
+      m_intake.setPivotSpeed(m_intakePivotSpeed.getAsDouble() * -1.0 * IntakeConstants.ManualPivotSpeedMultiplier.get());
       return;
     }
     m_intake.setRollerSpeed(0);

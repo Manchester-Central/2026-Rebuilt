@@ -43,7 +43,7 @@ public class MapleSimtake extends Intake {
   public void periodic() {
     super.periodic();
 
-    if (atTargetAngle(PivotConstants.DeployAngle)) {
+    if (atTargetAngle(PivotConstants.DeployAngle.get())) {
       intakeSim.startIntake();
     } else {
       intakeSim.stopIntake();

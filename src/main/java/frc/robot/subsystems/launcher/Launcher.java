@@ -20,33 +20,45 @@ import frc.robot.constants.FieldDimensions;
 import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.LauncherConstants;
 import frc.robot.subsystems.interfaces.IFlywheel;
-import frc.robot.subsystems.interfaces.IIndexer;
-import frc.robot.subsystems.interfaces.ISimpleLauncher;
+import frc.robot.subsystems.interfaces.IHood;
+import frc.robot.subsystems.interfaces.IFeeder;
+import frc.robot.subsystems.interfaces.ILauncher;
 
-public class SimpleLauncher extends SubsystemBase implements ISimpleLauncher {
+public class Launcher extends SubsystemBase implements ILauncher {
   IFlywheel m_flywheel;
-  IIndexer m_indexer;
+  IFeeder m_feeder;
+  IHood m_hood; 
 
-  /** Creates a new SimpleLauncher. */
-  public SimpleLauncher(IFlywheel flywheel, IIndexer indexer) {
+
+  /** Creates a new Launcher. */
+  public Launcher(IFlywheel flywheel, IFeeder feeder, IHood hood) {
     m_flywheel = flywheel;
-    m_indexer = indexer;
+    m_feeder = feeder;
+    m_hood = hood; 
   }
 
   public double getFlywheelSpeed() {
     return m_flywheel.getFlywheelSpeed();
   }
 
-  public double getIndexerSpeed() {
-    return m_indexer.getIndexerSpeed();
+  public double getFeederSpeed() {
+    return m_feeder.getFeederSpeed();
+  }
+
+  public double getHoodSpeed() {
+    return m_hood.getHoodSpeed();
+  }
+
+  public void setHoodSpeed(double speed) {
+    m_hood.setHoodSpeed(speed);
   }
 
   public void setFlywheelSpeed(double speed) {
     m_flywheel.setFlywheelSpeed(speed);
   }
 
-  public void setIndexerSpeed(double speed) {
-    m_indexer.setIndexerSpeed(speed);
+  public void setFeederSpeed(double speed) {
+    m_feeder.setFeederSpeed(speed);
   }
 
   public void setFlywheelVelocity(LinearVelocity velocity) {
@@ -54,17 +66,17 @@ public class SimpleLauncher extends SubsystemBase implements ISimpleLauncher {
   }
 
   public LinearVelocity getFlywheelVelocity() {
-    return m_flywheel.getLeftLinearVelocity(); // TODO: Implement actual velocity getter
+    return m_flywheel.getLinearVelocity(); // TODO: Implement actual velocity getter
   }
 
   public boolean atTargetFlywheelVelocity() {
-    return m_flywheel.atTargetRight() && m_flywheel.atTargetLeft();
+    return m_flywheel.atTarget();
   }
 
   private LinearVelocity getVelocityForTarget(Pose2d currentPose, Pose2d targetPose, Distance targetHeight) {
     double groundDisplacementInches = FieldPose.getDistanceFromLocations(currentPose, targetPose).in(Inches);
-    double thetaRadians = LauncherConstants.SimpleLauncherAngle.in(Radians);
-    double deltaHeightInches = targetHeight.minus(LauncherConstants.SimpleLauncherHeight).in(Inches);
+    double thetaRadians = LauncherConstants.LauncherAngle.in(Radians);
+    double deltaHeightInches = targetHeight.minus(LauncherConstants.LauncherHeight).in(Inches);
     
     double numerator = GeneralConstants.gravity.in(InchesPerSecondPerSecond) * Math.pow(groundDisplacementInches, 2);
     double denomenator = 2 * Math.pow(Math.cos(thetaRadians), 2) * (deltaHeightInches - groundDisplacementInches * Math.tan(thetaRadians));
@@ -74,7 +86,7 @@ public class SimpleLauncher extends SubsystemBase implements ISimpleLauncher {
   }
 
   public LinearVelocity getScoringVelocity(Pose2d currentPose) {
-    return getVelocityForTarget(currentPose, FieldPose2026.HubCenter.getCurrentAlliancePose(), FieldDimensions.HubHeight);
+    return getVelocityForTarget(currentPose, FieldPose2026.HubCenter.getCurrentAlliancePose(), FieldDimensions.HubHeight).times(4);
   }
 
   public LinearVelocity getPassVelocity(Pose2d currentPose) {
@@ -82,8 +94,4 @@ public class SimpleLauncher extends SubsystemBase implements ISimpleLauncher {
     return getVelocityForTarget(currentPose, closestPose.getCurrentAlliancePose(), Inches.of(0));
   }
 
-  @Override
-  public void periodic() {
-    m_flywheel.periodic();
-  }
-}
+ }
