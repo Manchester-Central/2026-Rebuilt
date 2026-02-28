@@ -48,29 +48,16 @@ public class Flywheel implements IFlywheel {
             m_leftFlywheelMotor.attachMotorSim(m_dcMotorSim, m_leftFlywheelMotor.Configuration.Feedback.SensorToMechanismRatio, true, ChassisReference.CounterClockwise_Positive, MotorType.KrakenX60);
         }
 
-        m_rightFlywheelMotor.setControl(new StrictFollower(m_leftFlywheelMotor.getDeviceID()));
-        // //for (var motor : m_flywheelMotors) {
-        //     motor.applyConfig();
-        //     if (Robot.isSimulation()) {
-        //         var m_dcMotor = DCMotor.getKrakenX60(1); // TODO: double check
-        //         var m_moi = SingleJointedArmSim.estimateMOI(FlywheelConstants.FlyWheelDiameter.in(Meters) / 2.0, FlywheelConstants.FlywheelMass.in(Kilograms));
-        //         var m_dcMotorSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(m_dcMotor, m_moi, motor.Configuration.Feedback.SensorToMechanismRatio), m_dcMotor);
-        //         motor.attachMotorSim(m_dcMotorSim, motor.Configuration.Feedback.SensorToMechanismRatio, true, ChassisReference.CounterClockwise_Positive, MotorType.KrakenX60);
-        //     }
-        // }
+        m_rightFlywheelMotor.setControl(new StrictFollower(m_leftFlywheelMotor.getDeviceID()));        
     }
 
-    public void setFlywheelVelocity(AngularVelocity velocity) {
-        // for (var motor : m_flywheelMotors)
-        //     motor.moveAtVelocity(velocity);
+    public void setFlywheelVelocity(AngularVelocity velocity) {   
         m_leftFlywheelMotor.moveAtVelocity(velocity);
     }
 
     public void setFlywheelVelocity(LinearVelocity linearVelocity) {
         targetVelocity = linearVelocity;
         AngularVelocity angularVelocity = RotationsPerSecond.of(linearVelocity.in(MetersPerSecond) / (Math.PI * FlywheelConstants.FlyWheelDiameter.in(Meters)));
-        // for (var motor : m_flywheelMotors)
-        //     motor.moveAtVelocity(angularVelocity);
         m_leftFlywheelMotor.moveAtVelocity(angularVelocity);
     }
 
@@ -87,8 +74,6 @@ public class Flywheel implements IFlywheel {
    
     @Override
     public void setFlywheelSpeed(double speed) {
-        // for (var motor : m_flywheelMotors)
-        //     motor.set(speed);
         m_leftFlywheelMotor.set(speed);
     }
 
@@ -100,8 +85,7 @@ public class Flywheel implements IFlywheel {
     }
 
     public void periodic() {
-        Logger.recordOutput("Launcher/FlywheelVelocity", getLinearVelocity().in(MetersPerSecond));
-        
+        Logger.recordOutput("Launcher/FlywheelVelocity", getLinearVelocity().in(MetersPerSecond));     
         Logger.recordOutput("Launcher/FlywheelTargetVelocity", targetVelocity.in(MetersPerSecond));
     }
 }
