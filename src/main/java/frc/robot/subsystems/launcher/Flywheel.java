@@ -28,13 +28,9 @@ import frc.robot.subsystems.interfaces.IFlywheel;
 public class Flywheel extends SubsystemBase implements IFlywheel {
     private ChaosTalonFx m_leftFlywheelMotor = new ChaosTalonFx(FlywheelConstants.LeftFlywheelCanId, LauncherConstants.LauncherCanBus, FlywheelConstants.LeftConfig);
     private ChaosTalonFx m_rightFlywheelMotor = new ChaosTalonFx(FlywheelConstants.RightFlywheelCanId, LauncherConstants.LauncherCanBus, FlywheelConstants.RightConfig);
-    private ChaosTalonFx[] m_flywheelMotors = {
-        m_leftFlywheelMotor,
-        m_rightFlywheelMotor
-    };
 
     @SuppressWarnings("unused")
-    private ChaosTalonFxTuner m_flywheelTuner = new ChaosTalonFxTuner("Launcher/Flywheel/Flywheel Motors", m_flywheelMotors).withAllConfigs();
+    private ChaosTalonFxTuner m_flywheelTuner = new ChaosTalonFxTuner("Launcher/Flywheel/Flywheel Motors", m_leftFlywheelMotor, m_rightFlywheelMotor).withAllConfigs();
 
     private LinearVelocity targetVelocity = MetersPerSecond.of(0);
 

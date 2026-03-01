@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -36,6 +37,9 @@ import frc.robot.commands.intake.DeployOuttake;
 import frc.robot.commands.intake.RetractIntake;
 import frc.robot.commands.launcher.TargetHubVelocityAndLaunch;
 import frc.robot.commands.launcher.TargetPassVelocityAndLaunch;
+import frc.robot.commands.manual.ClimberManualCommand;
+import frc.robot.commands.manual.IntakeManualCommand;
+import frc.robot.commands.manual.LauncherManualCommand;
 import frc.robot.constants.ClimberConstants;
 import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.IntakeConstants.PivotConstants;
@@ -231,17 +235,30 @@ public class RobotContainer {
             m_getDriverYTranslation,
             m_getDriverRotation));
 
-    m_climber.setDefaultCommand(new ClimberDefaultCommand(m_climber, m_operator::getLeftY, m_isManualTrigger)); 
-    m_intake.setDefaultCommand(new IntakeDefaultCommand(m_intake, m_isManualTrigger, m_operator.leftTrigger(), m_operator::getRightY, m_operator.a()));    
-    m_launcher.setDefaultCommand(new LauncherDefaultCommand(
-      m_launcher, 
-      m_isManualTrigger,
-      m_operator.rightTrigger(),
-      m_operator.rightBumper(), 
-      m_operator.b(),
-      ()-> m_operator.leftBumper().getAsBoolean() ? 1 : (m_operator.x().getAsBoolean() ? -1 :0 )));
-    
-    
+    m_climber.setDefaultCommand(new ConditionalCommand(
+      new ClimberDefaultCommand(m_climber),
+      new ClimberManualCommand(m_climber, m_operator::getLeftY),
+      m_isAutomaticTrigger)
+    ); 
+
+    m_intake.setDefaultCommand(new ConditionalCommand(
+      new IntakeDefaultCommand(m_intake),
+      new IntakeManualCommand(m_intake, m_operator.leftTrigger(), m_operator::getRightY, m_operator.a()),
+      m_isAutomaticTrigger)
+    );
+
+    m_launcher.setDefaultCommand(new ConditionalCommand(
+      new LauncherDefaultCommand(m_launcher),
+      new LauncherManualCommand(
+        m_launcher,
+        m_operator.rightTrigger(),
+        m_operator.rightBumper(), 
+        m_operator.b(),
+        ()-> m_operator.leftBumper().getAsBoolean() ? 1.0 : (m_operator.x().getAsBoolean() ? -1.0 : 0.0)
+      ),
+      m_isAutomaticTrigger)
+    );
+
     // Reset gyro to 0° when B button is pressed
     m_driver
         .povUp()
