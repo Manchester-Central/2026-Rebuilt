@@ -35,11 +35,11 @@ import frc.robot.RobotContainer;
 import frc.robot.constants.ArenaConstants;
 import frc.robot.subsystems.interfaces.AbstractDrive;
 
-public class MultiplayerArena extends Arena2026Rebuilt {
+public class MultiplayerArena2026 extends Arena2026Rebuilt {
   // Statics
-  public static MultiplayerArena Instance;
+  public static MultiplayerArena2026 Instance;
   static {
-    Instance = new MultiplayerArena(MatchState.TRANSITION_SHIFT);
+    Instance = new MultiplayerArena2026(MatchState.TRANSITION_SHIFT);
     SimulatedArena.overrideInstance(Instance);
   }
   
@@ -82,7 +82,7 @@ public class MultiplayerArena extends Arena2026Rebuilt {
   private Alliance m_firstAlliance;
   // TODO: Can we use a thread to drive the Robot state changes from Auto to Teleop?
 
-  private MultiplayerArena(MatchState startMode) {
+  private MultiplayerArena2026(MatchState startMode) {
     super(false);
     phaseTimer = new Timer();
     matchTimer = new Timer();

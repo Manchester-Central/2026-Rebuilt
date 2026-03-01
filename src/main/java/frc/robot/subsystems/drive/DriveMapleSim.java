@@ -8,7 +8,6 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import org.dyn4j.geometry.Vector2;
-import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.COTS;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
@@ -30,7 +29,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.MultiplayerSim.MultiplayerArena;
+import frc.robot.subsystems.MultiplayerSim.MultiplayerArena2026;
 import frc.robot.subsystems.interfaces.AbstractDrive;
 
 public class DriveMapleSim extends AbstractDrive {
@@ -53,7 +52,7 @@ public class DriveMapleSim extends AbstractDrive {
   public DriveMapleSim(Pose2d initialPose) {
     sim = new SwerveDriveSimulation(m_swerveConfig, initialPose);
     // SimulatedArena.getInstance().addDriveTrainSimulation(sim);
-    MultiplayerArena.Instance.addDriveTrainSimulation(sim);
+    MultiplayerArena2026.Instance.addDriveTrainSimulation(sim);
   }
 
   @Override

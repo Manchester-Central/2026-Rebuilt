@@ -13,7 +13,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.constants.RobotDimensions;
-import frc.robot.subsystems.MultiplayerSim.MultiplayerArena;
+import frc.robot.subsystems.MultiplayerSim.MultiplayerArena2026;
 import frc.robot.subsystems.interfaces.AbstractDrive;
 import frc.robot.subsystems.interfaces.IIntake;
 
@@ -64,7 +64,7 @@ public class MapleSimFlywheel extends Flywheel {
         Pose3d launcherPose = new Pose3d(robotPose);
         launcherPose = launcherPose.transformBy(launcherOffset);
 
-        MultiplayerArena.Instance.addGamePieceProjectile(new RebuiltFuelOnFly(
+        MultiplayerArena2026.Instance.addGamePieceProjectile(new RebuiltFuelOnFly(
             robotPose.getTranslation(),
             new Translation2d(launcherOffset.getX(), launcherOffset.getY()),
             drive.getChassisSpeeds(),

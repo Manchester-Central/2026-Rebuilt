@@ -11,7 +11,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.MultiplayerSim.MultiplayerArena;
+import frc.robot.subsystems.MultiplayerSim.MultiplayerArena2026;
 import frc.robot.constants.ArenaConstants;
 import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.GeneralConstants.Mode;
@@ -81,7 +81,7 @@ public class Robot extends LoggedRobot {
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer(0, ArenaConstants.startingPoses[0]);
-    MultiplayerArena.Instance.loadAdditionalRobots();
+    MultiplayerArena2026.Instance.loadAdditionalRobots();
   }
 
   /** This function is called periodically during all modes. */
@@ -107,7 +107,7 @@ public class Robot extends LoggedRobot {
   /** This function is called once when the robot is disabled. */
   @Override
   public void disabledInit() {
-    MultiplayerArena.Instance.prepareMatch();
+    MultiplayerArena2026.Instance.prepareMatch();
   
     if (!hasEnabled) {
       robotContainer.getCamera().setUseForOdometry(true);
@@ -126,7 +126,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void autonomousInit() {
     autonomousCommand = robotContainer.getAutonomousCommand();
-    if (GeneralConstants.currentMode == Mode.ARENA) MultiplayerArena.Instance.startMatch();
+    if (GeneralConstants.currentMode == Mode.ARENA) MultiplayerArena2026.Instance.startMatch();
 
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {
@@ -140,13 +140,13 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    MultiplayerArena.Instance.periodic();
+    MultiplayerArena2026.Instance.periodic();
   }
 
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    if (GeneralConstants.currentMode == Mode.ARENA) MultiplayerArena.Instance.startMatch();
+    if (GeneralConstants.currentMode == Mode.ARENA) MultiplayerArena2026.Instance.startMatch();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -162,7 +162,7 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    MultiplayerArena.Instance.periodic();
+    MultiplayerArena2026.Instance.periodic();
   }
 
   /** This function is called once when test mode is enabled. */
@@ -186,7 +186,5 @@ public class Robot extends LoggedRobot {
     // MultiplayerArena.Instance.periodic();
     // Logs on the main robot
     robotContainer.containerLogging();
-    // This is done in MultiplayerArena::periodic() now
-    // MultiplayerArena.Instance.arenaLogging();
   }
 }

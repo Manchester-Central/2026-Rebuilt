@@ -175,7 +175,7 @@ public class Intake extends SubsystemBase implements IIntake {
     Logger.recordOutput("Intake/PivotAngleDegrees", getPivotAngle().in(Degrees));
     Logger.recordOutput("Intake/AbsolutePivotAngleDegrees", getAbsolutePivotAngle().in(Degrees));
     Logger.recordOutput("Intake/RollerSpeed", getRollerSpeed());
-    Logger.recordOutput("intake/targetAngle", m_targetAngle.in(Degrees));
+    Logger.recordOutput("Intake/targetAngle", m_targetAngle.in(Degrees));
   }
 
   @Override

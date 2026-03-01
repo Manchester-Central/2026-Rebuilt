@@ -115,7 +115,7 @@ public class RobotContainer {
   private final DoubleSupplier m_getDriverYTranslationSlow = () -> m_getDriverYTranslation.getAsDouble() * GeneralConstants.SlowModeMultiplier;
   private final DoubleSupplier m_getDriverRotationSlow = () -> m_getDriverRotation.getAsDouble() *  GeneralConstants.SlowModeMultiplier;
 
-  private boolean m_isManual = true;
+  private boolean m_isManual = false;
   private final Trigger m_isManualTrigger = new Trigger(() -> m_isManual);
   private final Trigger m_isAutomaticTrigger = m_isManualTrigger.negate();
   // Dashboard inputs
@@ -323,7 +323,7 @@ public class RobotContainer {
 
     m_driver.a().and(m_isAutomaticTrigger).whileTrue(new RetractIntake(m_intake));
     m_driver.x().onTrue(Commands.runOnce(m_swerveDrive::stopWithX, m_swerveDrive));
-    m_driver.y().whileTrue(PathUtil.driveToPoseCommand(LauncherConstants.SafeLaunchePoint, m_swerveDrive));
+    // m_driver.y().whileTrue(PathUtil.driveToPoseCommand(LauncherConstants.SafeLaunchePoint, m_swerveDrive));
 
     m_driver.leftStick().or(m_driver.rightStick()).toggleOnTrue(
         DriveCommands.joystickDrive(
@@ -382,6 +382,8 @@ public class RobotContainer {
 
   public void containerLogging() {
     Logger.recordOutput("Robot"+id+"/Pose2d", m_swerveDrive.getPose());
+    Logger.recordOutput("Robot"+id+"/PiecesHeld", m_intake.getNumGamePieces());
+    Logger.recordOutput("Robot"+id+"/IntakeMechanism", m_intakeMech2d.getMechanism2d());
   }
 
   public Camera getCamera() {

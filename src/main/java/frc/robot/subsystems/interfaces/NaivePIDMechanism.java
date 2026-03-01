@@ -9,17 +9,15 @@ public class NaivePIDMechanism extends SubsystemBase {
     // many motors we would use all the canbus IDs, we're doing this with
     // software PID and pretending there's a motor in here somewhere.
     protected PIDController pidController = new PIDController(0.3, 0.0, 0.0);
-    /* Stores the [currentAngle, previousAngle] */
-    protected double[] positionHistory = new double[]{0, 0};
-    protected final int PREVIOUS = 1;
-    protected final int CURRENT = 0;
+    protected double previousPosition;
+    protected double currentPosition;
 
     protected double getStateDifference() {
-        return positionHistory[CURRENT]-positionHistory[PREVIOUS];
+        return currentPosition-previousPosition;
     }
 
     protected double getCurrentState() {
-        return positionHistory[CURRENT];
+        return currentPosition;
     }
 
     protected void setTargetState(double target) {
@@ -29,7 +27,7 @@ public class NaivePIDMechanism extends SubsystemBase {
     @Override
     public void periodic() {
         var newstate = pidController.calculate(getCurrentState());
-        positionHistory[PREVIOUS] = positionHistory[CURRENT];
-        positionHistory[CURRENT] = newstate;
+        previousPosition = currentPosition;
+        currentPosition = newstate;
     }
 }
