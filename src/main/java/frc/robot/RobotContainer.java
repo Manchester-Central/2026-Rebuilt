@@ -17,19 +17,26 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.climb.SetClimberHeight;
 import frc.robot.commands.defaults.ClimberDefaultCommand;
 import frc.robot.commands.defaults.IntakeDefaultCommand;
+import frc.robot.constants.ArenaConstants;
+import frc.robot.constants.GeneralConstants;
+import frc.robot.constants.GeneralConstants.Mode;
 import frc.robot.commands.defaults.LauncherDefaultCommand;
 import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.DeployOuttake;
@@ -37,8 +44,6 @@ import frc.robot.commands.intake.RetractIntake;
 import frc.robot.commands.launcher.TargetHubVelocityAndLaunch;
 import frc.robot.commands.launcher.TargetPassVelocityAndLaunch;
 import frc.robot.constants.ClimberConstants;
-import frc.robot.constants.GeneralConstants;
-import frc.robot.constants.IntakeConstants.PivotConstants;
 import frc.robot.constants.LauncherConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Camera;
@@ -46,17 +51,21 @@ import frc.robot.subsystems.Quest;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberMech2D;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.DriveMapleSim;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.interfaces.AbstractDrive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeMech2D;
+import frc.robot.subsystems.intake.MapleSimtake;
 import frc.robot.subsystems.interfaces.IClimber;
 import frc.robot.subsystems.interfaces.IIntake;
 import frc.robot.subsystems.interfaces.ILauncher;
 import frc.robot.subsystems.launcher.Flywheel;
+import frc.robot.subsystems.launcher.MapleSimFlywheel;
 import frc.robot.subsystems.launcher.Hood;
 import frc.robot.subsystems.launcher.Feeder;
 import frc.robot.subsystems.launcher.LauncherMech2D;
@@ -66,6 +75,9 @@ import frc.robot.util.PathUtil;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
+import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.Logger;
 import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
@@ -77,8 +89,9 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  protected int id;
   // Subsystems
-  private final Drive m_swerveDrive;
+  private final AbstractDrive m_swerveDrive;
   private Quest m_quest;
   private Camera m_camera;
   private IClimber m_climber;
@@ -102,14 +115,15 @@ public class RobotContainer {
   private final DoubleSupplier m_getDriverYTranslationSlow = () -> m_getDriverYTranslation.getAsDouble() * GeneralConstants.SlowModeMultiplier;
   private final DoubleSupplier m_getDriverRotationSlow = () -> m_getDriverRotation.getAsDouble() *  GeneralConstants.SlowModeMultiplier;
 
-  private boolean m_isManual = true;
+  private boolean m_isManual = false;
   private final Trigger m_isManualTrigger = new Trigger(() -> m_isManual);
   private final Trigger m_isAutomaticTrigger = m_isManualTrigger.negate();
   // Dashboard inputs
-  private final LoggedDashboardChooser<Command> autoChooser;
+  private LoggedDashboardChooser<Command> autoChooser;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
+  public RobotContainer(int id, Pose2d startPose) {
+    this.id = id;
     switch (GeneralConstants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -122,7 +136,11 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
-         m_quest = new Quest(m_swerveDrive);
+        m_quest = new Quest(m_swerveDrive);
+        m_intake = new Intake(id);
+        m_launcher = new Launcher(new Flywheel(id), new Feeder(id), new Hood(id));
+
+        m_climber = new Climber();
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
@@ -152,6 +170,17 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
+        m_intake = new Intake(id);
+        m_launcher = new Launcher(new Flywheel(id), new Feeder(id), new Hood(id));
+        m_climber = new Climber();
+        break;
+
+      case ARENA:
+        var drive = new DriveMapleSim(startPose);
+        m_intake = new MapleSimtake(id, drive.sim);
+        m_launcher = new Launcher(new MapleSimFlywheel(id, drive, m_intake), new Feeder(id), new Hood(id));
+        m_climber = new Climber();
+        m_swerveDrive = drive;
         break;
 
       default:
@@ -163,6 +192,9 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
+        m_intake = new Intake(id);
+        m_launcher = new Launcher(new Flywheel(id), new Feeder(id), new Hood(id));
+        m_climber = new Climber();
         break;
     }
     m_camera = new Camera("limelight",
@@ -173,44 +205,61 @@ public class RobotContainer {
             () -> m_swerveDrive.getSpeed().in(MetersPerSecond),
             () -> m_swerveDrive.getRotationalSpeed().in(RotationsPerSecond));
 
-    m_climber = new Climber();
-    m_climberMech2d = new ClimberMech2D(m_climber);
-
-    m_intake = new Intake ();
+    // Setup Mech2ds
     m_intakeMech2d = new IntakeMech2D(m_intake);
-
-    m_launcher = new Launcher(new Flywheel(), new Feeder(), new Hood());
+    m_launcherMech2D = new LauncherMech2D(m_launcher);
+    m_climberMech2d = new ClimberMech2D(m_climber);
     m_launcherMech2D = new LauncherMech2D(m_launcher);
 
-    
-    NamedCommands.registerCommand("DeployOuttake", new DeployOuttake(m_intake));
-    NamedCommands.registerCommand("DeployIntake", new DeployIntake(m_intake));
-    NamedCommands.registerCommand("RetractIntake", new RetractIntake(m_intake));
-    NamedCommands.registerCommand("LaunchHub", new TargetHubVelocityAndLaunch(m_launcher, m_swerveDrive::getPose)
-            .alongWith(getAimAtFieldPosesCommand(FieldPose2026.HubCenter)));
-    NamedCommands.registerCommand("LaunchPass", new TargetPassVelocityAndLaunch(m_launcher, m_swerveDrive::getPose)
-            .alongWith(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
-    NamedCommands.registerCommand("ClimbReach", new SetClimberHeight(m_climber, ClimberConstants.MaxExtension));
-    NamedCommands.registerCommand("ClimbEngage", new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension));
+    if (GeneralConstants.currentMode != Mode.ARENA) {
+      NamedCommands.registerCommand("DeployOuttake", new DeployOuttake(m_intake));
+      NamedCommands.registerCommand("DeployIntake", new DeployIntake(m_intake));
+      NamedCommands.registerCommand("RetractIntake", new RetractIntake(m_intake));
+      NamedCommands.registerCommand("LaunchHub", new TargetHubVelocityAndLaunch(m_launcher, m_swerveDrive::getPose)
+              .alongWith(getAimAtFieldPosesCommand(FieldPose2026.HubCenter)));
+      NamedCommands.registerCommand("LaunchPass", new TargetPassVelocityAndLaunch(m_launcher, m_swerveDrive::getPose)
+              .alongWith(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
+      NamedCommands.registerCommand("ClimbReach", new SetClimberHeight(m_climber, ClimberConstants.MaxExtension));
+      NamedCommands.registerCommand("ClimbEngage", new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension));
 
-    // Set up auto routines
-    autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+      // Set up auto routines
+      autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
-    // Set up SysId routines
-    autoChooser.addOption(
-        "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(m_swerveDrive));
-    autoChooser.addOption(
-        "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(m_swerveDrive));
-    autoChooser.addOption(
-        "Drive SysId (Quasistatic Forward)",
-        m_swerveDrive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    autoChooser.addOption(
-        "Drive SysId (Quasistatic Reverse)",
-        m_swerveDrive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    autoChooser.addOption(
-        "Drive SysId (Dynamic Forward)", m_swerveDrive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    autoChooser.addOption(
-        "Drive SysId (Dynamic Reverse)", m_swerveDrive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+      // Set up SysId routines
+      autoChooser.addOption(
+          "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(m_swerveDrive));
+      autoChooser.addOption(
+          "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(m_swerveDrive));
+      autoChooser.addOption(
+          "Drive SysId (Quasistatic Forward)",
+          m_swerveDrive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+      autoChooser.addOption(
+          "Drive SysId (Quasistatic Reverse)",
+          m_swerveDrive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+      autoChooser.addOption(
+          "Drive SysId (Dynamic Forward)", m_swerveDrive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+      autoChooser.addOption(
+          "Drive SysId (Dynamic Reverse)", m_swerveDrive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    } else if(id > 0) {
+      // Additional bots get a behavior chooser
+      SendableChooser<Command> behaviorChooser = new SendableChooser<>();
+      final Supplier<Command> disable =
+          () -> Commands.runOnce(() -> m_swerveDrive.setPose(ArenaConstants.startingPoses[id+1]))
+                        .andThen(Commands.runOnce(
+                          () -> m_swerveDrive.runVelocity(new ChassisSpeeds())))
+                        .ignoringDisable(true);
+      // List of options
+      behaviorChooser.setDefaultOption("Disable", disable.get());
+      // behaviorChooser.addOption("Joystick Drive", joystickDrive(m_driver));
+
+      // Setup functionality
+      behaviorChooser.onChange((Command::schedule));
+      RobotModeTriggers.teleop()
+                      .onTrue(Commands.runOnce(
+                          () -> behaviorChooser.getSelected().schedule()));
+      RobotModeTriggers.disabled().onTrue(disable.get());
+      SmartDashboard.putData("FieldSimulation/Robot"+this.id+"/Behavior", behaviorChooser);
+    }
 
     // Configure the button bindings
     configureButtonBindings();
@@ -274,7 +323,7 @@ public class RobotContainer {
 
     m_driver.a().and(m_isAutomaticTrigger).whileTrue(new RetractIntake(m_intake));
     m_driver.x().onTrue(Commands.runOnce(m_swerveDrive::stopWithX, m_swerveDrive));
-    m_driver.y().whileTrue(PathUtil.driveToPoseCommand(LauncherConstants.SafeLaunchePoint, m_swerveDrive));
+    // m_driver.y().whileTrue(PathUtil.driveToPoseCommand(LauncherConstants.SafeLaunchePoint, m_swerveDrive));
 
     m_driver.leftStick().or(m_driver.rightStick()).toggleOnTrue(
         DriveCommands.joystickDrive(
@@ -323,11 +372,25 @@ public class RobotContainer {
     return autoChooser.get();
   }
 
+  public void logMech3d() {
+    // Generates poses for the turret
+    // - release pose at center of turret
+    // - doesn't include hood, or anything else
+    // ArrayList<Pose3d> lst = m_launcher.generateMech3d();
+    // Now generate the pose for the intake
+  }
+
+  public void containerLogging() {
+    Logger.recordOutput("Robot"+id+"/Pose2d", m_swerveDrive.getPose());
+    Logger.recordOutput("Robot"+id+"/PiecesHeld", m_intake.getNumGamePieces());
+    Logger.recordOutput("Robot"+id+"/IntakeMechanism", m_intakeMech2d.getMechanism2d());
+  }
+
   public Camera getCamera() {
     return m_camera;
   }
 
-  public Drive getSwerveDrive() {
+  public AbstractDrive getSwerveDrive() {
     return m_swerveDrive;
   }
 

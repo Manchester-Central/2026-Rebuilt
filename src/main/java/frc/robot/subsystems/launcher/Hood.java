@@ -19,10 +19,10 @@ public class Hood extends SubsystemBase implements IHood {
  private ChaosTalonFx m_hoodMotor = new ChaosTalonFx (HoodConstants.HoodCanId, LauncherConstants.LauncherCanBus, HoodConstants.HoodConfig); 
 
   @SuppressWarnings("unused")
-    private ChaosTalonFxTuner m_hoodMotorTuner = new ChaosTalonFxTuner ("Launcher/Hood/Hood Motor", m_hoodMotor).withCurrentLimits();
+  private ChaosTalonFxTuner m_hoodMotorTuner = new ChaosTalonFxTuner ("Launcher/Hood/Hood Motor", m_hoodMotor).withCurrentLimits();
 
-    public Hood() {
-      m_hoodMotor.applyConfig(); 
+  public Hood(int id) {
+    m_hoodMotor.applyConfig(); 
   }
 
   @Override

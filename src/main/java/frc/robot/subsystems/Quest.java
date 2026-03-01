@@ -16,8 +16,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.interfaces.IDrive;
 import frc.robot.constants.QuestConstants;
-import frc.robot.subsystems.drive.Drive;
 import gg.questnav.questnav.PoseFrame;
 import gg.questnav.questnav.QuestNav;
 
@@ -40,11 +40,11 @@ public class Quest extends SubsystemBase {
     QuestConstants.RobotToQuestRotation);
   
   // To keep a reference of the swerve drive for sending pose updates
-  private Drive m_swerveDrive;
+  private IDrive m_swerveDrive;
   private Pose3d robotPose = null;
   private Pose3d questPose = null;
   // Constructor
-  public Quest(Drive swerveDrive) {
+  public Quest(IDrive swerveDrive) {
     m_swerveDrive = swerveDrive;
     setUseForOdometry(true);
   }

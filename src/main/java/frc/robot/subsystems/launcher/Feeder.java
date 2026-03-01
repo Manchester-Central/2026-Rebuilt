@@ -17,7 +17,7 @@ public class Feeder extends SubsystemBase implements IFeeder {
     @SuppressWarnings("unused")
     private ChaosTalonFxTuner m_flywheelTuner = new ChaosTalonFxTuner("Launcher/Feeder/Feeder Motors", m_topFeederMotor, m_bottomFeederMotor).withCurrentLimits();
 
-    public Feeder() {
+    public Feeder(int id) {
         m_topFeederMotor.applyConfig();
         m_bottomFeederMotor.applyConfig();
     }

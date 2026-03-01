@@ -11,8 +11,6 @@ import static edu.wpi.first.units.Units.Rotations;
 
 import org.littletonrobotics.junction.Logger;
 
-import com.chaos131.ctre.ChaosCanCoder;
-import com.chaos131.ctre.ChaosCanCoderTuner;
 import com.chaos131.ctre.ChaosTalonFx;
 import com.chaos131.ctre.ChaosTalonFxTuner;
 
@@ -20,36 +18,46 @@ import com.ctre.phoenix6.sim.ChassisReference;
 import com.ctre.phoenix6.sim.TalonFXSimState.MotorType;
 import com.revrobotics.ResetMode;
 import com.revrobotics.encoder.SplineEncoder;
-import com.revrobotics.encoder.config.DetachedEncoderConfig;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import frc.robot.constants.ArenaConstants;
+import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.IntakeConstants;
+import frc.robot.constants.ArenaConstants.MotorIDs;
+import frc.robot.constants.GeneralConstants.Mode;
 import frc.robot.constants.IntakeConstants.RollerConstants;
 import frc.robot.constants.IntakeConstants.PivotConstants;
 import frc.robot.subsystems.interfaces.IIntake;
 
 public class Intake extends SubsystemBase implements IIntake {
-  private ChaosTalonFx m_rollerMotor = new ChaosTalonFx(RollerConstants.RollerCanId, IntakeConstants.CanBus, RollerConstants.Config);
-  // private ChaosTalonFx m_intakeKickerMotor = new ChaosTalonFx(IntakeConstants.IntakeKickerCanId, IntakeConstants.IntakeCanBus); TODO: delete if not added to robot
-  private ChaosTalonFx m_pivotMotor = new ChaosTalonFx(PivotConstants.PivotCanId, IntakeConstants.CanBus, PivotConstants.TalonConfig);
+  protected ChaosTalonFx m_rollerMotor;
+  protected ChaosTalonFx m_pivotMotor;
   private SplineEncoder m_pivotEncoder = new SplineEncoder(PivotConstants.PivotCanCoderId.id);
 
   @SuppressWarnings("unused")
-  private ChaosTalonFxTuner m_rollerTuner = new ChaosTalonFxTuner("Intake/Roller Motor", m_rollerMotor).withCurrentLimits();
+  protected ChaosTalonFxTuner m_rollerTuner;
   @SuppressWarnings("unused")
-  private ChaosTalonFxTuner m_pivotTuner = new ChaosTalonFxTuner("Intake/Pivot Motor", m_pivotMotor).withAllConfigs();
+  protected ChaosTalonFxTuner m_pivotTuner;
   private Angle m_targetAngle = PivotConstants.RetractAngle.get();
 
   /** Creates a new Intake. */
-  public Intake() {
+  public Intake(int id) {
+    if (GeneralConstants.currentMode != Mode.ARENA) {
+      m_rollerMotor = new ChaosTalonFx(RollerConstants.RollerCanId, IntakeConstants.CanBus, RollerConstants.Config);
+      m_pivotMotor = new ChaosTalonFx(PivotConstants.PivotCanId, IntakeConstants.CanBus, PivotConstants.TalonConfig);
+    } else {
+      m_rollerMotor = new ChaosTalonFx(ArenaConstants.motorCanIDs[id][MotorIDs.Intake.canIdx], IntakeConstants.CanBus, RollerConstants.Config);
+      m_pivotMotor = new ChaosTalonFx(ArenaConstants.motorCanIDs[id][MotorIDs.IntakePivot.canIdx], IntakeConstants.CanBus, PivotConstants.TalonConfig);
+    }
 
+    m_rollerTuner = new ChaosTalonFxTuner("Intake/Roller Motor", m_rollerMotor).withCurrentLimits();
+    m_pivotTuner = new ChaosTalonFxTuner("Intake/Pivot Motor", m_pivotMotor).withAllConfigs();
     m_pivotMotor.applyConfig();
     m_rollerMotor.applyConfig();
 
@@ -92,7 +100,7 @@ public class Intake extends SubsystemBase implements IIntake {
       targetSpeed = Math.max(speed, 0);
     }
 
-    m_pivotMotor.set(targetSpeed); // TODO: Change to targetSpeed
+    m_pivotMotor.set(targetSpeed);
   }
 
   /**
@@ -137,6 +145,14 @@ public class Intake extends SubsystemBase implements IIntake {
     return m_pivotMotor.getPosition().getValue();
   }
 
+  public boolean atTargetAngle(Angle targetAngle) {
+    if (getPivotAngle().isNear(targetAngle, Degrees.of(10))) {
+      return true;
+    }
+
+    return false;
+  }
+
   /**
    * Returns pivot encoder angle
    */
@@ -159,6 +175,21 @@ public class Intake extends SubsystemBase implements IIntake {
     Logger.recordOutput("Intake/PivotAngleDegrees", getPivotAngle().in(Degrees));
     Logger.recordOutput("Intake/AbsolutePivotAngleDegrees", getAbsolutePivotAngle().in(Degrees));
     Logger.recordOutput("Intake/RollerSpeed", getRollerSpeed());
-    Logger.recordOutput("intake/targetAngle", m_targetAngle.in(Degrees));
+    Logger.recordOutput("Intake/targetAngle", m_targetAngle.in(Degrees));
+  }
+
+  @Override
+  public void simulationPeriodic() {
+    // m_pivotMotor.simulationPeriodic();
+  }
+
+  @Override
+  public int getNumGamePieces() {
+    return 1;
+  }
+
+  @Override
+  public boolean claimGamePiece() {
+    return true;
   }
 }
