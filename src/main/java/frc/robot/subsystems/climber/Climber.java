@@ -80,7 +80,7 @@ public class Climber extends SubsystemBase implements IClimber {
   }
 
   public boolean getClimberAtBottom() {
-    return m_limSwitch.get();
+    return !m_limSwitch.get(); // Magnetic limit switch is false when the climber is at the bottom
   }
 
   public double getClimberSpeed() {
