@@ -46,6 +46,7 @@ public final class LauncherConstants {
   public static Angle LauncherAngle = Degrees.of(65);
 
   public static final DashboardNumber LauncherSpeed = new DashboardNumber("Launcher/ManualLaunchSpeed", 0.6); 
+  public static final DashboardNumber UnjamSpeed = new DashboardNumber("Launcher/UnjamSpeed", -0.3); 
 
   public static final Distance LauncherToHubHeight = FieldDimensions.HubHeight.minus(LauncherHeight);
 

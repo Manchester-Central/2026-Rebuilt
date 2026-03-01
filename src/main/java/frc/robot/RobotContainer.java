@@ -43,8 +43,9 @@ import frc.robot.commands.manual.LauncherManualCommand;
 import frc.robot.constants.ClimberConstants;
 import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.IntakeConstants;
-import frc.robot.constants.IntakeConstants.PivotConstants;
 import frc.robot.constants.LauncherConstants;
+import frc.robot.constants.LauncherConstants.FeederConstants;
+import frc.robot.constants.LauncherConstants.HoodConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Quest;
@@ -249,29 +250,20 @@ public class RobotContainer {
             m_getDriverYTranslation,
             m_getDriverRotation));
 
-    m_climber.setDefaultCommand(new ConditionalCommand(
+    m_climber.setDefaultCommand(automaticOrManualCommand(
       new ClimberDefaultCommand(m_climber),
-      new ClimberManualCommand(m_climber),
-      m_isAutomaticTrigger)
-    ); 
+      new ClimberManualCommand(m_climber)
+    )); 
 
-    m_intake.setDefaultCommand(new ConditionalCommand(
+    m_intake.setDefaultCommand(automaticOrManualCommand(
       new IntakeDefaultCommand(m_intake),
-      new IntakeManualCommand(m_intake, m_operator.leftTrigger(), m_operator::getRightY, m_operator.a()),
-      m_isAutomaticTrigger)
-    );
+      new IntakeManualCommand(m_intake)
+    ));
 
-    m_launcher.setDefaultCommand(new ConditionalCommand(
+    m_launcher.setDefaultCommand(automaticOrManualCommand(
       new LauncherDefaultCommand(m_launcher),
-      new LauncherManualCommand(
-        m_launcher,
-        m_operator.rightTrigger(),
-        m_operator.rightBumper(), 
-        m_operator.b(),
-        ()-> m_operator.leftBumper().getAsBoolean() ? 1.0 : (m_operator.x().getAsBoolean() ? -1.0 : 0.0)
-      ),
-      m_isAutomaticTrigger)
-    );
+      new LauncherManualCommand(m_launcher)
+    ));
   }
 
   private void configureDriverButtons() {
@@ -321,16 +313,28 @@ public class RobotContainer {
 
   private void configureOperatorButtons() {
 
-    // RB: 
-    m_operator.rightBumper();
-    // LB: 
-    m_operator.leftBumper();
-    // RT: 
-    m_operator.rightTrigger();
-    // LT: 
-    m_operator.leftTrigger();
+    // RB: manually prep flywheels (no feeder)
+    m_operator.rightBumper().whileTrue(automaticOrManualCommand(
+      new InstantCommand(),
+      new RunCommand(() -> m_launcher.setFlywheelSpeed(LauncherConstants.LauncherSpeed.get()), m_launcher) 
+    ));;
+    // LB: Unjam intake (automatic and manual mode)
+    m_operator.leftBumper().whileTrue(new RunCommand(() -> m_intake.setRollerSpeed(IntakeConstants.OuttakeRollerSpeed.get()), m_intake));
+    // RT: manually run flywheels and feeder
+    m_operator.rightTrigger().whileTrue(automaticOrManualCommand(
+      new InstantCommand(),
+      new RunCommand(() -> {
+        m_launcher.setFeederSpeed(FeederConstants.FeederSpeed.get());
+        m_launcher.setFlywheelSpeed(LauncherConstants.LauncherSpeed.get());
+      }, m_launcher) 
+    ));
+    // LT: controls manually running the intake rollers
+    m_operator.leftTrigger().whileTrue(automaticOrManualCommand(
+      new InstantCommand(),
+      new RunCommand(() -> m_intake.setRollerSpeed(IntakeConstants.IntakeRollerSpeed.get()), m_intake)
+    ));
 
-    // Right Y: controls manual intake
+    // Right Y: controls manual intake pivot
     m_operator.rightY().whileTrue(automaticOrManualCommand(
       new InstantCommand(),
       new RunCommand(() -> m_intake.setPivotSpeed(m_operator.getRightY() * -1.0 * IntakeConstants.ManualPivotSpeedMultiplier.get()), m_intake) // TODO: does -1 make sense for this one?
@@ -360,12 +364,21 @@ public class RobotContainer {
       new RunCommand(() -> m_climber.setClimberSpeed(-ClimberConstants.ManualSpeedFixed.get()), m_climber)
     ));
 
-    // A: 
-    m_operator.a();
-    // B: 
-    m_operator.b();
-    // X:
-    m_operator.x();
+    // A: Move hood up
+    m_operator.a().whileTrue(automaticOrManualCommand(
+      new InstantCommand(), 
+      new RunCommand(() -> m_launcher.setHoodSpeed(HoodConstants.HoodSpeed.get()), m_launcher)
+    ));
+    // B: Move hood down
+    m_operator.b().whileTrue(automaticOrManualCommand(
+      new InstantCommand(), 
+      new RunCommand(() -> m_launcher.setHoodSpeed(-HoodConstants.HoodSpeed.get()), m_launcher)
+    ));
+    // X: Unjam launcher (automatic and manual mode)
+    m_operator.x().whileTrue(new RunCommand(() -> {
+      m_launcher.setFeederSpeed(FeederConstants.UnjamSpeed.get());
+      m_launcher.setFlywheelSpeed(LauncherConstants.UnjamSpeed.get());
+    }, m_launcher));
     // Y: resets quest and odometry pose to limelight pose
     m_operator.y().whileTrue(new RunCommand(() -> {
       var botpose = m_camera.getBotPose3d();

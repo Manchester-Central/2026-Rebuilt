@@ -4,27 +4,17 @@
 
 package frc.robot.commands.manual;
 
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.IntakeConstants;
 import frc.robot.subsystems.interfaces.IIntake;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class IntakeManualCommand extends Command {
   private IIntake m_intake;
-  private BooleanSupplier m_isRunIntake;
-  private DoubleSupplier m_intakePivotSpeed;
-  private BooleanSupplier m_isRunUnjam;
   
   /** Creates a new IntakeDefaultCommand. */
-  public IntakeManualCommand(IIntake intake, BooleanSupplier isRunIntake, DoubleSupplier intakePivotSpeed, BooleanSupplier isRunUnjam) {
+  public IntakeManualCommand(IIntake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_intake = intake;
-    m_isRunIntake = isRunIntake;
-    m_intakePivotSpeed = intakePivotSpeed;
-    m_isRunUnjam = isRunUnjam;
 
     addRequirements(m_intake);
   }
@@ -37,14 +27,8 @@ public class IntakeManualCommand extends Command {
   @Override
   public void execute() {
     // TODO: determine logic while in manual mode
-    if (m_isRunIntake.getAsBoolean()) {
-      m_intake.setRollerSpeed(IntakeConstants.IntakeRollerSpeed.get()); // TODO: add dashboard number
-    } else if (m_isRunUnjam.getAsBoolean()) {
-      m_intake.setRollerSpeed(IntakeConstants.OuttakeRollerSpeed.get());
-    } else {
-      m_intake.setRollerSpeed(0);
-    }
-    m_intake.setPivotSpeed(m_intakePivotSpeed.getAsDouble() * -1.0 * IntakeConstants.ManualPivotSpeedMultiplier.get());
+    m_intake.setRollerSpeed(0);
+    m_intake.setPivotSpeed(0);
   }
 
   // Called once the command ends or is interrupted.
