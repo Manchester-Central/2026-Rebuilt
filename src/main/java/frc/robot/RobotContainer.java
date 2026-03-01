@@ -10,13 +10,13 @@ package frc.robot;
 import com.chaos131.gamepads.Gamepad;
 import com.chaos131.poses.FieldPose;
 import com.chaos131.poses.FieldPose2026;
+import com.chaos131.util.DriveDirection;
 import com.chaos131.vision.LimelightCamera;
 import com.chaos131.vision.LimelightCamera.LimelightVersion;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -250,58 +250,69 @@ public class RobotContainer {
             m_getDriverYTranslation,
             m_getDriverRotation));
 
-    m_climber.setDefaultCommand(automaticOrManualCommand(
-      new ClimberDefaultCommand(m_climber),
-      new ClimberManualCommand(m_climber)
+    m_climber.setDefaultCommand(switchAutomaticOrManual(
+      new ClimberDefaultCommand(m_climber), // automatic
+      new ClimberManualCommand(m_climber)   // manual
     )); 
 
-    m_intake.setDefaultCommand(automaticOrManualCommand(
-      new IntakeDefaultCommand(m_intake),
-      new IntakeManualCommand(m_intake)
+    m_intake.setDefaultCommand(switchAutomaticOrManual(
+      new IntakeDefaultCommand(m_intake),   // automatic
+      new IntakeManualCommand(m_intake)     // manual
     ));
 
-    m_launcher.setDefaultCommand(automaticOrManualCommand(
-      new LauncherDefaultCommand(m_launcher),
-      new LauncherManualCommand(m_launcher)
+    m_launcher.setDefaultCommand(switchAutomaticOrManual(
+      new LauncherDefaultCommand(m_launcher), // automatic
+      new LauncherManualCommand(m_launcher)   // manual
     ));
   }
 
   private void configureDriverButtons() {
 
-    // Reset gyro to 0° when B button is pressed
-    m_driver
-        .povUp()
-        .onTrue(
-            Commands.runOnce(
-                    () ->
-                        m_swerveDrive.setPose(
-                            new Pose2d(m_swerveDrive.getPose().getTranslation(), Rotation2d.kZero)), // Handle red direction
-                    m_swerveDrive)
-                .ignoringDisable(true));
+    // Reset gyro to directions based on pov buttons
+    m_driver.povUp().onTrue(resetPoseCommand(DriveDirection.Away));
+    m_driver.povLeft().onTrue(resetPoseCommand(DriveDirection.Left));
+    m_driver.povRight().onTrue(resetPoseCommand(DriveDirection.Right));
+    m_driver.povDown().onTrue(resetPoseCommand(DriveDirection.Towards));
 
-    m_driver
-        .leftBumper()
-        .and(m_isAutomaticTrigger)
-        .whileTrue(
-            new TargetPassVelocityAndLaunch(m_launcher, m_swerveDrive::getPose)
-            .alongWith(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
-    m_driver
-        .rightBumper()
-        .whileTrue(getAimAtFieldPosesCommand(FieldPose2026.HubCenter));
+    // LB: Aim and pass (if manual mode, only aim drive)
+    m_driver.leftBumper().whileTrue(switchAutomaticOrManual(
+      // Automatic
+      new TargetPassVelocityAndLaunch(m_launcher, m_swerveDrive::getPose).alongWith(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)), 
+       // Manual
+      getAimAtFieldPosesCommand(LauncherConstants.PassPoints)
+    ));
+    // LT: Intake
+    m_driver.leftTrigger().and(m_isAutomaticTrigger).whileTrue(switchAutomaticOrManual(
+      // Automatic
+      new DeployIntake(m_intake),
+      // Manual
+      new InstantCommand()
+    ));
+    // RB: Aim at hub
+    m_driver.rightBumper().whileTrue(getAimAtFieldPosesCommand(FieldPose2026.HubCenter));
+    // RT: Aim and score in hub (if manual mode, only aim drive)
+    m_driver.rightTrigger().whileTrue(switchAutomaticOrManual(
+      // automatic
+      new TargetHubVelocityAndLaunch(m_launcher, m_swerveDrive::getPose).alongWith(getAimAtFieldPosesCommand(FieldPose2026.HubCenter)),
+      // manual
+      getAimAtFieldPosesCommand(FieldPose2026.HubCenter)
+    ));
 
-    
-    m_driver.leftTrigger().and(m_isAutomaticTrigger).whileTrue(new DeployIntake(m_intake));
-    m_driver
-        .rightTrigger()
-        .and(m_isAutomaticTrigger)
-        .whileTrue(
-            new TargetHubVelocityAndLaunch(m_launcher, m_swerveDrive::getPose)
-            .alongWith(getAimAtFieldPosesCommand(FieldPose2026.HubCenter)));
-
-    m_driver.a().and(m_isAutomaticTrigger).whileTrue(new RetractIntake(m_intake));
+    // A: retract intake
+    m_driver.a().whileTrue(switchAutomaticOrManual(
+      // automatic
+      new RetractIntake(m_intake),
+      // manual
+      new InstantCommand()
+    ));
+    // B: 
+    m_driver.b();
+    // X: Set drive to X mode (defensive position)
     m_driver.x().onTrue(Commands.runOnce(m_swerveDrive::stopWithX, m_swerveDrive));
-    m_driver.y().whileTrue(PathUtil.driveToPoseCommand(LauncherConstants.SafeLaunchePoint, m_swerveDrive));
+    // Y: Drive to the safe launch point
+    m_driver.y().whileTrue(PathUtil.driveToPoseCommand(LauncherConstants.SafeLaunchPoint, m_swerveDrive));
 
+    // Left or Right stick press: toggles slow mode
     m_driver.leftStick().or(m_driver.rightStick()).toggleOnTrue(
         DriveCommands.joystickDrive(
             m_swerveDrive,
@@ -309,69 +320,94 @@ public class RobotContainer {
             m_getDriverYTranslationSlow,
             m_getDriverRotationSlow)
     );
+
+    // Start: 
+    m_driver.start();
+    // Back: 
+    m_driver.back();
   }
 
   private void configureOperatorButtons() {
 
     // RB: manually prep flywheels (no feeder)
-    m_operator.rightBumper().whileTrue(automaticOrManualCommand(
+    m_operator.rightBumper().whileTrue(switchAutomaticOrManual(
+      // automatic
       new InstantCommand(),
+      // manual
       new RunCommand(() -> m_launcher.setFlywheelSpeed(LauncherConstants.LauncherSpeed.get()), m_launcher) 
     ));;
-    // LB: Unjam intake (automatic and manual mode)
-    m_operator.leftBumper().whileTrue(new RunCommand(() -> m_intake.setRollerSpeed(IntakeConstants.OuttakeRollerSpeed.get()), m_intake));
     // RT: manually run flywheels and feeder
-    m_operator.rightTrigger().whileTrue(automaticOrManualCommand(
+    m_operator.rightTrigger().whileTrue(switchAutomaticOrManual(
+      // automatic
       new InstantCommand(),
+      // manual
       new RunCommand(() -> {
         m_launcher.setFeederSpeed(FeederConstants.FeederSpeed.get());
         m_launcher.setFlywheelSpeed(LauncherConstants.LauncherSpeed.get());
       }, m_launcher) 
     ));
+    // LB: Unjam intake (automatic and manual mode)
+    m_operator.leftBumper().whileTrue(new RunCommand(() -> m_intake.setRollerSpeed(IntakeConstants.OuttakeRollerSpeed.get()), m_intake));
     // LT: controls manually running the intake rollers
-    m_operator.leftTrigger().whileTrue(automaticOrManualCommand(
+    m_operator.leftTrigger().whileTrue(switchAutomaticOrManual(
+      // automatic
       new InstantCommand(),
+      // manual
       new RunCommand(() -> m_intake.setRollerSpeed(IntakeConstants.IntakeRollerSpeed.get()), m_intake)
     ));
 
     // Right Y: controls manual intake pivot
-    m_operator.rightY().whileTrue(automaticOrManualCommand(
+    m_operator.rightY().whileTrue(switchAutomaticOrManual(
+      // automatic
       new InstantCommand(),
+      // manual
       new RunCommand(() -> m_intake.setPivotSpeed(m_operator.getRightY() * -1.0 * IntakeConstants.ManualPivotSpeedMultiplier.get()), m_intake) // TODO: does -1 make sense for this one?
     ));
 
     // Left Y: controls manual climb
-    m_operator.leftY().whileTrue(automaticOrManualCommand(
+    m_operator.leftY().whileTrue(switchAutomaticOrManual(
+      // automatic
       new InstantCommand(),
+      // manual
       new RunCommand(() -> m_climber.setClimberSpeed(m_operator.getLeftY() * -1.0 * ClimberConstants.ManualSpeedMultiplier.get()), m_climber) // TODO: -1 seems wrong. Implies motor is inverted correctly
     ));
 
     // POV up: controls climber to up position (with manaual fixed move too)
-    m_operator.povUp().whileTrue(automaticOrManualCommand(
+    m_operator.povUp().whileTrue(switchAutomaticOrManual(
+      // automatic
       new SetClimberHeight(m_climber, ClimberConstants.MaxExtension),
+      // manual
       new RunCommand(() -> m_climber.setClimberSpeed(ClimberConstants.ManualSpeedFixed.get()), m_climber)
     ));
     // POV left:
     m_operator.povLeft();
     // POV right: moves to the climb position
-    m_operator.povRight().whileTrue(automaticOrManualCommand(
+    m_operator.povRight().whileTrue(switchAutomaticOrManual(
+      // automatic
       new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension),
+      // manual
       new InstantCommand()
     ));
     // POV down: controls climber to down position (with manaual fixed move too)
-    m_operator.povDown().whileTrue(automaticOrManualCommand(
+    m_operator.povDown().whileTrue(switchAutomaticOrManual(
+      // automatic
       new SetClimberHeight(m_climber, ClimberConstants.MinExtension),
+      // manual
       new RunCommand(() -> m_climber.setClimberSpeed(-ClimberConstants.ManualSpeedFixed.get()), m_climber)
     ));
 
     // A: Move hood up
-    m_operator.a().whileTrue(automaticOrManualCommand(
+    m_operator.a().whileTrue(switchAutomaticOrManual(
+      // automatic
       new InstantCommand(), 
+      // manual
       new RunCommand(() -> m_launcher.setHoodSpeed(HoodConstants.HoodSpeed.get()), m_launcher)
     ));
     // B: Move hood down
-    m_operator.b().whileTrue(automaticOrManualCommand(
+    m_operator.b().whileTrue(switchAutomaticOrManual(
+      // automatic
       new InstantCommand(), 
+      // manual
       new RunCommand(() -> m_launcher.setHoodSpeed(-HoodConstants.HoodSpeed.get()), m_launcher)
     ));
     // X: Unjam launcher (automatic and manual mode)
@@ -395,7 +431,7 @@ public class RobotContainer {
     m_operator.back().onTrue(new InstantCommand((() -> m_isManual = false)));
   }
 
-  private Command automaticOrManualCommand(Command autoCommand, Command manualCommand) {
+  private Command switchAutomaticOrManual(Command autoCommand, Command manualCommand) {
     return new ConditionalCommand(autoCommand, manualCommand, m_isAutomaticTrigger);
   }
 
@@ -409,6 +445,14 @@ public class RobotContainer {
             return targetPose.getTargetAngleForRobot(m_swerveDrive.getPose());
         }
     );
+  }
+
+  private Command resetPoseCommand(DriveDirection direction) {
+    return Commands.runOnce(
+        () -> m_swerveDrive.setPose(
+            new Pose2d(m_swerveDrive.getPose().getTranslation(), direction.getAllianceAngle())),
+        m_swerveDrive)
+        .ignoringDisable(true);
   }
 
   /**
