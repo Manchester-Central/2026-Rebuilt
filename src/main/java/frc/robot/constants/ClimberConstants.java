@@ -75,4 +75,5 @@ public final class ClimberConstants {
         );
 
     public static final DashboardNumber ManualSpeedMultiplier = new DashboardNumber("Climber/ManualSpeedMultiplier", 1);
+    public static final DashboardNumber ManualSpeedFixed = new DashboardNumber("Climber/ManualSpeedFixed", 0.4);
 }

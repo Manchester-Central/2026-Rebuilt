@@ -4,22 +4,17 @@
 
 package frc.robot.commands.manual;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.ClimberConstants;
 import frc.robot.subsystems.interfaces.IClimber;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ClimberManualCommand extends Command {
   IClimber m_climber;
-  DoubleSupplier m_climberSpeed;
 
   /** Creates a new ClimberDefaultCommand. */
-  public ClimberManualCommand(IClimber climber, DoubleSupplier climberSpeed) {
+  public ClimberManualCommand(IClimber climber) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_climber = climber;
-    m_climberSpeed = climberSpeed;
 
     addRequirements(m_climber);
   }
@@ -31,7 +26,8 @@ public class ClimberManualCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_climber.setClimberSpeed(m_climberSpeed.getAsDouble() * ClimberConstants.ManualSpeedMultiplier.get());
+    // TODO: determine logic while in manual mode
+    m_climber.setClimberSpeed(0);
   }
 
   // Called once the command ends or is interrupted.

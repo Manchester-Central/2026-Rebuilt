@@ -36,6 +36,7 @@ public class IntakeManualCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // TODO: determine logic while in manual mode
     if (m_isRunIntake.getAsBoolean()) {
       m_intake.setRollerSpeed(IntakeConstants.IntakeRollerSpeed.get()); // TODO: add dashboard number
     } else if (m_isRunUnjam.getAsBoolean()) {

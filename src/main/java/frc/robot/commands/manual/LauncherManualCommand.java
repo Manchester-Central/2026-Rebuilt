@@ -39,6 +39,7 @@ public class LauncherManualCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // TODO: determine logic while in manual mode
     m_launcher.setHoodSpeed(m_hoodRunSpeed.getAsDouble() * HoodConstants.HoodSpeed.get());
     if (m_isRunLauncher.getAsBoolean()) {
       m_launcher.setFlywheelSpeed(LauncherConstants.LauncherSpeed.get()); // TODO: add dashboard number

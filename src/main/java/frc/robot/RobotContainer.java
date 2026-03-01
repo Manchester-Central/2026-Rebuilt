@@ -42,6 +42,7 @@ import frc.robot.commands.manual.IntakeManualCommand;
 import frc.robot.commands.manual.LauncherManualCommand;
 import frc.robot.constants.ClimberConstants;
 import frc.robot.constants.GeneralConstants;
+import frc.robot.constants.IntakeConstants;
 import frc.robot.constants.IntakeConstants.PivotConstants;
 import frc.robot.constants.LauncherConstants;
 import frc.robot.generated.TunerConstants;
@@ -110,7 +111,7 @@ public class RobotContainer {
   private final Trigger m_isManualTrigger = new Trigger(() -> m_isManual);
   private final Trigger m_isAutomaticTrigger = m_isManualTrigger.negate();
   // Dashboard inputs
-  private final LoggedDashboardChooser<Command> autoChooser;
+  private LoggedDashboardChooser<Command> autoChooser;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -186,7 +187,13 @@ public class RobotContainer {
     m_launcher = new Launcher(new Flywheel(), new Feeder(), new Hood());
     m_launcherMech2D = new LauncherMech2D(m_launcher);
 
-    
+    addAutos();
+
+    // Configure the button bindings
+    configureButtonBindings();
+  }
+
+  private void configureNamedCommands() {
     NamedCommands.registerCommand("DeployOuttake", new DeployOuttake(m_intake));
     NamedCommands.registerCommand("DeployIntake", new DeployIntake(m_intake));
     NamedCommands.registerCommand("RetractIntake", new RetractIntake(m_intake));
@@ -196,6 +203,10 @@ public class RobotContainer {
             .alongWith(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
     NamedCommands.registerCommand("ClimbReach", new SetClimberHeight(m_climber, ClimberConstants.MaxExtension));
     NamedCommands.registerCommand("ClimbEngage", new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension));
+  }
+
+  private void addAutos() {
+    configureNamedCommands();
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -215,9 +226,6 @@ public class RobotContainer {
         "Drive SysId (Dynamic Forward)", m_swerveDrive.sysIdDynamic(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", m_swerveDrive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-
-    // Configure the button bindings
-    configureButtonBindings();
   }
 
   /**
@@ -227,6 +235,12 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    configureDefaultCommands();
+    configureDriverButtons();
+    configureOperatorButtons();
+  }
+
+  private void configureDefaultCommands() {
     // Default command, normal field-relative drive
     m_swerveDrive.setDefaultCommand(
         DriveCommands.joystickDrive(
@@ -237,7 +251,7 @@ public class RobotContainer {
 
     m_climber.setDefaultCommand(new ConditionalCommand(
       new ClimberDefaultCommand(m_climber),
-      new ClimberManualCommand(m_climber, m_operator::getLeftY),
+      new ClimberManualCommand(m_climber),
       m_isAutomaticTrigger)
     ); 
 
@@ -258,6 +272,9 @@ public class RobotContainer {
       ),
       m_isAutomaticTrigger)
     );
+  }
+
+  private void configureDriverButtons() {
 
     // Reset gyro to 0° when B button is pressed
     m_driver
@@ -266,7 +283,7 @@ public class RobotContainer {
             Commands.runOnce(
                     () ->
                         m_swerveDrive.setPose(
-                            new Pose2d(m_swerveDrive.getPose().getTranslation(), Rotation2d.kZero)),
+                            new Pose2d(m_swerveDrive.getPose().getTranslation(), Rotation2d.kZero)), // Handle red direction
                     m_swerveDrive)
                 .ignoringDisable(true));
 
@@ -300,23 +317,73 @@ public class RobotContainer {
             m_getDriverYTranslationSlow,
             m_getDriverRotationSlow)
     );
+  }
 
-    m_operator.povUp().and(m_isAutomaticTrigger).whileTrue(new SetClimberHeight(m_climber, ClimberConstants.MaxExtension));
-    m_operator.povRight().and(m_isAutomaticTrigger).whileTrue(new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension));
-    m_operator.povDown().and(m_isAutomaticTrigger).whileTrue(new SetClimberHeight(m_climber, ClimberConstants.MinExtension));
+  private void configureOperatorButtons() {
 
+    // RB: 
+    m_operator.rightBumper();
+    // LB: 
+    m_operator.leftBumper();
+    // RT: 
+    m_operator.rightTrigger();
+    // LT: 
+    m_operator.leftTrigger();
+
+    // Right Y: controls manual intake
+    m_operator.rightY().whileTrue(automaticOrManualCommand(
+      new InstantCommand(),
+      new RunCommand(() -> m_intake.setPivotSpeed(m_operator.getRightY() * -1.0 * IntakeConstants.ManualPivotSpeedMultiplier.get()), m_intake) // TODO: does -1 make sense for this one?
+    ));
+
+    // Left Y: controls manual climb
+    m_operator.leftY().whileTrue(automaticOrManualCommand(
+      new InstantCommand(),
+      new RunCommand(() -> m_climber.setClimberSpeed(m_operator.getLeftY() * -1.0 * ClimberConstants.ManualSpeedMultiplier.get()), m_climber) // TODO: -1 seems wrong. Implies motor is inverted correctly
+    ));
+
+    // POV up: controls climber to up position (with manaual fixed move too)
+    m_operator.povUp().whileTrue(automaticOrManualCommand(
+      new SetClimberHeight(m_climber, ClimberConstants.MaxExtension),
+      new RunCommand(() -> m_climber.setClimberSpeed(ClimberConstants.ManualSpeedFixed.get()), m_climber)
+    ));
+    // POV left:
+    m_operator.povLeft();
+    // POV right: moves to the climb position
+    m_operator.povRight().whileTrue(automaticOrManualCommand(
+      new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension),
+      new InstantCommand()
+    ));
+    // POV down: controls climber to down position (with manaual fixed move too)
+    m_operator.povDown().whileTrue(automaticOrManualCommand(
+      new SetClimberHeight(m_climber, ClimberConstants.MinExtension),
+      new RunCommand(() -> m_climber.setClimberSpeed(-ClimberConstants.ManualSpeedFixed.get()), m_climber)
+    ));
+
+    // A: 
+    m_operator.a();
+    // B: 
+    m_operator.b();
+    // X:
+    m_operator.x();
+    // Y: resets quest and odometry pose to limelight pose
     m_operator.y().whileTrue(new RunCommand(() -> {
       var botpose = m_camera.getBotPose3d();
       if (botpose != null){
         m_quest.resetPose(botpose);
         m_swerveDrive.setPose(botpose.toPose2d());
       }
-     
     }).ignoringDisable(true));
 
 
+    // Start: enables manual mode
     m_operator.start().onTrue(new InstantCommand((() -> m_isManual = true)));
+    // Back: enabled auto mode
     m_operator.back().onTrue(new InstantCommand((() -> m_isManual = false)));
+  }
+
+  private Command automaticOrManualCommand(Command autoCommand, Command manualCommand) {
+    return new ConditionalCommand(autoCommand, manualCommand, m_isAutomaticTrigger);
   }
 
   private Command getAimAtFieldPosesCommand(FieldPose2026... poses) {
