@@ -12,7 +12,7 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
 
-import com.chaos131.util.Color;
+import com.chaos131.util.ChaosColor;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.ILauncher;
@@ -39,7 +39,7 @@ public class LauncherMech2D extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    m_feederLigament.setColor(Color.fromDutyCycle(m_launcher.getFeederSpeed()));
-    m_launcherLigament.setColor(Color.fromDutyCycle(m_launcher.getFlywheelSpeed()));
+    m_feederLigament.setColor(ChaosColor.fromDutyCycle(m_launcher.getFeederSpeed()));
+    m_launcherLigament.setColor(ChaosColor.fromDutyCycle(m_launcher.getFlywheelSpeed()));
   }
 }
