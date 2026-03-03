@@ -6,7 +6,10 @@ package frc.robot.constants;
 
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Inch;
 import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Kilogram;
+import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.Seconds;
@@ -105,18 +108,34 @@ public final class LauncherConstants {
   public static final class HoodConstants {
     public static final CanId HoodCanId = CanId.ID_44;
     public static final DashboardNumber HoodSpeed = new DashboardNumber("Launcher/Hood/HoodSpeed", 0.2);
+    public static final Distance HoodRadius = Inches.of(9);
+    public static final Mass HoodMass = Kilogram.of(2.26796); 
+    public static final Angle HoodMinAngle = Degrees.of(40);
+    public static final Angle HoodMaxAngle = Degrees.of(85); 
+
+    public static final double SensorToMechanismRatio = 19; //TODO check or change 
     public static final TalonFXConfiguration HoodConfig = new TalonFXConfiguration()
         .withMotorOutput(new MotorOutputConfigs()
-            .withInverted(InvertedValue.Clockwise_Positive) //TODO: check
-            .withNeutralMode(NeutralModeValue.Brake)
+         .withInverted(InvertedValue.Clockwise_Positive) //TODO: check
+          .withNeutralMode(NeutralModeValue.Brake)
       )
       .withCurrentLimits(new CurrentLimitsConfigs()
           .withSupplyCurrentLimit(Amps.of(20)) //TODO: Double CHek
-          .withStatorCurrentLimit(Amps.of(20)) //TODO: Double Check
-          .withSupplyCurrentLowerLimit(Amps.of(40))
-          .withSupplyCurrentLimitEnable(true)
-          .withStatorCurrentLimitEnable(true)
-      ); //TODO: add slot zero
+           .withStatorCurrentLimit(Amps.of(20)) //TODO: Double Check
+            .withSupplyCurrentLowerLimit(Amps.of(40))
+             .withSupplyCurrentLimitEnable(true)
+               .withStatorCurrentLimitEnable(true)
+      )
+    .withSlot0(new Slot0Configs() //TODO: CHECK THESE PLEASE
+            .withKP(0)
+            .withKI(0)
+            .withKD(0)
+            .withKG(0)
+            .withKS(0)
+            .withKV(0)
+            .withKA(0)
+        );
+
   }
 
   public static final class FeederConstants {
