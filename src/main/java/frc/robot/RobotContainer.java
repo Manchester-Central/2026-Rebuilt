@@ -399,16 +399,16 @@ public class RobotContainer {
     // A: Move hood up
     m_operator.a().whileTrue(switchAutomaticOrManual(
       // automatic
-      new InstantCommand(), 
+      new RunCommand(()-> m_launcher.setHoodAngle(HoodConstants.HoodMinAngle), m_launcher), 
       // manual
-      new RunCommand(() -> m_launcher.setHoodSpeed(HoodConstants.HoodSpeed.get()), m_launcher)
+      new RunCommand(() -> m_launcher.setHoodSpeed(-HoodConstants.HoodSpeed.get()), m_launcher)
     ));
     // B: Move hood down
     m_operator.b().whileTrue(switchAutomaticOrManual(
-      // automatic
-      new InstantCommand(), 
+      // automaticm
+      new RunCommand(()-> m_launcher.setHoodAngle(HoodConstants.HoodMaxAngle), m_launcher), 
       // manual
-      new RunCommand(() -> m_launcher.setHoodSpeed(-HoodConstants.HoodSpeed.get()), m_launcher)
+      new RunCommand(() -> m_launcher.setHoodSpeed(HoodConstants.HoodSpeed.get()), m_launcher)
     ));
     // X: Unjam launcher (automatic and manual mode)
     m_operator.x().whileTrue(new RunCommand(() -> {

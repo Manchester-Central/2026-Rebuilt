@@ -38,7 +38,7 @@ public class Hood extends SubsystemBase implements IHood {
       var m_moi = SingleJointedArmSim.estimateMOI(HoodConstants.HoodRadius.in(Meters), HoodConstants.HoodMass.in(Kilograms));
       var m_dcMotor = DCMotor.getKrakenX44(1); // TODO: double check
       var m_dcMotorSim = new DCMotorSim(LinearSystemId.createSingleJointedArmSystem(m_dcMotor, m_moi, HoodConstants.SensorToMechanismRatio), m_dcMotor);
-      m_hoodMotor.attachMotorSim(m_dcMotorSim, HoodConstants.SensorToMechanismRatio, true, ChassisReference.CounterClockwise_Positive, MotorType.KrakenX60);
+      m_hoodMotor.attachMotorSim(m_dcMotorSim, HoodConstants.SensorToMechanismRatio, true, ChassisReference.Clockwise_Positive, MotorType.KrakenX60);
     }
   }
 
@@ -59,11 +59,11 @@ public class Hood extends SubsystemBase implements IHood {
 
   @Override
   public void setHoodAngle(Angle targetAngle) {
-    m_hoodMotor.setPosition(targetAngle); //TODO: replace with actual closed loop control
-  }
+    m_hoodMotor.moveToPosition(targetAngle); //TODO: replace with actual closed loop control
+ }
 
   @Override
   public Angle getHoodAngle() {
     return m_hoodMotor.getPosition().getValue();
-  }
+        }
 }
