@@ -52,9 +52,9 @@ public class Hood extends SubsystemBase implements IHood {
 
   @Override
   public void setHoodAngle(Angle targetAngle) {
-    if (getHoodAngle().gt(HoodConstants.HoodMaxAngle)) {
+    if (targetAngle.gt(HoodConstants.HoodMaxAngle)) {
       targetAngle = HoodConstants.HoodMaxAngle;
-    } else if (getHoodAngle().lt(HoodConstants.HoodMinAngle)) {
+    } else if (targetAngle.lt(HoodConstants.HoodMinAngle)) {
       targetAngle = HoodConstants.HoodMinAngle;
     }
     m_hoodMotor.moveToPosition(targetAngle); // TODO: replace with actual closed loop control

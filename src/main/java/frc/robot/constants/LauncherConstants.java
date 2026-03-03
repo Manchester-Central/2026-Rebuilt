@@ -150,7 +150,7 @@ public final class LauncherConstants {
             .withSensorToMechanismRatio(SensorToMechanismRatio) // TODO: Double Check
             .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor))
         .withSlot0(new Slot0Configs() // TODO: CHECK THESE PLEASE
-            .withKP(0)
+            .withKP(0) // 20.0 tested in sim
             .withKI(0)
             .withKD(0)
             .withKG(0)
