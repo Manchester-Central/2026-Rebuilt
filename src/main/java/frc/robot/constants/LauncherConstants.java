@@ -76,6 +76,8 @@ public final class LauncherConstants {
 
     public static final DashboardUnit<LinearVelocityUnit, LinearVelocity> TargetVelocityTolerance = new DashboardUnit<>("Launcher/TargetVelocityTolerance", MetersPerSecond.of(0.4)); // TODO: Tested with 2
 
+    public static final double SensorToMechanismRatio = 1; // TODO check or change
+
     // Keep these separate to control them independently.
     // There's a 50-50 chance their directions are different!
     public static final TalonFXConfiguration LeftConfig = GenerateFlywheelConfig(InvertedValue.CounterClockwise_Positive);
@@ -96,7 +98,7 @@ public final class LauncherConstants {
         )
         .withFeedback(new FeedbackConfigs()
             .withRotorToSensorRatio(1) // TODO: Double Check
-            .withSensorToMechanismRatio(1) // TODO: Double Check
+            .withSensorToMechanismRatio(SensorToMechanismRatio) // TODO: Double Check
             .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor)
         )
         .withSlot0(new Slot0Configs() //TODO: CHECK THESE PLEASE
@@ -109,6 +111,19 @@ public final class LauncherConstants {
             .withKA(0)
         );
     }
+
+    // Sim values
+    public static final double MOI = SingleJointedArmSim.estimateMOI(FlyWheelDiameter.in(Meters), FlywheelMass.in(Kilograms));
+    public static final DCMotor DcMotor = DCMotor.getKrakenX60(2);
+    public static final DCMotorSim DcMotorSim = new DCMotorSim(
+      LinearSystemId.createDCMotorSystem(DcMotor, MOI, SensorToMechanismRatio),
+      DcMotor);
+    public static final CtreMotorSimValues SimValues = new CtreMotorSimValues(
+      DcMotorSim,
+      SensorToMechanismRatio,
+      true,
+      CtreMotorSimValues.chassisReferenceFromInvertedValue(LeftConfig.MotorOutput.Inverted),
+      MotorType.KrakenX60);
   }
 
   public static final class HoodConstants {

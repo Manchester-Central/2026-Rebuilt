@@ -5,34 +5,21 @@
 package frc.robot.subsystems.intake;
 
 import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Kilograms;
-import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Rotations;
 
 import org.littletonrobotics.junction.Logger;
 
-import com.chaos131.ctre.ChaosCanCoder;
-import com.chaos131.ctre.ChaosCanCoderTuner;
 import com.chaos131.ctre.ChaosTalonFx;
 import com.chaos131.ctre.ChaosTalonFxTuner;
-
-import com.ctre.phoenix6.sim.ChassisReference;
-import com.ctre.phoenix6.sim.TalonFXSimState.MotorType;
 import com.revrobotics.ResetMode;
 import com.revrobotics.encoder.SplineEncoder;
-import com.revrobotics.encoder.config.DetachedEncoderConfig;
 
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.simulation.DCMotorSim;
-import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.IntakeConstants;
-import frc.robot.constants.IntakeConstants.RollerConstants;
 import frc.robot.constants.IntakeConstants.PivotConstants;
+import frc.robot.constants.IntakeConstants.RollerConstants;
 import frc.robot.subsystems.interfaces.IIntake;
 
 public class Intake extends SubsystemBase implements IIntake {
@@ -56,10 +43,8 @@ public class Intake extends SubsystemBase implements IIntake {
     m_pivotEncoder.configure(PivotConstants.pivotEncoderConfig, ResetMode.kResetSafeParameters);
 
     if (Robot.isSimulation()) {
-      var m_moi = SingleJointedArmSim.estimateMOI(IntakeConstants.IntakeLength.in(Meters), IntakeConstants.IntakeMass.in(Kilograms));
-      var m_dcMotor = DCMotor.getKrakenX60(1); // TODO: double check
-      var m_dcMotorSim = new DCMotorSim(LinearSystemId.createSingleJointedArmSystem(m_dcMotor, m_moi, PivotConstants.SensorToMechanismRatio), m_dcMotor);
-      m_pivotMotor.attachMotorSim(m_dcMotorSim, PivotConstants.SensorToMechanismRatio, true, ChassisReference.CounterClockwise_Positive, MotorType.KrakenX60);
+      m_pivotMotor.attachMotorSim(PivotConstants.SimValues);
+      m_pivotMotor.setSimAngle(PivotConstants.MinAngle);
     }
 
     m_pivotMotor.setPosition(getAbsolutePivotAngle());
