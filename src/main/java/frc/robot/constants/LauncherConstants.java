@@ -6,9 +6,9 @@ package frc.robot.constants;
 
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Inch;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Kilogram;
+import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Pounds;
@@ -16,6 +16,7 @@ import static edu.wpi.first.units.Units.Seconds;
 
 import com.chaos131.can.CanConstants.CanBusName;
 import com.chaos131.can.CanConstants.CanId;
+import com.chaos131.ctre.CtreMotorSimValues;
 import com.chaos131.poses.FieldPose2026;
 import com.chaos131.util.DashboardNumber;
 import com.chaos131.util.DashboardUnit;
@@ -27,9 +28,12 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.sim.TalonFXSimState.MotorType;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.units.AngleUnit;
 import edu.wpi.first.units.LinearVelocityUnit;
 import edu.wpi.first.units.TimeUnit;
@@ -39,6 +43,8 @@ import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Mass;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
 /** Add your docs here. */
 public final class LauncherConstants {
@@ -113,29 +119,42 @@ public final class LauncherConstants {
     public static final Angle HoodMinAngle = Degrees.of(40);
     public static final Angle HoodMaxAngle = Degrees.of(85); 
 
-    public static final double SensorToMechanismRatio = 19; //TODO check or change 
+    public static final double SensorToMechanismRatio = 19; // TODO check or change
     public static final TalonFXConfiguration HoodConfig = new TalonFXConfiguration()
         .withMotorOutput(new MotorOutputConfigs()
-         .withInverted(InvertedValue.Clockwise_Positive) //TODO: check
-          .withNeutralMode(NeutralModeValue.Brake)
-      )
-      .withCurrentLimits(new CurrentLimitsConfigs()
-          .withSupplyCurrentLimit(Amps.of(20)) //TODO: Double CHek
-           .withStatorCurrentLimit(Amps.of(20)) //TODO: Double Check
+            .withInverted(InvertedValue.Clockwise_Positive) // TODO: check
+            .withNeutralMode(NeutralModeValue.Brake))
+        .withCurrentLimits(new CurrentLimitsConfigs()
+            .withSupplyCurrentLimit(Amps.of(20)) // TODO: Double CHek
+            .withStatorCurrentLimit(Amps.of(20)) // TODO: Double Check
             .withSupplyCurrentLowerLimit(Amps.of(40))
-             .withSupplyCurrentLimitEnable(true)
-               .withStatorCurrentLimitEnable(true)
-      )
-    .withSlot0(new Slot0Configs() //TODO: CHECK THESE PLEASE
+            .withSupplyCurrentLimitEnable(true)
+            .withStatorCurrentLimitEnable(true))
+        .withFeedback(new FeedbackConfigs()
+            .withRotorToSensorRatio(1) // TODO: Double Check
+            .withSensorToMechanismRatio(SensorToMechanismRatio) // TODO: Double Check
+            .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor))
+        .withSlot0(new Slot0Configs() // TODO: CHECK THESE PLEASE
             .withKP(0)
             .withKI(0)
             .withKD(0)
             .withKG(0)
             .withKS(0)
             .withKV(0)
-            .withKA(0)
-        );
+            .withKA(0));
 
+    // Sim values
+    public static final double MOI = SingleJointedArmSim.estimateMOI(HoodRadius.in(Meters), HoodMass.in(Kilograms));
+    public static final DCMotor DcMotor = DCMotor.getKrakenX44(1);
+    public static final DCMotorSim DcMotorSim = new DCMotorSim(
+      LinearSystemId.createSingleJointedArmSystem(DcMotor, MOI, SensorToMechanismRatio),
+      DcMotor);
+    public static final CtreMotorSimValues SimValues = new CtreMotorSimValues(
+      DcMotorSim,
+      SensorToMechanismRatio,
+      true,
+      CtreMotorSimValues.chassisReferenceFromInvertedValue(HoodConfig.MotorOutput.Inverted),
+      MotorType.KrakenX44);
   }
 
   public static final class FeederConstants {
