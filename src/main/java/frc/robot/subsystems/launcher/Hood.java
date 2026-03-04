@@ -12,6 +12,8 @@ import com.chaos131.ctre.ChaosTalonFx;
 import com.chaos131.ctre.ChaosTalonFxTuner;
 
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.LauncherConstants;
@@ -20,8 +22,11 @@ import frc.robot.subsystems.interfaces.IHood;
 
 /** Add your docs here. */
 public class Hood extends SubsystemBase implements IHood {
-  private ChaosTalonFx m_hoodMotor = new ChaosTalonFx(HoodConstants.HoodCanId, LauncherConstants.LauncherCanBus,
-      HoodConstants.HoodConfig);
+  private ChaosTalonFx m_hoodMotor = new ChaosTalonFx(HoodConstants.HoodCanId, LauncherConstants.LauncherCanBus, HoodConstants.HoodConfig);
+  private DigitalInput m_limSwitch = new DigitalInput(1); // TODO: check input channel
+
+  private boolean m_hasReachedMax = false;
+  private Angle m_targetAngle = HoodConstants.HoodMaxAngle;
 
   @SuppressWarnings("unused")
   private ChaosTalonFxTuner m_hoodMotorTuner = new ChaosTalonFxTuner("Launcher/Hood/Hood Motor", m_hoodMotor)
@@ -52,12 +57,14 @@ public class Hood extends SubsystemBase implements IHood {
 
   @Override
   public void setHoodAngle(Angle targetAngle) {
-    if (targetAngle.gt(HoodConstants.HoodMaxAngle)) {
-      targetAngle = HoodConstants.HoodMaxAngle;
-    } else if (targetAngle.lt(HoodConstants.HoodMinAngle)) {
-      targetAngle = HoodConstants.HoodMinAngle;
+    m_targetAngle = targetAngle;
+    if (m_targetAngle.gt(HoodConstants.HoodMaxAngle)) {
+      m_targetAngle = HoodConstants.HoodMaxAngle;
+    } else if (m_targetAngle.lt(HoodConstants.HoodMinAngle)) {
+      m_targetAngle = HoodConstants.HoodMinAngle;
     }
-    m_hoodMotor.moveToPosition(targetAngle); // TODO: replace with actual closed loop control
+    
+    m_hoodMotor.moveToPosition(m_targetAngle); // TODO: replace with actual closed loop control
   }
 
   @Override
@@ -65,9 +72,23 @@ public class Hood extends SubsystemBase implements IHood {
     return m_hoodMotor.getPosition().getValue();
   }
 
+  public boolean getHoodAtMax() {
+    return !m_limSwitch.get(); // Magnetic limit switch is false when the climber is at the bottom
+  }
+
   @Override
   public void periodic() {
+    if (!m_hasReachedMax && DriverStation.isEnabled()) {
+      // m_hoodMotor.set(HoodConstants.NotReachedMaxSpeed.get());
+    }
+
+    if (getHoodAtMax() && !m_hasReachedMax) {
+      m_hoodMotor.setPosition(0);
+      m_hasReachedMax = true;
+    }
+
     Logger.recordOutput("Hood/Speed", getHoodSpeed());
     Logger.recordOutput("Hood/Angle_Deg", getHoodAngle().in(Degrees));
+    Logger.recordOutput("Hood/TargetAngle_Deg", m_targetAngle.in(Degrees));
   }
 }
