@@ -1,3 +1,6 @@
 [submodule "CHAOS-Shared-Code"]
 	path = CHAOS-Shared-Code
 	url = git@github.com:Manchester-Central/CHAOS-Shared-Code.git
+[submodule "python-questnav-viewer"]
+	path = python-questnav-viewer
+	url = git@github.com:juchong/python-questnav-viewer.git
