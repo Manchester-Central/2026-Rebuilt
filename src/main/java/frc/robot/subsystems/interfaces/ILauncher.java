@@ -18,4 +18,5 @@ public interface ILauncher extends Subsystem {
     public void setHoodSpeed(double speed);
     public void setHoodAngle(Angle targetAngle);
     public Angle getHoodAngle();
+    public boolean doesFeederHaveFuel();
 }

@@ -128,7 +128,9 @@ public final class LauncherConstants {
 
   public static final class HoodConstants {
     public static final CanId HoodCanId = CanId.ID_44;
+    public static final int SensorIndex = 2;
     public static final DashboardNumber HoodSpeed = new DashboardNumber("Launcher/Hood/HoodSpeed", 0.2);
+    public static final DashboardNumber NotReachedMaxSpeed = new DashboardNumber("Launcher/Hood/NotReachedMaxSpeed", 0.2);
     public static final Distance HoodRadius = Inches.of(9);
     public static final Mass HoodMass = Kilogram.of(2.26796); 
     public static final Angle HoodMinAngle = Degrees.of(40);
@@ -175,9 +177,11 @@ public final class LauncherConstants {
   public static final class FeederConstants {
     public static final CanId TopFeederCanId = CanId.ID_42;
     public static final CanId BottomFeederCanId = CanId.ID_43;
+    public static final int SensorIndex = 1;
 
     public static final DashboardNumber UnjamSpeed = new DashboardNumber("Launcher/Feeder/UnjamSpeed", -1.0);
     public static final DashboardNumber FeederSpeed = new DashboardNumber("Launcher/Feeder/FeederSpeed", 1.0);
+    public static final DashboardNumber PassiveFeederSpeed = new DashboardNumber("Launcher/Feeder/PassiveFeederSpeed", 0.2);
 
     public static final TalonFXConfiguration TopConfig = new TalonFXConfiguration()
       .withMotorOutput(new MotorOutputConfigs()

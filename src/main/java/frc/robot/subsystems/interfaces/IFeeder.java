@@ -13,4 +13,9 @@ public interface IFeeder extends Subsystem {
      * @return the current speed of the feeder, in the range of [-1.0, 1.0]
      */
     public double getFeederSpeed();
+
+    /**
+     * @return the state of the beam break sensor on the feeder
+     */
+    public boolean doesFeederHaveFuel();
 }

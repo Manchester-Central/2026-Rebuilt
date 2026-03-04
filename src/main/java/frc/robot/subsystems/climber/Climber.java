@@ -21,7 +21,7 @@ import frc.robot.subsystems.interfaces.IClimber;
 
 public class Climber extends SubsystemBase implements IClimber {
   private ChaosTalonFx m_climberMotor = new ChaosTalonFx(ClimberConstants.ClimberCanId, ClimberConstants.ClimberCanBus, ClimberConstants.Config);
-  private DigitalInput m_limSwitch = new DigitalInput(0); // TODO: check input channel
+  private DigitalInput m_limSwitch = new DigitalInput(ClimberConstants.SensorIndex); // TODO: check input channel
   
   private boolean m_hasTouchedBottom = false;
   private Distance m_targetHeight = ClimberConstants.MinExtension;
