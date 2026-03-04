@@ -13,6 +13,7 @@ import com.chaos131.poses.FieldPose;
 import com.chaos131.poses.FieldPose2026;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -94,4 +95,14 @@ public class Launcher extends SubsystemBase implements ILauncher {
     return getVelocityForTarget(currentPose, closestPose.getCurrentAlliancePose(), Inches.of(0));
   }
 
- }
+  @Override
+  public void setHoodAngle(Angle targetAngle) {
+    m_hood.setHoodAngle (targetAngle); 
+  }
+
+  @Override
+  public Angle getHoodAngle() {
+    return m_hood.getHoodAngle();
+  }
+
+ } 

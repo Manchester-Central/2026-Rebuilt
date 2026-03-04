@@ -1,6 +1,7 @@
 package frc.robot.subsystems.interfaces;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
@@ -15,4 +16,6 @@ public interface ILauncher extends Subsystem {
     public LinearVelocity getPassVelocity(Pose2d currentPose);
     public double getHoodSpeed();
     public void setHoodSpeed(double speed);
+    public void setHoodAngle(Angle targetAngle);
+    public Angle getHoodAngle();
 }
