@@ -28,7 +28,7 @@ public class LauncherDefaultCommand extends Command {
   public void execute() {
     // TODO: determine logic while in auto mode
     m_launcher.setFlywheelSpeed(0);
-    if (m_launcher.doesFeederHaveFuel()) {
+    if (!m_launcher.doesFeederHaveFuel()) {
       m_launcher.setFeederSpeed(FeederConstants.PassiveFeederSpeed.get());
     } else {
       m_launcher.setFeederSpeed(0);

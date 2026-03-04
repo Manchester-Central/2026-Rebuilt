@@ -63,8 +63,10 @@ public class Hood extends SubsystemBase implements IHood {
     } else if (m_targetAngle.lt(HoodConstants.HoodMinAngle)) {
       m_targetAngle = HoodConstants.HoodMinAngle;
     }
-    
-    m_hoodMotor.moveToPosition(m_targetAngle); // TODO: replace with actual closed loop control
+
+    if (m_hasReachedMax) {
+      m_hoodMotor.moveToPosition(m_targetAngle);
+    }
   }
 
   @Override
