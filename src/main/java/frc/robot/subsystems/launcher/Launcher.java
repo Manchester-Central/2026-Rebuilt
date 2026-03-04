@@ -105,4 +105,8 @@ public class Launcher extends SubsystemBase implements ILauncher {
     return m_hood.getHoodAngle();
   }
 
+  @Override
+  public boolean doesFeederHaveFuel() {
+    return m_feeder.doesFeederHaveFuel();
+  }
  } 

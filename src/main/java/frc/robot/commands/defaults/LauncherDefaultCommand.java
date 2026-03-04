@@ -5,6 +5,7 @@
 package frc.robot.commands.defaults;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.LauncherConstants.FeederConstants;
 import frc.robot.subsystems.interfaces.ILauncher;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -27,6 +28,11 @@ public class LauncherDefaultCommand extends Command {
   public void execute() {
     // TODO: determine logic while in auto mode
     m_launcher.setFlywheelSpeed(0);
+    if (m_launcher.doesFeederHaveFuel()) {
+      m_launcher.setFeederSpeed(FeederConstants.PassiveFeederSpeed.get());
+    } else {
+      m_launcher.setFeederSpeed(0);
+    }
     m_launcher.setFeederSpeed(0);
     m_launcher.setHoodSpeed(0);
   }
