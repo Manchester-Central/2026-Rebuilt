@@ -35,6 +35,7 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 public final class ClimberConstants {
     public static final CanBusName ClimberCanBus = CanBusName.CTRE;
     public static final CanId ClimberCanId = CanId.ID_20;
+    public static final int SensorIndex = 0;
 
     public static final AnalogInput StringPotInput = new AnalogInput(0); // TODO: Double Check
     public static final Distance StringPotRange = Inches.of(10.0); // TODO: Double Check

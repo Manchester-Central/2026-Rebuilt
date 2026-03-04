@@ -23,7 +23,7 @@ import frc.robot.subsystems.interfaces.IHood;
 /** Add your docs here. */
 public class Hood extends SubsystemBase implements IHood {
   private ChaosTalonFx m_hoodMotor = new ChaosTalonFx(HoodConstants.HoodCanId, LauncherConstants.LauncherCanBus, HoodConstants.HoodConfig);
-  private DigitalInput m_limSwitch = new DigitalInput(1); // TODO: check input channel
+  private DigitalInput m_limSwitch = new DigitalInput(HoodConstants.SensorIndex); // TODO: check input channel
 
   private boolean m_hasReachedMax = false;
   private Angle m_targetAngle = HoodConstants.HoodMaxAngle;

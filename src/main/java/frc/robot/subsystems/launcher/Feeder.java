@@ -15,7 +15,7 @@ public class Feeder extends SubsystemBase implements IFeeder {
     private ChaosTalonFx m_topFeederMotor = new ChaosTalonFx(FeederConstants.TopFeederCanId, LauncherConstants.LauncherCanBus, FeederConstants.TopConfig);
     private ChaosTalonFx m_bottomFeederMotor = new ChaosTalonFx(FeederConstants.BottomFeederCanId, LauncherConstants.LauncherCanBus, FeederConstants.BottomConfig);
 
-    private DigitalInput m_beamSensor = new DigitalInput(2); // TODO: check input channel
+    private DigitalInput m_beamSensor = new DigitalInput(FeederConstants.SensorIndex); // TODO: check input channel
 
     @SuppressWarnings("unused")
     private ChaosTalonFxTuner m_flywheelTuner = new ChaosTalonFxTuner("Launcher/Feeder/Feeder Motors", m_topFeederMotor, m_bottomFeederMotor).withCurrentLimits();
