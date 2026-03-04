@@ -2,6 +2,7 @@ package frc.robot.subsystems.interfaces;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
@@ -19,4 +20,7 @@ public interface ILauncher extends Subsystem {
     public void setHoodAngle(Angle targetAngle);
     public Angle getHoodAngle();
     public boolean doesFeederHaveFuel();
+    public LinearVelocity getVelocityForTargetSetHeight(IDrive swerveDrive, Pose2d targetPose, Distance targetHeight);
+    public Angle getPitchForTarget(IDrive swerveDrive, Pose2d targetPose, Distance targetHeight);
+    public Angle getYawForTarget(IDrive swerveDrive, Pose2d targetPose, Distance targetHeight);
 }

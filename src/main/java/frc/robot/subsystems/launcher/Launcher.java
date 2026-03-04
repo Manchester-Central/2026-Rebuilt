@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.FieldDimensions;
 import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.LauncherConstants;
-import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.interfaces.IDrive;
 import frc.robot.subsystems.interfaces.IFeeder;
 import frc.robot.subsystems.interfaces.IFlywheel;
 import frc.robot.subsystems.interfaces.IHood;
@@ -144,7 +144,7 @@ public class Launcher extends SubsystemBase implements ILauncher {
    * @param targetHeight Height of the target that will be launched at.
    * @return The time it will take the fuel to reach its target.
    */
-  public Time getFuelFlightTime(Distance targetHeight) {
+  private Time getFuelFlightTime(Distance targetHeight) {
     Distance deltaMaxHeight = LauncherConstants.MaxLaunchHeight.get().minus(LauncherConstants.LauncherHeight);
     Distance deltatargetHeight = targetHeight.minus(LauncherConstants.LauncherHeight);
     
@@ -163,7 +163,7 @@ public class Launcher extends SubsystemBase implements ILauncher {
    * @param targetHeight The height to target at the specified pose.
    * @return The linear velocity needed to launch at the target.
    */
-  public LinearVelocity getVelocityForTargetSetHeight(Drive swerveDrive, Pose2d targetPose, Distance targetHeight) {
+  public LinearVelocity getVelocityForTargetSetHeight(IDrive swerveDrive, Pose2d targetPose, Distance targetHeight) {
     Pose2d currentPose = swerveDrive.getPose();
     
     double deltaXMeters = FieldPose.getDeltaXFromLocations(currentPose, targetPose).in(Meters);
@@ -186,14 +186,14 @@ public class Launcher extends SubsystemBase implements ILauncher {
   }
 
   /**
-   * Determines the launch angle of the fuel needed to launch to a set target from any position at a set max height. Does account for shoot on the move.
+   * Determines the vertical launch angle of the fuel needed to launch to a set target from any position at a set max height. Does account for shoot on the move.
    * 
    * @param swerveDrive
    * @param targetPose The pose of the target to launch.
    * @param targetHeight The height to target at the specified pose.
    * @return The pitch needed to launch at the target. (For adjustable hood)
    */
-  public Angle getPitchForTarget(Drive swerveDrive, Pose2d targetPose, Distance targetHeight) {
+  public Angle getPitchForTarget(IDrive swerveDrive, Pose2d targetPose, Distance targetHeight) {
     Pose2d currentPose = swerveDrive.getPose();
     
     double deltaXMeters = FieldPose.getDeltaXFromLocations(currentPose, targetPose).in(Meters);
@@ -213,5 +213,32 @@ public class Launcher extends SubsystemBase implements ILauncher {
         + Math.pow((deltaYMeters / timeSeconds) - swerveVelocityYMPS, 2))));
     
     return targetPitch;
+  }
+
+  /**
+   * Determines the horizontal launch angle of the fuel needed to launch to a set target from any position at a set max height. Does account for shoot on the move.
+   * 
+   * @param swerveDrive
+   * @param targetPose The pose of the target to launch.
+   * @param targetHeight The height to target at the specified pose.
+   * @return The yaw needed to launch at the target. (For swerve drive)
+   */
+  public Angle getYawForTarget(IDrive swerveDrive, Pose2d targetPose, Distance targetHeight) {
+    Pose2d currentPose = swerveDrive.getPose();
+    
+    double deltaXMeters = FieldPose.getDeltaXFromLocations(currentPose, targetPose).in(Meters);
+    double deltaYMeters = FieldPose.getDeltaYFromLocations(currentPose, targetPose).in(Meters);
+
+    double swerveVelocityXMPS = swerveDrive.getVelocityVector().getX();
+    double swerveVelocityYMPS = swerveDrive.getVelocityVector().getY();
+
+    double timeSeconds = getFuelFlightTime(targetHeight).in(Seconds);
+
+    Angle targetYaw = Radians.of(
+      Math.atan2(
+        deltaYMeters - timeSeconds * swerveVelocityYMPS, 
+        deltaXMeters - timeSeconds * swerveVelocityXMPS));
+    
+    return targetYaw;
   }
  } 

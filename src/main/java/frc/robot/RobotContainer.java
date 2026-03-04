@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
@@ -24,6 +25,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -42,12 +44,14 @@ import frc.robot.commands.defaults.LauncherDefaultCommand;
 import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.DeployOuttake;
 import frc.robot.commands.intake.RetractIntake;
+import frc.robot.commands.launcher.AImHubAndLaunchSetHeight;
 import frc.robot.commands.launcher.AimHubAndLaunchSetAngle;
 import frc.robot.commands.launcher.AimPassAndLaunchSetAngle;
 import frc.robot.commands.manual.ClimberManualCommand;
 import frc.robot.commands.manual.IntakeManualCommand;
 import frc.robot.commands.manual.LauncherManualCommand;
 import frc.robot.constants.ClimberConstants;
+import frc.robot.constants.FieldDimensions;
 import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.constants.LauncherConstants;
@@ -289,11 +293,12 @@ public class RobotContainer {
       new InstantCommand()
     ));
     // RB: Aim at hub
-    m_driver.rightBumper().whileTrue(getAimAtFieldPosesCommand(FieldPose2026.HubCenter));
+    m_driver.rightBumper().whileTrue(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter));
     // RT: Aim and score in hub (if manual mode, only aim drive)
     m_driver.rightTrigger().whileTrue(switchAutomaticOrManual(
       // automatic
-      new AimHubAndLaunchSetAngle(m_launcher, m_swerveDrive::getPose).alongWith(getAimAtFieldPosesCommand(FieldPose2026.HubCenter)),
+      new AImHubAndLaunchSetHeight(m_launcher, m_swerveDrive)
+        .alongWith(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter)),
       // manual
       getAimAtFieldPosesCommand(FieldPose2026.HubCenter)
     ));
@@ -443,6 +448,18 @@ public class RobotContainer {
         () -> {
             FieldPose targetPose = FieldPose.getClosestPose(m_swerveDrive.getPose(), poses);
             return targetPose.getTargetAngleForRobot(m_swerveDrive.getPose());
+        }
+    );
+  }
+
+  private Command getAimAtFieldPosesMovingCommand(FieldPose2026... poses) {
+    return DriveCommands.joystickDriveAtAngle(
+        m_swerveDrive,
+        DriverStation.isAutonomous() ? () -> 0 :  m_getDriverXTranslation,
+        DriverStation.isAutonomous() ? () -> 0 : m_getDriverYTranslation,
+        () -> {
+            FieldPose targetPose = FieldPose.getClosestPose(m_swerveDrive.getPose(), poses);
+            return Rotation2d.fromDegrees(m_launcher.getYawForTarget(m_swerveDrive, targetPose.getCurrentAlliancePose(), FieldDimensions.HubHeight).in(Degrees));
         }
     );
   }
