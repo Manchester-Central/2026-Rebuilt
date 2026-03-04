@@ -6,6 +6,7 @@ package frc.robot.constants;
 
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Feet;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Kilogram;
 import static edu.wpi.first.units.Units.Kilograms;
@@ -35,6 +36,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.units.AngleUnit;
+import edu.wpi.first.units.DistanceUnit;
 import edu.wpi.first.units.LinearVelocityUnit;
 import edu.wpi.first.units.TimeUnit;
 import edu.wpi.first.units.measure.Angle;
@@ -53,6 +55,8 @@ public final class LauncherConstants {
 
   public static Distance LauncherHeight = Inches.of(16); // TODO: Verify
   public static Angle LauncherAngle = Degrees.of(65);
+
+  public static final DashboardUnit<DistanceUnit, Distance> MaxLaunchHeight = new DashboardUnit<>("Launcher/MaxLaunchHeight", Feet.of(7));
 
   public static final DashboardNumber LauncherSpeed = new DashboardNumber("Launcher/ManualLaunchSpeed", 0.6); 
   public static final DashboardNumber UnjamSpeed = new DashboardNumber("Launcher/UnjamSpeed", -0.3); 

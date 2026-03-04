@@ -23,12 +23,12 @@ import frc.robot.constants.LauncherConstants.FeederConstants;
 import frc.robot.subsystems.interfaces.ILauncher;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class TargetHubVelocityAndLaunch extends Command {
+public class AimHubAndLaunchSetAngle extends Command {
   ILauncher m_launcher;
   Supplier<Pose2d> m_currentPoseSupplier;
   Timer m_launchTimer = new Timer();
   /** Creates a new AimHubAndLaunch. */
-  public TargetHubVelocityAndLaunch(ILauncher launcher, Supplier<Pose2d> currentPoseSupplier) {
+  public AimHubAndLaunchSetAngle(ILauncher launcher, Supplier<Pose2d> currentPoseSupplier) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_launcher = launcher;
     m_currentPoseSupplier = currentPoseSupplier;
@@ -57,7 +57,7 @@ public class TargetHubVelocityAndLaunch extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_launcher.setFlywheelVelocity(m_launcher.getScoringVelocity(m_currentPoseSupplier.get()));
+    m_launcher.setFlywheelVelocity(m_launcher.getScoringVelocitySetAngle(m_currentPoseSupplier.get()));
     if (m_launcher.atTargetFlywheelVelocity() && isFacingTarget()) {
       m_launcher.setFeederSpeed(FeederConstants.FeederSpeed.get());
       m_launchTimer.start();

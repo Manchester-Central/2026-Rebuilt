@@ -11,9 +11,9 @@ public interface ILauncher extends Subsystem {
     public double getFeederSpeed();
     public void setFeederSpeed(double speed);
     public void setFlywheelVelocity(LinearVelocity velocity);
-    public LinearVelocity getScoringVelocity(Pose2d currentPose);
+    public LinearVelocity getScoringVelocitySetAngle(Pose2d currentPose);
     public boolean atTargetFlywheelVelocity();
-    public LinearVelocity getPassVelocity(Pose2d currentPose);
+    public LinearVelocity getPassVelocitySetAngle(Pose2d currentPose);
     public double getHoodSpeed();
     public void setHoodSpeed(double speed);
     public void setHoodAngle(Angle targetAngle);
