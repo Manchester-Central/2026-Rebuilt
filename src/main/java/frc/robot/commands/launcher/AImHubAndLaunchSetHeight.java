@@ -51,10 +51,17 @@ public class AimHubAndLaunchSetHeight extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_launcher.setFlywheelVelocity(m_launcher.getVelocityForTargetSetHeight(m_swerveDrive, FieldPose2026.HubCenter.getCurrentAlliancePose(), FieldDimensions.HubHeight).times(FlywheelConstants.LossFactor.get()));
-    m_launcher.setHoodAngle(m_launcher.getPitchForTarget(m_swerveDrive, FieldPose2026.HubCenter.getCurrentAlliancePose(), FieldDimensions.HubHeight));
+    m_launcher.setTargets(
+      m_launcher.getVelocityForTargetSetHeight(
+        m_swerveDrive, 
+        FieldPose2026.HubCenter.getCurrentAlliancePose(), 
+        FieldDimensions.HubHeight).times(FlywheelConstants.LossFactor.get()), 
+      m_launcher.getPitchForTarget(
+        m_swerveDrive, 
+        FieldPose2026.HubCenter.getCurrentAlliancePose(), 
+        FieldDimensions.HubHeight));
 
-    if (m_launcher.atTargetFlywheelVelocity() && isFacingTarget() && m_launcher.atTargetHoodAngle()) {
+    if (isFacingTarget() && m_launcher.atTargets()) {
       m_launcher.setFeederSpeed(FeederConstants.FeederSpeed.get());
     } else {
       m_launcher.setFeederSpeed(0);

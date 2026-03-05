@@ -94,6 +94,21 @@ public class Launcher extends SubsystemBase implements ILauncher {
     return m_hood.atTargetHoodAngle();
   }
 
+  /**
+   * Returns true if flywheel velocity and hood angle are within the proper tolerances.
+   */
+  public boolean atTargets() {
+    return atTargetHoodAngle() && atTargetFlywheelVelocity();
+  }
+
+  /**
+   * Sets the flywheel velocity and hood angle.
+   */
+  public void setTargets(LinearVelocity velocity, Angle angle) {
+    setFlywheelVelocity(velocity);
+    setHoodAngle(angle);
+  }
+
   @Override
   public boolean doesFeederHaveFuel() {
     return m_feeder.doesFeederHaveFuel();
@@ -150,10 +165,10 @@ public class Launcher extends SubsystemBase implements ILauncher {
    */
   private Time getFuelFlightTime(Distance targetHeight) {
     Distance deltaMaxHeight = LauncherConstants.MaxLaunchHeight.get().minus(LauncherConstants.LauncherHeight);
-    Distance deltatargetHeight = targetHeight.minus(LauncherConstants.LauncherHeight);
+    Distance deltaTargetHeight = targetHeight.minus(LauncherConstants.LauncherHeight);
     
     Time flightTime = Seconds.of(
-      (Math.sqrt(19.62 * deltaMaxHeight.in(Meters)) + Math.sqrt(19.62 * (deltaMaxHeight.minus(deltatargetHeight).in(Meters))))
+      (Math.sqrt(19.62 * deltaMaxHeight.in(Meters)) + Math.sqrt(19.62 * (deltaMaxHeight.minus(deltaTargetHeight).in(Meters))))
       / (Math.abs(GeneralConstants.gravity.in(MetersPerSecondPerSecond))));
     
     return flightTime;

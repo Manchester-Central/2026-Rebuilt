@@ -20,6 +20,8 @@ public interface ILauncher extends Subsystem {
     public void setHoodAngle(Angle targetAngle);
     public Angle getHoodAngle();
     public boolean atTargetHoodAngle();
+    public boolean atTargets();
+    public void setTargets(LinearVelocity velocity, Angle angle);
     public boolean doesFeederHaveFuel();
     public LinearVelocity getVelocityForTargetSetHeight(IDrive swerveDrive, Pose2d targetPose, Distance targetHeight);
     public Angle getPitchForTarget(IDrive swerveDrive, Pose2d targetPose, Distance targetHeight);
