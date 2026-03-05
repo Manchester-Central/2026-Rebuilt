@@ -90,6 +90,10 @@ public class Launcher extends SubsystemBase implements ILauncher {
     return m_hood.getHoodAngle();
   }
 
+  public boolean atTargetHoodAngle() {
+    return m_hood.atTargetHoodAngle();
+  }
+
   @Override
   public boolean doesFeederHaveFuel() {
     return m_feeder.doesFeederHaveFuel();
@@ -150,7 +154,7 @@ public class Launcher extends SubsystemBase implements ILauncher {
     
     Time flightTime = Seconds.of(
       (Math.sqrt(19.62 * deltaMaxHeight.in(Meters)) + Math.sqrt(19.62 * (deltaMaxHeight.minus(deltatargetHeight).in(Meters))))
-      / (GeneralConstants.gravity.in(MetersPerSecondPerSecond)));
+      / (Math.abs(GeneralConstants.gravity.in(MetersPerSecondPerSecond))));
     
     return flightTime;
   }

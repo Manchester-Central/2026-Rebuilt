@@ -25,7 +25,7 @@ public class Hood extends SubsystemBase implements IHood {
   private ChaosTalonFx m_hoodMotor = new ChaosTalonFx(HoodConstants.HoodCanId, LauncherConstants.LauncherCanBus, HoodConstants.HoodConfig);
   private DigitalInput m_limSwitch = new DigitalInput(HoodConstants.SensorIndex); // TODO: check input channel
 
-  private boolean m_hasReachedMax = false;
+  private boolean m_hasReachedMax = true; // TODO: Testing ONLY
   private Angle m_targetAngle = HoodConstants.HoodMaxAngle;
 
   @SuppressWarnings("unused")
@@ -76,6 +76,11 @@ public class Hood extends SubsystemBase implements IHood {
 
   public boolean getHoodAtMax() {
     return !m_limSwitch.get(); // Magnetic limit switch is false when the climber is at the bottom
+  }
+
+  @Override
+  public boolean atTargetHoodAngle() {
+    return getHoodAngle().isNear(m_targetAngle, HoodConstants.TargetAngleTolerance.get());
   }
 
   @Override

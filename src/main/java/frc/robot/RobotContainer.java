@@ -44,8 +44,8 @@ import frc.robot.commands.defaults.LauncherDefaultCommand;
 import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.DeployOuttake;
 import frc.robot.commands.intake.RetractIntake;
-import frc.robot.commands.launcher.AImHubAndLaunchSetHeight;
 import frc.robot.commands.launcher.AimHubAndLaunchSetAngle;
+import frc.robot.commands.launcher.AimHubAndLaunchSetHeight;
 import frc.robot.commands.launcher.AimPassAndLaunchSetAngle;
 import frc.robot.commands.manual.ClimberManualCommand;
 import frc.robot.commands.manual.IntakeManualCommand;
@@ -110,9 +110,11 @@ public class RobotContainer {
   private final DoubleSupplier m_getDriverRotation = () -> -m_driver.getRightX();
   private final DoubleSupplier m_getDriverXTranslationSlow = () -> m_getDriverXTranslation.getAsDouble() * GeneralConstants.SlowModeMultiplier;
   private final DoubleSupplier m_getDriverYTranslationSlow = () -> m_getDriverYTranslation.getAsDouble() * GeneralConstants.SlowModeMultiplier;
+  private final DoubleSupplier m_getDriverXTranslationMoveShoot = () -> m_getDriverXTranslation.getAsDouble() * GeneralConstants.SlowModeMultiplier;
+  private final DoubleSupplier m_getDriverYTranslationMoveShoot = () -> m_getDriverYTranslation.getAsDouble() * GeneralConstants.SlowModeMultiplier;
   private final DoubleSupplier m_getDriverRotationSlow = () -> m_getDriverRotation.getAsDouble() *  GeneralConstants.SlowModeMultiplier;
 
-  private boolean m_isManual = true;
+  private boolean m_isManual = false;
   private final Trigger m_isManualTrigger = new Trigger(() -> m_isManual);
   private final Trigger m_isAutomaticTrigger = m_isManualTrigger.negate();
   // Dashboard inputs
@@ -297,7 +299,7 @@ public class RobotContainer {
     // RT: Aim and score in hub (if manual mode, only aim drive)
     m_driver.rightTrigger().whileTrue(switchAutomaticOrManual(
       // automatic
-      new AImHubAndLaunchSetHeight(m_launcher, m_swerveDrive)
+      new AimHubAndLaunchSetHeight(m_launcher, m_swerveDrive)
         .alongWith(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter)),
       // manual
       getAimAtFieldPosesCommand(FieldPose2026.HubCenter)
@@ -455,8 +457,8 @@ public class RobotContainer {
   private Command getAimAtFieldPosesMovingCommand(FieldPose2026... poses) {
     return DriveCommands.joystickDriveAtAngle(
         m_swerveDrive,
-        DriverStation.isAutonomous() ? () -> 0 :  m_getDriverXTranslation,
-        DriverStation.isAutonomous() ? () -> 0 : m_getDriverYTranslation,
+        DriverStation.isAutonomous() ? () -> 0 :  m_getDriverXTranslationMoveShoot,
+        DriverStation.isAutonomous() ? () -> 0 : m_getDriverYTranslationMoveShoot,
         () -> {
             FieldPose targetPose = FieldPose.getClosestPose(m_swerveDrive.getPose(), poses);
             return Rotation2d.fromDegrees(m_launcher.getYawForTarget(m_swerveDrive, targetPose.getCurrentAlliancePose(), FieldDimensions.HubHeight).in(Degrees));
