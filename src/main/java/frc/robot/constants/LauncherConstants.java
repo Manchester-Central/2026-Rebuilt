@@ -80,6 +80,8 @@ public final class LauncherConstants {
 
     public static final DashboardUnit<LinearVelocityUnit, LinearVelocity> TargetVelocityTolerance = new DashboardUnit<>("Launcher/TargetVelocityTolerance", MetersPerSecond.of(0.4)); // TODO: Tested with 2
 
+    public static final DashboardNumber LossFactor = new DashboardNumber("Launcher/LossFactor", 1);
+
     public static final double SensorToMechanismRatio = 1; // TODO check or change
 
     // Keep these separate to control them independently.

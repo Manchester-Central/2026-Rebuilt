@@ -25,7 +25,7 @@ public class Hood extends SubsystemBase implements IHood {
   private ChaosTalonFx m_hoodMotor = new ChaosTalonFx(HoodConstants.HoodCanId, LauncherConstants.LauncherCanBus, HoodConstants.HoodConfig);
   private DigitalInput m_limSwitch = new DigitalInput(HoodConstants.SensorIndex); // TODO: check input channel
 
-  private boolean m_hasReachedMax = true; // TODO: Testing ONLY
+  private boolean m_hasReachedMax = false;
   private Angle m_targetAngle = HoodConstants.HoodMaxAngle;
 
   @SuppressWarnings("unused")
@@ -90,7 +90,7 @@ public class Hood extends SubsystemBase implements IHood {
     }
 
     if (getHoodAtMax() && !m_hasReachedMax) {
-      m_hoodMotor.setPosition(0);
+      m_hoodMotor.setPosition(HoodConstants.HoodMaxAngle);
       m_hasReachedMax = true;
     }
 

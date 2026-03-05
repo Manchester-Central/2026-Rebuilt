@@ -110,11 +110,11 @@ public class RobotContainer {
   private final DoubleSupplier m_getDriverRotation = () -> -m_driver.getRightX();
   private final DoubleSupplier m_getDriverXTranslationSlow = () -> m_getDriverXTranslation.getAsDouble() * GeneralConstants.SlowModeMultiplier;
   private final DoubleSupplier m_getDriverYTranslationSlow = () -> m_getDriverYTranslation.getAsDouble() * GeneralConstants.SlowModeMultiplier;
-  private final DoubleSupplier m_getDriverXTranslationMoveShoot = () -> m_getDriverXTranslation.getAsDouble() * GeneralConstants.SlowModeMultiplier;
-  private final DoubleSupplier m_getDriverYTranslationMoveShoot = () -> m_getDriverYTranslation.getAsDouble() * GeneralConstants.SlowModeMultiplier;
+  private final DoubleSupplier m_getDriverXTranslationMoveShoot = () -> m_getDriverXTranslation.getAsDouble() * GeneralConstants.MoveShootDriveMultiplier;
+  private final DoubleSupplier m_getDriverYTranslationMoveShoot = () -> m_getDriverYTranslation.getAsDouble() * GeneralConstants.MoveShootDriveMultiplier;
   private final DoubleSupplier m_getDriverRotationSlow = () -> m_getDriverRotation.getAsDouble() *  GeneralConstants.SlowModeMultiplier;
 
-  private boolean m_isManual = false;
+  private boolean m_isManual = true;
   private final Trigger m_isManualTrigger = new Trigger(() -> m_isManual);
   private final Trigger m_isAutomaticTrigger = m_isManualTrigger.negate();
   // Dashboard inputs
