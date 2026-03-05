@@ -110,8 +110,8 @@ public class RobotContainer {
   private final DoubleSupplier m_getDriverRotation = () -> -m_driver.getRightX();
   private final DoubleSupplier m_getDriverXTranslationSlow = () -> m_getDriverXTranslation.getAsDouble() * GeneralConstants.SlowModeMultiplier;
   private final DoubleSupplier m_getDriverYTranslationSlow = () -> m_getDriverYTranslation.getAsDouble() * GeneralConstants.SlowModeMultiplier;
-  private final DoubleSupplier m_getDriverXTranslationMoveShoot = () -> m_getDriverXTranslation.getAsDouble() * GeneralConstants.MoveShootDriveMultiplier;
-  private final DoubleSupplier m_getDriverYTranslationMoveShoot = () -> m_getDriverYTranslation.getAsDouble() * GeneralConstants.MoveShootDriveMultiplier;
+  private final DoubleSupplier m_getDriverXTranslationMoveLaunch = () -> m_getDriverXTranslation.getAsDouble() * GeneralConstants.MoveLaunchDriveMultiplier;
+  private final DoubleSupplier m_getDriverYTranslationMoveLaunch = () -> m_getDriverYTranslation.getAsDouble() * GeneralConstants.MoveLaunchDriveMultiplier;
   private final DoubleSupplier m_getDriverRotationSlow = () -> m_getDriverRotation.getAsDouble() *  GeneralConstants.SlowModeMultiplier;
 
   private boolean m_isManual = true;
@@ -457,8 +457,8 @@ public class RobotContainer {
   private Command getAimAtFieldPosesMovingCommand(FieldPose2026... poses) {
     return DriveCommands.joystickDriveAtAngle(
         m_swerveDrive,
-        DriverStation.isAutonomous() ? () -> 0 :  m_getDriverXTranslationMoveShoot,
-        DriverStation.isAutonomous() ? () -> 0 : m_getDriverYTranslationMoveShoot,
+        DriverStation.isAutonomous() ? () -> 0 :  m_getDriverXTranslationMoveLaunch,
+        DriverStation.isAutonomous() ? () -> 0 : m_getDriverYTranslationMoveLaunch,
         () -> {
             FieldPose targetPose = FieldPose.getClosestPose(m_swerveDrive.getPose(), poses);
             return Rotation2d.fromDegrees(m_launcher.getYawForTarget(m_swerveDrive, targetPose.getCurrentAlliancePose(), FieldDimensions.HubHeight).in(Degrees));

@@ -160,7 +160,7 @@ public class Launcher extends SubsystemBase implements ILauncher {
   }
 
   /**
-   * Determines the launch velocity needed to launch to a set target from any position at a set max height. Does account for shoot on the move.
+   * Determines the launch velocity needed to launch to a set target from any position at a set max height. Does account for launch on the move.
    * 
    * @param swerveDrive
    * @param targetPose The pose of the target to launch.
@@ -190,7 +190,7 @@ public class Launcher extends SubsystemBase implements ILauncher {
   }
 
   /**
-   * Determines the vertical launch angle of the fuel needed to launch to a set target from any position at a set max height. Does account for shoot on the move.
+   * Determines the vertical launch angle of the fuel needed to launch to a set target from any position at a set max height. Does account for launch on the move.
    * 
    * @param swerveDrive
    * @param targetPose The pose of the target to launch.
@@ -220,7 +220,7 @@ public class Launcher extends SubsystemBase implements ILauncher {
   }
 
   /**
-   * Determines the horizontal launch angle of the fuel needed to launch to a set target from any position at a set max height. Does account for shoot on the move.
+   * Determines the horizontal launch angle of the fuel needed to launch to a set target from any position at a set max height. Does account for launch on the move.
    * 
    * @param swerveDrive
    * @param targetPose The pose of the target to launch.
