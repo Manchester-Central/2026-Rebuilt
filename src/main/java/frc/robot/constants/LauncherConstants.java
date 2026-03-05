@@ -80,6 +80,8 @@ public final class LauncherConstants {
 
     public static final DashboardUnit<LinearVelocityUnit, LinearVelocity> TargetVelocityTolerance = new DashboardUnit<>("Launcher/TargetVelocityTolerance", MetersPerSecond.of(0.4)); // TODO: Tested with 2
 
+    public static final DashboardUnit<LinearVelocityUnit, LinearVelocity> TunableLaunchVelocity = new DashboardUnit<>("Launcher/TunableLaunchVelocity", MetersPerSecond.of(6));
+
     public static final DashboardNumber LossFactor = new DashboardNumber("Launcher/LossFactor", 1);
 
     public static final double SensorToMechanismRatio = 1; // TODO check or change
@@ -138,6 +140,7 @@ public final class LauncherConstants {
     public static final DashboardNumber HoodSpeed = new DashboardNumber("Launcher/Hood/HoodSpeed", 0.2);
     public static final DashboardNumber NotReachedMaxSpeed = new DashboardNumber("Launcher/Hood/NotReachedMaxSpeed", 0.2);
     public static final DashboardUnit<AngleUnit, Angle> TargetAngleTolerance = new DashboardUnit<>("Launcher/Hood/TargetAngleTolerance", Degrees.of(1));
+    public static final DashboardUnit<AngleUnit, Angle> TunableLaunchAngle = new DashboardUnit<>("Launcher/Hood/TunableLaunchAngle", Degrees.of(75));
     public static final Distance HoodRadius = Inches.of(9);
     public static final Mass HoodMass = Kilogram.of(2.26796); 
     public static final Angle HoodMinAngle = Degrees.of(40);
