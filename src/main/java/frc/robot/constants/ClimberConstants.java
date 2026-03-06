@@ -58,8 +58,8 @@ public final class ClimberConstants {
             .withNeutralMode(NeutralModeValue.Brake)
         )
         .withCurrentLimits(new CurrentLimitsConfigs()
-            .withSupplyCurrentLimit(Amps.of(60)) // TODO: Double Check
-            .withStatorCurrentLimit(Amps.of(60)) // TODO: Double Check
+            .withSupplyCurrentLimit(Amps.of(80)) // TODO: Double Check
+            .withStatorCurrentLimit(Amps.of(80)) // TODO: Double Check
             .withSupplyCurrentLowerLimit(Amps.of(80))
             .withSupplyCurrentLimitEnable(true)
             .withStatorCurrentLimitEnable(true)
