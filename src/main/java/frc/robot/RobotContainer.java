@@ -45,7 +45,7 @@ import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.DeployOuttake;
 import frc.robot.commands.intake.RetractIntake;
 import frc.robot.commands.launcher.AimHubAndLaunchSetAngle;
-import frc.robot.commands.launcher.AimHubAndLaunchSetHeight;
+import frc.robot.commands.launcher.AimHubAndLaunchSetHeight_;
 import frc.robot.commands.launcher.AimPassAndLaunchSetAngle;
 import frc.robot.commands.manual.ClimberManualCommand;
 import frc.robot.commands.manual.IntakeManualCommand;
@@ -299,7 +299,7 @@ public class RobotContainer {
     // RT: Aim and score in hub (if manual mode, only aim drive)
     m_driver.rightTrigger().whileTrue(switchAutomaticOrManual(
       // automatic
-      new AimHubAndLaunchSetHeight(m_launcher, m_swerveDrive)
+      new AimHubAndLaunchSetHeight_(m_launcher, m_swerveDrive)
         .alongWith(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter)),
       // manual
       getAimAtFieldPosesCommand(FieldPose2026.HubCenter)

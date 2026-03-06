@@ -21,12 +21,12 @@ import frc.robot.subsystems.interfaces.IDrive;
 import frc.robot.subsystems.interfaces.ILauncher;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class AimHubAndLaunchSetHeight extends Command {
+public class AimHubAndLaunchSetHeight_ extends Command {
   ILauncher m_launcher;
   IDrive m_swerveDrive;
 
   /** Creates a new AImHubAndLaunchSetHeight. */
-  public AimHubAndLaunchSetHeight(ILauncher launcher, IDrive swerveDrive) {
+  public AimHubAndLaunchSetHeight_(ILauncher launcher, IDrive swerveDrive) {
     m_launcher = launcher;
     m_swerveDrive = swerveDrive;
 
