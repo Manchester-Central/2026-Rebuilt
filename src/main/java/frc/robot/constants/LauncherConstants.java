@@ -198,7 +198,7 @@ public final class LauncherConstants {
 
     public static final TalonFXConfiguration TopConfig = new TalonFXConfiguration()
       .withMotorOutput(new MotorOutputConfigs()
-          .withInverted(InvertedValue.CounterClockwise_Positive)
+          .withInverted(InvertedValue.Clockwise_Positive)
           .withNeutralMode(NeutralModeValue.Brake)
       )
       .withCurrentLimits(new CurrentLimitsConfigs()
@@ -210,7 +210,7 @@ public final class LauncherConstants {
       );
      public static final TalonFXConfiguration BottomConfig = new TalonFXConfiguration()
       .withMotorOutput(new MotorOutputConfigs()
-          .withInverted(InvertedValue.CounterClockwise_Positive)
+          .withInverted(InvertedValue.Clockwise_Positive)
           .withNeutralMode(NeutralModeValue.Brake)
       )
       .withCurrentLimits(new CurrentLimitsConfigs()
