@@ -33,6 +33,7 @@ import com.ctre.phoenix6.sim.TalonFXSimState.MotorType;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.units.AngleUnit;
@@ -54,6 +55,8 @@ public final class LauncherConstants {
   // public static final CanId TurretCanId = CanId.ID_43;
 
   public static Distance LauncherHeight = Inches.of(16); // TODO: Verify
+  public static final Transform2d LauncherDisplacement = new Transform2d(Inches.of(6.328956), Inches.of(-5.067586), Rotation2d.kZero);
+
   public static Angle LauncherAngle = Degrees.of(65);
 
   public static final DashboardUnit<DistanceUnit, Distance> MaxLaunchHeight = new DashboardUnit<>("Launcher/MaxLaunchHeight", Feet.of(7));
