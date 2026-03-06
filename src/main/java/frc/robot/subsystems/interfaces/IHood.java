@@ -23,6 +23,8 @@ public interface IHood extends Subsystem {
     public void setHoodAngle(Angle targetAngle);
 
     public Angle getHoodAngle();
+
+    public boolean atTargetHoodAngle();
 } 
 
 

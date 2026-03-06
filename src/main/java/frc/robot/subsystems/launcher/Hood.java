@@ -79,13 +79,18 @@ public class Hood extends SubsystemBase implements IHood {
   }
 
   @Override
+  public boolean atTargetHoodAngle() {
+    return getHoodAngle().isNear(m_targetAngle, HoodConstants.TargetAngleTolerance.get());
+  }
+
+  @Override
   public void periodic() {
     if (!m_hasReachedMax && DriverStation.isEnabled()) {
       // m_hoodMotor.set(HoodConstants.NotReachedMaxSpeed.get());
     }
 
     if (getHoodAtMax() && !m_hasReachedMax) {
-      m_hoodMotor.setPosition(0);
+      m_hoodMotor.setPosition(HoodConstants.HoodMaxAngle);
       m_hasReachedMax = true;
     }
 

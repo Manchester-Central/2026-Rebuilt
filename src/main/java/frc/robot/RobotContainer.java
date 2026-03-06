@@ -7,6 +7,14 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
+import java.util.function.DoubleSupplier;
+
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+
 import com.chaos131.gamepads.Gamepad;
 import com.chaos131.poses.FieldPose;
 import com.chaos131.poses.FieldPose2026;
@@ -17,6 +25,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -35,12 +44,14 @@ import frc.robot.commands.defaults.LauncherDefaultCommand;
 import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.DeployOuttake;
 import frc.robot.commands.intake.RetractIntake;
-import frc.robot.commands.launcher.TargetHubVelocityAndLaunch;
-import frc.robot.commands.launcher.TargetPassVelocityAndLaunch;
+import frc.robot.commands.launcher.AimHubAndLaunchSetAngle;
+import frc.robot.commands.launcher.AimHubAndLaunchSetHeight;
+import frc.robot.commands.launcher.AimPassAndLaunchSetAngle;
 import frc.robot.commands.manual.ClimberManualCommand;
 import frc.robot.commands.manual.IntakeManualCommand;
 import frc.robot.commands.manual.LauncherManualCommand;
 import frc.robot.constants.ClimberConstants;
+import frc.robot.constants.FieldDimensions;
 import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.constants.LauncherConstants;
@@ -62,19 +73,12 @@ import frc.robot.subsystems.intake.IntakeMech2D;
 import frc.robot.subsystems.interfaces.IClimber;
 import frc.robot.subsystems.interfaces.IIntake;
 import frc.robot.subsystems.interfaces.ILauncher;
+import frc.robot.subsystems.launcher.Feeder;
 import frc.robot.subsystems.launcher.Flywheel;
 import frc.robot.subsystems.launcher.Hood;
-import frc.robot.subsystems.launcher.Feeder;
-import frc.robot.subsystems.launcher.LauncherMech2D;
 import frc.robot.subsystems.launcher.Launcher;
+import frc.robot.subsystems.launcher.LauncherMech2D;
 import frc.robot.util.PathUtil;
-
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
-
-import java.util.function.DoubleSupplier;
-
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -106,6 +110,8 @@ public class RobotContainer {
   private final DoubleSupplier m_getDriverRotation = () -> -m_driver.getRightX();
   private final DoubleSupplier m_getDriverXTranslationSlow = () -> m_getDriverXTranslation.getAsDouble() * GeneralConstants.SlowModeMultiplier;
   private final DoubleSupplier m_getDriverYTranslationSlow = () -> m_getDriverYTranslation.getAsDouble() * GeneralConstants.SlowModeMultiplier;
+  private final DoubleSupplier m_getDriverXTranslationMoveLaunch = () -> m_getDriverXTranslation.getAsDouble() * GeneralConstants.MoveLaunchDriveMultiplier;
+  private final DoubleSupplier m_getDriverYTranslationMoveLaunch = () -> m_getDriverYTranslation.getAsDouble() * GeneralConstants.MoveLaunchDriveMultiplier;
   private final DoubleSupplier m_getDriverRotationSlow = () -> m_getDriverRotation.getAsDouble() *  GeneralConstants.SlowModeMultiplier;
 
   private boolean m_isManual = true;
@@ -198,9 +204,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("DeployOuttake", new DeployOuttake(m_intake));
     NamedCommands.registerCommand("DeployIntake", new DeployIntake(m_intake));
     NamedCommands.registerCommand("RetractIntake", new RetractIntake(m_intake));
-    NamedCommands.registerCommand("LaunchHub", new TargetHubVelocityAndLaunch(m_launcher, m_swerveDrive::getPose)
+    NamedCommands.registerCommand("LaunchHub", new AimHubAndLaunchSetAngle(m_launcher, m_swerveDrive::getPose)
             .alongWith(getAimAtFieldPosesCommand(FieldPose2026.HubCenter)));
-    NamedCommands.registerCommand("LaunchPass", new TargetPassVelocityAndLaunch(m_launcher, m_swerveDrive::getPose)
+    NamedCommands.registerCommand("LaunchPass", new AimPassAndLaunchSetAngle(m_launcher, m_swerveDrive::getPose)
             .alongWith(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
     NamedCommands.registerCommand("ClimbReach", new SetClimberHeight(m_climber, ClimberConstants.MaxExtension));
     NamedCommands.registerCommand("ClimbEngage", new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension));
@@ -277,7 +283,7 @@ public class RobotContainer {
     // LB: Aim and pass (if manual mode, only aim drive)
     m_driver.leftBumper().whileTrue(switchAutomaticOrManual(
       // Automatic
-      new TargetPassVelocityAndLaunch(m_launcher, m_swerveDrive::getPose).alongWith(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)), 
+      new AimPassAndLaunchSetAngle(m_launcher, m_swerveDrive::getPose).alongWith(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)), 
        // Manual
       getAimAtFieldPosesCommand(LauncherConstants.PassPoints)
     ));
@@ -289,11 +295,12 @@ public class RobotContainer {
       new InstantCommand()
     ));
     // RB: Aim at hub
-    m_driver.rightBumper().whileTrue(getAimAtFieldPosesCommand(FieldPose2026.HubCenter));
+    m_driver.rightBumper().whileTrue(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter));
     // RT: Aim and score in hub (if manual mode, only aim drive)
     m_driver.rightTrigger().whileTrue(switchAutomaticOrManual(
       // automatic
-      new TargetHubVelocityAndLaunch(m_launcher, m_swerveDrive::getPose).alongWith(getAimAtFieldPosesCommand(FieldPose2026.HubCenter)),
+      new AimHubAndLaunchSetHeight(m_launcher, m_swerveDrive)
+        .alongWith(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter)),
       // manual
       getAimAtFieldPosesCommand(FieldPose2026.HubCenter)
     ));
@@ -443,6 +450,18 @@ public class RobotContainer {
         () -> {
             FieldPose targetPose = FieldPose.getClosestPose(m_swerveDrive.getPose(), poses);
             return targetPose.getTargetAngleForRobot(m_swerveDrive.getPose());
+        }
+    );
+  }
+
+  private Command getAimAtFieldPosesMovingCommand(FieldPose2026... poses) {
+    return DriveCommands.joystickDriveAtAngle(
+        m_swerveDrive,
+        DriverStation.isAutonomous() ? () -> 0 :  m_getDriverXTranslationMoveLaunch,
+        DriverStation.isAutonomous() ? () -> 0 : m_getDriverYTranslationMoveLaunch,
+        () -> {
+            FieldPose targetPose = FieldPose.getClosestPose(m_swerveDrive.getPose(), poses);
+            return Rotation2d.fromDegrees(m_launcher.getYawForTarget(m_swerveDrive, targetPose.getCurrentAlliancePose(), FieldDimensions.HubHeight).in(Degrees));
         }
     );
   }
