@@ -183,10 +183,10 @@ public class Launcher extends SubsystemBase implements ILauncher {
    * @return The linear velocity needed to launch at the target.
    */
   public LinearVelocity getVelocityForTargetSetHeight(IDrive swerveDrive, Pose2d targetPose, Distance targetHeight) {
-    Pose2d currentPose = swerveDrive.getPose();
+    Pose2d launcherPose = swerveDrive.getPose().transformBy(LauncherConstants.LauncherDisplacement);
     
-    double deltaXMeters = FieldPose.getDeltaXFromLocations(currentPose, targetPose).in(Meters);
-    double deltaYMeters = FieldPose.getDeltaYFromLocations(currentPose, targetPose).in(Meters);
+    double deltaXMeters = FieldPose.getDeltaXFromLocations(launcherPose, targetPose).in(Meters);
+    double deltaYMeters = FieldPose.getDeltaYFromLocations(launcherPose, targetPose).in(Meters);
 
     double swerveVelocityXMPS = swerveDrive.getVelocityVector().getX();
     double swerveVelocityYMPS = swerveDrive.getVelocityVector().getY();
@@ -213,10 +213,10 @@ public class Launcher extends SubsystemBase implements ILauncher {
    * @return The pitch needed to launch at the target. (For adjustable hood)
    */
   public Angle getPitchForTarget(IDrive swerveDrive, Pose2d targetPose, Distance targetHeight) {
-    Pose2d currentPose = swerveDrive.getPose();
+    Pose2d launcherPose = swerveDrive.getPose().transformBy(LauncherConstants.LauncherDisplacement);
     
-    double deltaXMeters = FieldPose.getDeltaXFromLocations(currentPose, targetPose).in(Meters);
-    double deltaYMeters = FieldPose.getDeltaYFromLocations(currentPose, targetPose).in(Meters);
+    double deltaXMeters = FieldPose.getDeltaXFromLocations(launcherPose, targetPose).in(Meters);
+    double deltaYMeters = FieldPose.getDeltaYFromLocations(launcherPose, targetPose).in(Meters);
 
     double swerveVelocityXMPS = swerveDrive.getVelocityVector().getX();
     double swerveVelocityYMPS = swerveDrive.getVelocityVector().getY();
