@@ -347,13 +347,13 @@ public class RobotContainer {
     // RT: manually run flywheels and feeder
     m_operator.rightTrigger().whileTrue(switchAutomaticOrManual(
       // automatic
-      new AimHubAndLaunchTunable(m_launcher, m_swerveDrive),
+      new AimHubAndLaunchTunable(m_launcher, m_swerveDrive, m_intake),
       // manual
       // new RunCommand(() -> {
       //   m_launcher.setFeederSpeed(FeederConstants.FeederSpeed.get());
       //   m_launcher.setFlywheelSpeed(LauncherConstants.LauncherSpeed.get());
       // }, m_launcher) 
-      new AimHubAndLaunchTunable(m_launcher, m_swerveDrive).alongWith(new RunCommand(() -> m_intake.setRollerSpeed(IntakeConstants.IntakeRollerSpeed.get()), m_intake))
+      new AimHubAndLaunchTunable(m_launcher, m_swerveDrive, m_intake).alongWith(new RunCommand(() -> m_intake.setRollerSpeed(IntakeConstants.IntakeRollerSpeed.get()), m_intake))
     ));
     // LB: Unjam intake (automatic and manual mode)
     m_operator.leftBumper().whileTrue(new RunCommand(() -> m_intake.setRollerSpeed(IntakeConstants.OuttakeRollerSpeed.get()), m_intake));
