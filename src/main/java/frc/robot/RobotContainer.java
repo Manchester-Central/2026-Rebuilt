@@ -46,6 +46,7 @@ import frc.robot.commands.intake.DeployOuttake;
 import frc.robot.commands.intake.RetractIntake;
 import frc.robot.commands.launcher.AimHubAndLaunchSetAngle;
 import frc.robot.commands.launcher.AimHubAndLaunchSetHeight;
+import frc.robot.commands.launcher.AimHubAndLaunchTunable;
 import frc.robot.commands.launcher.AimPassAndLaunchSetAngle;
 import frc.robot.commands.manual.ClimberManualCommand;
 import frc.robot.commands.manual.IntakeManualCommand;
@@ -346,12 +347,13 @@ public class RobotContainer {
     // RT: manually run flywheels and feeder
     m_operator.rightTrigger().whileTrue(switchAutomaticOrManual(
       // automatic
-      new InstantCommand(),
+      new AimHubAndLaunchTunable(m_launcher, m_swerveDrive),
       // manual
-      new RunCommand(() -> {
-        m_launcher.setFeederSpeed(FeederConstants.FeederSpeed.get());
-        m_launcher.setFlywheelSpeed(LauncherConstants.LauncherSpeed.get());
-      }, m_launcher) 
+      // new RunCommand(() -> {
+      //   m_launcher.setFeederSpeed(FeederConstants.FeederSpeed.get());
+      //   m_launcher.setFlywheelSpeed(LauncherConstants.LauncherSpeed.get());
+      // }, m_launcher) 
+      new AimHubAndLaunchTunable(m_launcher, m_swerveDrive).alongWith(new RunCommand(() -> m_intake.setRollerSpeed(IntakeConstants.IntakeRollerSpeed.get()), m_intake))
     ));
     // LB: Unjam intake (automatic and manual mode)
     m_operator.leftBumper().whileTrue(new RunCommand(() -> m_intake.setRollerSpeed(IntakeConstants.OuttakeRollerSpeed.get()), m_intake));
@@ -376,7 +378,7 @@ public class RobotContainer {
       // automatic
       new InstantCommand(),
       // manual
-      new RunCommand(() -> m_climber.setClimberSpeed(m_operator.getLeftY() * -1.0 * ClimberConstants.ManualSpeedMultiplier.get()), m_climber) // TODO: -1 seems wrong. Implies motor is inverted correctly
+      new RunCommand(() -> m_climber.setClimberSpeed(m_operator.getLeftY() * ClimberConstants.ManualSpeedMultiplier.get()), m_climber) // TODO: -1 seems wrong. Implies motor is inverted correctly
     ));
 
     // POV up: controls climber to up position (with manaual fixed move too)

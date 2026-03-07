@@ -62,9 +62,9 @@ public class Climber extends SubsystemBase implements IClimber {
    //   speed = 0;
     //}
 
-   // if (m_hasTouchedBottom) {
+   if (m_hasTouchedBottom) {
       m_climberMotor.set(speed);
-    //}
+    }
   }
 
   public boolean getClimberAtBottom() {
@@ -78,7 +78,7 @@ public class Climber extends SubsystemBase implements IClimber {
   @Override
   public void periodic() {
     if (!m_hasTouchedBottom && DriverStation.isEnabled()) {
-      // m_climberMotor.set(ClimberConstants.NotTouchedBottomSpeed.get());
+      m_climberMotor.set(ClimberConstants.NotTouchedBottomSpeed.get());
     }
 
     if (getClimberAtBottom() && !m_hasTouchedBottom) {

@@ -98,7 +98,7 @@ public final class LauncherConstants {
       return new TalonFXConfiguration()
         .withMotorOutput(new MotorOutputConfigs()
             .withInverted(motorDirection)
-            .withNeutralMode(NeutralModeValue.Brake)
+            .withNeutralMode(NeutralModeValue.Coast)
         )
         .withCurrentLimits(new CurrentLimitsConfigs()
             .withSupplyCurrentLimit(Amps.of(60))
@@ -113,12 +113,12 @@ public final class LauncherConstants {
             .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor)
         )
         .withSlot0(new Slot0Configs() //TODO: CHECK THESE PLEASE
-            .withKP(0.15)
+            .withKP(0.3)
             .withKI(0)
-            .withKD(0.02)
+            .withKD(0)
             .withKG(0)
             .withKS(0.1)
-            .withKV(0.12)
+            .withKV(0.152)
             .withKA(0)
         );
     }
@@ -140,8 +140,8 @@ public final class LauncherConstants {
   public static final class HoodConstants {
     public static final CanId HoodCanId = CanId.ID_44;
     public static final int SensorIndex = 2;
-    public static final DashboardNumber HoodSpeed = new DashboardNumber("Launcher/Hood/HoodSpeed", 0.2);
-    public static final DashboardNumber NotReachedMaxSpeed = new DashboardNumber("Launcher/Hood/NotReachedMaxSpeed", 0.2);
+    public static final DashboardNumber HoodSpeed = new DashboardNumber("Launcher/Hood/HoodSpeed", 0.02);
+    public static final DashboardNumber NotReachedMaxSpeed = new DashboardNumber("Launcher/Hood/NotReachedMaxSpeed", 0.02);
     public static final DashboardUnit<AngleUnit, Angle> TargetAngleTolerance = new DashboardUnit<>("Launcher/Hood/TargetAngleTolerance", Degrees.of(1));
     public static final DashboardUnit<AngleUnit, Angle> TunableLaunchAngle = new DashboardUnit<>("Launcher/Hood/TunableLaunchAngle", Degrees.of(75));
     public static final Distance HoodRadius = Inches.of(9);

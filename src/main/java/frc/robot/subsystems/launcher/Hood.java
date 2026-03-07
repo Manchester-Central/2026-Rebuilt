@@ -42,11 +42,12 @@ public class Hood extends SubsystemBase implements IHood {
 
   @Override
   public void setHoodSpeed(double speed) {
-    if (getHoodAngle().gt(HoodConstants.HoodMaxAngle)) {
-      speed = Math.min(speed, 0);
-    } else if (getHoodAngle().lt(HoodConstants.HoodMinAngle)) {
-      speed = Math.max(speed, 0);
-    }
+    // if (getHoodAngle().gt(HoodConstants.HoodMaxAngle)) {
+    //   speed = Math.min(speed, 0);
+    // } else if (getHoodAngle().lt(HoodConstants.HoodMinAngle)) {
+    //   speed = Math.max(speed, 0);
+    // }
+    
     m_hoodMotor.set(speed);
   }
 
@@ -64,9 +65,11 @@ public class Hood extends SubsystemBase implements IHood {
       m_targetAngle = HoodConstants.HoodMinAngle;
     }
 
-    if (m_hasReachedMax) {
-      m_hoodMotor.moveToPosition(m_targetAngle);
-    }
+    m_hoodMotor.moveToPosition(m_targetAngle);
+
+    // if (m_hasReachedMax) {
+    //   m_hoodMotor.moveToPosition(m_targetAngle);
+    // }
   }
 
   @Override
