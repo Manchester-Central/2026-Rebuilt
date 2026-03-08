@@ -45,7 +45,7 @@ import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.DeployOuttake;
 import frc.robot.commands.intake.RetractIntake;
 import frc.robot.commands.launcher.AimHubAndLaunchSetAngle;
-import frc.robot.commands.launcher.AimHubAndLaunchSetHeight;
+import frc.robot.commands.launcher.AimHubAndLaunchTable;
 import frc.robot.commands.launcher.AimHubAndLaunchTunable;
 import frc.robot.commands.launcher.AimPassAndLaunchSetAngle;
 import frc.robot.commands.manual.ClimberManualCommand;
@@ -115,7 +115,7 @@ public class RobotContainer {
   private final DoubleSupplier m_getDriverYTranslationMoveLaunch = () -> m_getDriverYTranslation.getAsDouble() * GeneralConstants.MoveLaunchDriveMultiplier;
   private final DoubleSupplier m_getDriverRotationSlow = () -> m_getDriverRotation.getAsDouble() *  GeneralConstants.SlowModeMultiplier;
 
-  private boolean m_isManual = true;
+  private boolean m_isManual = false;
   private final Trigger m_isManualTrigger = new Trigger(() -> m_isManual);
   private final Trigger m_isAutomaticTrigger = m_isManualTrigger.negate();
   // Dashboard inputs
@@ -192,7 +192,7 @@ public class RobotContainer {
     m_intake = new Intake ();
     m_intakeMech2d = new IntakeMech2D(m_intake);
 
-    m_launcher = new Launcher(new Flywheel(), new Feeder(), new Hood());
+    m_launcher = new Launcher(new Flywheel(), new Feeder(), new Hood(), m_swerveDrive);
     m_launcherMech2D = new LauncherMech2D(m_launcher);
 
     addAutos();
@@ -300,7 +300,7 @@ public class RobotContainer {
     // RT: Aim and score in hub (if manual mode, only aim drive)
     m_driver.rightTrigger().whileTrue(switchAutomaticOrManual(
       // automatic
-      new AimHubAndLaunchSetHeight(m_launcher, m_swerveDrive)
+      new AimHubAndLaunchTable(m_launcher, m_swerveDrive, m_intake)
         .alongWith(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter)),
       // manual
       getAimAtFieldPosesCommand(FieldPose2026.HubCenter)

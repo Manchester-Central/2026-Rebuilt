@@ -13,6 +13,8 @@ import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Seconds;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.chaos131.poses.FieldPose;
 import com.chaos131.poses.FieldPose2026;
 
@@ -38,16 +40,18 @@ public class Launcher extends SubsystemBase implements ILauncher {
   IFlywheel m_flywheel;
   IFeeder m_feeder;
   IHood m_hood; 
+  IDrive m_swerveDrive;
 
   Debouncer m_fallingDebouncer = new Debouncer(1.0, DebounceType.kFalling);
   boolean m_atVelocityDebouced = false;
 
 
   /** Creates a new Launcher. */
-  public Launcher(IFlywheel flywheel, IFeeder feeder, IHood hood) {
+  public Launcher(IFlywheel flywheel, IFeeder feeder, IHood hood, IDrive swerveDrive) {
     m_flywheel = flywheel;
     m_feeder = feeder;
     m_hood = hood; 
+    m_swerveDrive = swerveDrive;
   }
 
   public double getFlywheelSpeed() {
@@ -275,8 +279,20 @@ public class Launcher extends SubsystemBase implements ILauncher {
     return FlywheelConstants.LossFactor.get();
   }
 
+  public Distance getDisplacementFromHub() {
+    var launcherPose = m_swerveDrive.getPose().transformBy(LauncherConstants.LauncherDisplacement);
+    return FieldPose.getDistanceFromLocations(launcherPose, FieldPose2026.HubCenter.getCurrentAlliancePose());
+  }
+
+  public LinearVelocity getLookupLaunchVelocity() {
+    var lookedUpSpeed = FlywheelTable.getInstance().performLookup(getDisplacementFromHub()).getLaunchSpeed();
+    Logger.recordOutput("Launcher/FlywheelTableSpeed", lookedUpSpeed.in(MetersPerSecond));
+    return lookedUpSpeed;
+  }
+
   @Override
   public void periodic() {
     m_atVelocityDebouced = m_fallingDebouncer.calculate(atTargetFlywheelVelocity());
+    Logger.recordOutput("Launcher/DisplacementFromHub", getDisplacementFromHub().in(Meters));
   }
 } 
