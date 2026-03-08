@@ -23,7 +23,7 @@ public class Climber extends SubsystemBase implements IClimber {
   private ChaosTalonFx m_climberMotor = new ChaosTalonFx(ClimberConstants.ClimberCanId, ClimberConstants.ClimberCanBus, ClimberConstants.Config);
   private DigitalInput m_limSwitch = new DigitalInput(ClimberConstants.SensorIndex); // TODO: check input channel
   
-  private boolean m_hasTouchedBottom = false;
+  private boolean m_hasTouchedBottom = Robot.isReal() ? false : true;
   private Distance m_targetHeight = ClimberConstants.MinExtension;
 
   @SuppressWarnings("unused")
@@ -51,7 +51,7 @@ public class Climber extends SubsystemBase implements IClimber {
     }
 
     if (m_hasTouchedBottom) {
-      m_climberMotor.moveToPosition(m_targetHeight.in(Meters));
+      // m_climberMotor.moveToPosition(m_targetHeight.in(Meters));
     }
   }
 
@@ -63,7 +63,7 @@ public class Climber extends SubsystemBase implements IClimber {
     //}
 
    if (m_hasTouchedBottom) {
-      m_climberMotor.set(speed);
+      // m_climberMotor.set(speed);
     }
   }
 
@@ -78,7 +78,7 @@ public class Climber extends SubsystemBase implements IClimber {
   @Override
   public void periodic() {
     if (!m_hasTouchedBottom && DriverStation.isEnabled()) {
-      m_climberMotor.set(ClimberConstants.NotTouchedBottomSpeed.get());
+      // m_climberMotor.set(ClimberConstants.NotTouchedBottomSpeed.get());
     }
 
     if (getClimberAtBottom() && !m_hasTouchedBottom) {

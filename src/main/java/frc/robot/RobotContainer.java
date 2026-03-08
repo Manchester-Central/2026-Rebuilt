@@ -353,7 +353,7 @@ public class RobotContainer {
       //   m_launcher.setFeederSpeed(FeederConstants.FeederSpeed.get());
       //   m_launcher.setFlywheelSpeed(LauncherConstants.LauncherSpeed.get());
       // }, m_launcher) 
-      new AimHubAndLaunchTunable(m_launcher, m_swerveDrive, m_intake).alongWith(new RunCommand(() -> m_intake.setRollerSpeed(IntakeConstants.IntakeRollerSpeed.get()), m_intake))
+      new AimHubAndLaunchTunable(m_launcher, m_swerveDrive, m_intake)
     ));
     // LB: Unjam intake (automatic and manual mode)
     m_operator.leftBumper().whileTrue(new RunCommand(() -> m_intake.setRollerSpeed(IntakeConstants.OuttakeRollerSpeed.get()), m_intake));
@@ -378,7 +378,7 @@ public class RobotContainer {
       // automatic
       new InstantCommand(),
       // manual
-      new RunCommand(() -> m_climber.setClimberSpeed(m_operator.getLeftY() * ClimberConstants.ManualSpeedMultiplier.get()), m_climber) // TODO: -1 seems wrong. Implies motor is inverted correctly
+      new RunCommand(() -> m_launcher.setHoodSpeed(m_operator.getLeftY() * -1.0 * HoodConstants.ManualHoodSpeedMultiplier.get()), m_launcher) // TODO: -1 seems wrong. Implies motor is inverted correctly
     ));
 
     // POV up: controls climber to up position (with manaual fixed move too)

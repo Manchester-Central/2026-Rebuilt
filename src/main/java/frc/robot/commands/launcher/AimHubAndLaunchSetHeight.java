@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.FieldDimensions;
 import frc.robot.constants.LauncherConstants;
 import frc.robot.constants.LauncherConstants.FeederConstants;
-import frc.robot.constants.LauncherConstants.FlywheelConstants;
 import frc.robot.subsystems.interfaces.IDrive;
 import frc.robot.subsystems.interfaces.ILauncher;
 
@@ -55,7 +54,7 @@ public class AimHubAndLaunchSetHeight extends Command {
       m_launcher.getVelocityForTargetSetHeight(
         m_swerveDrive, 
         FieldPose2026.HubCenter.getCurrentAlliancePose(), 
-        FieldDimensions.HubHeight).times(FlywheelConstants.LossFactor.get()), 
+        FieldDimensions.HubHeight).times(m_launcher.getLossFactor()), 
       m_launcher.getPitchForTarget(
         m_swerveDrive, 
         FieldPose2026.HubCenter.getCurrentAlliancePose(), 

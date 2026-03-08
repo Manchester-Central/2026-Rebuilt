@@ -26,4 +26,5 @@ public interface ILauncher extends Subsystem {
     public LinearVelocity getVelocityForTargetSetHeight(IDrive swerveDrive, Pose2d targetPose, Distance targetHeight);
     public Angle getPitchForTarget(IDrive swerveDrive, Pose2d targetPose, Distance targetHeight);
     public Angle getYawForTarget(IDrive swerveDrive, Pose2d targetPose, Distance targetHeight);
+    public double getLossFactor();
 }

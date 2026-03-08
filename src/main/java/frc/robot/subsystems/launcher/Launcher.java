@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.FieldDimensions;
 import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.LauncherConstants;
+import frc.robot.constants.LauncherConstants.FlywheelConstants;
 import frc.robot.subsystems.interfaces.IDrive;
 import frc.robot.subsystems.interfaces.IFeeder;
 import frc.robot.subsystems.interfaces.IFlywheel;
@@ -230,7 +231,7 @@ public class Launcher extends SubsystemBase implements ILauncher {
       , Math.sqrt(
         Math.pow((deltaXMeters / timeSeconds) - swerveVelocityXMPS, 2)
         + Math.pow((deltaYMeters / timeSeconds) - swerveVelocityYMPS, 2))));
-    
+    // Math.hypot(a, b);
     return targetPitch;
   }
 
@@ -259,5 +260,9 @@ public class Launcher extends SubsystemBase implements ILauncher {
         deltaXMeters - timeSeconds * swerveVelocityXMPS));
     
     return targetYaw;
+  }
+
+  public double getLossFactor() {
+    return FlywheelConstants.LossFactor.get();
   }
  } 
