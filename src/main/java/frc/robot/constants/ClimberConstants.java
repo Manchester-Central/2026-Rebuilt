@@ -11,6 +11,7 @@ import static edu.wpi.first.units.Units.Meters;
 
 import com.chaos131.can.CanConstants.CanBusName;
 import com.chaos131.can.CanConstants.CanId;
+import com.chaos131.ctre.CtreMotorSimValues;
 import com.chaos131.util.DashboardNumber;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
@@ -21,15 +22,20 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.sim.TalonFXSimState.MotorType;
 
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Mass;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
 /** Add your docs here. */
 public final class ClimberConstants {
     public static final CanBusName ClimberCanBus = CanBusName.CTRE;
     public static final CanId ClimberCanId = CanId.ID_20;
+    public static final int SensorIndex = 0;
 
     public static final AnalogInput StringPotInput = new AnalogInput(0); // TODO: Double Check
     public static final Distance StringPotRange = Inches.of(10.0); // TODO: Double Check
@@ -52,8 +58,8 @@ public final class ClimberConstants {
             .withNeutralMode(NeutralModeValue.Brake)
         )
         .withCurrentLimits(new CurrentLimitsConfigs()
-            .withSupplyCurrentLimit(Amps.of(60)) // TODO: Double Check
-            .withStatorCurrentLimit(Amps.of(60)) // TODO: Double Check
+            .withSupplyCurrentLimit(Amps.of(80)) // TODO: Double Check
+            .withStatorCurrentLimit(Amps.of(80)) // TODO: Double Check
             .withSupplyCurrentLowerLimit(Amps.of(80))
             .withSupplyCurrentLimitEnable(true)
             .withStatorCurrentLimitEnable(true)
@@ -75,4 +81,17 @@ public final class ClimberConstants {
         );
 
     public static final DashboardNumber ManualSpeedMultiplier = new DashboardNumber("Climber/ManualSpeedMultiplier", 1);
+    public static final DashboardNumber ManualSpeedFixed = new DashboardNumber("Climber/ManualSpeedFixed", 0.4);
+
+    // Sim values
+    public static final DCMotor DcMotor = DCMotor.getKrakenX60(1);
+    public static final DCMotorSim DcMotorSim = new DCMotorSim(
+      LinearSystemId.createElevatorSystem(DcMotor, ClimberMass.in(Kilogram), DrivingDrumRadius.in(Meters), SensorToMechanismRatio),
+      DcMotor);
+    public static final CtreMotorSimValues SimValues = new CtreMotorSimValues(
+      DcMotorSim,
+      SensorToMechanismRatio,
+      true,
+      CtreMotorSimValues.chassisReferenceFromInvertedValue(Config.MotorOutput.Inverted),
+      MotorType.KrakenX60);
 }
