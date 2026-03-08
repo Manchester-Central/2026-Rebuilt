@@ -16,6 +16,8 @@ import static edu.wpi.first.units.Units.Seconds;
 import com.chaos131.poses.FieldPose;
 import com.chaos131.poses.FieldPose2026;
 
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
@@ -36,6 +38,9 @@ public class Launcher extends SubsystemBase implements ILauncher {
   IFlywheel m_flywheel;
   IFeeder m_feeder;
   IHood m_hood; 
+
+  Debouncer m_fallingDebouncer = new Debouncer(1.0, DebounceType.kFalling);
+  boolean m_atVelocityDebouced = false;
 
 
   /** Creates a new Launcher. */
@@ -262,7 +267,16 @@ public class Launcher extends SubsystemBase implements ILauncher {
     return targetYaw;
   }
 
+  public boolean atVelocityDebounced() {
+    return m_atVelocityDebouced;
+  }
+
   public double getLossFactor() {
     return FlywheelConstants.LossFactor.get();
   }
- } 
+
+  @Override
+  public void periodic() {
+    m_atVelocityDebouced = m_fallingDebouncer.calculate(atTargetFlywheelVelocity());
+  }
+} 

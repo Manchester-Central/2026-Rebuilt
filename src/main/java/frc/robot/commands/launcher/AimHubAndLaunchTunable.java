@@ -6,6 +6,7 @@ package frc.robot.commands.launcher;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.IntakeConstants;
+import frc.robot.constants.IntakeConstants.PivotConstants;
 import frc.robot.constants.LauncherConstants.FeederConstants;
 import frc.robot.constants.LauncherConstants.FlywheelConstants;
 import frc.robot.subsystems.interfaces.IDrive;
@@ -47,8 +48,9 @@ public class AimHubAndLaunchTunable extends Command {
   public void execute() {
     m_launcher.setFlywheelVelocity(FlywheelConstants.TunableLaunchVelocity.get());
     m_intake.setRollerSpeed(IntakeConstants.IntakeRollerSpeed.get());
+    m_intake.setPivotAngle(PivotConstants.DeployAngle.get()); // TODO: Testing only
 
-    if (m_launcher.atTargetFlywheelVelocity()) {
+    if (m_launcher.atVelocityDebounced()) {
       m_launcher.setFeederSpeed(FeederConstants.FeederSpeed.get());
     } else {
       m_launcher.setFeederSpeed(0);
