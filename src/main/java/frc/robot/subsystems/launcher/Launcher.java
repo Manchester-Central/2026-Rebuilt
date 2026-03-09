@@ -13,9 +13,13 @@ import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Seconds;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.chaos131.poses.FieldPose;
 import com.chaos131.poses.FieldPose2026;
 
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
@@ -25,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.FieldDimensions;
 import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.LauncherConstants;
+import frc.robot.constants.LauncherConstants.FlywheelConstants;
 import frc.robot.subsystems.interfaces.IDrive;
 import frc.robot.subsystems.interfaces.IFeeder;
 import frc.robot.subsystems.interfaces.IFlywheel;
@@ -35,13 +40,18 @@ public class Launcher extends SubsystemBase implements ILauncher {
   IFlywheel m_flywheel;
   IFeeder m_feeder;
   IHood m_hood; 
+  IDrive m_swerveDrive;
+
+  Debouncer m_fallingDebouncer = new Debouncer(1.0, DebounceType.kFalling);
+  boolean m_atVelocityDebouced = false;
 
 
   /** Creates a new Launcher. */
-  public Launcher(IFlywheel flywheel, IFeeder feeder, IHood hood) {
+  public Launcher(IFlywheel flywheel, IFeeder feeder, IHood hood, IDrive swerveDrive) {
     m_flywheel = flywheel;
     m_feeder = feeder;
     m_hood = hood; 
+    m_swerveDrive = swerveDrive;
   }
 
   public double getFlywheelSpeed() {
@@ -230,7 +240,7 @@ public class Launcher extends SubsystemBase implements ILauncher {
       , Math.sqrt(
         Math.pow((deltaXMeters / timeSeconds) - swerveVelocityXMPS, 2)
         + Math.pow((deltaYMeters / timeSeconds) - swerveVelocityYMPS, 2))));
-    
+    // Math.hypot(a, b);
     return targetPitch;
   }
 
@@ -260,4 +270,29 @@ public class Launcher extends SubsystemBase implements ILauncher {
     
     return targetYaw;
   }
- } 
+
+  public boolean atVelocityDebounced() {
+    return m_atVelocityDebouced;
+  }
+
+  public double getLossFactor() {
+    return FlywheelConstants.LossFactor.get();
+  }
+
+  public Distance getDisplacementFromHub() {
+    var launcherPose = m_swerveDrive.getPose().transformBy(LauncherConstants.LauncherDisplacement);
+    return FieldPose.getDistanceFromLocations(launcherPose, FieldPose2026.HubCenter.getCurrentAlliancePose());
+  }
+
+  public LinearVelocity getLookupLaunchVelocity() {
+    var lookedUpSpeed = FlywheelTable.getInstance().performLookup(getDisplacementFromHub()).getLaunchSpeed();
+    Logger.recordOutput("Launcher/FlywheelTableSpeed", lookedUpSpeed.in(MetersPerSecond));
+    return lookedUpSpeed;
+  }
+
+  @Override
+  public void periodic() {
+    m_atVelocityDebouced = m_fallingDebouncer.calculate(atTargetFlywheelVelocity());
+    Logger.recordOutput("Launcher/DisplacementFromHub", getDisplacementFromHub().in(Meters));
+  }
+} 

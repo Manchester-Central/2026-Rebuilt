@@ -25,7 +25,7 @@ public class Hood extends SubsystemBase implements IHood {
   private ChaosTalonFx m_hoodMotor = new ChaosTalonFx(HoodConstants.HoodCanId, LauncherConstants.LauncherCanBus, HoodConstants.HoodConfig);
   private DigitalInput m_limSwitch = new DigitalInput(HoodConstants.SensorIndex); // TODO: check input channel
 
-  private boolean m_hasReachedMax = false;
+  private boolean m_hasReachedMax = Robot.isReal() ? false : true;
   private Angle m_targetAngle = HoodConstants.HoodMaxAngle;
 
   @SuppressWarnings("unused")
@@ -42,12 +42,13 @@ public class Hood extends SubsystemBase implements IHood {
 
   @Override
   public void setHoodSpeed(double speed) {
-    if (getHoodAngle().gt(HoodConstants.HoodMaxAngle)) {
-      speed = Math.min(speed, 0);
-    } else if (getHoodAngle().lt(HoodConstants.HoodMinAngle)) {
-      speed = Math.max(speed, 0);
-    }
-    m_hoodMotor.set(speed);
+    // if (getHoodAngle().gt(HoodConstants.HoodMaxAngle)) {
+    //   speed = Math.min(speed, 0);
+    // } else if (getHoodAngle().lt(HoodConstants.HoodMinAngle)) {
+    //   speed = Math.max(speed, 0);
+    // }
+
+    // m_hoodMotor.set(speed); // TODO: re-add hood movement
   }
 
   @Override
@@ -64,9 +65,11 @@ public class Hood extends SubsystemBase implements IHood {
       m_targetAngle = HoodConstants.HoodMinAngle;
     }
 
-    if (m_hasReachedMax) {
-      m_hoodMotor.moveToPosition(m_targetAngle);
-    }
+    // m_hoodMotor.moveToPosition(m_targetAngle); // TODO: re-add hood movement
+
+    // if (m_hasReachedMax) {
+    //   m_hoodMotor.moveToPosition(m_targetAngle);
+    // }
   }
 
   @Override

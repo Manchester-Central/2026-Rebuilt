@@ -50,7 +50,7 @@ public final class IntakeConstants {
   public static final DashboardNumber ManualPivotSpeedMultiplier = new DashboardNumber("Intake/ManualPivotSpeedMultiplier", 0.4);
 
   // Speeds
-  public static final DashboardNumber IntakeRollerSpeed = new DashboardNumber("Intake/IntakeRollerSpeed", 0.65);
+  public static final DashboardNumber IntakeRollerSpeed = new DashboardNumber("Intake/IntakeRollerSpeed", 0.8);
   public static final DashboardNumber OuttakeRollerSpeed = new DashboardNumber("Intake/OuttakeRollerSpeed", -0.4);
 
   public static final class RollerConstants {
@@ -58,13 +58,13 @@ public final class IntakeConstants {
 
     public static final TalonFXConfiguration Config = new TalonFXConfiguration()
       .withMotorOutput(new MotorOutputConfigs()
-          .withInverted(InvertedValue.CounterClockwise_Positive)
+          .withInverted(InvertedValue.Clockwise_Positive)
           .withNeutralMode(NeutralModeValue.Coast)
       )
       .withCurrentLimits(new CurrentLimitsConfigs()
-          .withSupplyCurrentLimit(Amps.of(40)) // TODO: Double Check
-          .withStatorCurrentLimit(Amps.of(40)) // TODO: Double Check
-          .withSupplyCurrentLowerLimit(Amps.of(60))
+          .withSupplyCurrentLimit(Amps.of(80)) // TODO: Double Check
+          .withStatorCurrentLimit(Amps.of(80)) // TODO: Double Check
+          .withSupplyCurrentLowerLimit(Amps.of(40))
           .withSupplyCurrentLimitEnable(true)
           .withStatorCurrentLimitEnable(true)
       );

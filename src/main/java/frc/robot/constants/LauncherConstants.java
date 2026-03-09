@@ -24,8 +24,10 @@ import com.chaos131.util.DashboardUnit;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.OpenLoopRampsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.VoltageConfigs;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -81,9 +83,9 @@ public final class LauncherConstants {
     public static final Distance FlyWheelDiameter = Inches.of(6); //  TODO: Double Check
     public static final Mass FlywheelMass = Pounds.of(0.4);
 
-    public static final DashboardUnit<LinearVelocityUnit, LinearVelocity> TargetVelocityTolerance = new DashboardUnit<>("Launcher/TargetVelocityTolerance", MetersPerSecond.of(0.4)); // TODO: Tested with 2
+    public static final DashboardUnit<LinearVelocityUnit, LinearVelocity> TargetVelocityTolerance = new DashboardUnit<>("Launcher/TargetVelocityTolerance", MetersPerSecond.of(1)); // TODO: Tested with 2
 
-    public static final DashboardUnit<LinearVelocityUnit, LinearVelocity> TunableLaunchVelocity = new DashboardUnit<>("Launcher/TunableLaunchVelocity", MetersPerSecond.of(6));
+    public static final DashboardUnit<LinearVelocityUnit, LinearVelocity> TunableLaunchVelocity = new DashboardUnit<>("Launcher/TunableLaunchVelocity", MetersPerSecond.of(20));
 
     public static final DashboardNumber LossFactor = new DashboardNumber("Launcher/LossFactor", 1);
 
@@ -98,11 +100,11 @@ public final class LauncherConstants {
       return new TalonFXConfiguration()
         .withMotorOutput(new MotorOutputConfigs()
             .withInverted(motorDirection)
-            .withNeutralMode(NeutralModeValue.Brake)
+            .withNeutralMode(NeutralModeValue.Coast)
         )
         .withCurrentLimits(new CurrentLimitsConfigs()
-            .withSupplyCurrentLimit(Amps.of(60))
-            .withStatorCurrentLimit(Amps.of(60))
+            .withSupplyCurrentLimit(Amps.of(80))
+            .withStatorCurrentLimit(Amps.of(80))
             .withSupplyCurrentLowerLimit(Amps.of(80))
             .withSupplyCurrentLimitEnable(true)
             .withStatorCurrentLimitEnable(true)
@@ -113,14 +115,15 @@ public final class LauncherConstants {
             .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor)
         )
         .withSlot0(new Slot0Configs() //TODO: CHECK THESE PLEASE
-            .withKP(0.15)
+            .withKP(0.56)
             .withKI(0)
-            .withKD(0.02)
+            .withKD(0)
             .withKG(0)
             .withKS(0.1)
-            .withKV(0.12)
+            .withKV(0.13)
             .withKA(0)
-        );
+        )
+        .withVoltage(new VoltageConfigs().withPeakReverseVoltage(0));
     }
 
     // Sim values
@@ -140,10 +143,11 @@ public final class LauncherConstants {
   public static final class HoodConstants {
     public static final CanId HoodCanId = CanId.ID_44;
     public static final int SensorIndex = 2;
-    public static final DashboardNumber HoodSpeed = new DashboardNumber("Launcher/Hood/HoodSpeed", 0.2);
-    public static final DashboardNumber NotReachedMaxSpeed = new DashboardNumber("Launcher/Hood/NotReachedMaxSpeed", 0.2);
+    public static final DashboardNumber HoodSpeed = new DashboardNumber("Launcher/Hood/HoodSpeed", 0.02);
+    public static final DashboardNumber NotReachedMaxSpeed = new DashboardNumber("Launcher/Hood/NotReachedMaxSpeed", 0.02);
     public static final DashboardUnit<AngleUnit, Angle> TargetAngleTolerance = new DashboardUnit<>("Launcher/Hood/TargetAngleTolerance", Degrees.of(1));
     public static final DashboardUnit<AngleUnit, Angle> TunableLaunchAngle = new DashboardUnit<>("Launcher/Hood/TunableLaunchAngle", Degrees.of(75));
+    public static final DashboardNumber ManualHoodSpeedMultiplier = new DashboardNumber("Launcher/Hood/ManualHoodSpeedMultiplier", 0.08);
     public static final Distance HoodRadius = Inches.of(9);
     public static final Mass HoodMass = Kilogram.of(2.26796); 
     public static final Angle HoodMinAngle = Degrees.of(40);
@@ -204,10 +208,11 @@ public final class LauncherConstants {
       .withCurrentLimits(new CurrentLimitsConfigs()
           .withSupplyCurrentLimit(Amps.of(60)) // TODO: Double Check
           .withStatorCurrentLimit(Amps.of(60)) // TODO: Double Check
-          .withSupplyCurrentLowerLimit(Amps.of(80))
+          .withSupplyCurrentLowerLimit(Amps.of(40))
           .withSupplyCurrentLimitEnable(true)
           .withStatorCurrentLimitEnable(true)
-      );
+      )
+      .withOpenLoopRamps(new OpenLoopRampsConfigs().withDutyCycleOpenLoopRampPeriod(0.1));
      public static final TalonFXConfiguration BottomConfig = new TalonFXConfiguration()
       .withMotorOutput(new MotorOutputConfigs()
           .withInverted(InvertedValue.Clockwise_Positive)
@@ -219,7 +224,8 @@ public final class LauncherConstants {
           .withSupplyCurrentLowerLimit(Amps.of(80))
           .withSupplyCurrentLimitEnable(true)
           .withStatorCurrentLimitEnable(true)
-      );
+      )
+      .withOpenLoopRamps(new OpenLoopRampsConfigs().withDutyCycleOpenLoopRampPeriod(0.1));
       
   }
 }
