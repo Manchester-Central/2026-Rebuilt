@@ -284,9 +284,8 @@ public class Launcher extends SubsystemBase implements ILauncher {
     return FieldPose.getDistanceFromLocations(launcherPose, FieldPose2026.HubCenter.getCurrentAlliancePose());
   }
 
-  public LinearVelocity getLookupLaunchVelocity() {
-    var lookedUpSpeed = FlywheelTable.getInstance().performLookup(getDisplacementFromHub()).getLaunchSpeed();
-    Logger.recordOutput("Launcher/FlywheelTableSpeed", lookedUpSpeed.in(MetersPerSecond));
+  public TableRow getLookupTableRow() {
+    var lookedUpSpeed = FlywheelTable.getInstance().performLookup(getDisplacementFromHub());
     return lookedUpSpeed;
   }
 
