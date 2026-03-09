@@ -33,6 +33,8 @@ public class AimHubAndLaunchTable extends Command {
     m_launcher = launcher;
     m_swerveDrive = swerveDrive;
     m_intake = intake;
+
+    addRequirements(m_launcher, m_intake);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
