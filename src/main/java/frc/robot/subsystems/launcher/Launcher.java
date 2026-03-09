@@ -42,7 +42,7 @@ public class Launcher extends SubsystemBase implements ILauncher {
   IHood m_hood; 
   IDrive m_swerveDrive;
 
-  Debouncer m_fallingDebouncer = new Debouncer(1.0, DebounceType.kFalling);
+  Debouncer m_fallingDebouncer = new Debouncer(10.0, DebounceType.kFalling);
   boolean m_atVelocityDebouced = false;
 
 
