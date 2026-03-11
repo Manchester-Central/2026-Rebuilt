@@ -46,7 +46,7 @@ public class MapleSimLauncher extends Launcher {
     protected IIntake intake;
 
     public MapleSimLauncher(IFlywheel flywheel, IFeeder feeder, IHood hood, AbstractDrive drive, IIntake intake) {
-        super(flywheel, feeder, hood);
+        super(flywheel, feeder, hood, drive);
         this.intake = intake;
         this.drive = drive;
     }

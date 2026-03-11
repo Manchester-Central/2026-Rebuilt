@@ -144,7 +144,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackRight));
         m_quest = new Quest(m_swerveDrive);
         m_intake = new Intake(id);
-        m_launcher = new Launcher(new Flywheel(id), new Feeder(id), new Hood(id));
+        m_launcher = new Launcher(new Flywheel(id), new Feeder(id), new Hood(id), m_swerveDrive);
 
         m_climber = new Climber();
 
@@ -177,7 +177,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
         m_intake = new Intake(id);
-        m_launcher = new Launcher(new Flywheel(id), new Feeder(id), new Hood(id));
+        m_launcher = new Launcher(new Flywheel(id), new Feeder(id), new Hood(id), m_swerveDrive);
         m_climber = new Climber();
         break;
 
@@ -199,7 +199,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
         m_intake = new Intake(id);
-        m_launcher = new Launcher(new Flywheel(id), new Feeder(id), new Hood(id));
+        m_launcher = new Launcher(new Flywheel(id), new Feeder(id), new Hood(id), m_swerveDrive);
         m_climber = new Climber();
         break;
     }
