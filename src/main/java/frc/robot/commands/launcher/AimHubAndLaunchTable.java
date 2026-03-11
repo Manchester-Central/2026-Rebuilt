@@ -17,7 +17,6 @@ import frc.robot.constants.FieldDimensions;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.constants.IntakeConstants.PivotConstants;
 import frc.robot.constants.LauncherConstants;
-import frc.robot.constants.LauncherConstants.FeederConstants;
 import frc.robot.subsystems.interfaces.IDrive;
 import frc.robot.subsystems.interfaces.IIntake;
 import frc.robot.subsystems.interfaces.ILauncher;
@@ -56,12 +55,14 @@ public class AimHubAndLaunchTable extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_launcher.setFlywheelVelocity(m_launcher.getLookupLaunchVelocity());
+    var tableRow = m_launcher.getLookupTableRow();
+
+    m_launcher.setFlywheelVelocity(tableRow.getLaunchSpeed());
     m_intake.setRollerSpeed(IntakeConstants.IntakeRollerSpeed.get());
     m_intake.setPivotAngle(PivotConstants.DeployAngle.get()); // TODO: Testing only
 
     if (isFacingTarget() && m_launcher.atVelocityDebounced()) {
-      m_launcher.setFeederSpeed(FeederConstants.FeederSpeed.get());
+      m_launcher.setFeederSpeed(tableRow.getFeederSpeed());
     } else {
       m_launcher.setFeederSpeed(0);
     }

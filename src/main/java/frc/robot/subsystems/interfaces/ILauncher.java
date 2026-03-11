@@ -5,6 +5,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.subsystems.launcher.TableRow;
 
 public interface ILauncher extends Subsystem {
     public double getFlywheelSpeed();
@@ -28,6 +29,6 @@ public interface ILauncher extends Subsystem {
     public Angle getYawForTarget(IDrive swerveDrive, Pose2d targetPose, Distance targetHeight);
     public boolean atVelocityDebounced();
     public double getLossFactor();
-    public LinearVelocity getLookupLaunchVelocity();
+    public TableRow getLookupTableRow();
     public Distance getDisplacementFromHub();
 }
