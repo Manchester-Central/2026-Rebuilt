@@ -54,6 +54,7 @@ import frc.robot.commands.manual.LauncherManualCommand;
 import frc.robot.constants.ClimberConstants;
 import frc.robot.constants.FieldDimensions;
 import frc.robot.constants.GeneralConstants;
+import frc.robot.constants.GeneralConstants.Mode;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.constants.LauncherConstants;
 import frc.robot.constants.LauncherConstants.FeederConstants;
@@ -82,7 +83,7 @@ import frc.robot.subsystems.launcher.Flywheel;
 import frc.robot.subsystems.launcher.Hood;
 import frc.robot.subsystems.launcher.Launcher;
 import frc.robot.subsystems.launcher.LauncherMech2D;
-import frc.robot.subsystems.launcher.MapleSimFlywheel;
+import frc.robot.subsystems.launcher.MapleSimLauncher;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -182,7 +183,7 @@ public class RobotContainer {
       case ARENA:
         var drive = new DriveMapleSim(startPose);
         m_intake = new MapleSimtake(id, drive.sim);
-        m_launcher = new Launcher(new MapleSimFlywheel(id, drive, m_intake), new Feeder(id), new Hood(id));
+        m_launcher = new MapleSimLauncher(new Flywheel(id), new Feeder(id), new Hood(id), drive, m_intake);
         m_climber = new Climber();
         m_swerveDrive = drive;
         break;
@@ -235,6 +236,10 @@ public class RobotContainer {
 
   private void addAutos() {
     configureNamedCommands();
+    
+    if (GeneralConstants.currentMode == Mode.ARENA) {
+      return;
+    }
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -264,6 +269,7 @@ public class RobotContainer {
     configureDefaultCommands();
     configureDriverButtons();
     configureOperatorButtons();
+  }
 
   private void configureDefaultCommands() {
     // Default command, normal field-relative drive

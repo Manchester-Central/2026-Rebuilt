@@ -7,7 +7,6 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 
 import java.util.Random;
-import java.util.function.Supplier;
 
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.seasonspecific.rebuilt2026.Arena2026Rebuilt;
@@ -15,7 +14,6 @@ import org.ironmaple.simulation.seasonspecific.rebuilt2026.RebuiltFuelOnFly;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -26,11 +24,6 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.RobotContainer;
 import frc.robot.constants.ArenaConstants;
 import frc.robot.subsystems.interfaces.AbstractDrive;
@@ -62,7 +55,6 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
 
   // Other Robots
   private RobotContainer[] robots;
-  private SendableChooser<Command>[] choosers;
 
   private enum MatchState {
     PREPARE, /* matchRunning == false */
