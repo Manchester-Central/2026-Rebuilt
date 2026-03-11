@@ -14,22 +14,28 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.FieldDimensions;
+import frc.robot.constants.IntakeConstants;
+import frc.robot.constants.IntakeConstants.PivotConstants;
 import frc.robot.constants.LauncherConstants;
 import frc.robot.constants.LauncherConstants.FeederConstants;
 import frc.robot.subsystems.interfaces.IDrive;
+import frc.robot.subsystems.interfaces.IIntake;
 import frc.robot.subsystems.interfaces.ILauncher;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class AimHubAndLaunchSetHeight extends Command {
+public class AimHubAndLaunchTable extends Command {
   ILauncher m_launcher;
   IDrive m_swerveDrive;
+  IIntake m_intake;
 
-  /** Creates a new AImHubAndLaunchSetHeight. */
-  public AimHubAndLaunchSetHeight(ILauncher launcher, IDrive swerveDrive) {
+  /** Creates a new AimHubAndLaunchTable. */
+  public AimHubAndLaunchTable(ILauncher launcher, IDrive swerveDrive, IIntake intake) {
     m_launcher = launcher;
     m_swerveDrive = swerveDrive;
+    m_intake = intake;
 
-    addRequirements(m_launcher);
+    addRequirements(m_launcher, m_intake);
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -50,17 +56,11 @@ public class AimHubAndLaunchSetHeight extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_launcher.setTargets(
-      m_launcher.getVelocityForTargetSetHeight(
-        m_swerveDrive, 
-        FieldPose2026.HubCenter.getCurrentAlliancePose(), 
-        FieldDimensions.HubHeight).times(m_launcher.getLossFactor()), 
-      m_launcher.getPitchForTarget(
-        m_swerveDrive, 
-        FieldPose2026.HubCenter.getCurrentAlliancePose(), 
-        FieldDimensions.HubHeight));
+    m_launcher.setFlywheelVelocity(m_launcher.getLookupLaunchVelocity());
+    m_intake.setRollerSpeed(IntakeConstants.IntakeRollerSpeed.get());
+    m_intake.setPivotAngle(PivotConstants.DeployAngle.get()); // TODO: Testing only
 
-    if (isFacingTarget() && m_launcher.atTargets()) {
+    if (isFacingTarget() && m_launcher.atVelocityDebounced()) {
       m_launcher.setFeederSpeed(FeederConstants.FeederSpeed.get());
     } else {
       m_launcher.setFeederSpeed(0);

@@ -5,6 +5,7 @@
 package frc.robot.commands.manual;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.IntakeConstants.PivotConstants;
 import frc.robot.subsystems.interfaces.IIntake;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -28,14 +29,14 @@ public class IntakeManualCommand extends Command {
   public void execute() {
     // TODO: determine logic while in manual mode
     m_intake.setRollerSpeed(0);
-    m_intake.setPivotSpeed(0);
+    m_intake.setPivotAngle(PivotConstants.DeployAngle.get()); // TODO: Testing only
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_intake.setRollerSpeed(0);
-    m_intake.setPivotSpeed(0);
+    // m_intake.setPivotSpeed(0); TODO: Testing only
   }
 
   // Returns true when the command should end.
