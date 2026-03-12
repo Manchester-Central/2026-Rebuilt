@@ -74,9 +74,9 @@ public class AimHubAndLaunchSetAngle extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-  if (DriverStation.isAutonomous()){
-    return m_launchTimer.get() > LauncherConstants.AutoLaunchTime.get().in(Seconds);
-  }
+    if (DriverStation.isAutonomous()){
+     return m_launchTimer.get() > LauncherConstants.AutoLaunchTime.get().in(Seconds);
+    }
     return false; 
   }
 }

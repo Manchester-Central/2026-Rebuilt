@@ -18,6 +18,7 @@ public class AimHubAndLaunchTunable extends Command {
   ILauncher m_launcher;
   IDrive m_swerveDrive;
   IIntake m_intake;
+  boolean m_hasLaunched = false;
 
   /** Creates a new AImHubAndLaunchTunable. */
   public AimHubAndLaunchTunable(ILauncher launcher, IDrive swerveDrive, IIntake intake) {
@@ -30,7 +31,9 @@ public class AimHubAndLaunchTunable extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_hasLaunched = false;
+  }
 
   // private boolean isFacingTarget() {
   //   Pose2d currentPose = m_swerveDrive.getPose();
@@ -50,7 +53,11 @@ public class AimHubAndLaunchTunable extends Command {
     m_intake.setRollerSpeed(IntakeConstants.IntakeRollerSpeed.get());
     m_intake.setPivotAngle(PivotConstants.DeployAngle.get()); // TODO: Testing only
 
-    if (m_launcher.atVelocityDebounced()) {
+    if (m_launcher.atTargetFlywheelVelocity()) {
+      m_hasLaunched = true;
+    }
+
+    if (m_hasLaunched) {
       m_launcher.setFeederSpeed(FeederConstants.FeederSpeed.get());
     } else {
       m_launcher.setFeederSpeed(0);

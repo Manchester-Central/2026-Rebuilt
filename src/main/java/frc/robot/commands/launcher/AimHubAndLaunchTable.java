@@ -5,6 +5,7 @@
 package frc.robot.commands.launcher;
 
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Seconds;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -12,6 +13,8 @@ import com.chaos131.poses.FieldPose2026;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.FieldDimensions;
 import frc.robot.constants.IntakeConstants;
@@ -26,7 +29,8 @@ public class AimHubAndLaunchTable extends Command {
   ILauncher m_launcher;
   IDrive m_swerveDrive;
   IIntake m_intake;
-
+  Timer m_launchTimer = new Timer();
+  boolean m_hasLaunched = false;
   /** Creates a new AimHubAndLaunchTable. */
   public AimHubAndLaunchTable(ILauncher launcher, IDrive swerveDrive, IIntake intake) {
     m_launcher = launcher;
@@ -39,7 +43,9 @@ public class AimHubAndLaunchTable extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_hasLaunched = false;
+  }
 
   private boolean isFacingTarget() {
     Pose2d currentPose = m_swerveDrive.getPose();
@@ -61,7 +67,11 @@ public class AimHubAndLaunchTable extends Command {
     m_intake.setRollerSpeed(IntakeConstants.IntakeRollerSpeed.get());
     m_intake.setPivotAngle(PivotConstants.DeployAngle.get()); // TODO: Testing only
 
-    if (isFacingTarget() && m_launcher.atVelocityDebounced()) {
+    if (m_launcher.atTargetFlywheelVelocity()) {
+        m_hasLaunched = true;
+    }
+
+    if (isFacingTarget() && m_hasLaunched) {
       m_launcher.setFeederSpeed(tableRow.getFeederSpeed());
     } else {
       m_launcher.setFeederSpeed(0);
@@ -75,6 +85,12 @@ public class AimHubAndLaunchTable extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (DriverStation.isAutonomous()){
+      return m_launchTimer.get() > LauncherConstants.AutoLaunchTime.get().in(Seconds);
+    }
+   
+   
     return false;
+
   }
 }
