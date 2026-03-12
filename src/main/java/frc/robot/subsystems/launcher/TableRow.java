@@ -15,10 +15,12 @@ public class TableRow implements ITableRow<DistanceUnit, Distance> {
 
   private Distance m_distance;
   private LinearVelocity m_launchSpeed;
+  private double m_feederSpeed;
 
-  public TableRow(Distance distance, LinearVelocity launchSpeed) {
+  public TableRow(Distance distance, LinearVelocity launchSpeed, double feederSpeed) {
     m_distance = distance;
     m_launchSpeed = launchSpeed;
+    m_feederSpeed = feederSpeed;
   }
 
   @Override
@@ -28,5 +30,9 @@ public class TableRow implements ITableRow<DistanceUnit, Distance> {
 
   public LinearVelocity getLaunchSpeed() {
     return m_launchSpeed;
+  }
+
+  public double getFeederSpeed() {
+    return m_feederSpeed;
   }
 }

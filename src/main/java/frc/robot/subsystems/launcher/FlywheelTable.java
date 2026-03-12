@@ -18,9 +18,9 @@ import edu.wpi.first.units.measure.Distance;
 public class FlywheelTable extends LookupTable<DistanceUnit, Distance, TableRow> {
 
   private static final List<TableRow> Rows = List.of(
-    new TableRow(Meters.of(1), MetersPerSecond.of(24)),
-    new TableRow(Meters.of(2), MetersPerSecond.of(32)),
-    new TableRow(Meters.of(3),  MetersPerSecond.of(38))
+    new TableRow(Meters.of(2.5), MetersPerSecond.of(26.5), 0.29),
+    new TableRow(Meters.of(3.25), MetersPerSecond.of(32), 0.24)
+    // new TableRow(Meters.of(3),  MetersPerSecond.of(38))
   );
 
   private static final FlywheelTable m_instance = new FlywheelTable(Rows);
@@ -41,6 +41,13 @@ public class FlywheelTable extends LookupTable<DistanceUnit, Distance, TableRow>
             row1,
             row2,
             (row) -> ((TableRow) row).getLaunchSpeed().in(MetersPerSecond));
-    return new TableRow(targetMeasure, MetersPerSecond.of(linearVelocity));
+
+    var feederSpeed = 
+        interpolate(
+            targetMeasure, 
+            row1, 
+            row2, 
+            (row) -> ((TableRow) row).getFeederSpeed());
+    return new TableRow(targetMeasure, MetersPerSecond.of(linearVelocity), feederSpeed);
   }
 }

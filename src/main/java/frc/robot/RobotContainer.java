@@ -227,10 +227,10 @@ public class RobotContainer {
     NamedCommands.registerCommand("DeployOuttake", new DeployOuttake(m_intake));
     NamedCommands.registerCommand("DeployIntake", new DeployIntake(m_intake));
     NamedCommands.registerCommand("RetractIntake", new RetractIntake(m_intake));
-    NamedCommands.registerCommand("LaunchHub", new AimHubAndLaunchSetAngle(m_launcher, m_swerveDrive::getPose)
-            .alongWith(getAimAtFieldPosesCommand(FieldPose2026.HubCenter)));
-    NamedCommands.registerCommand("LaunchPass", new AimPassAndLaunchSetAngle(m_launcher, m_swerveDrive::getPose)
-            .alongWith(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
+    NamedCommands.registerCommand("LaunchHub", new AimHubAndLaunchSetAngle(m_launcher, m_swerveDrive, m_intake)
+            .deadlineFor(getAimAtFieldPosesCommand(FieldPose2026.HubCenter)));
+    NamedCommands.registerCommand("LaunchPass", new AimPassAndLaunchSetAngle(m_launcher, m_swerveDrive, m_intake)
+            .deadlineFor(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
     NamedCommands.registerCommand("ClimbReach", new SetClimberHeight(m_climber, ClimberConstants.MaxExtension));
     NamedCommands.registerCommand("ClimbEngage", new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension));
   }
@@ -308,7 +308,7 @@ public class RobotContainer {
     // LB: Aim and pass (if manual mode, only aim drive)
     m_driver.leftBumper().whileTrue(switchAutomaticOrManual(
       // Automatic
-      new AimPassAndLaunchSetAngle(m_launcher, m_swerveDrive::getPose).alongWith(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)), 
+      new AimPassAndLaunchSetAngle(m_launcher, m_swerveDrive, m_intake).alongWith(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)), 
        // Manual
       getAimAtFieldPosesCommand(LauncherConstants.PassPoints)
     ));

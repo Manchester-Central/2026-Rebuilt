@@ -43,7 +43,7 @@ public class Launcher extends SubsystemBase implements ILauncher {
   IHood m_hood; 
   IDrive m_swerveDrive;
 
-  Debouncer m_fallingDebouncer = new Debouncer(1.0, DebounceType.kFalling);
+  Debouncer m_fallingDebouncer = new Debouncer(10.0, DebounceType.kFalling);
   boolean m_atVelocityDebouced = false;
 
 
@@ -285,9 +285,8 @@ public class Launcher extends SubsystemBase implements ILauncher {
     return FieldPose.getDistanceFromLocations(launcherPose, FieldPose2026.HubCenter.getCurrentAlliancePose());
   }
 
-  public LinearVelocity getLookupLaunchVelocity() {
-    var lookedUpSpeed = FlywheelTable.getInstance().performLookup(getDisplacementFromHub()).getLaunchSpeed();
-    Logger.recordOutput("Launcher/FlywheelTableSpeed", lookedUpSpeed.in(MetersPerSecond));
+  public TableRow getLookupTableRow() {
+    var lookedUpSpeed = FlywheelTable.getInstance().performLookup(getDisplacementFromHub());
     return lookedUpSpeed;
   }
 
