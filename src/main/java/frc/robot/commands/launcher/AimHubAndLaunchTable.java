@@ -31,6 +31,7 @@ public class AimHubAndLaunchTable extends Command {
   IIntake m_intake;
   Timer m_launchTimer = new Timer();
   boolean m_hasLaunched = false;
+
   /** Creates a new AimHubAndLaunchTable. */
   public AimHubAndLaunchTable(ILauncher launcher, IDrive swerveDrive, IIntake intake) {
     m_launcher = launcher;
@@ -45,6 +46,8 @@ public class AimHubAndLaunchTable extends Command {
   @Override
   public void initialize() {
     m_hasLaunched = false;
+    m_launchTimer.stop();
+    m_launchTimer.reset();
   }
 
   private boolean isFacingTarget() {
@@ -68,7 +71,8 @@ public class AimHubAndLaunchTable extends Command {
     m_intake.setPivotAngle(PivotConstants.DeployAngle.get()); // TODO: Testing only
 
     if (m_launcher.atTargetFlywheelVelocity()) {
-        m_hasLaunched = true;
+      m_hasLaunched = true;
+      m_launchTimer.start();
     }
 
     if (isFacingTarget() && m_hasLaunched) {
@@ -88,7 +92,6 @@ public class AimHubAndLaunchTable extends Command {
     if (DriverStation.isAutonomous()){
       return m_launchTimer.get() > LauncherConstants.AutoLaunchTime.get().in(Seconds);
     }
-   
    
     return false;
 
