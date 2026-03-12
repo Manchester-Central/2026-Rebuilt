@@ -76,6 +76,7 @@ public final class LauncherConstants {
   public static final DashboardUnit<AngleUnit, Angle> AimYawTolerance = new DashboardUnit<>("Launcher/AimYawTolerance", Degrees.of(3.5)); // tested with 3
 
   public static final DashboardUnit<TimeUnit, Time> AutoLaunchTime = new DashboardUnit<>("Launcher/AutoLaunchTime", Seconds.of(4.0));
+
   public static final class FlywheelConstants {
     public static final CanId LeftFlywheelCanId = CanId.ID_40;
     public static final CanId RightFlywheelCanId = CanId.ID_41;
@@ -90,6 +91,28 @@ public final class LauncherConstants {
     public static final DashboardNumber LossFactor = new DashboardNumber("Launcher/LossFactor", 1);
 
     public static final double SensorToMechanismRatio = 1; // TODO check or change
+
+    public static final boolean UseTorqueCurrentFOC = false;
+
+    /** PID values for normal velocity mode */
+    public static final Slot0Configs VoltageSlot0 = new Slot0Configs()
+        .withKP(0.56)
+        .withKI(0.0)
+        .withKD(0.0)
+        .withKG(0.0)
+        .withKS(0.1)
+        .withKV(0.13)
+        .withKA(0.0);
+
+    /** PID values for torque current FOX mode */
+    public static final Slot0Configs TorqueCurrentSlot0 = new Slot0Configs() //TODO: CHECK THESE PLEASE. Some info here: https://www.chiefdelphi.com/t/tuning-feedforwards-with-ctre-foc-torquecurrentfoc-and-sysid/509435/2
+        .withKP(0.0)
+        .withKI(0.0)
+        .withKD(0.0)
+        .withKG(0.0)
+        .withKS(0.0) // Main thing to tune?
+        .withKV(0.0)
+        .withKA(0.0);
 
     // Keep these separate to control them independently.
     // There's a 50-50 chance their directions are different!
@@ -114,14 +137,8 @@ public final class LauncherConstants {
             .withSensorToMechanismRatio(SensorToMechanismRatio) // TODO: Double Check
             .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor)
         )
-        .withSlot0(new Slot0Configs() //TODO: CHECK THESE PLEASE
-            .withKP(0.56)
-            .withKI(0)
-            .withKD(0)
-            .withKG(0)
-            .withKS(0.1)
-            .withKV(0.13)
-            .withKA(0)
+        .withSlot0(
+          UseTorqueCurrentFOC ? TorqueCurrentSlot0 : VoltageSlot0
         )
         .withVoltage(new VoltageConfigs().withPeakReverseVoltage(0));
     }

@@ -45,7 +45,11 @@ public class Flywheel extends SubsystemBase implements IFlywheel {
     public void setFlywheelVelocity(LinearVelocity linearVelocity) {
         targetVelocity = linearVelocity;
         AngularVelocity angularVelocity = RotationsPerSecond.of(linearVelocity.in(MetersPerSecond) / (Math.PI * FlywheelConstants.FlyWheelDiameter.in(Meters)));
-        m_leftFlywheelMotor.moveAtVelocity(angularVelocity);
+        if (FlywheelConstants.UseTorqueCurrentFOC) {
+            m_leftFlywheelMotor.moveAtVelocityFOC(angularVelocity);
+        } else {
+            m_leftFlywheelMotor.moveAtVelocity(angularVelocity);
+        }
     }
 
     public LinearVelocity getLinearVelocity() {
