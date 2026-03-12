@@ -9,6 +9,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 public interface IDrive {
     /**
@@ -17,6 +19,7 @@ public interface IDrive {
      * @param speeds Speeds in meters/sec
      */
     public void runVelocity(ChassisSpeeds speeds);
+    public ChassisSpeeds getChassisSpeeds();
     /** The robot relative velocity in vector form, units are in meters per second. */
     public Translation2d getVelocityVector();
     /** The speed of the robot, based on the robot relative velocity vector. */
@@ -46,4 +49,10 @@ public interface IDrive {
     public double getMaxLinearSpeedMetersPerSec();
     /** Returns the maximum angular speed in radians per sec. */
     public double getMaxAngularSpeedRadPerSec();
+
+    public void runCharacterization(double output);
+    public Command sysIdQuasistatic(Direction direction);
+    public Command sysIdDynamic(Direction direction);
+    public double[] getWheelRadiusCharacterizationPositions();
+    public double getFFCharacterizationVelocity();
 }

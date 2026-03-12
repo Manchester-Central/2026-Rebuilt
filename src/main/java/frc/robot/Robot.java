@@ -7,17 +7,20 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.constants.GeneralConstants;
-
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.constants.ArenaConstants;
+import frc.robot.constants.GeneralConstants;
+import frc.robot.constants.GeneralConstants.Mode;
+import frc.robot.subsystems.MultiplayerSim.MultiplayerArena2026;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -53,6 +56,7 @@ public class Robot extends LoggedRobot {
         Logger.addDataReceiver(new NT4Publisher());
         break;
 
+      case ARENA:
       case SIM:
         // Running a physics simulator, log to NT
         Logger.addDataReceiver(new NT4Publisher());
@@ -73,7 +77,8 @@ public class Robot extends LoggedRobot {
 
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
-    robotContainer = new RobotContainer();
+    robotContainer = new RobotContainer(0, ArenaConstants.startingPoses[0]);
+    MultiplayerArena2026.Instance.loadAdditionalRobots();
   }
 
   /** This function is called periodically during all modes. */
@@ -99,6 +104,8 @@ public class Robot extends LoggedRobot {
   /** This function is called once when the robot is disabled. */
   @Override
   public void disabledInit() {
+    MultiplayerArena2026.Instance.prepareMatch();
+  
     if (!hasEnabled) {
       robotContainer.getCamera().setUseForOdometry(true);
     }
@@ -116,6 +123,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void autonomousInit() {
     autonomousCommand = robotContainer.getAutonomousCommand();
+    if (GeneralConstants.currentMode == Mode.ARENA) MultiplayerArena2026.Instance.startMatch();
 
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {
@@ -128,11 +136,14 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    MultiplayerArena2026.Instance.periodic();
+  }
 
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
+    if (GeneralConstants.currentMode == Mode.ARENA) MultiplayerArena2026.Instance.startMatch();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -147,7 +158,9 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    MultiplayerArena2026.Instance.periodic();
+  }
 
   /** This function is called once when test mode is enabled. */
   @Override
@@ -166,5 +179,9 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically whilst in simulation. */
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+    // MultiplayerArena.Instance.periodic();
+    // Logs on the main robot
+    robotContainer.containerLogging();
+  }
 }

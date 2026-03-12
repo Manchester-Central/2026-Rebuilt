@@ -7,7 +7,6 @@ package frc.robot.subsystems.intake;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 
-import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
@@ -18,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.interfaces.IIntake;
 
 public class IntakeMech2D extends SubsystemBase {
-  @AutoLogOutput(key = "Intake/IntakeMech2D")
+  // @AutoLogOutput(key = "Intake/IntakeMech2D")
   LoggedMechanism2d m_intakeBase;
   LoggedMechanismRoot2d m_intakeRoot;
   LoggedMechanismLigament2d m_intakeLigament;
@@ -39,5 +38,9 @@ public class IntakeMech2D extends SubsystemBase {
     // This method will be called once per scheduler run
     m_intakeLigament.setAngle(m_intake.getPivotAngle());
     m_intakeLigament.setColor(ChaosColor.fromDutyCycle(m_intake.getRollerSpeed()));
+  }
+
+  public LoggedMechanism2d getMechanism2d() {
+    return m_intakeBase;
   }
 }

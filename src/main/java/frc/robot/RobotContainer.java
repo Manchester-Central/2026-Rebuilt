@@ -13,6 +13,7 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import java.util.function.DoubleSupplier;
 
+import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.chaos131.gamepads.Gamepad;
@@ -54,6 +55,7 @@ import frc.robot.commands.manual.LauncherManualCommand;
 import frc.robot.constants.ClimberConstants;
 import frc.robot.constants.FieldDimensions;
 import frc.robot.constants.GeneralConstants;
+import frc.robot.constants.GeneralConstants.Mode;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.constants.LauncherConstants;
 import frc.robot.constants.LauncherConstants.FeederConstants;
@@ -64,6 +66,7 @@ import frc.robot.subsystems.Quest;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberMech2D;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.DriveMapleSim;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
@@ -71,6 +74,8 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeMech2D;
+import frc.robot.subsystems.intake.MapleSimtake;
+import frc.robot.subsystems.interfaces.AbstractDrive;
 import frc.robot.subsystems.interfaces.IClimber;
 import frc.robot.subsystems.interfaces.IIntake;
 import frc.robot.subsystems.interfaces.ILauncher;
@@ -79,7 +84,7 @@ import frc.robot.subsystems.launcher.Flywheel;
 import frc.robot.subsystems.launcher.Hood;
 import frc.robot.subsystems.launcher.Launcher;
 import frc.robot.subsystems.launcher.LauncherMech2D;
-import frc.robot.util.PathUtil;
+import frc.robot.subsystems.launcher.MapleSimLauncher;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -88,8 +93,9 @@ import frc.robot.util.PathUtil;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  protected int id;
   // Subsystems
-  private final Drive m_swerveDrive;
+  private final AbstractDrive m_swerveDrive;
   private Quest m_quest;
   private Camera m_camera;
   private IClimber m_climber;
@@ -122,7 +128,8 @@ public class RobotContainer {
   private LoggedDashboardChooser<Command> autoChooser;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
+  public RobotContainer(int id, Pose2d startPose) {
+    this.id = id;
     switch (GeneralConstants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -135,7 +142,11 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
-         m_quest = new Quest(m_swerveDrive);
+        m_quest = new Quest(m_swerveDrive);
+        m_intake = new Intake(id);
+        m_launcher = new Launcher(new Flywheel(id), new Feeder(id), new Hood(id), m_swerveDrive);
+
+        m_climber = new Climber();
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
@@ -165,6 +176,17 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
+        m_intake = new Intake(id);
+        m_launcher = new Launcher(new Flywheel(id), new Feeder(id), new Hood(id), m_swerveDrive);
+        m_climber = new Climber();
+        break;
+
+      case ARENA:
+        var drive = new DriveMapleSim(startPose);
+        m_intake = new MapleSimtake(id, drive.sim);
+        m_launcher = new MapleSimLauncher(new Flywheel(id), new Feeder(id), new Hood(id), drive, m_intake);
+        m_climber = new Climber();
+        m_swerveDrive = drive;
         break;
 
       default:
@@ -176,6 +198,9 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
+        m_intake = new Intake(id);
+        m_launcher = new Launcher(new Flywheel(id), new Feeder(id), new Hood(id), m_swerveDrive);
+        m_climber = new Climber();
         break;
     }
     m_camera = new Camera("limelight",
@@ -186,13 +211,10 @@ public class RobotContainer {
             () -> m_swerveDrive.getSpeed().in(MetersPerSecond),
             () -> m_swerveDrive.getRotationalSpeed().in(RotationsPerSecond));
 
-    m_climber = new Climber();
-    m_climberMech2d = new ClimberMech2D(m_climber);
-
-    m_intake = new Intake ();
+    // Setup Mech2ds
     m_intakeMech2d = new IntakeMech2D(m_intake);
-
-    m_launcher = new Launcher(new Flywheel(), new Feeder(), new Hood(), m_swerveDrive);
+    m_launcherMech2D = new LauncherMech2D(m_launcher);
+    m_climberMech2d = new ClimberMech2D(m_climber);
     m_launcherMech2D = new LauncherMech2D(m_launcher);
 
     addAutos();
@@ -215,6 +237,10 @@ public class RobotContainer {
 
   private void addAutos() {
     configureNamedCommands();
+    
+    if (GeneralConstants.currentMode == Mode.ARENA) {
+      return;
+    }
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -230,8 +256,6 @@ public class RobotContainer {
     autoChooser.addOption(
         "Drive SysId (Quasistatic Reverse)",
         m_swerveDrive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    autoChooser.addOption(
-        "Drive SysId (Dynamic Forward)", m_swerveDrive.sysIdDynamic(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", m_swerveDrive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
   }
@@ -318,7 +342,7 @@ public class RobotContainer {
     // X: Set drive to X mode (defensive position)
     m_driver.x().onTrue(Commands.runOnce(m_swerveDrive::stopWithX, m_swerveDrive));
     // Y: Drive to the safe launch point
-    m_driver.y().whileTrue(PathUtil.driveToPoseCommand(LauncherConstants.SafeLaunchPoint, m_swerveDrive));
+    // m_driver.y().whileTrue(PathUtil.driveToPoseCommand(LauncherConstants.SafeLaunchPoint, m_swerveDrive));
 
     // Left or Right stick press: toggles slow mode
     m_driver.leftStick().or(m_driver.rightStick()).toggleOnTrue(
@@ -485,11 +509,25 @@ public class RobotContainer {
     return autoChooser.get();
   }
 
+  public void logMech3d() {
+    // Generates poses for the turret
+    // - release pose at center of turret
+    // - doesn't include hood, or anything else
+    // ArrayList<Pose3d> lst = m_launcher.generateMech3d();
+    // Now generate the pose for the intake
+  }
+
+  public void containerLogging() {
+    Logger.recordOutput("Robot"+id+"/Pose2d", m_swerveDrive.getPose());
+    Logger.recordOutput("Robot"+id+"/PiecesHeld", m_intake.getNumGamePieces());
+    Logger.recordOutput("Robot"+id+"/IntakeMechanism", m_intakeMech2d.getMechanism2d());
+  }
+
   public Camera getCamera() {
     return m_camera;
   }
 
-  public Drive getSwerveDrive() {
+  public AbstractDrive getSwerveDrive() {
     return m_swerveDrive;
   }
 

@@ -4,8 +4,10 @@
 
 package frc.robot.constants;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 
 /** Add your docs here. */
@@ -18,4 +20,10 @@ public final class RobotDimensions {
   public static Distance FrameLength = Inches.of(25.5);
   // BumperWidth
   // BumperLength
+
+  // Distance of the intake's range
+  public static Distance IntakeRange = Inches.of(8);
+
+  // Highly tunable angle that reflects how the ball releases from the hood
+  public static Angle FixedHoodAngle = Degrees.of(60);
 }

@@ -29,11 +29,12 @@ public class Hood extends SubsystemBase implements IHood {
   private Angle m_targetAngle = HoodConstants.HoodMaxAngle;
 
   @SuppressWarnings("unused")
-  private ChaosTalonFxTuner m_hoodMotorTuner = new ChaosTalonFxTuner("Launcher/Hood/Hood Motor", m_hoodMotor)
-      .withAllConfigs();
+  private ChaosTalonFxTuner m_hoodMotorTuner;
 
-  public Hood() {
-    m_hoodMotor.applyConfig();
+  public Hood(int id) {
+    m_hoodMotor.applyConfig(); 
+    m_hoodMotorTuner = new ChaosTalonFxTuner("Launcher/Hood/Hood Motor", m_hoodMotor)
+        .withAllConfigs();
     if (Robot.isSimulation()) {
       m_hoodMotor.attachMotorSim(HoodConstants.SimValues);
       m_hoodMotor.setSimAngle(HoodConstants.HoodMinAngle);

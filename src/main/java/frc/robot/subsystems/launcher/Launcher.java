@@ -30,6 +30,7 @@ import frc.robot.constants.FieldDimensions;
 import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.LauncherConstants;
 import frc.robot.constants.LauncherConstants.FlywheelConstants;
+import frc.robot.subsystems.interfaces.AbstractDrive;
 import frc.robot.subsystems.interfaces.IDrive;
 import frc.robot.subsystems.interfaces.IFeeder;
 import frc.robot.subsystems.interfaces.IFlywheel;
@@ -47,7 +48,7 @@ public class Launcher extends SubsystemBase implements ILauncher {
 
 
   /** Creates a new Launcher. */
-  public Launcher(IFlywheel flywheel, IFeeder feeder, IHood hood, IDrive swerveDrive) {
+  public Launcher(IFlywheel flywheel, IFeeder feeder, IHood hood, AbstractDrive swerveDrive) {
     m_flywheel = flywheel;
     m_feeder = feeder;
     m_hood = hood; 

@@ -27,7 +27,7 @@ public class Flywheel extends SubsystemBase implements IFlywheel {
 
     private LinearVelocity targetVelocity = MetersPerSecond.of(0);
 
-    public Flywheel() {
+    public Flywheel(int id) {
         m_rightFollowerFlywheelMotor.applyConfig();
         m_leftMainFlywheelMotor.applyConfig();
 
