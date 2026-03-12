@@ -14,6 +14,7 @@ import com.chaos131.poses.FieldPose2026;
 
 import edu.wpi.first.units.measure.Distance;
 import frc.robot.constants.FieldDimensions;
+import frc.robot.constants.LauncherConstants.FeederConstants;
 import frc.robot.subsystems.interfaces.IDrive;
 import frc.robot.subsystems.interfaces.IIntake;
 import frc.robot.subsystems.interfaces.ILauncher;
@@ -51,6 +52,6 @@ public class AimHubAndLaunchTable extends BaseLaunchCommand {
 
   @Override
   protected void enableFeederForLauncher() {
-    m_launcher.setFeederSpeed(m_flywheelTableRow.getFeederSpeed());
+    m_launcher.setFeederSpeed(FeederConstants.BottomFeederSpeed.get(), FeederConstants.TopFeederSpeed.get()); 
   }
 }

@@ -467,6 +467,10 @@ public class RobotContainer {
     );
   }
 
+  private ConditionalCommand getAimWithXCommand(FieldPose2026... poses) {
+    return new ConditionalCommand(getAutonomousCommand(), getAutonomousCommand(),)
+  }
+
   private Command resetPoseCommand(DriveDirection direction) {
     return Commands.runOnce(
         () -> m_swerveDrive.setPose(
