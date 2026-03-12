@@ -5,6 +5,7 @@
 package frc.robot.commands.launcher;
 
 import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import java.util.Optional;
 
@@ -13,17 +14,18 @@ import com.chaos131.poses.FieldPose2026;
 
 import edu.wpi.first.units.measure.Distance;
 import frc.robot.constants.LauncherConstants;
-import frc.robot.constants.LauncherConstants.FeederConstants;
 import frc.robot.subsystems.interfaces.IDrive;
 import frc.robot.subsystems.interfaces.IIntake;
 import frc.robot.subsystems.interfaces.ILauncher;
+import frc.robot.subsystems.launcher.TableRow;
 
 /**
- * Creates a launch command that passes to a pass point using physics WITHOUT a moving hood
+ * Creates a launch command that passes to a pass point using a lookup table
  */
-public class AimPassAndLaunchSetAngle extends BaseLaunchCommand {
+public class AimPassAndLaunchTable extends BaseLaunchCommand {
+  private TableRow m_flywheelTableRow = new TableRow(Inches.of(0), MetersPerSecond.of(0), 0.0);
 
-  public AimPassAndLaunchSetAngle(ILauncher launcher, IDrive swerveDrive, IIntake intake) {
+  public AimPassAndLaunchTable(ILauncher launcher, IDrive swerveDrive, IIntake intake) {
     super(launcher, swerveDrive, intake);
   }
 
@@ -38,12 +40,17 @@ public class AimPassAndLaunchSetAngle extends BaseLaunchCommand {
   }
 
   @Override
+  protected void preExecute() {
+    m_flywheelTableRow = m_launcher.getLookupTableRow(); // TODO: might need to be a separate lookup table for hub launching
+  }
+
+  @Override
   protected void prepLauncher() {
-    m_launcher.setFlywheelVelocity(m_launcher.getPassVelocitySetAngle(m_swerveDrive.getPose()));
+    m_launcher.setFlywheelVelocity(m_flywheelTableRow.getLaunchSpeed());
   }
 
   @Override
   protected void enableFeederForLauncher() {
-    m_launcher.setFeederSpeed(FeederConstants.FeederSpeed.get());
+    m_launcher.setFeederSpeed(m_flywheelTableRow.getFeederSpeed());
   }
 }
