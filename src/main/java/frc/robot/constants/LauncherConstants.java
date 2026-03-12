@@ -7,6 +7,7 @@ package frc.robot.constants;
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Feet;
+import static edu.wpi.first.units.Units.Hertz;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Kilogram;
 import static edu.wpi.first.units.Units.Kilograms;
@@ -44,6 +45,7 @@ import edu.wpi.first.units.LinearVelocityUnit;
 import edu.wpi.first.units.TimeUnit;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.Frequency;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Mass;
 import edu.wpi.first.units.measure.Time;
@@ -93,6 +95,13 @@ public final class LauncherConstants {
     public static final double SensorToMechanismRatio = 1; // TODO check or change
 
     public static final boolean UseTorqueCurrentFOC = false;
+
+    /**
+     * Sets the update frequency for the leader motor so the follower can follow more effectviely.
+     * 1000 is max value - might need to lower if CAN bus utilization is too high. 
+     * Default is 100
+     */
+    public static final Frequency ClosedLoopUpdateFrequency = Hertz.of(1000);
 
     /** PID values for normal velocity mode */
     public static final Slot0Configs VoltageSlot0 = new Slot0Configs()

@@ -19,41 +19,48 @@ import frc.robot.constants.LauncherConstants.FlywheelConstants;
 import frc.robot.subsystems.interfaces.IFlywheel;
 
 public class Flywheel extends SubsystemBase implements IFlywheel {
-    private ChaosTalonFx m_leftFlywheelMotor = new ChaosTalonFx(FlywheelConstants.LeftFlywheelCanId, LauncherConstants.LauncherCanBus, FlywheelConstants.LeftConfig);
-    private ChaosTalonFx m_rightFlywheelMotor = new ChaosTalonFx(FlywheelConstants.RightFlywheelCanId, LauncherConstants.LauncherCanBus, FlywheelConstants.RightConfig);
+    private ChaosTalonFx m_leftMainFlywheelMotor = new ChaosTalonFx(FlywheelConstants.LeftFlywheelCanId, LauncherConstants.LauncherCanBus, FlywheelConstants.LeftConfig);
+    private ChaosTalonFx m_rightFollowerFlywheelMotor = new ChaosTalonFx(FlywheelConstants.RightFlywheelCanId, LauncherConstants.LauncherCanBus, FlywheelConstants.RightConfig);
 
     @SuppressWarnings("unused")
-    private ChaosTalonFxTuner m_flywheelTuner = new ChaosTalonFxTuner("Launcher/Flywheel/Flywheel Motors", m_leftFlywheelMotor, m_rightFlywheelMotor).withAllConfigs();
+    private ChaosTalonFxTuner m_flywheelTuner = new ChaosTalonFxTuner("Launcher/Flywheel/Flywheel Motors", m_leftMainFlywheelMotor, m_rightFollowerFlywheelMotor).withAllConfigs();
 
     private LinearVelocity targetVelocity = MetersPerSecond.of(0);
 
     public Flywheel() {
-        m_rightFlywheelMotor.applyConfig();
-        m_leftFlywheelMotor.applyConfig();
+        m_rightFollowerFlywheelMotor.applyConfig();
+        m_leftMainFlywheelMotor.applyConfig();
 
         if (Robot.isSimulation()) {
-            m_leftFlywheelMotor.attachMotorSim(FlywheelConstants.SimValues);
+            m_leftMainFlywheelMotor.attachMotorSim(FlywheelConstants.SimValues);
         }
 
-        m_rightFlywheelMotor.setControl(new StrictFollower(m_leftFlywheelMotor.getDeviceID()));        
+        m_rightFollowerFlywheelMotor.setControl(new StrictFollower(m_leftMainFlywheelMotor.getDeviceID()));
+        
+        // Increase the update rate for the leader motor so the follower can respond faster (for the respective follow type. See https://www.chiefdelphi.com/t/ctre-follower-does-the-same-volts-or-the-same-control-request/513725/6)
+        if (FlywheelConstants.UseTorqueCurrentFOC) {
+            m_leftMainFlywheelMotor.getTorqueCurrent().setUpdateFrequency(FlywheelConstants.ClosedLoopUpdateFrequency);
+        } else {
+            m_leftMainFlywheelMotor.getMotorVoltage().setUpdateFrequency(FlywheelConstants.ClosedLoopUpdateFrequency);
+        }
     }
 
     public void setFlywheelVelocity(AngularVelocity velocity) {   
-        m_leftFlywheelMotor.moveAtVelocity(velocity);
+        m_leftMainFlywheelMotor.moveAtVelocity(velocity);
     }
 
     public void setFlywheelVelocity(LinearVelocity linearVelocity) {
         targetVelocity = linearVelocity;
         AngularVelocity angularVelocity = RotationsPerSecond.of(linearVelocity.in(MetersPerSecond) / (Math.PI * FlywheelConstants.FlyWheelDiameter.in(Meters)));
         if (FlywheelConstants.UseTorqueCurrentFOC) {
-            m_leftFlywheelMotor.moveAtVelocityFOC(angularVelocity);
+            m_leftMainFlywheelMotor.moveAtVelocityFOC(angularVelocity);
         } else {
-            m_leftFlywheelMotor.moveAtVelocity(angularVelocity);
+            m_leftMainFlywheelMotor.moveAtVelocity(angularVelocity);
         }
     }
 
     public LinearVelocity getLinearVelocity() {
-        AngularVelocity angularVelocity = m_leftFlywheelMotor.getVelocity().getValue();
+        AngularVelocity angularVelocity = m_leftMainFlywheelMotor.getVelocity().getValue();
         return MetersPerSecond.of( angularVelocity.in(RotationsPerSecond) * (Math.PI * FlywheelConstants.FlyWheelDiameter.in(Meters)) );
     }
 
@@ -65,14 +72,14 @@ public class Flywheel extends SubsystemBase implements IFlywheel {
    
     @Override
     public void setFlywheelSpeed(double speed) {
-        m_leftFlywheelMotor.set(speed);
+        m_leftMainFlywheelMotor.set(speed);
     }
 
     @Override
     public double getFlywheelSpeed() {
         // Because there's 2 motors doing the same thing, we're presuming they're going to return the same values.
         // If this proves to be incorrect, we should make a separate function in the future.
-        return m_leftFlywheelMotor.get();
+        return m_leftMainFlywheelMotor.get();
     }
 
     @Override
