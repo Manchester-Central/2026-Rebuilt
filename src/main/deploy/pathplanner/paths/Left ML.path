@@ -3,47 +3,35 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.123277108433735,
-        "y": 5.9473493975903615
+        "x": 3.5383012048192777,
+        "y": 7.2368192771084345
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3531159526539072,
-        "y": 5.779563056462201
+        "x": 4.740349397590362,
+        "y": 7.2258915662650605
       },
       "isLocked": false,
-      "linkedName": "test auto 1-depot"
+      "linkedName": "LeftStart"
     },
     {
       "anchor": {
-        "x": 2.7077951807228917,
-        "y": 4.767156626506025
+        "x": 6.051674698795181,
+        "y": 7.422590361445783
       },
       "prevControl": {
-        "x": 0.9887406211449561,
-        "y": 6.026691681722948
+        "x": 5.051674698795181,
+        "y": 7.422590361445783
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "test auto1-launch"
+      "linkedName": "MidLeft"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "retract intake",
-      "waypointRelativePos": 0.6382133995037222,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "RetractIntake"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -54,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -20.949701470394857
+    "rotation": 180.0
   },
   "reversed": false,
-  "folder": "Test autos",
+  "folder": "Left",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -71.33071391721582
   },
   "useDefaultConstraints": true
 }

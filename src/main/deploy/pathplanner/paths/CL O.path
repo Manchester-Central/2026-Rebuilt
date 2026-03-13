@@ -3,47 +3,35 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.7077951807228917,
-        "y": 4.767156626506025
+        "x": 1.9537831325301207,
+        "y": 2.6362530120481926
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4018192771084337,
-        "y": 4.417469879518072
+        "x": 1.6954989763016357,
+        "y": 2.2620390857794126
       },
       "isLocked": false,
-      "linkedName": "test auto1-launch"
+      "linkedName": "CenterLaunch"
     },
     {
       "anchor": {
-        "x": 1.5713132530120486,
-        "y": 4.067783132530121
+        "x": 0.6424578313253011,
+        "y": 0.6255542168674697
       },
       "prevControl": {
-        "x": 2.532951807228916,
-        "y": 3.9803614457831324
+        "x": 1.21163390544694,
+        "y": 1.4541227603003861
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Outpost"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "ClimbReach",
-      "waypointRelativePos": 0.08039702233251082,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "ClimbReach"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -54,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 88.53119928561428
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Test autos",
+  "folder": "Center",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -20.949701470394857
+    "rotation": 28.145864628303656
   },
   "useDefaultConstraints": true
 }

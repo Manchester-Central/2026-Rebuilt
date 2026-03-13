@@ -7,37 +7,43 @@
         {
           "type": "path",
           "data": {
-            "pathName": "test auto 1- start to depot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "test auto 1-launch"
+            "pathName": "Center CL"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "LaunchHub"
+            "name": "Launch"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "test auto1-hub to climb"
+            "pathName": "CL O"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "O CL"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ClimbEngage"
+            "name": "Launch"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Center",
   "choreoAuto": false
 }

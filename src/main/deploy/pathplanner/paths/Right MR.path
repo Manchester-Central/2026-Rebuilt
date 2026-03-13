@@ -3,52 +3,40 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.6694337349397586,
-        "y": 7.586506024096385
+        "x": 6.346722891566266,
+        "y": 0.5381325301204822
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.0030722891566262,
-        "y": 7.5318674698795185
+        "x": 5.756626506024096,
+        "y": 0.680192771084337
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "MidRightEnd"
     },
     {
       "anchor": {
-        "x": 1.123277108433735,
-        "y": 5.9473493975903615
+        "x": 2.8935662650602403,
+        "y": 1.204722891566264
       },
       "prevControl": {
-        "x": 3.9827207603595554,
-        "y": 6.063797329116753
+        "x": 4.084686746987952,
+        "y": 0.10102409638554266
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "test auto 1-depot"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.8059701492537041,
+      "waypointRelativePos": 0.7145228215767562,
       "rotationDegrees": 0.0
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "deploy intake",
-      "waypointRelativePos": 0.3444168734491291,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "DeployIntake"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -58,14 +46,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 0.0
+    "velocity": 3.0,
+    "rotation": 62.99080438981008
   },
   "reversed": false,
-  "folder": "Test autos",
+  "folder": "Right",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }
