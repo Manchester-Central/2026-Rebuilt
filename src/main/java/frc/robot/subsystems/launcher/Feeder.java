@@ -32,6 +32,12 @@ public class Feeder extends SubsystemBase implements IFeeder {
     }
 
     @Override
+    public void setFeederSpeed (double bottomSpeed, double topSpeed) {
+        m_topFeederMotor.set(topSpeed);
+        m_bottomFeederMotor.set(bottomSpeed);
+    }
+
+    @Override
     public double getFeederSpeed () {
         return m_topFeederMotor.get();
     }

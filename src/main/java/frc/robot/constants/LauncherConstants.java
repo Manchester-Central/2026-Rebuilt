@@ -224,6 +224,8 @@ public final class LauncherConstants {
 
     public static final DashboardNumber UnjamSpeed = new DashboardNumber("Launcher/Feeder/UnjamSpeed", -1.0);
     public static final DashboardNumber FeederSpeed = new DashboardNumber("Launcher/Feeder/FeederSpeed", 0.3);
+    public static final DashboardNumber BottomFeederSpeed = new DashboardNumber("Launcher/Feeder/BottomFeederSpeed", 0.4);
+    public static final DashboardNumber TopFeederSpeed = new DashboardNumber("Launcher/Feeder/TopFeederSpeed", 1);
     public static final DashboardNumber PassiveFeederSpeed = new DashboardNumber("Launcher/Feeder/PassiveFeederSpeed", 0.2);
 
     public static final TalonFXConfiguration TopConfig = new TalonFXConfiguration()

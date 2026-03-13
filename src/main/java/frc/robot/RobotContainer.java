@@ -26,6 +26,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -44,7 +45,6 @@ import frc.robot.commands.defaults.LauncherDefaultCommand;
 import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.DeployOuttake;
 import frc.robot.commands.intake.RetractIntake;
-import frc.robot.commands.launcher.AimHubAndLaunchSetAngle;
 import frc.robot.commands.launcher.AimHubAndLaunchTable;
 import frc.robot.commands.launcher.AimHubAndLaunchTunable;
 import frc.robot.commands.launcher.AimPassAndLaunchSetAngle;
@@ -205,8 +205,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("DeployOuttake", new DeployOuttake(m_intake));
     NamedCommands.registerCommand("DeployIntake", new DeployIntake(m_intake));
     NamedCommands.registerCommand("RetractIntake", new RetractIntake(m_intake));
-    NamedCommands.registerCommand("LaunchHub", new AimHubAndLaunchSetAngle(m_launcher, m_swerveDrive, m_intake)
-            .deadlineFor(getAimAtFieldPosesCommand(FieldPose2026.HubCenter)));
+    NamedCommands.registerCommand("LaunchHub", new AimHubAndLaunchTable(m_launcher, m_swerveDrive, m_intake)
+            .deadlineFor(getAimWithXCommand(FieldPose2026.HubCenter)));
     NamedCommands.registerCommand("LaunchPass", new AimPassAndLaunchSetAngle(m_launcher, m_swerveDrive, m_intake)
             .deadlineFor(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
     NamedCommands.registerCommand("ClimbReach", new SetClimberHeight(m_climber, ClimberConstants.MaxExtension));
@@ -296,12 +296,12 @@ public class RobotContainer {
       new InstantCommand()
     ));
     // RB: Aim at hub
-    m_driver.rightBumper().whileTrue(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter));
+    m_driver.rightBumper().whileTrue(getAimWithXCommand(FieldPose2026.HubCenter));
     // RT: Aim and score in hub (if manual mode, only aim drive)
     m_driver.rightTrigger().whileTrue(switchAutomaticOrManual(
       // automatic
       new AimHubAndLaunchTable(m_launcher, m_swerveDrive, m_intake)
-        .alongWith(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter)),
+        .alongWith(getAimWithXCommand(FieldPose2026.HubCenter)),
       // manual
       getAimAtFieldPosesCommand(FieldPose2026.HubCenter)
     ));
@@ -466,6 +466,22 @@ public class RobotContainer {
             return Rotation2d.fromDegrees(m_launcher.getYawForTarget(m_swerveDrive, targetPose.getCurrentAlliancePose(), FieldDimensions.HubHeight).in(Degrees));
         }
     );
+  }
+
+  private boolean isAimedAtPose(FieldPose2026... poses) {
+    Angle currentAngle = m_swerveDrive.getPose().getRotation().getMeasure();
+    FieldPose targetPose = FieldPose.getClosestPose(m_swerveDrive.getPose(), poses);
+    Angle targetAngle = m_launcher.getYawForTarget(m_swerveDrive, targetPose.getCurrentAlliancePose(), FieldDimensions.HubHeight);
+
+    return targetAngle.isNear(currentAngle, LauncherConstants.AimYawTolerance.get()) 
+      && m_getDriverXTranslation.getAsDouble() == 0 
+      && m_getDriverYTranslation.getAsDouble() == 0;
+  }
+
+  private Command getAimWithXCommand(FieldPose2026... poses) {
+    return new ConditionalCommand(new InstantCommand(m_swerveDrive::stopWithX, m_swerveDrive), 
+    getAimAtFieldPosesCommand(poses).until(() -> isAimedAtPose(poses)), 
+    () -> isAimedAtPose(poses)).repeatedly(); 
   }
 
   private Command resetPoseCommand(DriveDirection direction) {

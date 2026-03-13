@@ -78,6 +78,13 @@ public class Launcher extends SubsystemBase implements ILauncher {
     m_feeder.setFeederSpeed(speed);
   }
 
+
+
+  
+  public void setFeederSpeed(double bottomeSpeed, double topSpeed) {
+    m_feeder.setFeederSpeed(bottomeSpeed, topSpeed);
+  }
+
   public void setFlywheelVelocity(LinearVelocity velocity) {
     m_flywheel.setFlywheelVelocity(velocity);
   }

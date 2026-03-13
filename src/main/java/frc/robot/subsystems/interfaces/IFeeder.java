@@ -9,6 +9,8 @@ public interface IFeeder extends Subsystem {
      */
     public void setFeederSpeed(double speed);
 
+    public void setFeederSpeed(double bottomSpeed, double topSpeed);
+
     /**
      * @return the current speed of the feeder, in the range of [-1.0, 1.0]
      */

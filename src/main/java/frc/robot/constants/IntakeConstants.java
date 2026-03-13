@@ -104,18 +104,16 @@ public final class IntakeConstants {
             .withGravityType(GravityTypeValue.Arm_Cosine)
         );
 
-    public static final Angle CanCoderOffset = Rotations.of(0);
-
     public static final DetachedEncoderConfig pivotEncoderConfig = new DetachedEncoderConfig()
-        .inverted(false)
-        .dutyCycleOffset(Degrees.of(226).in(Rotations));
+        .inverted(true)
+        .dutyCycleOffset(Degrees.of(120).in(Rotations));
 
     // Pivot Max / Min
-    public static final Angle MaxAngle = Degrees.of(188); // TODO: Double Check
-    public static final Angle MinAngle = Degrees.of(66); // TODO: Double Check
+    public static final Angle MaxAngle = Degrees.of(177); // TODO: Double Check
+    public static final Angle MinAngle = Degrees.of(49); // TODO: Double Check
 
     // Target Angles / Speeds
-    public static final DashboardUnit<AngleUnit,Angle> DeployAngle = new DashboardUnit<>("Intake/DeployAngle", Degrees.of(185)); // TODO: Double Check
+    public static final DashboardUnit<AngleUnit,Angle> DeployAngle = new DashboardUnit<>("Intake/DeployAngle", Degrees.of(172)); // TODO: Double Check
     public static final DashboardUnit<AngleUnit,Angle> RetractAngle = new DashboardUnit<>("Intake/RetractAngle", Degrees.of(66)); // TODO: Double Check
 
     // Sim values

@@ -55,7 +55,11 @@ public class Flywheel extends SubsystemBase implements IFlywheel {
         if (FlywheelConstants.UseTorqueCurrentFOC) {
             m_leftMainFlywheelMotor.moveAtVelocityFOC(angularVelocity);
         } else {
-            m_leftMainFlywheelMotor.moveAtVelocity(angularVelocity);
+            if (m_leftMainFlywheelMotor.getVelocity().getValue().minus(angularVelocity).in(RotationsPerSecond) > 10) {
+                m_leftMainFlywheelMotor.set(1);
+            } else {
+                m_leftMainFlywheelMotor.moveAtVelocity(angularVelocity);
+            }
         }
     }
 
