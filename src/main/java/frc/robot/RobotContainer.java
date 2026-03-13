@@ -301,7 +301,7 @@ public class RobotContainer {
     m_driver.rightTrigger().whileTrue(switchAutomaticOrManual(
       // automatic
       new AimHubAndLaunchTable(m_launcher, m_swerveDrive, m_intake)
-        .alongWith(getAimWithXCommand(FieldPose2026.HubCenter)),
+        .alongWith(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter)),
       // manual
       getAimAtFieldPosesCommand(FieldPose2026.HubCenter)
     ));
