@@ -17,6 +17,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.constants.FieldDimensions;
+import frc.robot.constants.LauncherConstants;
 import frc.robot.constants.LauncherConstants.FeederConstants;
 import frc.robot.subsystems.interfaces.IDrive;
 import frc.robot.subsystems.interfaces.IIntake;
@@ -70,7 +71,7 @@ public class AimHubAndLaunchTable extends BaseLaunchCommand {
   @Override
   public Angle getIntakePivotAngle(){
     Angle pivotAngle = super.getIntakePivotAngle();
-    return pivotAngle.minus(Degree.of(m_intakeTimer.get()));
+    return pivotAngle.minus(Degree.of(m_intakeTimer.get()* LauncherConstants.IntakePivotTimerSpeed.get()));
   }
 
 }

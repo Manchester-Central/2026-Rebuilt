@@ -67,6 +67,7 @@ public final class LauncherConstants {
 
   public static final DashboardNumber LauncherSpeed = new DashboardNumber("Launcher/ManualLaunchSpeed", 0.6); 
   public static final DashboardNumber UnjamSpeed = new DashboardNumber("Launcher/UnjamSpeed", -0.3); 
+  public static final DashboardNumber IntakePivotTimerSpeed = new DashboardNumber("Launcher/Intake/IntakePivotTimer", 30);
 
   public static final Distance LauncherToHubHeight = FieldDimensions.HubHeight.minus(LauncherHeight);
 
@@ -227,6 +228,9 @@ public final class LauncherConstants {
     public static final DashboardNumber BottomFeederSpeed = new DashboardNumber("Launcher/Feeder/BottomFeederSpeed", 0.4);
     public static final DashboardNumber TopFeederSpeed = new DashboardNumber("Launcher/Feeder/TopFeederSpeed", 1);
     public static final DashboardNumber PassiveFeederSpeed = new DashboardNumber("Launcher/Feeder/PassiveFeederSpeed", 0.2);
+    
+
+
 
     public static final TalonFXConfiguration TopConfig = new TalonFXConfiguration()
       .withMotorOutput(new MotorOutputConfigs()
