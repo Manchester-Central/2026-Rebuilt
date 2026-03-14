@@ -4,6 +4,7 @@
 
 package frc.robot.commands.defaults;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.IntakeConstants.PivotConstants;
 import frc.robot.subsystems.interfaces.IIntake;
@@ -30,7 +31,9 @@ public class IntakeDefaultCommand extends Command {
   public void execute() {
     // TODO: determine logic while in auto mode
     m_intake.setRollerSpeed(0);
-    m_intake.setPivotAngle(PivotConstants.DeployAngle.get()); // TODO: Testing only
+    if (DriverStation.isTeleopEnabled()) {
+      m_intake.setPivotAngle(PivotConstants.DeployAngle.get());
+    } // TODO: Testing only
   }
 
   // Called once the command ends or is interrupted.

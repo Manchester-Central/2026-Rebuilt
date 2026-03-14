@@ -95,7 +95,11 @@ public abstract class BaseLaunchCommand extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_launcher.setFlywheelSpeed(0);
+    m_launcher.setFeederSpeed(0);
+    m_intake.setRollerSpeed(0);
+  }
 
   /**
    * Don't end if the button is still pressed - unless it's auto and we need to time out
