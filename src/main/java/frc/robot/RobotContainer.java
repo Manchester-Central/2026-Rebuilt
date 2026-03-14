@@ -206,7 +206,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("DeployIntake", new DeployIntake(m_intake));
     NamedCommands.registerCommand("RetractIntake", new RetractIntake(m_intake));
     NamedCommands.registerCommand("LaunchHub", new AimHubAndLaunchTable(m_launcher, m_swerveDrive, m_intake)
-            .deadlineFor(getAimWithXCommand(FieldPose2026.HubCenter)));
+            .deadlineFor(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter)));
     NamedCommands.registerCommand("LaunchPass", new AimPassAndLaunchSetAngle(m_launcher, m_swerveDrive, m_intake)
             .deadlineFor(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
     NamedCommands.registerCommand("ClimbReach", new SetClimberHeight(m_climber, ClimberConstants.MaxExtension));
@@ -301,7 +301,7 @@ public class RobotContainer {
     m_driver.rightTrigger().whileTrue(switchAutomaticOrManual(
       // automatic
       new AimHubAndLaunchTable(m_launcher, m_swerveDrive, m_intake)
-        .alongWith(getAimWithXCommand(FieldPose2026.HubCenter)),
+        .alongWith(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter)),
       // manual
       getAimAtFieldPosesCommand(FieldPose2026.HubCenter)
     ));

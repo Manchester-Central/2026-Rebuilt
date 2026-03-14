@@ -7,13 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "test auto 1- start to depot"
+            "pathName": "Right MR"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "test auto 1-launch"
+            "pathName": "Right Far Loop"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MR RL"
           }
         },
         {
@@ -21,23 +27,11 @@
           "data": {
             "name": "LaunchHub"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "test auto1-hub to climb"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ClimbEngage"
-          }
         }
       ]
     }
   },
-  "resetOdom": true,
-  "folder": null,
+  "resetOdom": false,
+  "folder": "Right",
   "choreoAuto": false
 }

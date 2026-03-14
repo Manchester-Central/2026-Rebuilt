@@ -3,43 +3,38 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.6694337349397586,
-        "y": 7.586506024096385
+        "x": 4.461599025974026,
+        "y": 0.5381325301204822
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.0030722891566262,
-        "y": 7.5318674698795185
+        "x": 4.7581368900011265,
+        "y": 0.5467664109820664
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "RightStart"
     },
     {
       "anchor": {
-        "x": 1.123277108433735,
-        "y": 5.9473493975903615
+        "x": 6.346722891566266,
+        "y": 0.5381325301204822
       },
       "prevControl": {
-        "x": 3.9827207603595554,
-        "y": 6.063797329116753
+        "x": 5.459965163928439,
+        "y": 0.5332998217623062
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "test auto 1-depot"
+      "linkedName": "MidRightStart"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.8059701492537041,
-      "rotationDegrees": 0.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "deploy intake",
-      "waypointRelativePos": 0.3444168734491291,
+      "name": "Intake",
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -58,14 +53,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 0.0
+    "velocity": 3.0,
+    "rotation": 180.0
   },
   "reversed": false,
-  "folder": "Test autos",
+  "folder": "Right",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }
