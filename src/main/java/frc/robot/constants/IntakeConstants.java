@@ -50,7 +50,7 @@ public final class IntakeConstants {
   public static final DashboardNumber ManualPivotSpeedMultiplier = new DashboardNumber("Intake/ManualPivotSpeedMultiplier", 0.4);
 
   // Speeds
-  public static final DashboardNumber IntakeRollerSpeed = new DashboardNumber("Intake/IntakeRollerSpeed", 0.8);
+  public static final DashboardNumber IntakeRollerSpeed = new DashboardNumber("Intake/IntakeRollerSpeed", 0.85);
   public static final DashboardNumber OuttakeRollerSpeed = new DashboardNumber("Intake/OuttakeRollerSpeed", -0.4);
 
   public static final class RollerConstants {
@@ -64,7 +64,7 @@ public final class IntakeConstants {
       .withCurrentLimits(new CurrentLimitsConfigs()
           .withSupplyCurrentLimit(Amps.of(80)) // TODO: Double Check
           .withStatorCurrentLimit(Amps.of(80)) // TODO: Double Check
-          .withSupplyCurrentLowerLimit(Amps.of(40))
+          .withSupplyCurrentLowerLimit(Amps.of(80))
           .withSupplyCurrentLimitEnable(true)
           .withStatorCurrentLimitEnable(true)
       );
@@ -114,7 +114,7 @@ public final class IntakeConstants {
 
     // Target Angles / Speeds
     public static final DashboardUnit<AngleUnit,Angle> DeployAngle = new DashboardUnit<>("Intake/DeployAngle", Degrees.of(172)); // TODO: Double Check
-    public static final DashboardUnit<AngleUnit,Angle> RetractAngle = new DashboardUnit<>("Intake/RetractAngle", Degrees.of(66)); // TODO: Double Check
+    public static final DashboardUnit<AngleUnit,Angle> RetractAngle = new DashboardUnit<>("Intake/RetractAngle", Degrees.of(125)); // TODO: Double Check
 
     // Sim values
     public static final double MOI = SingleJointedArmSim.estimateMOI(IntakeLength.in(Meters), IntakeMass.in(Kilograms));
