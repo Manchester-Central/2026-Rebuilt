@@ -45,6 +45,7 @@ import frc.robot.commands.defaults.LauncherDefaultCommand;
 import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.DeployOuttake;
 import frc.robot.commands.intake.RetractIntake;
+import frc.robot.commands.launcher.AimHubAndLaunchJostle;
 import frc.robot.commands.launcher.AimHubAndLaunchTable;
 import frc.robot.commands.launcher.AimHubAndLaunchTunable;
 import frc.robot.commands.launcher.AimPassAndLaunchSetAngle;
@@ -300,7 +301,7 @@ public class RobotContainer {
     // RT: Aim and score in hub (if manual mode, only aim drive)
     m_driver.rightTrigger().whileTrue(switchAutomaticOrManual(
       // automatic
-      new AimHubAndLaunchTable(m_launcher, m_swerveDrive, m_intake)
+      new AimHubAndLaunchJostle(m_launcher, m_swerveDrive, m_intake)
         .alongWith(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter)),
       // manual
       getAimAtFieldPosesCommand(FieldPose2026.HubCenter)
@@ -314,7 +315,10 @@ public class RobotContainer {
       new InstantCommand()
     ));
     // B: 
-    m_driver.b();
+    m_driver.b().whileTrue(switchAutomaticOrManual(
+    new AimHubAndLaunchTable(m_launcher, m_swerveDrive, m_intake)
+    .alongWith(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter)),
+     getAimAtFieldPosesCommand(FieldPose2026.HubCenter))); 
     // X: Set drive to X mode (defensive position)
     m_driver.x().onTrue(Commands.runOnce(m_swerveDrive::stopWithX, m_swerveDrive));
     // Y: Drive to the safe launch point
