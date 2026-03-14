@@ -7,31 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center CL"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LaunchHub"
+            "pathName": "Right MR"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "CL O"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 5.0
+            "pathName": "Right Far Loop"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "O CL"
+            "pathName": "MR RL"
           }
         },
         {
@@ -44,6 +32,6 @@
     }
   },
   "resetOdom": false,
-  "folder": "Center",
+  "folder": "Right",
   "choreoAuto": false
 }

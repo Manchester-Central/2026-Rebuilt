@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 0.6424578313253011,
-        "y": 0.6255542168674697
+        "x": 0.6674350649350651,
+        "y": 0.6465909090909088
       },
       "prevControl": {
-        "x": 1.21163390544694,
-        "y": 1.4541227603003861
+        "x": 1.236611139056704,
+        "y": 1.4751594525238252
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,19 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "DeployIntake"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
