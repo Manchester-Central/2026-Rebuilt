@@ -25,6 +25,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -62,7 +63,6 @@ import frc.robot.constants.LauncherConstants.HoodConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Quest;
-import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberMech2D;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -187,7 +187,7 @@ public class RobotContainer {
             () -> m_swerveDrive.getSpeed().in(MetersPerSecond),
             () -> m_swerveDrive.getRotationalSpeed().in(RotationsPerSecond));
 
-    m_climber = new Climber();
+    // m_climber = new Climber();
     m_climberMech2d = new ClimberMech2D(m_climber);
 
     m_intake = new Intake ();
@@ -431,7 +431,7 @@ public class RobotContainer {
     // Y: resets quest and odometry pose to limelight pose
     m_operator.y().whileTrue(new RunCommand(() -> {
       var botpose = m_camera.getBotPose3d();
-      if (botpose != null){
+      if (botpose != null && !botpose.equals(new Pose3d())){
         m_quest.resetPose(botpose);
         m_swerveDrive.setPose(botpose.toPose2d());
       }
