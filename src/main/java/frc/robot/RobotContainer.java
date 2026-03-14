@@ -382,12 +382,10 @@ public class RobotContainer {
     ));
 
     // // POV up: controls climber to up position (with manaual fixed move too)
-    // m_operator.povUp().whileTrue(switchAutomaticOrManual(
-    //   // automatic
-    //   new SetClimberHeight(m_climber, ClimberConstants.MaxExtension),
-    //   // manual
-    //   new RunCommand(() -> m_climber.setClimberSpeed(ClimberConstants.ManualSpeedFixed.get()), m_climber)
-    // ));
+     m_operator.povUp().whileTrue (new InstantCommand(
+     ()-> m_launcher.increaseFlywheelMultiplier()
+     ));
+   
     // // POV left:
     // m_operator.povLeft();
     // // POV right: moves to the climb position
@@ -398,12 +396,9 @@ public class RobotContainer {
     //   new InstantCommand()
     // ));
     // // POV down: controls climber to down position (with manaual fixed move too)
-    // m_operator.povDown().whileTrue(switchAutomaticOrManual(
-    //   // automatic
-    //   new SetClimberHeight(m_climber, ClimberConstants.MinExtension),
-    //   // manual
-    //   new RunCommand(() -> m_climber.setClimberSpeed(-ClimberConstants.ManualSpeedFixed.get()), m_climber)
-    // ));
+     m_operator.povDown().whileTrue(new InstantCommand(
+      ()-> m_launcher.decreaseFlywheelMultiplier()
+     ));
 
     // A: Move hood up
     m_operator.a().whileTrue(switchAutomaticOrManual(
