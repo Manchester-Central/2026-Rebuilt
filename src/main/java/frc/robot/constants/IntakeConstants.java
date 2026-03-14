@@ -114,7 +114,7 @@ public final class IntakeConstants {
 
     // Target Angles / Speeds
     public static final DashboardUnit<AngleUnit,Angle> DeployAngle = new DashboardUnit<>("Intake/DeployAngle", Degrees.of(172)); // TODO: Double Check
-    public static final DashboardUnit<AngleUnit,Angle> RetractAngle = new DashboardUnit<>("Intake/RetractAngle", Degrees.of(125)); // TODO: Double Check
+    public static final DashboardUnit<AngleUnit,Angle> RetractAngle = new DashboardUnit<>("Intake/RetractAngle", Degrees.of(110)); // TODO: Double Check
 
     // Sim values
     public static final double MOI = SingleJointedArmSim.estimateMOI(IntakeLength.in(Meters), IntakeMass.in(Kilograms));
