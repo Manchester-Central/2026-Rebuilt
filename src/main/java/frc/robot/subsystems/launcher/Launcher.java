@@ -81,12 +81,12 @@ public class Launcher extends SubsystemBase implements ILauncher {
   }
 
   public void increaseFlywheelMultiplier(){
-    m_flywheelMarkiplier *= 1.1;
+    m_flywheelMarkiplier *= 1.05;
     // m_flywheelMultiplier = m_flywheelMultiplier * 1.1;
   }
 
   public void decreaseFlywheelMultiplier(){
-    m_flywheelMarkiplier /= 1.1;
+    m_flywheelMarkiplier /= 1.05;
   }
 
   
