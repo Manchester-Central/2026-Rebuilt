@@ -74,12 +74,17 @@ public abstract class BaseLaunchCommand extends Command {
     return m_launcher.atTargetFlywheelVelocity();
   }
 
+  public Angle getIntakePivotAngle(){
+   return PivotConstants.DeployAngle.get(); 
+  }
+
+
   @Override
   public void execute() {
     preExecute();
     prepLauncher();
     m_intake.setRollerSpeed(IntakeConstants.IntakeRollerSpeed.get());
-    m_intake.setPivotAngle(PivotConstants.DeployAngle.get()); // TODO: Testing only
+    m_intake.setPivotAngle(getIntakePivotAngle()); // TODO: Testing only
 
     if (isFacingTarget() && isLauncherReady()) {
       m_hasLaunched = true;

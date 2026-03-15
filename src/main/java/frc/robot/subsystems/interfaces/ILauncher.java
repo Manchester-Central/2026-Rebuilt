@@ -32,4 +32,6 @@ public interface ILauncher extends Subsystem {
     public double getLossFactor();
     public TableRow getLookupTableRow();
     public Distance getDisplacementFromHub();
+    public void increaseFlywheelMultiplier();
+    public void decreaseFlywheelMultiplier();
 }
