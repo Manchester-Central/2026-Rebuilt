@@ -45,6 +45,8 @@ public class Launcher extends SubsystemBase implements ILauncher {
 
   Debouncer m_fallingDebouncer = new Debouncer(10.0, DebounceType.kFalling);
   boolean m_atVelocityDebouced = false;
+  double m_flywheelMarkiplier = 1.1;
+
 
 
   /** Creates a new Launcher. */
@@ -79,8 +81,22 @@ public class Launcher extends SubsystemBase implements ILauncher {
     m_feeder.setFeederSpeed(speed);
   }
 
+  public void increaseFlywheelMultiplier(){
+    m_flywheelMarkiplier *= 1.05;
+    // m_flywheelMultiplier = m_flywheelMultiplier * 1.1;
+  }
+
+  public void decreaseFlywheelMultiplier(){
+    m_flywheelMarkiplier /= 1.05;
+  }
+
+  
+  public void setFeederSpeed(double bottomeSpeed, double topSpeed) {
+    m_feeder.setFeederSpeed(bottomeSpeed, topSpeed);
+  }
+
   public void setFlywheelVelocity(LinearVelocity velocity) {
-    m_flywheel.setFlywheelVelocity(velocity);
+    m_flywheel.setFlywheelVelocity(velocity.times(m_flywheelMarkiplier));
   }
 
   public LinearVelocity getFlywheelVelocity() {
@@ -294,5 +310,8 @@ public class Launcher extends SubsystemBase implements ILauncher {
   public void periodic() {
     m_atVelocityDebouced = m_fallingDebouncer.calculate(atTargetFlywheelVelocity());
     Logger.recordOutput("Launcher/DisplacementFromHub", getDisplacementFromHub().in(Meters));
+
+    Logger.recordOutput("Launcher/flywheelMultiplier", m_flywheelMarkiplier);
+
   }
 } 

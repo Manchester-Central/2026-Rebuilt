@@ -1,0 +1,71 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.244334415584416,
+        "y": 1.4794561688311683
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.1657305194838963,
+        "y": 0.36185064935149835
+      },
+      "isLocked": false,
+      "linkedName": "RightLaunch"
+    },
+    {
+      "anchor": {
+        "x": 6.397832792207793,
+        "y": 0.6323538961038957
+      },
+      "prevControl": {
+        "x": 5.83675113440776,
+        "y": 0.6340346776717253
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "MidRightStart"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.37892376681614387,
+      "rotationDegrees": 180.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": 1.0533423362592882,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "DeployIntake"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 3.0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "Right",
+  "idealStartingState": {
+    "velocity": 1.0,
+    "rotation": 62.2607660744464
+  },
+  "useDefaultConstraints": true
+}

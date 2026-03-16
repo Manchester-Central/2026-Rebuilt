@@ -41,6 +41,6 @@ public class AimHubAndLaunchTunable extends BaseLaunchCommand {
 
   @Override
   protected void enableFeederForLauncher() {
-    m_launcher.setFeederSpeed(FeederConstants.FeederSpeed.get());
+    m_launcher.setFeederSpeed(FeederConstants.BottomFeederSpeed.get(), FeederConstants.TopFeederSpeed.get());
   }
 }

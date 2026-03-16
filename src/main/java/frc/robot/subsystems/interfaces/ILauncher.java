@@ -12,6 +12,7 @@ public interface ILauncher extends Subsystem {
     public void setFlywheelSpeed(double speed);
     public double getFeederSpeed();
     public void setFeederSpeed(double speed);
+    public void setFeederSpeed(double bottomSpeed, double topSpeed);
     public void setFlywheelVelocity(LinearVelocity velocity);
     public LinearVelocity getScoringVelocitySetAngle(Pose2d currentPose);
     public boolean atTargetFlywheelVelocity();
@@ -31,4 +32,6 @@ public interface ILauncher extends Subsystem {
     public double getLossFactor();
     public TableRow getLookupTableRow();
     public Distance getDisplacementFromHub();
+    public void increaseFlywheelMultiplier();
+    public void decreaseFlywheelMultiplier();
 }

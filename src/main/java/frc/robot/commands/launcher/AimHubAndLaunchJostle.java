@@ -17,6 +17,7 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.constants.FieldDimensions;
 import frc.robot.constants.IntakeConstants;
+import frc.robot.constants.LauncherConstants;
 import frc.robot.constants.LauncherConstants.FeederConstants;
 import frc.robot.subsystems.interfaces.IDrive;
 import frc.robot.subsystems.interfaces.IIntake;
@@ -26,12 +27,12 @@ import frc.robot.subsystems.launcher.TableRow;
 /**
  * Creates a launch command using the lookup table
  */
-public class AimHubAndLaunchTable extends BaseLaunchCommand {
+public class AimHubAndLaunchJostle extends BaseLaunchCommand {
   private TableRow m_flywheelTableRow = new TableRow(Inches.of(0), MetersPerSecond.of(0), 0.0);
 
   private Timer m_intakeTimer = new Timer();
 
-  public AimHubAndLaunchTable(ILauncher launcher, IDrive swerveDrive, IIntake intake) {
+  public AimHubAndLaunchJostle(ILauncher launcher, IDrive swerveDrive, IIntake intake) {
     super(launcher, swerveDrive, intake);
   }
 
@@ -69,8 +70,14 @@ public class AimHubAndLaunchTable extends BaseLaunchCommand {
 
   @Override
   public Angle getIntakePivotAngle(){
-    return IntakeConstants.PivotConstants.DeployAngle.get();
    
+   double seconds = m_intakeTimer.get();
+   int newstep = (int)seconds;
+   if(newstep% 2 == 0){
+    return IntakeConstants.PivotConstants.DeployAngle.get();
+  } else {
+    return LauncherConstants.IntakePivotJostleAngle.get();
+  }
     
    
   }

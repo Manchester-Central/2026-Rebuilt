@@ -26,7 +26,9 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -38,21 +40,17 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.climb.SetClimberHeight;
-import frc.robot.commands.defaults.ClimberDefaultCommand;
 import frc.robot.commands.defaults.IntakeDefaultCommand;
 import frc.robot.commands.defaults.LauncherDefaultCommand;
 import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.DeployOuttake;
 import frc.robot.commands.intake.RetractIntake;
-import frc.robot.commands.launcher.AimHubAndLaunchSetAngle;
+import frc.robot.commands.launcher.AimHubAndLaunchJostle;
 import frc.robot.commands.launcher.AimHubAndLaunchTable;
 import frc.robot.commands.launcher.AimHubAndLaunchTunable;
 import frc.robot.commands.launcher.AimPassAndLaunchSetAngle;
-import frc.robot.commands.manual.ClimberManualCommand;
 import frc.robot.commands.manual.IntakeManualCommand;
 import frc.robot.commands.manual.LauncherManualCommand;
-import frc.robot.constants.ClimberConstants;
 import frc.robot.constants.FieldDimensions;
 import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.GeneralConstants.Mode;
@@ -63,8 +61,7 @@ import frc.robot.constants.LauncherConstants.HoodConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Quest;
-import frc.robot.subsystems.climber.Climber;
-import frc.robot.subsystems.climber.ClimberMech2D;
+// import frc.robot.subsystems.climber.ClimberMech2D;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveMapleSim;
 import frc.robot.subsystems.drive.GyroIO;
@@ -76,7 +73,6 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeMech2D;
 import frc.robot.subsystems.intake.MapleSimtake;
 import frc.robot.subsystems.interfaces.AbstractDrive;
-import frc.robot.subsystems.interfaces.IClimber;
 import frc.robot.subsystems.interfaces.IIntake;
 import frc.robot.subsystems.interfaces.ILauncher;
 import frc.robot.subsystems.launcher.Feeder;
@@ -98,10 +94,10 @@ public class RobotContainer {
   private final AbstractDrive m_swerveDrive;
   private Quest m_quest;
   private Camera m_camera;
-  private IClimber m_climber;
-  @SuppressWarnings("unused")
-  private ClimberMech2D m_climberMech2d;
-  @SuppressWarnings("unused")
+  // private IClimber m_climber;
+  // @SuppressWarnings("unused")
+  // // private ClimberMech2D m_climberMech2d;
+  // @SuppressWarnings("unused")
   private IntakeMech2D m_intakeMech2d;
   @SuppressWarnings("unused")
   private LauncherMech2D m_launcherMech2D;
@@ -146,8 +142,6 @@ public class RobotContainer {
         m_intake = new Intake(id);
         m_launcher = new Launcher(new Flywheel(id), new Feeder(id), new Hood(id), m_swerveDrive);
 
-        m_climber = new Climber();
-
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
         // implementations
@@ -178,14 +172,12 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackRight));
         m_intake = new Intake(id);
         m_launcher = new Launcher(new Flywheel(id), new Feeder(id), new Hood(id), m_swerveDrive);
-        m_climber = new Climber();
         break;
 
       case ARENA:
         var drive = new DriveMapleSim(startPose);
         m_intake = new MapleSimtake(id, drive.sim);
         m_launcher = new MapleSimLauncher(new Flywheel(id), new Feeder(id), new Hood(id), drive, m_intake);
-        m_climber = new Climber();
         m_swerveDrive = drive;
         break;
 
@@ -200,7 +192,6 @@ public class RobotContainer {
                 new ModuleIO() {});
         m_intake = new Intake(id);
         m_launcher = new Launcher(new Flywheel(id), new Feeder(id), new Hood(id), m_swerveDrive);
-        m_climber = new Climber();
         break;
     }
     m_camera = new Camera("limelight",
@@ -211,10 +202,10 @@ public class RobotContainer {
             () -> m_swerveDrive.getSpeed().in(MetersPerSecond),
             () -> m_swerveDrive.getRotationalSpeed().in(RotationsPerSecond));
 
-    // Setup Mech2ds
+
+    m_intake = new Intake ();
     m_intakeMech2d = new IntakeMech2D(m_intake);
     m_launcherMech2D = new LauncherMech2D(m_launcher);
-    m_climberMech2d = new ClimberMech2D(m_climber);
     m_launcherMech2D = new LauncherMech2D(m_launcher);
 
     addAutos();
@@ -227,12 +218,12 @@ public class RobotContainer {
     NamedCommands.registerCommand("DeployOuttake", new DeployOuttake(m_intake));
     NamedCommands.registerCommand("DeployIntake", new DeployIntake(m_intake));
     NamedCommands.registerCommand("RetractIntake", new RetractIntake(m_intake));
-    NamedCommands.registerCommand("LaunchHub", new AimHubAndLaunchSetAngle(m_launcher, m_swerveDrive, m_intake)
-            .deadlineFor(getAimAtFieldPosesCommand(FieldPose2026.HubCenter)));
+    NamedCommands.registerCommand("LaunchHub", new AimHubAndLaunchJostle(m_launcher, m_swerveDrive, m_intake)
+            .deadlineFor(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter)));
     NamedCommands.registerCommand("LaunchPass", new AimPassAndLaunchSetAngle(m_launcher, m_swerveDrive, m_intake)
             .deadlineFor(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
-    NamedCommands.registerCommand("ClimbReach", new SetClimberHeight(m_climber, ClimberConstants.MaxExtension));
-    NamedCommands.registerCommand("ClimbEngage", new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension));
+    // NamedCommands.registerCommand("ClimbReach", new SetClimberHeight(m_climber, ClimberConstants.MaxExtension));
+    // NamedCommands.registerCommand("ClimbEngage", new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension));
   }
 
   private void addAutos() {
@@ -281,10 +272,10 @@ public class RobotContainer {
             m_getDriverYTranslation,
             m_getDriverRotation));
 
-    m_climber.setDefaultCommand(switchAutomaticOrManual(
-      new ClimberDefaultCommand(m_climber), // automatic
-      new ClimberManualCommand(m_climber)   // manual
-    )); 
+    // m_climber.setDefaultCommand(switchAutomaticOrManual(
+    //   new ClimberDefaultCommand(m_climber), // automatic
+    //   new ClimberManualCommand(m_climber)   // manual
+    // )); 
 
     m_intake.setDefaultCommand(switchAutomaticOrManual(
       new IntakeDefaultCommand(m_intake),   // automatic
@@ -320,11 +311,11 @@ public class RobotContainer {
       new InstantCommand()
     ));
     // RB: Aim at hub
-    m_driver.rightBumper().whileTrue(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter));
+    m_driver.rightBumper().whileTrue(getAimWithXCommand(FieldPose2026.HubCenter));
     // RT: Aim and score in hub (if manual mode, only aim drive)
     m_driver.rightTrigger().whileTrue(switchAutomaticOrManual(
       // automatic
-      new AimHubAndLaunchTable(m_launcher, m_swerveDrive, m_intake)
+      new AimHubAndLaunchJostle(m_launcher, m_swerveDrive, m_intake)
         .alongWith(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter)),
       // manual
       getAimAtFieldPosesCommand(FieldPose2026.HubCenter)
@@ -338,7 +329,10 @@ public class RobotContainer {
       new InstantCommand()
     ));
     // B: 
-    m_driver.b();
+    m_driver.b().whileTrue(switchAutomaticOrManual(
+    new AimHubAndLaunchTable(m_launcher, m_swerveDrive, m_intake)
+    .alongWith(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter)),
+     getAimAtFieldPosesCommand(FieldPose2026.HubCenter))); 
     // X: Set drive to X mode (defensive position)
     m_driver.x().onTrue(Commands.runOnce(m_swerveDrive::stopWithX, m_swerveDrive));
     // Y: Drive to the safe launch point
@@ -405,29 +399,24 @@ public class RobotContainer {
       new RunCommand(() -> m_launcher.setHoodSpeed(m_operator.getLeftY() * -1.0 * HoodConstants.ManualHoodSpeedMultiplier.get()), m_launcher) // TODO: -1 seems wrong. Implies motor is inverted correctly
     ));
 
-    // POV up: controls climber to up position (with manaual fixed move too)
-    m_operator.povUp().whileTrue(switchAutomaticOrManual(
-      // automatic
-      new SetClimberHeight(m_climber, ClimberConstants.MaxExtension),
-      // manual
-      new RunCommand(() -> m_climber.setClimberSpeed(ClimberConstants.ManualSpeedFixed.get()), m_climber)
-    ));
-    // POV left:
-    m_operator.povLeft();
-    // POV right: moves to the climb position
-    m_operator.povRight().whileTrue(switchAutomaticOrManual(
-      // automatic
-      new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension),
-      // manual
-      new InstantCommand()
-    ));
-    // POV down: controls climber to down position (with manaual fixed move too)
-    m_operator.povDown().whileTrue(switchAutomaticOrManual(
-      // automatic
-      new SetClimberHeight(m_climber, ClimberConstants.MinExtension),
-      // manual
-      new RunCommand(() -> m_climber.setClimberSpeed(-ClimberConstants.ManualSpeedFixed.get()), m_climber)
-    ));
+    // // POV up: controls climber to up position (with manaual fixed move too)
+     m_operator.povUp().whileTrue (new InstantCommand(
+     ()-> m_launcher.increaseFlywheelMultiplier()
+     ));
+   
+    // // POV left:
+    // m_operator.povLeft();
+    // // POV right: moves to the climb position
+    // m_operator.povRight().whileTrue(switchAutomaticOrManual(
+    //   // automatic
+    //   new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension),
+    //   // manual
+    //   new InstantCommand()
+    // ));
+    // // POV down: controls climber to down position (with manaual fixed move too)
+     m_operator.povDown().whileTrue(new InstantCommand(
+      ()-> m_launcher.decreaseFlywheelMultiplier()
+     ));
 
     // A: Move hood up
     m_operator.a().whileTrue(switchAutomaticOrManual(
@@ -451,7 +440,7 @@ public class RobotContainer {
     // Y: resets quest and odometry pose to limelight pose
     m_operator.y().whileTrue(new RunCommand(() -> {
       var botpose = m_camera.getBotPose3d();
-      if (botpose != null){
+      if (botpose != null && !botpose.equals(new Pose3d())){
         m_quest.resetPose(botpose);
         m_swerveDrive.setPose(botpose.toPose2d());
       }
@@ -490,6 +479,22 @@ public class RobotContainer {
             return Rotation2d.fromDegrees(m_launcher.getYawForTarget(m_swerveDrive, targetPose.getCurrentAlliancePose(), FieldDimensions.HubHeight).in(Degrees));
         }
     );
+  }
+
+  private boolean isAimedAtPose(FieldPose2026... poses) {
+    Angle currentAngle = m_swerveDrive.getPose().getRotation().getMeasure();
+    FieldPose targetPose = FieldPose.getClosestPose(m_swerveDrive.getPose(), poses);
+    Angle targetAngle = m_launcher.getYawForTarget(m_swerveDrive, targetPose.getCurrentAlliancePose(), FieldDimensions.HubHeight);
+
+    return targetAngle.isNear(currentAngle, LauncherConstants.AimYawTolerance.get()) 
+      && m_getDriverXTranslation.getAsDouble() == 0 
+      && m_getDriverYTranslation.getAsDouble() == 0;
+  }
+
+  private Command getAimWithXCommand(FieldPose2026... poses) {
+    return new ConditionalCommand(new InstantCommand(m_swerveDrive::stopWithX, m_swerveDrive), 
+    getAimAtFieldPosesCommand(poses).until(() -> isAimedAtPose(poses)), 
+    () -> isAimedAtPose(poses)).repeatedly(); 
   }
 
   private Command resetPoseCommand(DriveDirection direction) {

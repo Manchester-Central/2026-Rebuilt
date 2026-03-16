@@ -26,5 +26,7 @@ public class DeployIntake extends Command {
     }
 
     @Override
-    public void end(boolean interupted){}
+    public void end(boolean interupted){
+        m_intake.setRollerSpeed(0);
+    }
 }

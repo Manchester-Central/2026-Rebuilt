@@ -74,12 +74,17 @@ public abstract class BaseLaunchCommand extends Command {
     return m_launcher.atTargetFlywheelVelocity();
   }
 
+  public Angle getIntakePivotAngle(){
+   return PivotConstants.DeployAngle.get(); 
+  }
+
+
   @Override
   public void execute() {
     preExecute();
     prepLauncher();
     m_intake.setRollerSpeed(IntakeConstants.IntakeRollerSpeed.get());
-    m_intake.setPivotAngle(PivotConstants.DeployAngle.get()); // TODO: Testing only
+    m_intake.setPivotAngle(getIntakePivotAngle()); // TODO: Testing only
 
     if (isFacingTarget() && isLauncherReady()) {
       m_hasLaunched = true;
@@ -95,7 +100,11 @@ public abstract class BaseLaunchCommand extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_launcher.setFlywheelSpeed(0);
+    m_launcher.setFeederSpeed(0);
+    m_intake.setRollerSpeed(0);
+  }
 
   /**
    * Don't end if the button is still pressed - unless it's auto and we need to time out
