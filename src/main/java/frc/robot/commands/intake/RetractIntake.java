@@ -1,11 +1,11 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.interfaces.IIntake;
+import frc.robot.subsystems.intake.Intake;
 
 public class RetractIntake extends Command {
-private IIntake m_intake;
-public RetractIntake(IIntake intake){
+private Intake m_intake;
+public RetractIntake(Intake intake){
     m_intake = intake;
     addRequirements(intake);
 }

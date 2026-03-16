@@ -12,16 +12,16 @@ import com.chaos131.poses.FieldPose2026;
 import edu.wpi.first.units.measure.Distance;
 import frc.robot.constants.FieldDimensions;
 import frc.robot.constants.LauncherConstants.FeederConstants;
-import frc.robot.subsystems.interfaces.IDrive;
-import frc.robot.subsystems.interfaces.IIntake;
-import frc.robot.subsystems.interfaces.ILauncher;
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.launcher.Launcher;
 
 /**
  * Creates a launch command using physics w/ a moving hood
  */
 public class AimHubAndLaunchSetHeight extends BaseLaunchCommand {
 
-  public AimHubAndLaunchSetHeight(ILauncher launcher, IDrive swerveDrive, IIntake intake) {
+  public AimHubAndLaunchSetHeight(Launcher launcher, Drive swerveDrive, Intake intake) {
     super(launcher, swerveDrive, intake);
   }
 
