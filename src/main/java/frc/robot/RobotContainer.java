@@ -202,8 +202,6 @@ public class RobotContainer {
             () -> m_swerveDrive.getSpeed().in(MetersPerSecond),
             () -> m_swerveDrive.getRotationalSpeed().in(RotationsPerSecond));
 
-
-    m_intake = new Intake ();
     m_intakeMech2d = new IntakeMech2D(m_intake);
     m_launcherMech2D = new LauncherMech2D(m_launcher);
     m_launcherMech2D = new LauncherMech2D(m_launcher);
