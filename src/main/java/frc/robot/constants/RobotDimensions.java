@@ -6,7 +6,9 @@ package frc.robot.constants;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Meters;
 
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 
@@ -26,4 +28,6 @@ public final class RobotDimensions {
 
   // Highly tunable angle that reflects how the ball releases from the hood
   public static Angle FixedHoodAngle = Degrees.of(60);
+  // Intake Axle
+  public static Translation3d IntakeOffset = new Translation3d(Meters.of(-0.275449), Meters.of(0), Meters.of(0.222401));
 }

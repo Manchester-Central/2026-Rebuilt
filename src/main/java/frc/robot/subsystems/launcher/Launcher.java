@@ -31,26 +31,19 @@ import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.LauncherConstants;
 import frc.robot.constants.LauncherConstants.FlywheelConstants;
 import frc.robot.subsystems.interfaces.AbstractDrive;
-import frc.robot.subsystems.interfaces.IDrive;
-import frc.robot.subsystems.interfaces.IFeeder;
-import frc.robot.subsystems.interfaces.IFlywheel;
-import frc.robot.subsystems.interfaces.IHood;
-import frc.robot.subsystems.interfaces.ILauncher;
 
-public class Launcher extends SubsystemBase implements ILauncher {
-  IFlywheel m_flywheel;
-  IFeeder m_feeder;
-  IHood m_hood; 
-  IDrive m_swerveDrive;
+public class Launcher extends SubsystemBase {
+  Flywheel m_flywheel;
+  Feeder m_feeder;
+  Hood m_hood; 
+  AbstractDrive m_swerveDrive;
 
   Debouncer m_fallingDebouncer = new Debouncer(10.0, DebounceType.kFalling);
   boolean m_atVelocityDebouced = false;
   double m_flywheelMarkiplier = 1.1;
 
-
-
   /** Creates a new Launcher. */
-  public Launcher(IFlywheel flywheel, IFeeder feeder, IHood hood, AbstractDrive swerveDrive) {
+  public Launcher(Flywheel flywheel, Feeder feeder, Hood hood, AbstractDrive swerveDrive) {
     m_flywheel = flywheel;
     m_feeder = feeder;
     m_hood = hood; 
@@ -107,12 +100,10 @@ public class Launcher extends SubsystemBase implements ILauncher {
     return m_flywheel.atTarget();
   }
 
-  @Override
   public void setHoodAngle(Angle targetAngle) {
     m_hood.setHoodAngle (targetAngle); 
   }
 
-  @Override
   public Angle getHoodAngle() {
     return m_hood.getHoodAngle();
   }
@@ -136,7 +127,6 @@ public class Launcher extends SubsystemBase implements ILauncher {
     setHoodAngle(angle);
   }
 
-  @Override
   public boolean doesFeederHaveFuel() {
     return m_feeder.doesFeederHaveFuel();
   }
@@ -209,7 +199,7 @@ public class Launcher extends SubsystemBase implements ILauncher {
    * @param targetHeight The height to target at the specified pose.
    * @return The linear velocity needed to launch at the target.
    */
-  public LinearVelocity getVelocityForTargetSetHeight(IDrive swerveDrive, Pose2d targetPose, Distance targetHeight) {
+  public LinearVelocity getVelocityForTargetSetHeight(AbstractDrive swerveDrive, Pose2d targetPose, Distance targetHeight) {
     Pose2d launcherPose = swerveDrive.getPose().transformBy(LauncherConstants.LauncherDisplacement);
     
     double deltaXMeters = FieldPose.getDeltaXFromLocations(launcherPose, targetPose).in(Meters);
@@ -239,7 +229,7 @@ public class Launcher extends SubsystemBase implements ILauncher {
    * @param targetHeight The height to target at the specified pose.
    * @return The pitch needed to launch at the target. (For adjustable hood)
    */
-  public Angle getPitchForTarget(IDrive swerveDrive, Pose2d targetPose, Distance targetHeight) {
+  public Angle getPitchForTarget(AbstractDrive swerveDrive, Pose2d targetPose, Distance targetHeight) {
     Pose2d launcherPose = swerveDrive.getPose().transformBy(LauncherConstants.LauncherDisplacement);
     
     double deltaXMeters = FieldPose.getDeltaXFromLocations(launcherPose, targetPose).in(Meters);
@@ -269,7 +259,7 @@ public class Launcher extends SubsystemBase implements ILauncher {
    * @param targetHeight The height to target at the specified pose.
    * @return The yaw needed to launch at the target. (For swerve drive)
    */
-  public Angle getYawForTarget(IDrive swerveDrive, Pose2d targetPose, Distance targetHeight) {
+  public Angle getYawForTarget(AbstractDrive swerveDrive, Pose2d targetPose, Distance targetHeight) {
     Pose2d currentPose = swerveDrive.getPose();
     
     double deltaXMeters = FieldPose.getDeltaXFromLocations(currentPose, targetPose).in(Meters);

@@ -14,9 +14,9 @@ import com.chaos131.poses.FieldPose2026;
 
 import edu.wpi.first.units.measure.Distance;
 import frc.robot.constants.LauncherConstants;
-import frc.robot.subsystems.interfaces.IDrive;
-import frc.robot.subsystems.interfaces.IIntake;
-import frc.robot.subsystems.interfaces.ILauncher;
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.launcher.Launcher;
 import frc.robot.subsystems.launcher.TableRow;
 
 /**
@@ -25,7 +25,7 @@ import frc.robot.subsystems.launcher.TableRow;
 public class AimPassAndLaunchTable extends BaseLaunchCommand {
   private TableRow m_flywheelTableRow = new TableRow(Inches.of(0), MetersPerSecond.of(0), 0.0);
 
-  public AimPassAndLaunchTable(ILauncher launcher, IDrive swerveDrive, IIntake intake) {
+  public AimPassAndLaunchTable(Launcher launcher, Drive swerveDrive, Intake intake) {
     super(launcher, swerveDrive, intake);
   }
 

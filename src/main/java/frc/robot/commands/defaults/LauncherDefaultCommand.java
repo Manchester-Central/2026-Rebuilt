@@ -6,14 +6,14 @@ package frc.robot.commands.defaults;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.LauncherConstants.FeederConstants;
-import frc.robot.subsystems.interfaces.ILauncher;
+import frc.robot.subsystems.launcher.Launcher;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class LauncherDefaultCommand extends Command {
   /** Creates a new SimpleLauncherDefaultCommand. */
-  private ILauncher m_launcher;
+  private Launcher m_launcher;
 
-  public LauncherDefaultCommand(ILauncher launcher) {
+  public LauncherDefaultCommand(Launcher launcher) {
     // Use addRequirements() here to declare subsystem dependencies.=
     m_launcher = launcher;
     addRequirements(m_launcher);

@@ -22,20 +22,20 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.constants.IntakeConstants.PivotConstants;
 import frc.robot.constants.LauncherConstants;
-import frc.robot.subsystems.interfaces.IDrive;
-import frc.robot.subsystems.interfaces.IIntake;
-import frc.robot.subsystems.interfaces.ILauncher;
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.launcher.Launcher;
 
 /* An abstract class for sharing common launch functions */
 public abstract class BaseLaunchCommand extends Command {
-  protected ILauncher m_launcher;
-  protected IDrive m_swerveDrive;
-  protected IIntake m_intake;
+  protected Launcher m_launcher;
+  protected Drive m_swerveDrive;
+  protected Intake m_intake;
   protected Timer m_launchTimer = new Timer();
   protected boolean m_hasLaunched = false;
 
   /** Creates a new BaseLaunchCommand. */
-  protected BaseLaunchCommand(ILauncher launcher, IDrive swerveDrive, IIntake intake) {
+  protected BaseLaunchCommand(Launcher launcher, Drive swerveDrive, Intake intake) {
     m_launcher = launcher;
     m_swerveDrive = swerveDrive;
     m_intake = intake;
