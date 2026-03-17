@@ -14,11 +14,8 @@ import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.constants.RobotDimensions;
 import frc.robot.subsystems.MultiplayerSim.MultiplayerArena2026;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.interfaces.AbstractDrive;
-import frc.robot.subsystems.interfaces.IFeeder;
-import frc.robot.subsystems.interfaces.IFlywheel;
-import frc.robot.subsystems.interfaces.IHood;
-import frc.robot.subsystems.interfaces.IIntake;
 
 /**
  * Leverages existing Flywheel behavior, but attaches 
@@ -43,9 +40,9 @@ public class MapleSimLauncher extends Launcher {
         Rotation3d.kZero);
 
     protected AbstractDrive drive;
-    protected IIntake intake;
+    protected Intake intake;
 
-    public MapleSimLauncher(IFlywheel flywheel, IFeeder feeder, IHood hood, AbstractDrive drive, IIntake intake) {
+    public MapleSimLauncher(Flywheel flywheel, Feeder feeder, Hood hood, AbstractDrive drive, Intake intake) {
         super(flywheel, feeder, hood, drive);
         this.intake = intake;
         this.drive = drive;

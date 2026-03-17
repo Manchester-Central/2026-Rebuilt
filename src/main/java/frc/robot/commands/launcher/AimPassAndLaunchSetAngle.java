@@ -14,8 +14,8 @@ import com.chaos131.poses.FieldPose2026;
 import edu.wpi.first.units.measure.Distance;
 import frc.robot.constants.LauncherConstants;
 import frc.robot.constants.LauncherConstants.FeederConstants;
-import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.interfaces.AbstractDrive;
 import frc.robot.subsystems.launcher.Launcher;
 
 /**
@@ -23,7 +23,7 @@ import frc.robot.subsystems.launcher.Launcher;
  */
 public class AimPassAndLaunchSetAngle extends BaseLaunchCommand {
 
-  public AimPassAndLaunchSetAngle(Launcher launcher, Drive swerveDrive, Intake intake) {
+  public AimPassAndLaunchSetAngle(Launcher launcher, AbstractDrive swerveDrive, Intake intake) {
     super(launcher, swerveDrive, intake);
   }
 

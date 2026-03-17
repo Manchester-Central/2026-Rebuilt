@@ -11,8 +11,8 @@ import com.chaos131.poses.FieldPose;
 import edu.wpi.first.units.measure.Distance;
 import frc.robot.constants.LauncherConstants.FeederConstants;
 import frc.robot.constants.LauncherConstants.FlywheelConstants;
-import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.interfaces.AbstractDrive;
 import frc.robot.subsystems.launcher.Launcher;
 
 /**
@@ -20,7 +20,7 @@ import frc.robot.subsystems.launcher.Launcher;
  */
 public class AimHubAndLaunchTunable extends BaseLaunchCommand {
 
-  public AimHubAndLaunchTunable(Launcher launcher, Drive swerveDrive, Intake intake) {
+  public AimHubAndLaunchTunable(Launcher launcher, AbstractDrive swerveDrive, Intake intake) {
     super(launcher, swerveDrive, intake);
   }
 
