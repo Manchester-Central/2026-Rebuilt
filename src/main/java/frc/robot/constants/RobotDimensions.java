@@ -5,7 +5,9 @@
 package frc.robot.constants;
 
 import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Meters;
 
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.units.measure.Distance;
 
 /** Add your docs here. */
@@ -18,4 +20,7 @@ public final class RobotDimensions {
   public static Distance FrameLength = Inches.of(25.5);
   // BumperWidth
   // BumperLength
+
+  // Intake Axle
+  public static Translation3d IntakeOffset = new Translation3d(Meters.of(-0.275449), Meters.of(0), Meters.of(0.222401));
 }

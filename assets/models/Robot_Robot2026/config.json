@@ -1,0 +1,29 @@
+{
+  "name": "robot2026",
+  "disableSimplification": true, 
+  "rotations": [{"axis": "x", "degrees": 90},
+                {"axis": "z", "degrees": 90}],
+  "position": [0, 0, 0],
+  "cameras": [
+    {
+      "name": "limelight",
+      "rotations": [{"axis": "y", "degrees": 0}],
+      "position": [15, 0, 6],
+      "resolution": [1280, 800],
+      "fov": 80
+    },
+    {
+      "name": "quest",
+      "rotations": [{"axis": "z", "degrees": 45}],
+      "position": [6, 6, 10.5],
+      "resolution": [1280, 800],
+      "fov": 80
+    }
+  ],
+  "components": [
+    {
+      "zeroedRotations": [{"axis": "z", "degrees": 90}],
+      "zeroedPosition": [-0.3, 0, 0.35]
+    }
+  ] 
+}
