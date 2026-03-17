@@ -143,7 +143,7 @@ public class Intake extends SubsystemBase {
     Pose3d[] poses = new Pose3d[]{
       new Pose3d(
         RobotDimensions.IntakeOffset,
-        new Rotation3d(Degrees.of(0), getPivotAngle(), Degrees.of(0))
+        new Rotation3d(Degrees.of(0), getPivotAngle().times(-1), Degrees.of(0))
       )
     };
     return poses;
