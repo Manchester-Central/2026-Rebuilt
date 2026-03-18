@@ -73,6 +73,7 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeMech2D;
 import frc.robot.subsystems.intake.MapleSimtake;
 import frc.robot.subsystems.interfaces.AbstractDrive;
+import frc.robot.subsystems.launcher.FakeFeeder;
 import frc.robot.subsystems.launcher.Feeder;
 import frc.robot.subsystems.launcher.Flywheel;
 import frc.robot.subsystems.launcher.Hood;
@@ -175,7 +176,7 @@ public class RobotContainer {
       case ARENA:
         var drive = new DriveMapleSim(startPose);
         m_intake = new MapleSimtake(id, drive.sim);
-        m_launcher = new MapleSimLauncher(new Flywheel(id), new Feeder(id), new Hood(id), drive, m_intake);
+        m_launcher = new MapleSimLauncher(new Flywheel(id), new FakeFeeder(m_intake), new Hood(id), drive, m_intake);
         m_swerveDrive = drive;
         break;
 

@@ -31,10 +31,11 @@ import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.LauncherConstants;
 import frc.robot.constants.LauncherConstants.FlywheelConstants;
 import frc.robot.subsystems.interfaces.AbstractDrive;
+import frc.robot.subsystems.interfaces.AbstractFeeder;
 
 public class Launcher extends SubsystemBase {
   Flywheel m_flywheel;
-  Feeder m_feeder;
+  AbstractFeeder m_feeder;
   Hood m_hood; 
   AbstractDrive m_swerveDrive;
 
@@ -43,7 +44,7 @@ public class Launcher extends SubsystemBase {
   double m_flywheelMarkiplier = 1.1;
 
   /** Creates a new Launcher. */
-  public Launcher(Flywheel flywheel, Feeder feeder, Hood hood, AbstractDrive swerveDrive) {
+  public Launcher(Flywheel flywheel, AbstractFeeder feeder, Hood hood, AbstractDrive swerveDrive) {
     m_flywheel = flywheel;
     m_feeder = feeder;
     m_hood = hood; 

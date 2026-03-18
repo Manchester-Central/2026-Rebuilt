@@ -16,6 +16,7 @@ import frc.robot.constants.RobotDimensions;
 import frc.robot.subsystems.MultiplayerSim.MultiplayerArena2026;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.interfaces.AbstractDrive;
+import frc.robot.subsystems.interfaces.AbstractFeeder;
 
 /**
  * Leverages existing Flywheel behavior, but attaches 
@@ -42,7 +43,7 @@ public class MapleSimLauncher extends Launcher {
     protected AbstractDrive drive;
     protected Intake intake;
 
-    public MapleSimLauncher(Flywheel flywheel, Feeder feeder, Hood hood, AbstractDrive drive, Intake intake) {
+    public MapleSimLauncher(Flywheel flywheel, AbstractFeeder feeder, Hood hood, AbstractDrive drive, Intake intake) {
         super(flywheel, feeder, hood, drive);
         this.intake = intake;
         this.drive = drive;

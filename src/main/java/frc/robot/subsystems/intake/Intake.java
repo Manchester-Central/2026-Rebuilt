@@ -31,7 +31,7 @@ import frc.robot.constants.RobotDimensions;
 public class Intake extends SubsystemBase {
   protected ChaosTalonFx m_rollerMotor;
   protected ChaosTalonFx m_pivotMotor;
-  private SplineEncoder m_pivotEncoder = new SplineEncoder(PivotConstants.PivotCanCoderId.id);
+  private SplineEncoder m_pivotEncoder;
 
   @SuppressWarnings("unused")
   protected ChaosTalonFxTuner m_rollerTuner;
@@ -44,9 +44,11 @@ public class Intake extends SubsystemBase {
     if (GeneralConstants.currentMode != Mode.ARENA) {
       m_rollerMotor = new ChaosTalonFx(RollerConstants.RollerCanId, IntakeConstants.CanBus, RollerConstants.Config);
       m_pivotMotor = new ChaosTalonFx(PivotConstants.PivotCanId, IntakeConstants.CanBus, PivotConstants.TalonConfig);
+      m_pivotEncoder = new SplineEncoder(PivotConstants.PivotCanCoderId.id);
     } else {
-      m_rollerMotor = new ChaosTalonFx(ArenaConstants.motorCanIDs[id][MotorIDs.Intake.canIdx], IntakeConstants.CanBus, RollerConstants.Config);
+      m_rollerMotor = new ChaosTalonFx(ArenaConstants.motorCanIDs[id][MotorIDs.IntakeRoller.canIdx], IntakeConstants.CanBus, RollerConstants.Config);
       m_pivotMotor = new ChaosTalonFx(ArenaConstants.motorCanIDs[id][MotorIDs.IntakePivot.canIdx], IntakeConstants.CanBus, PivotConstants.TalonConfig);
+      m_pivotEncoder = new SplineEncoder(ArenaConstants.motorCanIDs[id][MotorIDs.IntakePivotEncoder.canIdx].id);
     }
 
     m_rollerTuner = new ChaosTalonFxTuner("Intake/Roller Motor", m_rollerMotor).withCurrentLimits();
