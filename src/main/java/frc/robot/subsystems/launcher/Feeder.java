@@ -1,17 +1,14 @@
 package frc.robot.subsystems.launcher;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.chaos131.ctre.ChaosTalonFx;
 import com.chaos131.ctre.ChaosTalonFxTuner;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.LauncherConstants;
 import frc.robot.constants.LauncherConstants.FeederConstants;
-import frc.robot.subsystems.interfaces.IFeeder;
+import frc.robot.subsystems.interfaces.AbstractFeeder;
 
-public class Feeder extends SubsystemBase implements IFeeder {
+public class Feeder extends AbstractFeeder {
     private ChaosTalonFx m_topFeederMotor = new ChaosTalonFx(FeederConstants.TopFeederCanId, LauncherConstants.LauncherCanBus, FeederConstants.TopConfig);
     private ChaosTalonFx m_bottomFeederMotor = new ChaosTalonFx(FeederConstants.BottomFeederCanId, LauncherConstants.LauncherCanBus, FeederConstants.BottomConfig);
 
@@ -20,7 +17,7 @@ public class Feeder extends SubsystemBase implements IFeeder {
     @SuppressWarnings("unused")
     private ChaosTalonFxTuner m_flywheelTuner = new ChaosTalonFxTuner("Launcher/Feeder/Feeder Motors", m_topFeederMotor, m_bottomFeederMotor).withCurrentLimits();
 
-    public Feeder() {
+    public Feeder(int id) {
         m_topFeederMotor.applyConfig();
         m_bottomFeederMotor.applyConfig();
     }
@@ -45,10 +42,5 @@ public class Feeder extends SubsystemBase implements IFeeder {
     @Override
     public boolean doesFeederHaveFuel() {
         return !m_beamSensor.get(); // TODO: test if not is needed
-    }
-
-    @Override
-    public void periodic() {
-        Logger.recordOutput("Feeder/Speed", getFeederSpeed());
     }
 }

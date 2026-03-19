@@ -14,16 +14,16 @@ import com.chaos131.poses.FieldPose2026;
 import edu.wpi.first.units.measure.Distance;
 import frc.robot.constants.LauncherConstants;
 import frc.robot.constants.LauncherConstants.FeederConstants;
-import frc.robot.subsystems.interfaces.IDrive;
-import frc.robot.subsystems.interfaces.IIntake;
-import frc.robot.subsystems.interfaces.ILauncher;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.interfaces.AbstractDrive;
+import frc.robot.subsystems.launcher.Launcher;
 
 /**
  * Creates a launch command that passes to a pass point using physics WITHOUT a moving hood
  */
 public class AimPassAndLaunchSetAngle extends BaseLaunchCommand {
 
-  public AimPassAndLaunchSetAngle(ILauncher launcher, IDrive swerveDrive, IIntake intake) {
+  public AimPassAndLaunchSetAngle(Launcher launcher, AbstractDrive swerveDrive, Intake intake) {
     super(launcher, swerveDrive, intake);
   }
 

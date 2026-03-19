@@ -18,9 +18,9 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.constants.FieldDimensions;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.constants.LauncherConstants.FeederConstants;
-import frc.robot.subsystems.interfaces.IDrive;
-import frc.robot.subsystems.interfaces.IIntake;
-import frc.robot.subsystems.interfaces.ILauncher;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.interfaces.AbstractDrive;
+import frc.robot.subsystems.launcher.Launcher;
 import frc.robot.subsystems.launcher.TableRow;
 
 /**
@@ -31,7 +31,7 @@ public class AimHubAndLaunchTable extends BaseLaunchCommand {
 
   private Timer m_intakeTimer = new Timer();
 
-  public AimHubAndLaunchTable(ILauncher launcher, IDrive swerveDrive, IIntake intake) {
+  public AimHubAndLaunchTable(Launcher launcher, AbstractDrive swerveDrive, Intake intake) {
     super(launcher, swerveDrive, intake);
   }
 

@@ -17,7 +17,6 @@ import com.chaos131.util.ChaosColor;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.LauncherConstants.HoodConstants;
-import frc.robot.subsystems.interfaces.ILauncher;
 
 public class LauncherMech2D extends SubsystemBase {
   @AutoLogOutput(key = "Launcher/LauncherMech2D")
@@ -28,10 +27,10 @@ public class LauncherMech2D extends SubsystemBase {
 
   Angle kFeederAngle = Degrees.of(75);
 
-  ILauncher m_launcher;
+  Launcher m_launcher;
 
   /** Creates a new IntakeMech2D. */
-  public LauncherMech2D(ILauncher launcher) {
+  public LauncherMech2D(Launcher launcher) {
     m_launcherBase = new LoggedMechanism2d(Inches.of(26), Inches.of(28.5));
     m_launcherRoot = m_launcherBase.getRoot("Launcher", 0.7, 0.4);
     m_feederLigament = m_launcherRoot.append(new LoggedMechanismLigament2d("FeederLigament", Inches.of(8), kFeederAngle));

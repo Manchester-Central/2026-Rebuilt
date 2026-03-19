@@ -28,7 +28,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 
 /** Add your docs here. */
 public final class GeneralConstants {
-  public static final Mode simMode = Mode.SIM;
+  public static final Mode simMode = Mode.ARENA;
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
   public static final double SlowModeMultiplier = 0.5;
   public static final double MoveLaunchDriveMultiplier = 0.4;
@@ -39,6 +39,9 @@ public final class GeneralConstants {
 
     /** Running a physics simulator. */
     SIM,
+
+    /** Runs the full multiplayer arena mode */
+    ARENA,
 
     /** Replaying from a log file. */
     REPLAY

@@ -16,9 +16,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.LauncherConstants;
 import frc.robot.constants.LauncherConstants.FlywheelConstants;
-import frc.robot.subsystems.interfaces.IFlywheel;
 
-public class Flywheel extends SubsystemBase implements IFlywheel {
+public class Flywheel extends SubsystemBase {
     private ChaosTalonFx m_leftMainFlywheelMotor = new ChaosTalonFx(FlywheelConstants.LeftFlywheelCanId, LauncherConstants.LauncherCanBus, FlywheelConstants.LeftConfig);
     private ChaosTalonFx m_rightFollowerFlywheelMotor = new ChaosTalonFx(FlywheelConstants.RightFlywheelCanId, LauncherConstants.LauncherCanBus, FlywheelConstants.RightConfig);
 
@@ -27,7 +26,7 @@ public class Flywheel extends SubsystemBase implements IFlywheel {
 
     private LinearVelocity targetVelocity = MetersPerSecond.of(0);
 
-    public Flywheel() {
+    public Flywheel(int id) {
         m_rightFollowerFlywheelMotor.applyConfig();
         m_leftMainFlywheelMotor.applyConfig();
 
@@ -73,13 +72,10 @@ public class Flywheel extends SubsystemBase implements IFlywheel {
         return getLinearVelocity().isNear(targetVelocity, FlywheelConstants.TargetVelocityTolerance.get());
     }
 
-   
-    @Override
     public void setFlywheelSpeed(double speed) {
         m_leftMainFlywheelMotor.set(speed);
     }
 
-    @Override
     public double getFlywheelSpeed() {
         // Because there's 2 motors doing the same thing, we're presuming they're going to return the same values.
         // If this proves to be incorrect, we should make a separate function in the future.

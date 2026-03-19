@@ -11,16 +11,16 @@ import com.chaos131.poses.FieldPose;
 import edu.wpi.first.units.measure.Distance;
 import frc.robot.constants.LauncherConstants.FeederConstants;
 import frc.robot.constants.LauncherConstants.FlywheelConstants;
-import frc.robot.subsystems.interfaces.IDrive;
-import frc.robot.subsystems.interfaces.IIntake;
-import frc.robot.subsystems.interfaces.ILauncher;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.interfaces.AbstractDrive;
+import frc.robot.subsystems.launcher.Launcher;
 
 /**
  * Creates a launch command using values from the dashboard
  */
 public class AimHubAndLaunchTunable extends BaseLaunchCommand {
 
-  public AimHubAndLaunchTunable(ILauncher launcher, IDrive swerveDrive, IIntake intake) {
+  public AimHubAndLaunchTunable(Launcher launcher, AbstractDrive swerveDrive, Intake intake) {
     super(launcher, swerveDrive, intake);
   }
 

@@ -31,9 +31,9 @@
   "java.test.defaultConfig": "WPIlibUnitTests",
   "spotlessGradle.format.enable": true,
   "spotlessGradle.diagnostics.enable": false,
-  "editor.codeActionsOnSave": {
-    "source.organizeImports": "explicit"
-  },
+  // "editor.codeActionsOnSave": {
+  //   "source.organizeImports": "explicit"
+  // },
   "java.import.gradle.annotationProcessing.enabled": false,
   "java.completion.favoriteStaticMembers": [
     "org.junit.Assert.*",

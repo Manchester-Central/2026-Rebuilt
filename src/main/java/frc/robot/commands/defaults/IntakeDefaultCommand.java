@@ -7,14 +7,14 @@ package frc.robot.commands.defaults;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.IntakeConstants.PivotConstants;
-import frc.robot.subsystems.interfaces.IIntake;
+import frc.robot.subsystems.intake.Intake;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class IntakeDefaultCommand extends Command {
- private IIntake m_intake;
+ private Intake m_intake;
 
   /** Creates a new IntakeDefaultCommand. */
-  public IntakeDefaultCommand(IIntake intake) {
+  public IntakeDefaultCommand(Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_intake = intake;
 

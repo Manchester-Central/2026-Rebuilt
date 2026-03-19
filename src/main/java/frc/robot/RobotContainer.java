@@ -13,6 +13,7 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import java.util.function.DoubleSupplier;
 
+import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.chaos131.gamepads.Gamepad;
@@ -25,17 +26,16 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
@@ -46,21 +46,19 @@ import frc.robot.commands.intake.DeployOuttake;
 import frc.robot.commands.intake.RetractIntake;
 import frc.robot.commands.launcher.AimHubAndLaunchJostle;
 import frc.robot.commands.launcher.AimHubAndLaunchTable;
-import frc.robot.commands.launcher.AimHubAndLaunchTunable;
 import frc.robot.commands.launcher.AimPassAndLaunchSetAngle;
 import frc.robot.commands.manual.IntakeManualCommand;
 import frc.robot.commands.manual.LauncherManualCommand;
+import frc.robot.constants.ArenaConstants;
 import frc.robot.constants.FieldDimensions;
 import frc.robot.constants.GeneralConstants;
-import frc.robot.constants.IntakeConstants;
+import frc.robot.constants.GeneralConstants.Mode;
 import frc.robot.constants.LauncherConstants;
-import frc.robot.constants.LauncherConstants.FeederConstants;
-import frc.robot.constants.LauncherConstants.HoodConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Quest;
-// import frc.robot.subsystems.climber.ClimberMech2D;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.DriveMapleSim;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
@@ -68,15 +66,15 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeMech2D;
-// import frc.robot.subsystems.interfaces.IClimber;
-import frc.robot.subsystems.interfaces.IIntake;
-import frc.robot.subsystems.interfaces.ILauncher;
+import frc.robot.subsystems.intake.MapleSimtake;
+import frc.robot.subsystems.interfaces.AbstractDrive;
+import frc.robot.subsystems.launcher.FakeFeeder;
 import frc.robot.subsystems.launcher.Feeder;
 import frc.robot.subsystems.launcher.Flywheel;
 import frc.robot.subsystems.launcher.Hood;
 import frc.robot.subsystems.launcher.Launcher;
 import frc.robot.subsystems.launcher.LauncherMech2D;
-import frc.robot.util.PathUtil;
+import frc.robot.subsystems.launcher.MapleSimLauncher;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -85,8 +83,9 @@ import frc.robot.util.PathUtil;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  protected int id;
   // Subsystems
-  private final Drive m_swerveDrive;
+  private final AbstractDrive m_swerveDrive;
   private Quest m_quest;
   private Camera m_camera;
   // private IClimber m_climber;
@@ -96,30 +95,43 @@ public class RobotContainer {
   private IntakeMech2D m_intakeMech2d;
   @SuppressWarnings("unused")
   private LauncherMech2D m_launcherMech2D;
-  private ILauncher m_launcher;
-  private IIntake m_intake;
+  private Launcher m_launcher;
+  private Intake m_intake;
 
   // Controller
-  private final Gamepad m_driver = new Gamepad(0);
-  private final Gamepad m_operator = new Gamepad(1);
+  private final Gamepad m_driver;
+  // private final Gamepad m_operator = new Gamepad(1);
 
-  private final DoubleSupplier m_getDriverXTranslation = () -> m_driver.getLeftY();
-  private final DoubleSupplier m_getDriverYTranslation = () -> -m_driver.getLeftX();
-  private final DoubleSupplier m_getDriverRotation = () -> -m_driver.getRightX();
-  private final DoubleSupplier m_getDriverXTranslationSlow = () -> m_getDriverXTranslation.getAsDouble() * GeneralConstants.SlowModeMultiplier;
-  private final DoubleSupplier m_getDriverYTranslationSlow = () -> m_getDriverYTranslation.getAsDouble() * GeneralConstants.SlowModeMultiplier;
-  private final DoubleSupplier m_getDriverXTranslationMoveLaunch = () -> m_getDriverXTranslation.getAsDouble() * GeneralConstants.MoveLaunchDriveMultiplier;
-  private final DoubleSupplier m_getDriverYTranslationMoveLaunch = () -> m_getDriverYTranslation.getAsDouble() * GeneralConstants.MoveLaunchDriveMultiplier;
-  private final DoubleSupplier m_getDriverRotationSlow = () -> m_getDriverRotation.getAsDouble() *  GeneralConstants.SlowModeMultiplier;
+  private final DoubleSupplier m_getDriverXTranslation;
+  private final DoubleSupplier m_getDriverYTranslation;
+  private final DoubleSupplier m_getDriverRotation;
+  private final DoubleSupplier m_getDriverXTranslationSlow;
+  private final DoubleSupplier m_getDriverYTranslationSlow;
+  private final DoubleSupplier m_getDriverXTranslationMoveLaunch;
+  private final DoubleSupplier m_getDriverYTranslationMoveLaunch;
+  private final DoubleSupplier m_getDriverRotationSlow;
 
   private boolean m_isManual = false;
   private final Trigger m_isManualTrigger = new Trigger(() -> m_isManual);
   private final Trigger m_isAutomaticTrigger = m_isManualTrigger.negate();
   // Dashboard inputs
   private LoggedDashboardChooser<Command> autoChooser;
+  private LoggedDashboardChooser<Runnable> arenaEnable;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
+  public RobotContainer(int id, Pose2d startPose) {
+    this.id = id;
+    m_driver = new Gamepad(id);
+    
+    m_getDriverXTranslation = () -> m_driver.getLeftY();
+    m_getDriverYTranslation = () -> -m_driver.getLeftX();
+    m_getDriverRotation = () -> -m_driver.getRightX();
+    m_getDriverXTranslationSlow = () -> m_getDriverXTranslation.getAsDouble() * GeneralConstants.SlowModeMultiplier;
+    m_getDriverYTranslationSlow = () -> m_getDriverYTranslation.getAsDouble() * GeneralConstants.SlowModeMultiplier;
+    m_getDriverXTranslationMoveLaunch = () -> m_getDriverXTranslation.getAsDouble() * GeneralConstants.MoveLaunchDriveMultiplier;
+    m_getDriverYTranslationMoveLaunch = () -> m_getDriverYTranslation.getAsDouble() * GeneralConstants.MoveLaunchDriveMultiplier;
+    m_getDriverRotationSlow = () -> m_getDriverRotation.getAsDouble() *  GeneralConstants.SlowModeMultiplier;
+
     switch (GeneralConstants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -132,7 +144,9 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
-         m_quest = new Quest(m_swerveDrive);
+        m_quest = new Quest(m_swerveDrive);
+        m_intake = new Intake(id);
+        m_launcher = new Launcher(new Flywheel(id), new Feeder(id), new Hood(id), m_swerveDrive);
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
@@ -162,6 +176,15 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
+        m_intake = new Intake(id);
+        m_launcher = new Launcher(new Flywheel(id), new Feeder(id), new Hood(id), m_swerveDrive);
+        break;
+
+      case ARENA:
+        var drive = new DriveMapleSim(startPose);
+        m_intake = new MapleSimtake(id, drive.sim);
+        m_launcher = new MapleSimLauncher(new Flywheel(id), new FakeFeeder(m_intake), new Hood(id), drive, m_intake);
+        m_swerveDrive = drive;
         break;
 
       default:
@@ -173,8 +196,12 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
+        m_intake = new Intake(id);
+        m_launcher = new Launcher(new Flywheel(id), new Feeder(id), new Hood(id), m_swerveDrive);
         break;
     }
+    m_swerveDrive.setPose(startPose);
+
     m_camera = new Camera("limelight",
             LimelightVersion.LL3G,
             LimelightCamera.LL3GSpecs(),
@@ -183,16 +210,18 @@ public class RobotContainer {
             () -> m_swerveDrive.getSpeed().in(MetersPerSecond),
             () -> m_swerveDrive.getRotationalSpeed().in(RotationsPerSecond));
 
-    // m_climber = new Climber();
-    // m_climberMech2d = new ClimberMech2D(m_climber);
-
-    m_intake = new Intake ();
     m_intakeMech2d = new IntakeMech2D(m_intake);
-
-    m_launcher = new Launcher(new Flywheel(), new Feeder(), new Hood(), m_swerveDrive);
+    m_launcherMech2D = new LauncherMech2D(m_launcher);
     m_launcherMech2D = new LauncherMech2D(m_launcher);
 
-    addAutos();
+    if (id == 0) m_swerveDrive.setupAutoBuilder();
+    if (GeneralConstants.currentMode == Mode.ARENA && id != 0) {
+      // All the extra Arena bots
+      addMultiplayerChoosers();
+    } else {
+      // Runs in every mode, and the first robot made in Arena
+      addAutos();
+    }
 
     // Configure the button bindings
     configureButtonBindings();
@@ -208,6 +237,16 @@ public class RobotContainer {
             .deadlineFor(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
     // NamedCommands.registerCommand("ClimbReach", new SetClimberHeight(m_climber, ClimberConstants.MaxExtension));
     // NamedCommands.registerCommand("ClimbEngage", new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension));
+  }
+
+  private void addMultiplayerChoosers() {
+    var tmp = new SendableChooser<Runnable>();
+    final Runnable disable = () -> m_swerveDrive.setPose(ArenaConstants.waitingPoses[id]);
+    final Runnable enable = () -> m_swerveDrive.setPose(ArenaConstants.startingPoses[id]);
+    tmp.setDefaultOption("Disable", disable);
+    tmp.addOption("Enable", enable);
+
+    arenaEnable = new LoggedDashboardChooser<>("Robot"+id+"/Enabled", tmp);
   }
 
   private void addAutos() {
@@ -228,8 +267,6 @@ public class RobotContainer {
         "Drive SysId (Quasistatic Reverse)",
         m_swerveDrive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
     autoChooser.addOption(
-        "Drive SysId (Dynamic Forward)", m_swerveDrive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", m_swerveDrive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
   }
 
@@ -242,7 +279,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     configureDefaultCommands();
     configureDriverButtons();
-    configureOperatorButtons();
+    // configureOperatorButtons();
   }
 
   private void configureDefaultCommands() {
@@ -318,7 +355,7 @@ public class RobotContainer {
     // X: Set drive to X mode (defensive position)
     m_driver.x().onTrue(Commands.runOnce(m_swerveDrive::stopWithX, m_swerveDrive));
     // Y: Drive to the safe launch point
-    m_driver.y().whileTrue(PathUtil.driveToPoseCommand(LauncherConstants.SafeLaunchPoint, m_swerveDrive));
+    // m_driver.y().whileTrue(PathUtil.driveToPoseCommand(LauncherConstants.SafeLaunchPoint, m_swerveDrive));
 
     // Left or Right stick press: toggles slow mode
     m_driver.leftStick().or(m_driver.rightStick()).toggleOnTrue(
@@ -335,105 +372,105 @@ public class RobotContainer {
     m_driver.back();
   }
 
-  private void configureOperatorButtons() {
+  // private void configureOperatorButtons() {
 
-    // RB: manually prep flywheels (no feeder)
-    m_operator.rightBumper().whileTrue(switchAutomaticOrManual(
-      // automatic
-      new InstantCommand(),
-      // manual
-      new RunCommand(() -> m_launcher.setFlywheelSpeed(LauncherConstants.LauncherSpeed.get()), m_launcher) 
-    ));;
-    // RT: manually run flywheels and feeder
-    m_operator.rightTrigger().whileTrue(switchAutomaticOrManual(
-      // automatic
-      new AimHubAndLaunchTunable(m_launcher, m_swerveDrive, m_intake),
-      // manual
-      // new RunCommand(() -> {
-      //   m_launcher.setFeederSpeed(FeederConstants.FeederSpeed.get());
-      //   m_launcher.setFlywheelSpeed(LauncherConstants.LauncherSpeed.get());
-      // }, m_launcher) 
-      new AimHubAndLaunchTunable(m_launcher, m_swerveDrive, m_intake)
-    ));
-    // LB: Unjam intake (automatic and manual mode)
-    m_operator.leftBumper().whileTrue(new RunCommand(() -> m_intake.setRollerSpeed(IntakeConstants.OuttakeRollerSpeed.get()), m_intake));
-    // LT: controls manually running the intake rollers
-    m_operator.leftTrigger().whileTrue(switchAutomaticOrManual(
-      // automatic
-      new InstantCommand(),
-      // manual
-      new RunCommand(() -> m_intake.setRollerSpeed(IntakeConstants.IntakeRollerSpeed.get()), m_intake)
-    ));
+  //   // RB: manually prep flywheels (no feeder)
+  //   m_operator.rightBumper().whileTrue(switchAutomaticOrManual(
+  //     // automatic
+  //     new InstantCommand(),
+  //     // manual
+  //     new RunCommand(() -> m_launcher.setFlywheelSpeed(LauncherConstants.LauncherSpeed.get()), m_launcher) 
+  //   ));;
+  //   // RT: manually run flywheels and feeder
+  //   m_operator.rightTrigger().whileTrue(switchAutomaticOrManual(
+  //     // automatic
+  //     new AimHubAndLaunchTunable(m_launcher, m_swerveDrive, m_intake),
+  //     // manual
+  //     // new RunCommand(() -> {
+  //     //   m_launcher.setFeederSpeed(FeederConstants.FeederSpeed.get());
+  //     //   m_launcher.setFlywheelSpeed(LauncherConstants.LauncherSpeed.get());
+  //     // }, m_launcher) 
+  //     new AimHubAndLaunchTunable(m_launcher, m_swerveDrive, m_intake)
+  //   ));
+  //   // LB: Unjam intake (automatic and manual mode)
+  //   m_operator.leftBumper().whileTrue(new RunCommand(() -> m_intake.setRollerSpeed(IntakeConstants.OuttakeRollerSpeed.get()), m_intake));
+  //   // LT: controls manually running the intake rollers
+  //   m_operator.leftTrigger().whileTrue(switchAutomaticOrManual(
+  //     // automatic
+  //     new InstantCommand(),
+  //     // manual
+  //     new RunCommand(() -> m_intake.setRollerSpeed(IntakeConstants.IntakeRollerSpeed.get()), m_intake)
+  //   ));
 
-    // Right Y: controls manual intake pivot
-    m_operator.rightY().whileTrue(switchAutomaticOrManual(
-      // automatic
-      new InstantCommand(),
-      // manual
-      new RunCommand(() -> m_intake.setPivotSpeed(m_operator.getRightY() * -1.0 * IntakeConstants.ManualPivotSpeedMultiplier.get()), m_intake) // TODO: does -1 make sense for this one?
-    ));
+  //   // Right Y: controls manual intake pivot
+  //   m_operator.rightY().whileTrue(switchAutomaticOrManual(
+  //     // automatic
+  //     new InstantCommand(),
+  //     // manual
+  //     new RunCommand(() -> m_intake.setPivotSpeed(m_operator.getRightY() * -1.0 * IntakeConstants.ManualPivotSpeedMultiplier.get()), m_intake) // TODO: does -1 make sense for this one?
+  //   ));
 
-    // Left Y: controls manual climb
-    m_operator.leftY().whileTrue(switchAutomaticOrManual(
-      // automatic
-      new InstantCommand(),
-      // manual
-      new RunCommand(() -> m_launcher.setHoodSpeed(m_operator.getLeftY() * -1.0 * HoodConstants.ManualHoodSpeedMultiplier.get()), m_launcher) // TODO: -1 seems wrong. Implies motor is inverted correctly
-    ));
+  //   // Left Y: controls manual climb
+  //   m_operator.leftY().whileTrue(switchAutomaticOrManual(
+  //     // automatic
+  //     new InstantCommand(),
+  //     // manual
+  //     new RunCommand(() -> m_launcher.setHoodSpeed(m_operator.getLeftY() * -1.0 * HoodConstants.ManualHoodSpeedMultiplier.get()), m_launcher) // TODO: -1 seems wrong. Implies motor is inverted correctly
+  //   ));
 
-    // // POV up: controls climber to up position (with manaual fixed move too)
-     m_operator.povUp().whileTrue (new InstantCommand(
-     ()-> m_launcher.increaseFlywheelMultiplier()
-     ));
+  //   // // POV up: controls climber to up position (with manaual fixed move too)
+  //    m_operator.povUp().whileTrue (new InstantCommand(
+  //    ()-> m_launcher.increaseFlywheelMultiplier()
+  //    ));
    
-    // // POV left:
-    // m_operator.povLeft();
-    // // POV right: moves to the climb position
-    // m_operator.povRight().whileTrue(switchAutomaticOrManual(
-    //   // automatic
-    //   new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension),
-    //   // manual
-    //   new InstantCommand()
-    // ));
-    // // POV down: controls climber to down position (with manaual fixed move too)
-     m_operator.povDown().whileTrue(new InstantCommand(
-      ()-> m_launcher.decreaseFlywheelMultiplier()
-     ));
+  //   // // POV left:
+  //   // m_operator.povLeft();
+  //   // // POV right: moves to the climb position
+  //   // m_operator.povRight().whileTrue(switchAutomaticOrManual(
+  //   //   // automatic
+  //   //   new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension),
+  //   //   // manual
+  //   //   new InstantCommand()
+  //   // ));
+  //   // // POV down: controls climber to down position (with manaual fixed move too)
+  //    m_operator.povDown().whileTrue(new InstantCommand(
+  //     ()-> m_launcher.decreaseFlywheelMultiplier()
+  //    ));
 
-    // A: Move hood up
-    m_operator.a().whileTrue(switchAutomaticOrManual(
-      // automatic
-      new RunCommand(()-> m_launcher.setHoodAngle(HoodConstants.HoodMinAngle), m_launcher), 
-      // manual
-      new RunCommand(() -> m_launcher.setHoodSpeed(-HoodConstants.HoodSpeed.get()), m_launcher)
-    ));
-    // B: Move hood down
-    m_operator.b().whileTrue(switchAutomaticOrManual(
-      // automaticm
-      new RunCommand(()-> m_launcher.setHoodAngle(HoodConstants.HoodMaxAngle), m_launcher), 
-      // manual
-      new RunCommand(() -> m_launcher.setHoodSpeed(HoodConstants.HoodSpeed.get()), m_launcher)
-    ));
-    // X: Unjam launcher (automatic and manual mode)
-    m_operator.x().whileTrue(new RunCommand(() -> {
-      m_launcher.setFeederSpeed(FeederConstants.UnjamSpeed.get());
-      m_launcher.setFlywheelSpeed(LauncherConstants.UnjamSpeed.get());
-    }, m_launcher));
-    // Y: resets quest and odometry pose to limelight pose
-    m_operator.y().whileTrue(new RunCommand(() -> {
-      var botpose = m_camera.getBotPose3d();
-      if (botpose != null && !botpose.equals(new Pose3d())){
-        m_quest.resetPose(botpose);
-        m_swerveDrive.setPose(botpose.toPose2d());
-      }
-    }).ignoringDisable(true));
+  //   // A: Move hood up
+  //   m_operator.a().whileTrue(switchAutomaticOrManual(
+  //     // automatic
+  //     new RunCommand(()-> m_launcher.setHoodAngle(HoodConstants.HoodMinAngle), m_launcher), 
+  //     // manual
+  //     new RunCommand(() -> m_launcher.setHoodSpeed(-HoodConstants.HoodSpeed.get()), m_launcher)
+  //   ));
+  //   // B: Move hood down
+  //   m_operator.b().whileTrue(switchAutomaticOrManual(
+  //     // automaticm
+  //     new RunCommand(()-> m_launcher.setHoodAngle(HoodConstants.HoodMaxAngle), m_launcher), 
+  //     // manual
+  //     new RunCommand(() -> m_launcher.setHoodSpeed(HoodConstants.HoodSpeed.get()), m_launcher)
+  //   ));
+  //   // X: Unjam launcher (automatic and manual mode)
+  //   m_operator.x().whileTrue(new RunCommand(() -> {
+  //     m_launcher.setFeederSpeed(FeederConstants.UnjamSpeed.get());
+  //     m_launcher.setFlywheelSpeed(LauncherConstants.UnjamSpeed.get());
+  //   }, m_launcher));
+  //   // Y: resets quest and odometry pose to limelight pose
+  //   m_operator.y().whileTrue(new RunCommand(() -> {
+  //     var botpose = m_camera.getBotPose3d();
+  //     if (botpose != null && !botpose.equals(new Pose3d())){
+  //       m_quest.resetPose(botpose);
+  //       m_swerveDrive.setPose(botpose.toPose2d());
+  //     }
+  //   }).ignoringDisable(true));
 
 
-    // Start: enables manual mode
-    m_operator.start().onTrue(new InstantCommand((() -> m_isManual = true)));
-    // Back: enabled auto mode
-    m_operator.back().onTrue(new InstantCommand((() -> m_isManual = false)));
-  }
+  //   // Start: enables manual mode
+  //   m_operator.start().onTrue(new InstantCommand((() -> m_isManual = true)));
+  //   // Back: enabled auto mode
+  //   m_operator.back().onTrue(new InstantCommand((() -> m_isManual = false)));
+  // }
 
   private Command switchAutomaticOrManual(Command autoCommand, Command manualCommand) {
     return new ConditionalCommand(autoCommand, manualCommand, m_isAutomaticTrigger);
@@ -496,11 +533,25 @@ public class RobotContainer {
     return autoChooser.get();
   }
 
+  public void logMech3d() {
+    // Generates poses for the turret
+    // - release pose at center of turret
+    // - doesn't include hood, or anything else
+    // ArrayList<Pose3d> lst = m_launcher.generateMech3d();
+    // Now generate the pose for the intake
+  }
+
+  public void containerLogging() {
+    Logger.recordOutput("Robot"+id+"/Pose2d", m_swerveDrive.getPose());
+    Logger.recordOutput("Robot"+id+"/PiecesHeld", m_intake.getNumGamePieces());
+    Logger.recordOutput("Robot"+id+"/IntakeMechanism", m_intakeMech2d.getMechanism2d());
+  }
+
   public Camera getCamera() {
     return m_camera;
   }
 
-  public Drive getSwerveDrive() {
+  public AbstractDrive getSwerveDrive() {
     return m_swerveDrive;
   }
 
