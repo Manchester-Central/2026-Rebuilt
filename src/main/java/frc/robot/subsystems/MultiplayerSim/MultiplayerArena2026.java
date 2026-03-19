@@ -89,6 +89,10 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
     m_firstAlliance = Alliance.Blue;
   }
 
+  /**
+   * Two phase init that should be run after the primary RobotContainer is created.
+   * This is because the primary robot has special permissions and static initializations.
+   */
   public void loadAdditionalRobots() {
     robots = new RobotContainer[ArenaConstants.numAdditionalRobots];
     for (int idx = 0; idx < ArenaConstants.numAdditionalRobots; idx++) {
