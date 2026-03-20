@@ -18,10 +18,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.LauncherConstants;
 import frc.robot.constants.LauncherConstants.HoodConstants;
-import frc.robot.subsystems.interfaces.IHood;
 
 /** Add your docs here. */
-public class Hood extends SubsystemBase implements IHood {
+public class Hood extends SubsystemBase {
   private ChaosTalonFx m_hoodMotor = new ChaosTalonFx(HoodConstants.HoodCanId, LauncherConstants.LauncherCanBus, HoodConstants.HoodConfig);
   private DigitalInput m_limSwitch = new DigitalInput(HoodConstants.SensorIndex); // TODO: check input channel
 
@@ -40,7 +39,6 @@ public class Hood extends SubsystemBase implements IHood {
     }
   }
 
-  @Override
   public void setHoodSpeed(double speed) {
     // if (getHoodAngle().gt(HoodConstants.HoodMaxAngle)) {
     //   speed = Math.min(speed, 0);
@@ -51,12 +49,10 @@ public class Hood extends SubsystemBase implements IHood {
     // m_hoodMotor.set(speed); // TODO: re-add hood movement
   }
 
-  @Override
   public double getHoodSpeed() {
-    return m_hoodMotor.get(); // TODO: finish IHood stuff
+    return m_hoodMotor.get(); // TODO: finish Hood stuff
   }
 
-  @Override
   public void setHoodAngle(Angle targetAngle) {
     m_targetAngle = targetAngle;
     if (m_targetAngle.gt(HoodConstants.HoodMaxAngle)) {
@@ -72,7 +68,6 @@ public class Hood extends SubsystemBase implements IHood {
     // }
   }
 
-  @Override
   public Angle getHoodAngle() {
     return m_hoodMotor.getPosition().getValue();
   }
@@ -81,7 +76,6 @@ public class Hood extends SubsystemBase implements IHood {
     return !m_limSwitch.get(); // Magnetic limit switch is false when the climber is at the bottom
   }
 
-  @Override
   public boolean atTargetHoodAngle() {
     return getHoodAngle().isNear(m_targetAngle, HoodConstants.TargetAngleTolerance.get());
   }

@@ -9,9 +9,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.LauncherConstants;
 import frc.robot.constants.LauncherConstants.FeederConstants;
-import frc.robot.subsystems.interfaces.IFeeder;
 
-public class Feeder extends SubsystemBase implements IFeeder {
+public class Feeder extends SubsystemBase {
     private ChaosTalonFx m_topFeederMotor = new ChaosTalonFx(FeederConstants.TopFeederCanId, LauncherConstants.LauncherCanBus, FeederConstants.TopConfig);
     private ChaosTalonFx m_bottomFeederMotor = new ChaosTalonFx(FeederConstants.BottomFeederCanId, LauncherConstants.LauncherCanBus, FeederConstants.BottomConfig);
 
@@ -25,24 +24,20 @@ public class Feeder extends SubsystemBase implements IFeeder {
         m_bottomFeederMotor.applyConfig();
     }
 
-    @Override
     public void setFeederSpeed (double speed) {
         m_topFeederMotor.set(speed);
         m_bottomFeederMotor.set(speed);
     }
 
-    @Override
     public void setFeederSpeed (double bottomSpeed, double topSpeed) {
         m_topFeederMotor.set(topSpeed);
         m_bottomFeederMotor.set(bottomSpeed);
     }
 
-    @Override
     public double getFeederSpeed () {
         return m_topFeederMotor.get();
     }
 
-    @Override
     public boolean doesFeederHaveFuel() {
         return !m_beamSensor.get(); // TODO: test if not is needed
     }

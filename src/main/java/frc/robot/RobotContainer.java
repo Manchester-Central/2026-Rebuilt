@@ -68,9 +68,6 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeMech2D;
-// import frc.robot.subsystems.interfaces.IClimber;
-import frc.robot.subsystems.interfaces.IIntake;
-import frc.robot.subsystems.interfaces.ILauncher;
 import frc.robot.subsystems.launcher.Feeder;
 import frc.robot.subsystems.launcher.Flywheel;
 import frc.robot.subsystems.launcher.Hood;
@@ -96,8 +93,8 @@ public class RobotContainer {
   private IntakeMech2D m_intakeMech2d;
   @SuppressWarnings("unused")
   private LauncherMech2D m_launcherMech2D;
-  private ILauncher m_launcher;
-  private IIntake m_intake;
+  private Launcher m_launcher;
+  private Intake m_intake;
 
   // Controller
   private final Gamepad m_driver = new Gamepad(0);
