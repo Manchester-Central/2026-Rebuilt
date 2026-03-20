@@ -44,7 +44,7 @@ public class Launcher extends SubsystemBase implements ILauncher {
 
   Debouncer m_fallingDebouncer = new Debouncer(10.0, DebounceType.kFalling);
   boolean m_atVelocityDebouced = false;
-  double m_flywheelMarkiplier = 1.1;
+  double m_flywheelMarkiplier = 1.0;
 
 
 

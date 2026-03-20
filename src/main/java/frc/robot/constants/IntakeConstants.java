@@ -51,7 +51,7 @@ public final class IntakeConstants {
 
   // Speeds
   public static final DashboardNumber IntakeRollerSpeed = new DashboardNumber("Intake/IntakeRollerSpeed", 0.85);
-  public static final DashboardNumber OuttakeRollerSpeed = new DashboardNumber("Intake/OuttakeRollerSpeed", -0.4);
+  public static final DashboardNumber OuttakeRollerSpeed = new DashboardNumber("Intake/OuttakeRollerSpeed", -0.8);
 
   public static final class RollerConstants {
     public static final CanId RollerCanId = CanId.ID_30;
