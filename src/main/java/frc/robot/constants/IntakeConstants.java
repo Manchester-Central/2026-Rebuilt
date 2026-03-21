@@ -7,17 +7,18 @@ package frc.robot.constants;
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Kilograms;
+import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.Rotations;
 
 import com.chaos131.can.CanConstants.CanBusName;
 import com.chaos131.can.CanConstants.CanId;
+import com.chaos131.ctre.CtreMotorSimValues;
 import com.chaos131.util.DashboardNumber;
 import com.chaos131.util.DashboardUnit;
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
-import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -25,13 +26,17 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.ctre.phoenix6.sim.TalonFXSimState.MotorType;
 import com.revrobotics.encoder.config.DetachedEncoderConfig;
 
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.units.AngleUnit;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Mass;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
 /** Add your docs here. */
 public final class IntakeConstants {
@@ -45,21 +50,21 @@ public final class IntakeConstants {
   public static final DashboardNumber ManualPivotSpeedMultiplier = new DashboardNumber("Intake/ManualPivotSpeedMultiplier", 0.4);
 
   // Speeds
-  public static final DashboardNumber IntakeRollerSpeed = new DashboardNumber("Intake/IntakeRollerSpeed", 0.65);
-  public static final DashboardNumber OuttakeRollerSpeed = new DashboardNumber("Intake/OuttakeRollerSpeed", -0.4);
+  public static final DashboardNumber IntakeRollerSpeed = new DashboardNumber("Intake/IntakeRollerSpeed", 0.85);
+  public static final DashboardNumber OuttakeRollerSpeed = new DashboardNumber("Intake/OuttakeRollerSpeed", -0.8);
 
   public static final class RollerConstants {
     public static final CanId RollerCanId = CanId.ID_30;
 
     public static final TalonFXConfiguration Config = new TalonFXConfiguration()
       .withMotorOutput(new MotorOutputConfigs()
-          .withInverted(InvertedValue.CounterClockwise_Positive)
+          .withInverted(InvertedValue.Clockwise_Positive)
           .withNeutralMode(NeutralModeValue.Coast)
       )
       .withCurrentLimits(new CurrentLimitsConfigs()
-          .withSupplyCurrentLimit(Amps.of(40)) // TODO: Double Check
-          .withStatorCurrentLimit(Amps.of(40)) // TODO: Double Check
-          .withSupplyCurrentLowerLimit(Amps.of(60))
+          .withSupplyCurrentLimit(Amps.of(80)) // TODO: Double Check
+          .withStatorCurrentLimit(Amps.of(80)) // TODO: Double Check
+          .withSupplyCurrentLowerLimit(Amps.of(80))
           .withSupplyCurrentLimitEnable(true)
           .withStatorCurrentLimitEnable(true)
       );
@@ -99,18 +104,29 @@ public final class IntakeConstants {
             .withGravityType(GravityTypeValue.Arm_Cosine)
         );
 
-    public static final Angle CanCoderOffset = Rotations.of(0);
-
     public static final DetachedEncoderConfig pivotEncoderConfig = new DetachedEncoderConfig()
-        .inverted(false)
-        .dutyCycleOffset(Degrees.of(226).in(Rotations));
+        .inverted(true)
+        .dutyCycleOffset(Degrees.of(120).in(Rotations));
 
     // Pivot Max / Min
-    public static final Angle MaxAngle = Degrees.of(188); // TODO: Double Check
-    public static final Angle MinAngle = Degrees.of(66); // TODO: Double Check
+    public static final Angle MaxAngle = Degrees.of(177); // TODO: Double Check
+    public static final Angle MinAngle = Degrees.of(49); // TODO: Double Check
 
     // Target Angles / Speeds
-    public static final DashboardUnit<AngleUnit,Angle> DeployAngle = new DashboardUnit<>("Intake/DeployAngle", Degrees.of(185)); // TODO: Double Check
-    public static final DashboardUnit<AngleUnit,Angle> RetractAngle = new DashboardUnit<>("Intake/RetractAngle", Degrees.of(66)); // TODO: Double Check
+    public static final DashboardUnit<AngleUnit,Angle> DeployAngle = new DashboardUnit<>("Intake/DeployAngle", Degrees.of(172)); // TODO: Double Check
+    public static final DashboardUnit<AngleUnit,Angle> RetractAngle = new DashboardUnit<>("Intake/RetractAngle", Degrees.of(110)); // TODO: Double Check
+
+    // Sim values
+    public static final double MOI = SingleJointedArmSim.estimateMOI(IntakeLength.in(Meters), IntakeMass.in(Kilograms));
+    public static final DCMotor DcMotor = DCMotor.getKrakenX60(1);
+    public static final DCMotorSim DcMotorSim = new DCMotorSim(
+      LinearSystemId.createSingleJointedArmSystem(DcMotor, MOI, SensorToMechanismRatio),
+      DcMotor);
+    public static final CtreMotorSimValues SimValues = new CtreMotorSimValues(
+      DcMotorSim,
+      SensorToMechanismRatio,
+      true,
+      CtreMotorSimValues.chassisReferenceFromInvertedValue(TalonConfig.MotorOutput.Inverted),
+      MotorType.KrakenX60);
   }
 }

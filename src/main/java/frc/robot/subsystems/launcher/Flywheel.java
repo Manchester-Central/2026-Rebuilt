@@ -1,6 +1,5 @@
 package frc.robot.subsystems.launcher;
 
-import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
@@ -9,94 +8,83 @@ import org.littletonrobotics.junction.Logger;
 
 import com.chaos131.ctre.ChaosTalonFx;
 import com.chaos131.ctre.ChaosTalonFxTuner;
-import com.ctre.phoenix6.sim.ChassisReference;
-import com.ctre.phoenix6.sim.TalonFXSimState.MotorType;
+import com.ctre.phoenix6.controls.StrictFollower;
 
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearVelocity;
-import edu.wpi.first.wpilibj.simulation.DCMotorSim;
-import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.LauncherConstants;
 import frc.robot.constants.LauncherConstants.FlywheelConstants;
-import frc.robot.subsystems.interfaces.IFlywheel;
 
-public class Flywheel implements IFlywheel {
-    private ChaosTalonFx m_leftFlywheelMotor = new ChaosTalonFx(FlywheelConstants.LeftFlywheelCanId, LauncherConstants.LauncherCanBus, FlywheelConstants.LeftConfig);
-    private ChaosTalonFx m_rightFlywheelMotor = new ChaosTalonFx(FlywheelConstants.RightFlywheelCanId, LauncherConstants.LauncherCanBus, FlywheelConstants.RightConfig);
-    private ChaosTalonFx[] m_flywheelMotors = {
-        m_leftFlywheelMotor,
-        m_rightFlywheelMotor
-    };
+public class Flywheel extends SubsystemBase {
+    private ChaosTalonFx m_leftMainFlywheelMotor = new ChaosTalonFx(FlywheelConstants.LeftFlywheelCanId, LauncherConstants.LauncherCanBus, FlywheelConstants.LeftConfig);
+    private ChaosTalonFx m_rightFollowerFlywheelMotor = new ChaosTalonFx(FlywheelConstants.RightFlywheelCanId, LauncherConstants.LauncherCanBus, FlywheelConstants.RightConfig);
 
     @SuppressWarnings("unused")
-    private ChaosTalonFxTuner m_flywheelTuner = new ChaosTalonFxTuner("Launcher/Flywheel/Flywheel Motors", m_flywheelMotors).withAllConfigs();
+    private ChaosTalonFxTuner m_flywheelTuner = new ChaosTalonFxTuner("Launcher/Flywheel/Flywheel Motors", m_leftMainFlywheelMotor, m_rightFollowerFlywheelMotor).withAllConfigs();
 
     private LinearVelocity targetVelocity = MetersPerSecond.of(0);
-    private LinearVelocity targetVelocityTolerance = FlywheelConstants.TargetVelocityTolerance;
 
     public Flywheel() {
-        for (var motor : m_flywheelMotors) {
-            motor.applyConfig();
-            if (Robot.isSimulation()) {
-                var m_dcMotor = DCMotor.getKrakenX60(1); // TODO: double check
-                var m_moi = SingleJointedArmSim.estimateMOI(FlywheelConstants.FlyWheelDiameter.in(Meters) / 2.0, FlywheelConstants.FlywheelMass.in(Kilograms));
-                var m_dcMotorSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(m_dcMotor, m_moi, motor.Configuration.Feedback.SensorToMechanismRatio), m_dcMotor);
-                motor.attachMotorSim(m_dcMotorSim, motor.Configuration.Feedback.SensorToMechanismRatio, true, ChassisReference.CounterClockwise_Positive, MotorType.KrakenX60);
-            }
+        m_rightFollowerFlywheelMotor.applyConfig();
+        m_leftMainFlywheelMotor.applyConfig();
+
+        if (Robot.isSimulation()) {
+            m_leftMainFlywheelMotor.attachMotorSim(FlywheelConstants.SimValues);
+        }
+
+        m_rightFollowerFlywheelMotor.setControl(new StrictFollower(m_leftMainFlywheelMotor.getDeviceID()));
+        
+        // Increase the update rate for the leader motor so the follower can respond faster (for the respective follow type. See https://www.chiefdelphi.com/t/ctre-follower-does-the-same-volts-or-the-same-control-request/513725/6)
+        if (FlywheelConstants.UseTorqueCurrentFOC) {
+            m_leftMainFlywheelMotor.getTorqueCurrent().setUpdateFrequency(FlywheelConstants.ClosedLoopUpdateFrequency);
+        } else {
+            m_leftMainFlywheelMotor.getMotorVoltage().setUpdateFrequency(FlywheelConstants.ClosedLoopUpdateFrequency);
         }
     }
 
-    public void setFlywheelVelocity(AngularVelocity velocity) {
-        for (var motor : m_flywheelMotors)
-            motor.moveAtVelocity(velocity);
+    public void setFlywheelVelocity(AngularVelocity velocity) {   
+        m_leftMainFlywheelMotor.moveAtVelocity(velocity);
     }
 
     public void setFlywheelVelocity(LinearVelocity linearVelocity) {
         targetVelocity = linearVelocity;
         AngularVelocity angularVelocity = RotationsPerSecond.of(linearVelocity.in(MetersPerSecond) / (Math.PI * FlywheelConstants.FlyWheelDiameter.in(Meters)));
-        for (var motor : m_flywheelMotors)
-            motor.moveAtVelocity(angularVelocity);
+        if (FlywheelConstants.UseTorqueCurrentFOC) {
+            m_leftMainFlywheelMotor.moveAtVelocityFOC(angularVelocity);
+        } else {
+            if (m_leftMainFlywheelMotor.getVelocity().getValue().minus(angularVelocity).in(RotationsPerSecond) > 10) {
+                m_leftMainFlywheelMotor.set(1);
+            } else {
+                m_leftMainFlywheelMotor.moveAtVelocity(angularVelocity);
+            }
+        }
     }
 
-    public LinearVelocity getLeftLinearVelocity() {
-        AngularVelocity angularVelocity = m_leftFlywheelMotor.getVelocity().getValue();
+    public LinearVelocity getLinearVelocity() {
+        AngularVelocity angularVelocity = m_leftMainFlywheelMotor.getVelocity().getValue();
         return MetersPerSecond.of( angularVelocity.in(RotationsPerSecond) * (Math.PI * FlywheelConstants.FlyWheelDiameter.in(Meters)) );
     }
 
-    public boolean atTargetLeft() {
+    public boolean atTarget() {
         if (targetVelocity == null) return false;
-        return getLeftLinearVelocity().isNear(targetVelocity, targetVelocityTolerance);
+        return getLinearVelocity().isNear(targetVelocity, FlywheelConstants.TargetVelocityTolerance.get());
     }
 
-    public LinearVelocity getRightLinearVelocity() {
-        AngularVelocity angularVelocity = m_rightFlywheelMotor.getVelocity().getValue();
-        return MetersPerSecond.of( angularVelocity.in(RotationsPerSecond) * (Math.PI * FlywheelConstants.FlyWheelDiameter.in(Meters)) );
-    }
-
-    public boolean atTargetRight() {
-        if (targetVelocity == null) return false;
-        return getRightLinearVelocity().isNear(targetVelocity, targetVelocityTolerance);
-    }
-
-    @Override
     public void setFlywheelSpeed(double speed) {
-        for (var motor : m_flywheelMotors)
-            motor.set(speed);
+        m_leftMainFlywheelMotor.set(speed);
     }
 
-    @Override
     public double getFlywheelSpeed() {
         // Because there's 2 motors doing the same thing, we're presuming they're going to return the same values.
         // If this proves to be incorrect, we should make a separate function in the future.
-        return m_leftFlywheelMotor.get();
+        return m_leftMainFlywheelMotor.get();
     }
 
+    @Override
     public void periodic() {
-        Logger.recordOutput("Launcher/LeftFlywheelVelocity", getLeftLinearVelocity().in(MetersPerSecond));
-        Logger.recordOutput("Launcher/RightFlywheelVelocity", getRightLinearVelocity().in(MetersPerSecond));
+        Logger.recordOutput("Launcher/FlywheelVelocity", getLinearVelocity().in(MetersPerSecond));     
         Logger.recordOutput("Launcher/FlywheelTargetVelocity", targetVelocity.in(MetersPerSecond));
     }
 }

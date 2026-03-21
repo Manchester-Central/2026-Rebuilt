@@ -1,0 +1,121 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.397832792207793,
+        "y": 0.6323538961038957
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.38146704349867,
+        "y": 1.3743593529964004
+      },
+      "isLocked": false,
+      "linkedName": "MidRightStart"
+    },
+    {
+      "anchor": {
+        "x": 7.202224025974026,
+        "y": 2.7394318181818176
+      },
+      "prevControl": {
+        "x": 7.202224025974026,
+        "y": 1.5085232927670553
+      },
+      "nextControl": {
+        "x": 7.202224025974026,
+        "y": 3.52622699890471
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.113092532467532,
+        "y": 3.5794155844155844
+      },
+      "prevControl": {
+        "x": 6.772072075715211,
+        "y": 3.865622104893715
+      },
+      "nextControl": {
+        "x": 5.28267704584572,
+        "y": 3.2187513886715693
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.850470756062768,
+        "y": 0.7679885877318122
+      },
+      "prevControl": {
+        "x": 7.3384165477888725,
+        "y": 0.7032952924393738
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "MidRightEnd"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.8643497757847537,
+      "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 2.0986547085201788,
+      "rotationDegrees": 80.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 2.738007380073799,
+      "maxWaypointRelativePos": 3.0,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "DeployIntake"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 1.0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "Right",
+  "idealStartingState": {
+    "velocity": 3.0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

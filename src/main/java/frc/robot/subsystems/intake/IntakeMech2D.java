@@ -12,10 +12,9 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
 
-import com.chaos131.util.Color;
+import com.chaos131.util.ChaosColor;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.interfaces.IIntake;
 
 public class IntakeMech2D extends SubsystemBase {
   @AutoLogOutput(key = "Intake/IntakeMech2D")
@@ -23,10 +22,10 @@ public class IntakeMech2D extends SubsystemBase {
   LoggedMechanismRoot2d m_intakeRoot;
   LoggedMechanismLigament2d m_intakeLigament;
 
-  IIntake m_intake;
+  Intake m_intake;
 
   /** Creates a new IntakeMech2D. */
-  public IntakeMech2D(IIntake intake) {
+  public IntakeMech2D(Intake intake) {
     m_intakeBase = new LoggedMechanism2d(Inches.of(26), Inches.of(28.5));
     m_intakeRoot = m_intakeBase.getRoot("Intake", 0, 0.2);
     m_intakeLigament = m_intakeRoot.append(new LoggedMechanismLigament2d("IntakeLigament", Inches.of(10), Degrees.of(90)));
@@ -38,6 +37,6 @@ public class IntakeMech2D extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     m_intakeLigament.setAngle(m_intake.getPivotAngle());
-    m_intakeLigament.setColor(Color.fromDutyCycle(m_intake.getRollerSpeed()));
+    m_intakeLigament.setColor(ChaosColor.fromDutyCycle(m_intake.getRollerSpeed()));
   }
 }

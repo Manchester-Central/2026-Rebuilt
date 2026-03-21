@@ -4,28 +4,20 @@
 
 package frc.robot.commands.defaults;
 
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.IntakeConstants;
-import frc.robot.subsystems.interfaces.IIntake;
+import frc.robot.constants.IntakeConstants.PivotConstants;
+import frc.robot.subsystems.intake.Intake;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class IntakeDefaultCommand extends Command {
- private IIntake m_intake;
- private BooleanSupplier m_isManualMode;
- private BooleanSupplier m_isRunIntake;
- private DoubleSupplier m_intakePivotSpeed;
- private BooleanSupplier m_isRunUnjam;
+ private Intake m_intake;
+
   /** Creates a new IntakeDefaultCommand. */
-  public IntakeDefaultCommand(IIntake intake, BooleanSupplier isManualMode, BooleanSupplier isRunIntake, DoubleSupplier intakePivotSpeed, BooleanSupplier isRunUnjam) {
+  public IntakeDefaultCommand(Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_intake = intake;
-    m_isManualMode = isManualMode;
-    m_isRunIntake = isRunIntake;
-    m_intakePivotSpeed = intakePivotSpeed;
-    m_isRunUnjam = isRunUnjam;
+
 
     addRequirements(m_intake);
   }
@@ -37,24 +29,19 @@ public class IntakeDefaultCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_isManualMode.getAsBoolean()) {
-      if (m_isRunIntake.getAsBoolean()) {
-        m_intake.setRollerSpeed(IntakeConstants.IntakeRollerSpeed.get()); // TODO: add dashboard number
-      } else if (m_isRunUnjam.getAsBoolean()) {
-        m_intake.setRollerSpeed(IntakeConstants.OuttakeRollerSpeed.get());
-      } else {
-        m_intake.setRollerSpeed(0);
-      }
-      m_intake.setPivotSpeed(m_intakePivotSpeed.getAsDouble() * -1.0 * IntakeConstants.ManualPivotSpeedMultiplier.get());
-      return;
-    }
+    // TODO: determine logic while in auto mode
     m_intake.setRollerSpeed(0);
-    m_intake.setPivotSpeed(0);
+    if (DriverStation.isTeleopEnabled()) {
+      m_intake.setPivotAngle(PivotConstants.DeployAngle.get());
+    } // TODO: Testing only
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_intake.setRollerSpeed(0);
+    // m_intake.setPivotSpeed(0);
+  }
 
   // Returns true when the command should end.
   @Override
