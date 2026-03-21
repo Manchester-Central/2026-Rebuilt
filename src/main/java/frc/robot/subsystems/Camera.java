@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.chaos131.util.FieldData;
+import com.chaos131.vision.AprilTag;
 import com.chaos131.vision.CameraSpecs;
 import com.chaos131.vision.LimelightCamera;
 import com.chaos131.vision.VisionData;
@@ -11,6 +13,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.LimelightHelpers;
+
+import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -35,6 +39,8 @@ public class Camera extends LimelightCamera {
         poseConsumer,
         robotSpeedSupplier,
         robotRotationSpeedSupplier);
+    ArrayList<AprilTag> tags = FieldData.LoadTagLocationsFromFile("FRC2026_ANDYMARK.fmap");
+    setTagsOfInterest(tags);
   }
 
   public Pose3d getBotPose3d() {
@@ -68,6 +74,14 @@ public class Camera extends LimelightCamera {
       return 0;   
     }
     return super.calculateConfidence(pose, tagCount, distance, deviation);
+  }
+
+  @Override
+  public void periodic() {
+    super.periodic();
+
+    // simPoseSupplier actually just the pose from the swerve estimator
+    updateCropFromRobotpose(new Pose3d(m_simPoseSupplier.get()), 0.2, 0.2 );
   }
 
 }
