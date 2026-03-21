@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.constants.IntakeConstants.PivotConstants;
 import frc.robot.constants.LauncherConstants;
+import frc.robot.constants.LauncherConstants.FeederConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.launcher.Launcher;
@@ -94,7 +95,7 @@ public abstract class BaseLaunchCommand extends Command {
     if (isFacingTarget() && m_hasLaunched) {
       enableFeederForLauncher();
     } else {
-      m_launcher.setFeederSpeed(0);
+      m_launcher.setFeederSpeed(0, FeederConstants.UnjamSpeed.get());
     }
   }
 

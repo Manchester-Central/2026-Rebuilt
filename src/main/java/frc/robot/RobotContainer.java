@@ -39,6 +39,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.RepeatedConditionalCommand;
 import frc.robot.commands.defaults.IntakeDefaultCommand;
 import frc.robot.commands.defaults.LauncherDefaultCommand;
 import frc.robot.commands.intake.DeployIntake;
@@ -59,7 +60,6 @@ import frc.robot.constants.LauncherConstants.HoodConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Quest;
-// import frc.robot.subsystems.climber.ClimberMech2D;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -73,7 +73,6 @@ import frc.robot.subsystems.launcher.Flywheel;
 import frc.robot.subsystems.launcher.Hood;
 import frc.robot.subsystems.launcher.Launcher;
 import frc.robot.subsystems.launcher.LauncherMech2D;
-import frc.robot.util.PathUtil;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -278,14 +277,14 @@ public class RobotContainer {
     // LB: Aim and pass (if manual mode, only aim drive)
     m_driver.leftBumper().whileTrue(switchAutomaticOrManual(
       // Automatic
-      new AimPassAndLaunchSetAngle(m_launcher, m_swerveDrive, m_intake).alongWith(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)), 
-       // Manual
-      getAimAtFieldPosesCommand(LauncherConstants.PassPoints)
+      new DeployOuttake(m_intake).alongWith(new RunCommand(() -> m_launcher.setFeederSpeed(0, FeederConstants.UnjamSpeed.get()), m_launcher)),
+      // Manual
+      new InstantCommand()  // getAimAtFieldPosesCommand(LauncherConstants.PassPoints)
     ));
     // LT: Intake
     m_driver.leftTrigger().and(m_isAutomaticTrigger).whileTrue(switchAutomaticOrManual(
       // Automatic
-      new DeployIntake(m_intake),
+      new DeployIntake(m_intake).alongWith(new RunCommand(() -> m_launcher.setFeederSpeed(0, FeederConstants.UnjamSpeed.get()), m_launcher)),
       // Manual
       new InstantCommand()
     ));
@@ -295,7 +294,7 @@ public class RobotContainer {
     m_driver.rightTrigger().whileTrue(switchAutomaticOrManual(
       // automatic
       new AimHubAndLaunchJostle(m_launcher, m_swerveDrive, m_intake)
-        .alongWith(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter)),
+        .alongWith(getAimWithXCommand(FieldPose2026.HubCenter)),
       // manual
       getAimAtFieldPosesCommand(FieldPose2026.HubCenter)
     ));
@@ -315,7 +314,7 @@ public class RobotContainer {
     // X: Set drive to X mode (defensive position)
     m_driver.x().onTrue(Commands.runOnce(m_swerveDrive::stopWithX, m_swerveDrive));
     // Y: Drive to the safe launch point
-    m_driver.y().whileTrue(PathUtil.driveToPoseCommand(LauncherConstants.SafeLaunchPoint, m_swerveDrive));
+    m_driver.y().whileTrue(getAimForwardCommand());
 
     // Left or Right stick press: toggles slow mode
     m_driver.leftStick().or(m_driver.rightStick()).toggleOnTrue(
@@ -460,6 +459,15 @@ public class RobotContainer {
     );
   }
 
+  private Command getAimForwardCommand() {
+    return DriveCommands.joystickDriveAtAngle(
+        m_swerveDrive,
+        DriverStation.isAutonomous() ? () -> 0 :  m_getDriverXTranslation,
+        DriverStation.isAutonomous() ? () -> 0 : m_getDriverYTranslation,
+        DriveDirection.Away::getAllianceAngle
+    );
+  }
+
   private boolean isAimedAtPose(FieldPose2026... poses) {
     Angle currentAngle = m_swerveDrive.getPose().getRotation().getMeasure();
     FieldPose targetPose = FieldPose.getClosestPose(m_swerveDrive.getPose(), poses);
@@ -471,9 +479,10 @@ public class RobotContainer {
   }
 
   private Command getAimWithXCommand(FieldPose2026... poses) {
-    return new ConditionalCommand(new InstantCommand(m_swerveDrive::stopWithX, m_swerveDrive), 
-    getAimAtFieldPosesCommand(poses).until(() -> isAimedAtPose(poses)), 
-    () -> isAimedAtPose(poses)).repeatedly(); 
+    return new RepeatedConditionalCommand(
+      new InstantCommand(m_swerveDrive::stopWithX, m_swerveDrive),
+      getAimAtFieldPosesMovingCommand(poses), 
+      () -> isAimedAtPose(poses)).repeatedly(); 
   }
 
   private Command resetPoseCommand(DriveDirection direction) {
