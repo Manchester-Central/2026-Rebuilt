@@ -8,14 +8,14 @@
     {
       "name": "limelight",
       "rotations": [{"axis": "y", "degrees": -25}],
-      "position": [15, 0, 6],
+      "position": [0.2794, 0, 0.1778],
       "resolution": [1280, 800],
       "fov": 80
     },
     {
       "name": "quest",
       "rotations": [{"axis": "z", "degrees": 45}],
-      "position": [6, 6, 10.5],
+      "position": [0.2794, 0.2794, 0.2794],
       "resolution": [1280, 800],
       "fov": 80
     }
