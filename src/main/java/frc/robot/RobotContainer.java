@@ -479,11 +479,8 @@ public class RobotContainer {
   }
 
   private Command getAimWithXCommand(FieldPose2026... poses) {
-    boolean isMoving = m_getDriverXTranslation.getAsDouble() != 0 || m_getDriverYTranslation.getAsDouble() != 0;
     return new RepeatedConditionalCommand(
-        new RepeatedConditionalCommand(getAimAtFieldPosesMovingCommand(poses), 
-        new InstantCommand(m_swerveDrive::stopWithX, m_swerveDrive),
-        () -> isMoving), 
+      new InstantCommand(m_swerveDrive::stopWithX, m_swerveDrive),
       getAimAtFieldPosesMovingCommand(poses), 
       () -> isAimedAtPose(poses)).repeatedly(); 
   }
