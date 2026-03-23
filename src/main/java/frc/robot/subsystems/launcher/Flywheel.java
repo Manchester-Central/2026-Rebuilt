@@ -14,19 +14,33 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import frc.robot.constants.ArenaConstants;
+import frc.robot.constants.ArenaConstants.MotorIDs;
+import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.LauncherConstants;
+import frc.robot.constants.GeneralConstants.Mode;
 import frc.robot.constants.LauncherConstants.FlywheelConstants;
 
 public class Flywheel extends SubsystemBase {
-    private ChaosTalonFx m_leftMainFlywheelMotor = new ChaosTalonFx(FlywheelConstants.LeftFlywheelCanId, LauncherConstants.LauncherCanBus, FlywheelConstants.LeftConfig);
-    private ChaosTalonFx m_rightFollowerFlywheelMotor = new ChaosTalonFx(FlywheelConstants.RightFlywheelCanId, LauncherConstants.LauncherCanBus, FlywheelConstants.RightConfig);
+    private ChaosTalonFx m_leftMainFlywheelMotor;
+    private ChaosTalonFx m_rightFollowerFlywheelMotor;
 
     @SuppressWarnings("unused")
-    private ChaosTalonFxTuner m_flywheelTuner = new ChaosTalonFxTuner("Launcher/Flywheel/Flywheel Motors", m_leftMainFlywheelMotor, m_rightFollowerFlywheelMotor).withAllConfigs();
+    private ChaosTalonFxTuner m_flywheelTuner;
 
     private LinearVelocity targetVelocity = MetersPerSecond.of(0);
 
     public Flywheel(int id) {
+        if (GeneralConstants.currentMode != Mode.ARENA) {
+            m_leftMainFlywheelMotor = new ChaosTalonFx(FlywheelConstants.LeftFlywheelCanId, LauncherConstants.LauncherCanBus, FlywheelConstants.LeftConfig);
+            m_rightFollowerFlywheelMotor = new ChaosTalonFx(FlywheelConstants.RightFlywheelCanId, LauncherConstants.LauncherCanBus, FlywheelConstants.RightConfig);
+        } else {
+            m_leftMainFlywheelMotor = new ChaosTalonFx(ArenaConstants.motorCanIDs[id][MotorIDs.Launcher1.canIdx], LauncherConstants.LauncherCanBus, FlywheelConstants.LeftConfig);
+            m_rightFollowerFlywheelMotor = new ChaosTalonFx(ArenaConstants.motorCanIDs[id][MotorIDs.Launcher2.canIdx], LauncherConstants.LauncherCanBus, FlywheelConstants.RightConfig);
+        }
+
+        m_flywheelTuner = new ChaosTalonFxTuner("Launcher/Flywheel/Flywheel Motors", m_leftMainFlywheelMotor, m_rightFollowerFlywheelMotor).withAllConfigs();
+
         m_rightFollowerFlywheelMotor.applyConfig();
         m_leftMainFlywheelMotor.applyConfig();
 

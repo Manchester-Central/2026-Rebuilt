@@ -51,6 +51,7 @@ public class MapleSimLauncher extends Launcher {
 
     @Override
     public void periodic() {
+        super.periodic();
         if (atTargetFlywheelVelocity() && leftBallTimer.hasElapsed(ballLaunchInterval)) {
             if (intake.claimGamePiece()) {
                 leftBallTimer.reset();

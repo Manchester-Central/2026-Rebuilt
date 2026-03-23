@@ -31,7 +31,6 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -49,7 +48,6 @@ import frc.robot.commands.launcher.AimHubAndLaunchTable;
 import frc.robot.commands.launcher.AimPassAndLaunchSetAngle;
 import frc.robot.commands.manual.IntakeManualCommand;
 import frc.robot.commands.manual.LauncherManualCommand;
-import frc.robot.constants.ArenaConstants;
 import frc.robot.constants.FieldDimensions;
 import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.GeneralConstants.Mode;
@@ -116,7 +114,6 @@ public class RobotContainer {
   private final Trigger m_isAutomaticTrigger = m_isManualTrigger.negate();
   // Dashboard inputs
   private LoggedDashboardChooser<Command> autoChooser;
-  private LoggedDashboardChooser<Runnable> arenaEnable;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer(int id, Pose2d startPose) {
@@ -215,11 +212,8 @@ public class RobotContainer {
     m_launcherMech2D = new LauncherMech2D(m_launcher);
 
     if (id == 0) m_swerveDrive.setupAutoBuilder();
-    if (GeneralConstants.currentMode == Mode.ARENA && id != 0) {
-      // All the extra Arena bots
-      addMultiplayerChoosers();
-    } else {
-      // Runs in every mode, and the first robot made in Arena
+    if (GeneralConstants.currentMode != Mode.ARENA || id == 0) {
+      // Runs in every mode, and when 
       addAutos();
     }
 
@@ -237,16 +231,6 @@ public class RobotContainer {
             .deadlineFor(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
     // NamedCommands.registerCommand("ClimbReach", new SetClimberHeight(m_climber, ClimberConstants.MaxExtension));
     // NamedCommands.registerCommand("ClimbEngage", new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension));
-  }
-
-  private void addMultiplayerChoosers() {
-    var tmp = new SendableChooser<Runnable>();
-    final Runnable disable = () -> m_swerveDrive.setPose(ArenaConstants.waitingPoses[id]);
-    final Runnable enable = () -> m_swerveDrive.setPose(ArenaConstants.startingPoses[id]);
-    tmp.setDefaultOption("Disable", disable);
-    tmp.addOption("Enable", enable);
-
-    arenaEnable = new LoggedDashboardChooser<>("Robot"+id+"/Enabled", tmp);
   }
 
   private void addAutos() {
@@ -506,7 +490,7 @@ public class RobotContainer {
     Angle targetAngle = m_launcher.getYawForTarget(m_swerveDrive, targetPose.getCurrentAlliancePose(), FieldDimensions.HubHeight);
 
     return targetAngle.isNear(currentAngle, LauncherConstants.AimYawTolerance.get()) 
-      && m_getDriverXTranslation.getAsDouble() == 0 
+      && m_getDriverXTranslation.getAsDouble() == 0
       && m_getDriverYTranslation.getAsDouble() == 0;
   }
 
@@ -533,18 +517,11 @@ public class RobotContainer {
     return autoChooser.get();
   }
 
-  public void logMech3d() {
-    // Generates poses for the turret
-    // - release pose at center of turret
-    // - doesn't include hood, or anything else
-    // ArrayList<Pose3d> lst = m_launcher.generateMech3d();
-    // Now generate the pose for the intake
-  }
-
   public void containerLogging() {
     Logger.recordOutput("Robot"+id+"/Pose2d", m_swerveDrive.getPose());
     Logger.recordOutput("Robot"+id+"/PiecesHeld", m_intake.getNumGamePieces());
     Logger.recordOutput("Robot"+id+"/IntakeMechanism", m_intakeMech2d.getMechanism2d());
+    Logger.recordOutput("Robot"+id+"/Mech3d", m_intake.generateMech3d());
   }
 
   public Camera getCamera() {

@@ -6,12 +6,14 @@ import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.seasonspecific.rebuilt2026.Arena2026Rebuilt;
 import org.ironmaple.simulation.seasonspecific.rebuilt2026.RebuiltFuelOnFly;
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -24,6 +26,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.RobotContainer;
 import frc.robot.constants.ArenaConstants;
 import frc.robot.subsystems.interfaces.AbstractDrive;
@@ -35,6 +38,8 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
     Instance = new MultiplayerArena2026(MatchState.TRANSITION_SHIFT);
     SimulatedArena.overrideInstance(Instance);
   }
+  @SuppressWarnings("unused")
+  private ArrayList<LoggedDashboardChooser<Runnable>> arenaEnable;
   
   // Match Phase Times
   public static final Time DurationAutonomous = Seconds.of(20);
@@ -92,13 +97,22 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
   /**
    * Two phase init that should be run after the primary RobotContainer is created.
    * This is because the primary robot has special permissions and static initializations.
+   *
+   * There's a lot of work in here that normally should exist in other parts of the code,
+   * but we're trying to remove any Arena code from other robot behavior code.
    */
+  @SuppressWarnings("unused")
   public void loadAdditionalRobots() {
+    if (ArenaConstants.numAdditionalRobots > 5)
+      throw new RuntimeException("Too many additional robots declared, max number is 5!"); 
+    
     robots = new RobotContainer[ArenaConstants.numAdditionalRobots];
+    ArrayList<LoggedDashboardChooser<Runnable>> arenaEnable = new ArrayList<>();
     for (int idx = 0; idx < ArenaConstants.numAdditionalRobots; idx++) {
       // Actual robot container is id 0, rest of player alliance is 1-2
       // opposition is 3-5.
       robots[idx] = new RobotContainer(idx+1, ArenaConstants.startingPoses[idx+1]);
+      arenaEnable.add(addMultiplayerChooser(idx+1));
     }
   }
 
@@ -333,10 +347,23 @@ M    MMMMMMMMMMMMMMMMMMMMM:<$$$$c  "$ J$$$$$$$PF" ."$$$$$$$$P" .
             Degrees.of(Math.random()*Math.PI/3)));
   }
 
+  private LoggedDashboardChooser<Runnable> addMultiplayerChooser(int robotId) {
+    var tmp = new SendableChooser<Runnable>();
+    final Runnable disable = () -> robots[robotId].getSwerveDrive().setPose(ArenaConstants.waitingPoses[robotId]);
+    final Runnable enable = () -> robots[robotId].getSwerveDrive().setPose(ArenaConstants.startingPoses[robotId]);
+    tmp.setDefaultOption("Disable", disable);
+    tmp.addOption("Enable", enable);
+
+    return new LoggedDashboardChooser<>("Robot"+robotId+"/Enabled", tmp);
+  }
+
   /**
    * Logs overall match and field information.
    */
   public void arenaLogging() {
+    for (RobotContainer container : robots) {
+      container.containerLogging();
+    }
     Logger.recordOutput("Arena/ScoreBlue", getScore(Alliance.Blue));
     Logger.recordOutput("Arena/ScoreRed", getScore(Alliance.Red));
     Logger.recordOutput("Arena/GameState", m_matchState);
