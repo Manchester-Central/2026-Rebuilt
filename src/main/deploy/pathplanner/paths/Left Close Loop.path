@@ -3,45 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.038498376623377,
-        "y": 7.2383279220779215
+        "x": 6.419771754636234,
+        "y": 7.373579545454545
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.187987012987013,
-        "y": 6.604780844155844
+        "x": 6.937318116975749,
+        "y": 6.900912981455065
       },
       "isLocked": false,
       "linkedName": "MidLeftStart"
     },
     {
       "anchor": {
-        "x": 7.195105519480519,
-        "y": 5.622426948051948
+        "x": 7.053766048502139,
+        "y": 5.697617689015692
       },
       "prevControl": {
-        "x": 7.139828315927454,
-        "y": 6.801673957184051
+        "x": 6.998488844949073,
+        "y": 6.876864698147795
       },
       "nextControl": {
-        "x": 7.216461038961038,
-        "y": 5.166842532467532
+        "x": 7.075121567982658,
+        "y": 5.242033273431276
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.212751623376623,
-        "y": 4.68278409090909
+        "x": 6.264507845934379,
+        "y": 4.830727532097005
       },
       "prevControl": {
-        "x": 7.138266868910531,
-        "y": 4.302835726953065
+        "x": 6.812608524903079,
+        "y": 4.625942663031776
       },
       "nextControl": {
-        "x": 4.860235389610389,
-        "y": 5.2380275974025965
+        "x": 5.087089871611982,
+        "y": 5.270641940085593
       },
       "isLocked": false,
       "linkedName": null
@@ -66,25 +66,11 @@
       "rotationDegrees": 90.0
     },
     {
-      "waypointRelativePos": 2.139013452914797,
+      "waypointRelativePos": 2.3731343283582107,
       "rotationDegrees": -80.0
     }
   ],
-  "constraintZones": [
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 2.70479704797048,
-      "maxWaypointRelativePos": 2.941255908170156,
-      "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
@@ -115,7 +101,7 @@
   "folder": "Left",
   "idealStartingState": {
     "velocity": 3.0,
-    "rotation": 174.3824194098731
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }
