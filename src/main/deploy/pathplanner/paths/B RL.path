@@ -3,34 +3,34 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.264507845934379,
-        "y": 7.302011412268189
+        "x": 5.682268188302425,
+        "y": 2.398259629101284
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3958487874465044,
-        "y": 7.845435092724678
+        "x": 2.719315263908701,
+        "y": 2.8640513552068483
       },
       "isLocked": false,
-      "linkedName": "MidLeftEnd"
+      "linkedName": "RightBump"
     },
     {
       "anchor": {
-        "x": 3.0165422077922077,
-        "y": 6.51224025974026
+        "x": 3.244334415584416,
+        "y": 1.4794561688311683
       },
       "prevControl": {
-        "x": 2.917140348383633,
-        "y": 6.7416291660677405
+        "x": 2.564051355206847,
+        "y": 1.8936519258202575
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "LeftLaunch"
+      "linkedName": "RightLaunch"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.3,
+      "waypointRelativePos": 0.25,
       "rotationDegrees": 0.0
     }
   ],
@@ -40,7 +40,7 @@
     {
       "name": "Intake",
       "waypointRelativePos": 0,
-      "endWaypointRelativePos": 0.8048615800134941,
+      "endWaypointRelativePos": 1.0533423362592882,
       "command": {
         "type": "named",
         "data": {
@@ -59,10 +59,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -56.619427259952374
+    "rotation": 62.2607660744464
   },
   "reversed": false,
-  "folder": "Left",
+  "folder": "Right",
   "idealStartingState": {
     "velocity": 3.0,
     "rotation": 0.0

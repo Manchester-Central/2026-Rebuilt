@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.1657305194838963,
-        "y": 0.36185064935149835
+        "x": 2.706376604850214,
+        "y": 0.17281027104136926
       },
       "isLocked": false,
       "linkedName": "RightLaunch"
@@ -20,8 +20,8 @@
         "y": 0.6323538961038957
       },
       "prevControl": {
-        "x": 5.83675113440776,
-        "y": 0.6340346776717253
+        "x": 5.048273894436518,
+        "y": 0.7162339514978597
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.37892376681614387,
+      "waypointRelativePos": 0.4029850746268649,
       "rotationDegrees": 180.0
     }
   ],

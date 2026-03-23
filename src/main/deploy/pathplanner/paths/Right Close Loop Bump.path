@@ -3,71 +3,71 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.419771754636234,
-        "y": 7.373579545454545
+        "x": 6.397832792207793,
+        "y": 0.6323538961038957
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.687760342368046,
-        "y": 7.198502139800285
+        "x": 7.3513552068473595,
+        "y": 0.6774179743223976
       },
       "isLocked": false,
-      "linkedName": "MidLeftStart"
+      "linkedName": "MidRightStart"
     },
     {
       "anchor": {
-        "x": 8.334693295292439,
-        "y": 6.046961483594864
+        "x": 7.131398002853067,
+        "y": 2.7864194008559195
       },
       "prevControl": {
-        "x": 8.179429386590584,
-        "y": 6.603323823109844
+        "x": 7.105520684736091,
+        "y": 1.8807132667617692
       },
       "nextControl": {
-        "x": 8.47032161819288,
-        "y": 5.560959993201616
+        "x": 7.147203657404489,
+        "y": 3.3396173101557096
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.8947788873038505,
-        "y": 4.675463623395149
+        "x": 6.397832792207793,
+        "y": 3.8732667617689023
       },
       "prevControl": {
-        "x": 8.645221112696147,
-        "y": 4.675463623395149
+        "x": 6.794992867332382,
+        "y": 4.041469329529244
       },
       "nextControl": {
-        "x": 6.659899210246443,
-        "y": 4.675463623395149
+        "x": 5.758510859708359,
+        "y": 3.602505430489128
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.264507845934379,
-        "y": 7.302011412268189
+        "x": 5.682268188302425,
+        "y": 2.398259629101284
       },
       "prevControl": {
-        "x": 8.477018544935806,
-        "y": 7.444336661911555
+        "x": 7.17021398002853,
+        "y": 2.3335663338088453
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "MidLeftEnd"
+      "linkedName": "RightBump"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.4556016597510074,
-      "rotationDegrees": 135.0
+      "waypointRelativePos": 0.7803837953091685,
+      "rotationDegrees": -90.0
     },
     {
-      "waypointRelativePos": 2.245202558635391,
-      "rotationDegrees": -44.0
+      "waypointRelativePos": 2.385927505330491,
+      "rotationDegrees": 80.0
     }
   ],
   "constraintZones": [],
@@ -75,7 +75,7 @@
   "eventMarkers": [
     {
       "name": "Intake",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -98,7 +98,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Left",
+  "folder": "Right",
   "idealStartingState": {
     "velocity": 3.0,
     "rotation": 180.0

@@ -5,11 +5,13 @@
   "pathFolders": [
     "Center",
     "Left",
+    "Test",
     "Right"
   ],
   "autoFolders": [
     "Center",
     "Left",
+    "Test",
     "Right"
   ],
   "defaultMaxVel": 3.0,
