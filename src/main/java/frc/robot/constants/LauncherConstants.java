@@ -91,6 +91,8 @@ public final class LauncherConstants {
 
     public static final DashboardUnit<LinearVelocityUnit, LinearVelocity> TunableLaunchVelocity = new DashboardUnit<>("Launcher/TunableLaunchVelocity", MetersPerSecond.of(20));
 
+    public static final DashboardNumber BangBangLimit = new DashboardNumber("Launcher/BangBangLimit", 10);
+
     public static final DashboardNumber LossFactor = new DashboardNumber("Launcher/LossFactor", 1);
 
     public static final double SensorToMechanismRatio = 1; // TODO check or change
@@ -106,7 +108,7 @@ public final class LauncherConstants {
 
     /** PID values for normal velocity mode */
     public static final Slot0Configs VoltageSlot0 = new Slot0Configs()
-        .withKP(0.56)
+        .withKP(0.46)
         .withKI(0.0)
         .withKD(0.0)
         .withKG(0.0)

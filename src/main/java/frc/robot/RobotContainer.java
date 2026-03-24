@@ -277,7 +277,7 @@ public class RobotContainer {
     // LB: Aim and pass (if manual mode, only aim drive)
     m_driver.leftBumper().whileTrue(switchAutomaticOrManual(
       // Automatic
-      new DeployOuttake(m_intake).alongWith(new RunCommand(() -> m_launcher.setFeederSpeed(0, FeederConstants.UnjamSpeed.get()), m_launcher)),
+      new DeployOuttake(m_intake).alongWith(new RunCommand(() -> m_launcher.setFeederSpeed(FeederConstants.UnjamSpeed.get(), 0), m_launcher)),
       // Manual
       new InstantCommand()  // getAimAtFieldPosesCommand(LauncherConstants.PassPoints)
     ));
