@@ -89,9 +89,9 @@ public final class LauncherConstants {
 
     public static final DashboardUnit<LinearVelocityUnit, LinearVelocity> TargetVelocityTolerance = new DashboardUnit<>("Launcher/TargetVelocityTolerance", MetersPerSecond.of(1)); // TODO: Tested with 2
 
-    public static final DashboardUnit<LinearVelocityUnit, LinearVelocity> TunableLaunchVelocity = new DashboardUnit<>("Launcher/TunableLaunchVelocity", MetersPerSecond.of(10));
+    public static final DashboardUnit<LinearVelocityUnit, LinearVelocity> TunableLaunchVelocity = new DashboardUnit<>("Launcher/TunableLaunchVelocity", MetersPerSecond.of(20));
 
-    public static final DashboardNumber BangBangLimit = new DashboardNumber("Launcher/BangBangLimit", 15);
+    public static final DashboardNumber BangBangLimit = new DashboardNumber("Launcher/BangBangLimit", 10);
 
     public static final DashboardNumber LossFactor = new DashboardNumber("Launcher/LossFactor", 1);
 
