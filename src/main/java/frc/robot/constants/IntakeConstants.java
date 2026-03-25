@@ -113,7 +113,7 @@ public final class IntakeConstants {
     public static final Angle MinAngle = Degrees.of(49); // TODO: Double Check
 
     // Target Angles / Speeds
-    public static final DashboardUnit<AngleUnit,Angle> DeployAngle = new DashboardUnit<>("Intake/DeployAngle", Degrees.of(172)); // TODO: Double Check
+    public static final DashboardUnit<AngleUnit,Angle> DeployAngle = new DashboardUnit<>("Intake/DeployAngle", Degrees.of(173)); // TODO: Double Check
     public static final DashboardUnit<AngleUnit,Angle> RetractAngle = new DashboardUnit<>("Intake/RetractAngle", Degrees.of(110)); // TODO: Double Check
 
     // Sim values
