@@ -47,12 +47,13 @@ public class MapleSimLauncher extends Launcher {
         super(flywheel, feeder, hood, drive);
         this.intake = intake;
         this.drive = drive;
+        leftBallTimer.start();
     }
 
     @Override
     public void periodic() {
         super.periodic();
-        if (atTargetFlywheelVelocity() && leftBallTimer.hasElapsed(ballLaunchInterval)) {
+        if (atTargetFlywheelVelocity() && m_feeder.getFeederSpeed() > 0.05 && leftBallTimer.hasElapsed(ballLaunchInterval)) {
             if (intake.claimGamePiece()) {
                 leftBallTimer.reset();
                 launchGamePiece(drive.getPose(), leftOffset, MetersPerSecond.of(10));

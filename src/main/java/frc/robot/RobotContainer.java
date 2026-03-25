@@ -213,7 +213,7 @@ public class RobotContainer {
 
     if (id == 0) m_swerveDrive.setupAutoBuilder();
     if (GeneralConstants.currentMode != Mode.ARENA || id == 0) {
-      // Runs in every mode, and when 
+      // Runs in every mode, and when the first robot container is made in Arena mode
       addAutos();
     }
 

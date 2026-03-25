@@ -301,8 +301,6 @@ public class Launcher extends SubsystemBase {
   public void periodic() {
     m_atVelocityDebouced = m_fallingDebouncer.calculate(atTargetFlywheelVelocity());
     Logger.recordOutput("Launcher/DisplacementFromHub", getDisplacementFromHub().in(Meters));
-
     Logger.recordOutput("Launcher/flywheelMultiplier", m_flywheelMarkiplier);
-
   }
 } 

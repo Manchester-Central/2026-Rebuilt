@@ -30,7 +30,10 @@ public class Flywheel extends SubsystemBase {
 
     private LinearVelocity targetVelocity = MetersPerSecond.of(0);
 
+    private int m_id;
+
     public Flywheel(int id) {
+        m_id = id;
         if (GeneralConstants.currentMode != Mode.ARENA) {
             m_leftMainFlywheelMotor = new ChaosTalonFx(FlywheelConstants.LeftFlywheelCanId, LauncherConstants.LauncherCanBus, FlywheelConstants.LeftConfig);
             m_rightFollowerFlywheelMotor = new ChaosTalonFx(FlywheelConstants.RightFlywheelCanId, LauncherConstants.LauncherCanBus, FlywheelConstants.RightConfig);
@@ -98,7 +101,9 @@ public class Flywheel extends SubsystemBase {
 
     @Override
     public void periodic() {
-        Logger.recordOutput("Launcher/FlywheelVelocity", getLinearVelocity().in(MetersPerSecond));     
-        Logger.recordOutput("Launcher/FlywheelTargetVelocity", targetVelocity.in(MetersPerSecond));
+        // Logger.recordOutput("Launcher/FlywheelVelocity", getLinearVelocity().in(MetersPerSecond));     
+        // Logger.recordOutput("Launcher/FlywheelTargetVelocity", targetVelocity.in(MetersPerSecond));
+        Logger.recordOutput("Robot"+m_id+"/FlywheelVelocity", getLinearVelocity().in(MetersPerSecond));
+        Logger.recordOutput("Robot"+m_id+"/FlywheelTargetVelocity", targetVelocity.in(MetersPerSecond));
     }
 }
