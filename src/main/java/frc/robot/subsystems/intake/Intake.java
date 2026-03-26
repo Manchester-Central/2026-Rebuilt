@@ -138,6 +138,10 @@ public class Intake extends SubsystemBase {
   public void retract() {
     setPivotAngle(PivotConstants.RetractAngle.get());
   }
+  
+  public void retractBump() {
+    setPivotAngle(PivotConstants.BumpAngle.get());
+  }
 
   public Pose3d[] generateMech3d() {
     Pose3d[] poses = new Pose3d[]{

@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.593466476462195,
-        "y": 1.4019828815977178
+        "x": 8.430445077275397,
+        "y": 1.3689096528659093
       },
       "isLocked": false,
       "linkedName": "MidRightStart"
@@ -20,12 +20,12 @@
         "y": 2.7605420827389446
       },
       "prevControl": {
-        "x": 8.117053991429636,
-        "y": 1.8894697783696408
+        "x": 8.44973836256552,
+        "y": 2.32413067650666
       },
       "nextControl": {
-        "x": 8.464079885877318,
-        "y": 3.2004564907275324
+        "x": 8.187758559072268,
+        "y": 3.44385446707091
       },
       "isLocked": false,
       "linkedName": null
@@ -36,12 +36,12 @@
         "y": 3.6197469879518076
       },
       "prevControl": {
-        "x": 7.902570582962393,
-        "y": 4.027676599401226
+        "x": 7.66297403578673,
+        "y": 3.6043137607201445
       },
       "nextControl": {
-        "x": 6.885563480741797,
-        "y": 3.2263338088445086
+        "x": 6.486090047393366,
+        "y": 3.669620853080568
       },
       "isLocked": false,
       "linkedName": null
@@ -52,8 +52,8 @@
         "y": 2.398259629101284
       },
       "prevControl": {
-        "x": 7.804208273894436,
-        "y": 2.2041797432239663
+        "x": 6.862215639810428,
+        "y": 2.3693009478672966
       },
       "nextControl": null,
       "isLocked": false,
@@ -66,8 +66,8 @@
       "rotationDegrees": -135.0
     },
     {
-      "waypointRelativePos": 2.2579957356076847,
-      "rotationDegrees": 45.0
+      "waypointRelativePos": 1.4099279423538822,
+      "rotationDegrees": -10.0
     }
   ],
   "constraintZones": [],
@@ -76,11 +76,22 @@
     {
       "name": "Intake",
       "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": null,
+      "endWaypointRelativePos": 2.65,
       "command": {
         "type": "named",
         "data": {
           "name": "DeployIntake"
+        }
+      }
+    },
+    {
+      "name": "RetractBump",
+      "waypointRelativePos": 2.7,
+      "endWaypointRelativePos": 3.0,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "RetractBump"
         }
       }
     }
@@ -95,7 +106,7 @@
   },
   "goalEndState": {
     "velocity": 3.0,
-    "rotation": 0.0
+    "rotation": 90.0
   },
   "reversed": false,
   "folder": "Right",
