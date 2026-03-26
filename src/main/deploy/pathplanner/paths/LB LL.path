@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.669329529243937,
-        "y": 5.71055634807418
+        "x": 5.68010663507109,
+        "y": 5.528755924170615
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7581312410841656,
-        "y": 5.477660485021399
+        "x": 2.853791469194314,
+        "y": 5.485770142180094
       },
       "isLocked": false,
       "linkedName": "LeftBump"
@@ -20,26 +20,31 @@
         "y": 6.51224025974026
       },
       "prevControl": {
-        "x": 3.1797242279423523,
-        "y": 6.322842191377043
+        "x": 3.025734597156398,
+        "y": 5.958613744075828
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "LeftLaunch"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.30585106382978733,
+      "rotationDegrees": -90.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Intake",
+      "name": "RetractBump",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": 0.8048615800134941,
       "command": {
         "type": "named",
         "data": {
-          "name": "DeployIntake"
+          "name": "RetractBump"
         }
       }
     }
@@ -60,7 +65,7 @@
   "folder": "Left",
   "idealStartingState": {
     "velocity": 3.0,
-    "rotation": 0.0
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }

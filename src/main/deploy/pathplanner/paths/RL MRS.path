@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.706376604850214,
-        "y": 0.17281027104136926
+        "x": 3.298066643072567,
+        "y": 0.18988270911552863
       },
       "isLocked": false,
       "linkedName": "RightLaunch"
@@ -55,7 +55,7 @@
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
-    "unlimited": false
+    "unlimited": true
   },
   "goalEndState": {
     "velocity": 3.0,

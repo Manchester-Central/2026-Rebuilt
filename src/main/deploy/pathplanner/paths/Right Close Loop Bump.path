@@ -8,40 +8,40 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.3513552068473595,
-        "y": 0.6774179743223976
+        "x": 7.599201511437956,
+        "y": 1.53978845997185
       },
       "isLocked": false,
       "linkedName": "MidRightStart"
     },
     {
       "anchor": {
-        "x": 7.131398002853067,
-        "y": 2.7864194008559195
+        "x": 7.292073459715641,
+        "y": 2.8421445497630327
       },
       "prevControl": {
-        "x": 7.105520684736091,
-        "y": 1.8807132667617692
+        "x": 7.292073459715641,
+        "y": 2.42164578098319
       },
       "nextControl": {
-        "x": 7.147203657404489,
-        "y": 3.3396173101557096
+        "x": 7.292073459715641,
+        "y": 3.658874407582937
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.397832792207793,
-        "y": 3.8732667617689023
+        "x": 6.518329383886257,
+        "y": 3.75559241706161
       },
       "prevControl": {
-        "x": 6.794992867332382,
-        "y": 4.041469329529244
+        "x": 6.755500208398885,
+        "y": 3.8346493585658195
       },
       "nextControl": {
-        "x": 5.758510859708359,
-        "y": 3.602505430489128
+        "x": 5.68010663507109,
+        "y": 3.476184834123222
       },
       "isLocked": false,
       "linkedName": null
@@ -52,8 +52,8 @@
         "y": 2.398259629101284
       },
       "prevControl": {
-        "x": 7.17021398002853,
-        "y": 2.3335663338088453
+        "x": 6.636540284360191,
+        "y": 2.3155687203791455
       },
       "nextControl": null,
       "isLocked": false,
@@ -64,10 +64,6 @@
     {
       "waypointRelativePos": 0.7803837953091685,
       "rotationDegrees": -90.0
-    },
-    {
-      "waypointRelativePos": 2.385927505330491,
-      "rotationDegrees": 80.0
     }
   ],
   "constraintZones": [],
@@ -76,11 +72,22 @@
     {
       "name": "Intake",
       "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": null,
+      "endWaypointRelativePos": 2.55,
       "command": {
         "type": "named",
         "data": {
           "name": "DeployIntake"
+        }
+      }
+    },
+    {
+      "name": "RetractBump",
+      "waypointRelativePos": 2.6,
+      "endWaypointRelativePos": 3.0,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "RetractBump"
         }
       }
     }
@@ -95,7 +102,7 @@
   },
   "goalEndState": {
     "velocity": 3.0,
-    "rotation": 0.0
+    "rotation": 90.0
   },
   "reversed": false,
   "folder": "Right",
