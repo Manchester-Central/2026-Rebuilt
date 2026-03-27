@@ -34,6 +34,9 @@ public class IntakeDefaultCommand extends Command {
     if (DriverStation.isTeleopEnabled()) {
       m_intake.setPivotAngle(PivotConstants.DeployAngle.get());
     } // TODO: Testing only
+    if (DriverStation.isAutonomousEnabled()) {
+      m_intake.setPivotSpeed(0);
+    }
   }
 
   // Called once the command ends or is interrupted.

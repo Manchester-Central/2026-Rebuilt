@@ -105,6 +105,7 @@ public abstract class BaseLaunchCommand extends Command {
     m_launcher.setFlywheelSpeed(0);
     m_launcher.setFeederSpeed(0);
     m_intake.setRollerSpeed(0);
+    m_intake.setPivotSpeed(0);
   }
 
   /**
