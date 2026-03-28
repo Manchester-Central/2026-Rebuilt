@@ -1,0 +1,125 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.419771754636234,
+        "y": 7.373579545454545
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.543912337662338,
+        "y": 6.768506493506493
+      },
+      "isLocked": false,
+      "linkedName": "MidLeftStart"
+    },
+    {
+      "anchor": {
+        "x": 8.099155844155845,
+        "y": 4.020762987012987
+      },
+      "prevControl": {
+        "x": 9.095746753246754,
+        "y": 4.227199675324675
+      },
+      "nextControl": {
+        "x": 7.108138534677818,
+        "y": 3.8154808300496823
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.68010663507109,
+        "y": 5.528755924170615
+      },
+      "prevControl": {
+        "x": 7.280527597402597,
+        "y": 5.529886363636364
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "LeftBump"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5246636771300448,
+      "rotationDegrees": 85.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.5731857318573189,
+      "maxWaypointRelativePos": 1.3136531365313635,
+      "constraints": {
+        "maxVelocity": 2.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 1.5596555965559662,
+      "maxWaypointRelativePos": 2.0,
+      "constraints": {
+        "maxVelocity": 3.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": 1.7,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "DeployIntake"
+        }
+      }
+    },
+    {
+      "name": "RetractBump",
+      "waypointRelativePos": 1.75,
+      "endWaypointRelativePos": 2.0,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "RetractBump"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 3.0,
+    "rotation": -90.0
+  },
+  "reversed": false,
+  "folder": "Left",
+  "idealStartingState": {
+    "velocity": 3.0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}
