@@ -117,6 +117,8 @@ public final class IntakeConstants {
     public static final DashboardUnit<AngleUnit,Angle> RetractAngle = new DashboardUnit<>("Intake/RetractAngle", Degrees.of(110)); // TODO: Double Check
     public static final DashboardUnit<AngleUnit,Angle> BumpAngle = new DashboardUnit<>("Intake/BumpAngle", Degrees.of(150)); // TODO: Double Check
 
+    public static final DashboardNumber JostleSpeed = new DashboardNumber("Intake/JostleSpeed", 63);
+
     // Sim values
     public static final double MOI = SingleJointedArmSim.estimateMOI(IntakeLength.in(Meters), IntakeMass.in(Kilograms));
     public static final DCMotor DcMotor = DCMotor.getKrakenX60(1);
