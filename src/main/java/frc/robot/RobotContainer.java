@@ -431,6 +431,8 @@ public class RobotContainer {
     m_operator.start().onTrue(new InstantCommand((() -> m_isManual = true)));
     // Back: enabled auto mode
     m_operator.back().onTrue(new InstantCommand((() -> m_isManual = false)));
+
+    m_operator.leftStick().onTrue(new InstantCommand(() -> m_quest.setUseForOdometry(false)));
   }
 
   private Command switchAutomaticOrManual(Command autoCommand, Command manualCommand) {
