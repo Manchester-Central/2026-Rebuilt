@@ -515,4 +515,8 @@ public class RobotContainer {
   public Quest getQuest() {
     return m_quest;
   }
+
+  public Intake getIntake() {
+    return m_intake;
+  }
 }

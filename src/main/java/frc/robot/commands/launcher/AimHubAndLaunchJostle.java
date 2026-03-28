@@ -4,6 +4,7 @@
 
 package frc.robot.commands.launcher;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
@@ -16,7 +17,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.constants.FieldDimensions;
-import frc.robot.constants.IntakeConstants;
+import frc.robot.constants.IntakeConstants.PivotConstants;
 import frc.robot.constants.LauncherConstants;
 import frc.robot.constants.LauncherConstants.FeederConstants;
 import frc.robot.subsystems.drive.Drive;
@@ -69,17 +70,24 @@ public class AimHubAndLaunchJostle extends BaseLaunchCommand {
   }
 
   @Override
-  public Angle getIntakePivotAngle(){
-   
+  public Angle getIntakePivotAngle() {
    double seconds = m_intakeTimer.get();
-   int newstep = (int)seconds;
-   if(newstep% 2 == 0){
-    return IntakeConstants.PivotConstants.DeployAngle.get();
-  } else {
-    return LauncherConstants.IntakePivotJostleAngle.get();
-  }
-    
-   
+   if(seconds > 1){
+    return Degrees.of(Math.max(
+      PivotConstants.DeployAngle.get().in(Degrees) - (seconds - 1) * PivotConstants.JostleSpeed.get(), 
+      LauncherConstants.IntakePivotJostleAngle.get().in(Degrees)));
+    } else {
+      return PivotConstants.DeployAngle.get();
+    }
   }
 
+  // public Angle getIntakePivotAngle(){
+  //  double seconds = m_intakeTimer.get();
+  //  int newstep = (int)seconds;
+  //  if(newstep% 2 == 0){
+  //   return IntakeConstants.PivotConstants.DeployAngle.get();
+  //   } else {
+  //     return LauncherConstants.IntakePivotJostleAngle.get();
+  //   }
+  // }
 }

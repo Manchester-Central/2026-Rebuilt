@@ -24,5 +24,7 @@ public boolean isFinished(){
 }
 
 @Override
-public void end(boolean interupted){}
+public void end(boolean interupted){
+    m_intake.setRollerSpeed(0);
+}
 }

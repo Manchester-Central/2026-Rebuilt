@@ -263,9 +263,10 @@ public class Launcher extends SubsystemBase {
    */
   public Angle getYawForTarget(Drive swerveDrive, Pose2d targetPose, Distance targetHeight) {
     Pose2d currentPose = swerveDrive.getPose();
+    Pose2d trueTargetPose = targetPose.transformBy(LauncherConstants.LauncherDisplacement.inverse());
     
-    double deltaXMeters = FieldPose.getDeltaXFromLocations(currentPose, targetPose).in(Meters);
-    double deltaYMeters = FieldPose.getDeltaYFromLocations(currentPose, targetPose).in(Meters);
+    double deltaXMeters = FieldPose.getDeltaXFromLocations(currentPose, trueTargetPose).in(Meters);
+    double deltaYMeters = FieldPose.getDeltaYFromLocations(currentPose, trueTargetPose).in(Meters);
 
     double swerveVelocityXMPS = swerveDrive.getVelocityVector().getX();
     double swerveVelocityYMPS = swerveDrive.getVelocityVector().getY();

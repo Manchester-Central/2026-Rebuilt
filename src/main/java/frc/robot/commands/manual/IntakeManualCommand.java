@@ -35,7 +35,7 @@ public class IntakeManualCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     m_intake.setRollerSpeed(0);
-    // m_intake.setPivotSpeed(0); TODO: Testing only
+    m_intake.setPivotSpeed(0); 
   }
 
   // Returns true when the command should end.
