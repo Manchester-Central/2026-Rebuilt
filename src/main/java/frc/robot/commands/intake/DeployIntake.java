@@ -27,6 +27,6 @@ public boolean isFinished(){
 @Override
 public void end(boolean interupted){
     m_intake.setRollerSpeed(0);
-    m_intake.setPivotSpeed(0);
+
 }
 }
