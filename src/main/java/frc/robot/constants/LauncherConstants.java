@@ -80,7 +80,9 @@ public final class LauncherConstants {
   public static final DashboardUnit<AngleUnit, Angle> LaunchYawTolerance = new DashboardUnit<>("Launcher/LaunchYawTolerance", Degrees.of(5)); // tested with 3
   
 
-  public static final DashboardUnit<TimeUnit, Time> AutoLaunchTime = new DashboardUnit<>("Launcher/AutoLaunchTime", Seconds.of(3.5));
+  public static final DashboardUnit<TimeUnit, Time> AutoLaunchTime = new DashboardUnit<>("Launcher/AutoLaunchTime", Seconds.of(3.2));
+
+  public static final DashboardUnit<TimeUnit, Time> JostleDelay = new DashboardUnit<>("Launcher/JostleDelay", Seconds.of(0.65));
 
   public static final class FlywheelConstants {
     public static final CanId LeftFlywheelCanId = CanId.ID_40;
