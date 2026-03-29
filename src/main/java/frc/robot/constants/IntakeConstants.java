@@ -64,7 +64,7 @@ public final class IntakeConstants {
       .withCurrentLimits(new CurrentLimitsConfigs()
           .withSupplyCurrentLimit(Amps.of(80)) // TODO: Double Check
           .withStatorCurrentLimit(Amps.of(80)) // TODO: Double Check
-          .withSupplyCurrentLowerLimit(Amps.of(80))
+          .withSupplyCurrentLowerLimit(Amps.of(60))
           .withSupplyCurrentLimitEnable(true)
           .withStatorCurrentLimitEnable(true)
       );
@@ -116,6 +116,7 @@ public final class IntakeConstants {
     public static final DashboardUnit<AngleUnit,Angle> DeployAngle = new DashboardUnit<>("Intake/DeployAngle", Degrees.of(173)); // TODO: Double Check
     public static final DashboardUnit<AngleUnit,Angle> RetractAngle = new DashboardUnit<>("Intake/RetractAngle", Degrees.of(110)); // TODO: Double Check
     public static final DashboardUnit<AngleUnit,Angle> BumpAngle = new DashboardUnit<>("Intake/BumpAngle", Degrees.of(150)); // TODO: Double Check
+    public static final DashboardUnit<AngleUnit,Angle> RetractDepAngle = new DashboardUnit<>("Intake/RetractDeepAngle", Degrees.of(60)); // TODO: Double Check
 
     public static final DashboardNumber JostleSpeed = new DashboardNumber("Intake/JostleSpeed", 63);
 

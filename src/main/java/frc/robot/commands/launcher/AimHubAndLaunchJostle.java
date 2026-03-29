@@ -7,6 +7,7 @@ package frc.robot.commands.launcher;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Seconds;
 
 import java.util.Optional;
 
@@ -72,9 +73,9 @@ public class AimHubAndLaunchJostle extends BaseLaunchCommand {
   @Override
   public Angle getIntakePivotAngle() {
    double seconds = m_intakeTimer.get();
-   if(seconds > 1){
+   if(seconds > LauncherConstants.JostleDelay.get().in(Seconds)){
     return Degrees.of(Math.max(
-      PivotConstants.DeployAngle.get().in(Degrees) - (seconds - 1) * PivotConstants.JostleSpeed.get(), 
+      PivotConstants.DeployAngle.get().in(Degrees) - (seconds - LauncherConstants.JostleDelay.get().in(Seconds)) * PivotConstants.JostleSpeed.get(), 
       LauncherConstants.IntakePivotJostleAngle.get().in(Degrees)));
     } else {
       return PivotConstants.DeployAngle.get();
