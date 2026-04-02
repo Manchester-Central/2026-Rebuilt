@@ -30,4 +30,6 @@ public final class RobotDimensions {
   public static Angle FixedHoodAngle = Degrees.of(60);
   // Intake Axle
   public static Translation3d IntakeOffset = new Translation3d(Meters.of(-0.275449), Meters.of(0), Meters.of(0.222401));
+
+  public static Distance LauncherWidth = Meters.of(0.6);
 }

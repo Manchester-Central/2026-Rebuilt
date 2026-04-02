@@ -3,6 +3,8 @@ package frc.robot.subsystems.launcher;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
+import java.util.Random;
+
 import org.ironmaple.simulation.seasonspecific.rebuilt2026.RebuiltFuelOnFly;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -63,10 +65,12 @@ public class MapleSimLauncher extends Launcher {
     private void launchGamePiece(Pose2d robotPose, Transform3d launcherOffset, LinearVelocity launcherSpeed) {
         Pose3d launcherPose = new Pose3d(robotPose);
         launcherPose = launcherPose.transformBy(launcherOffset);
+        double launcher_y = launcherOffset.getY();
+        launcher_y += RobotDimensions.LauncherWidth.in(Meters) * (new Random()).nextDouble(-0.5, 0.5);
 
         MultiplayerArena2026.Instance.addGamePieceProjectile(new RebuiltFuelOnFly(
             robotPose.getTranslation(),
-            new Translation2d(launcherOffset.getX(), launcherOffset.getY()),
+            new Translation2d(launcherOffset.getX(), launcher_y),
             drive.getChassisSpeeds(),
             robotPose.getRotation(),
             Meters.of(launcherOffset.getZ()),
