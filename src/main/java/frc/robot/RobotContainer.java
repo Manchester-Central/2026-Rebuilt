@@ -180,7 +180,7 @@ public class RobotContainer {
       case ARENA:
         var drive = new DriveMapleSim(startPose);
         m_intake = new MapleSimtake(id, drive.sim);
-        m_launcher = new MapleSimLauncher(new Flywheel(id), new FakeFeeder(m_intake), new Hood(id), drive, m_intake);
+        m_launcher = new MapleSimLauncher(new Flywheel(id), new FakeFeeder(id, m_intake), new Hood(id), drive, m_intake);
         m_swerveDrive = drive;
         break;
 
@@ -211,6 +211,8 @@ public class RobotContainer {
     m_launcherMech2D = new LauncherMech2D(m_launcher);
     m_launcherMech2D = new LauncherMech2D(m_launcher);
 
+    // We need Pathplanner's Autobuilder to run, but they do funky singleton stuff
+    // So we catch the cases in RobotContainer
     if (id == 0) m_swerveDrive.setupAutoBuilder();
     if (GeneralConstants.currentMode != Mode.ARENA || id == 0) {
       // Runs in every mode, and when the first robot container is made in Arena mode
@@ -518,6 +520,7 @@ public class RobotContainer {
   }
 
   public void containerLogging() {
+    Logger.recordOutput("Robot"+id+"/ID", id);
     Logger.recordOutput("Robot"+id+"/Pose2d", m_swerveDrive.getPose());
     Logger.recordOutput("Robot"+id+"/PiecesHeld", m_intake.getNumGamePieces());
     Logger.recordOutput("Robot"+id+"/IntakeMechanism", m_intakeMech2d.getMechanism2d());

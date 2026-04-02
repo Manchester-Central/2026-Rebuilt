@@ -38,8 +38,12 @@ public class Flywheel extends SubsystemBase {
             m_leftMainFlywheelMotor = new ChaosTalonFx(FlywheelConstants.LeftFlywheelCanId, LauncherConstants.LauncherCanBus, FlywheelConstants.LeftConfig);
             m_rightFollowerFlywheelMotor = new ChaosTalonFx(FlywheelConstants.RightFlywheelCanId, LauncherConstants.LauncherCanBus, FlywheelConstants.RightConfig);
         } else {
-            m_leftMainFlywheelMotor = new ChaosTalonFx(ArenaConstants.motorCanIDs[id][MotorIDs.Launcher1.canIdx], LauncherConstants.LauncherCanBus, FlywheelConstants.LeftConfig);
-            m_rightFollowerFlywheelMotor = new ChaosTalonFx(ArenaConstants.motorCanIDs[id][MotorIDs.Launcher2.canIdx], LauncherConstants.LauncherCanBus, FlywheelConstants.RightConfig);
+            m_leftMainFlywheelMotor = new ChaosTalonFx(ArenaConstants.motorCanIDs[id][MotorIDs.Launcher1.canIdx],
+                                                        LauncherConstants.LauncherCanBus,
+                                                        FlywheelConstants.LeftConfig);
+            m_rightFollowerFlywheelMotor = new ChaosTalonFx(ArenaConstants.motorCanIDs[id][MotorIDs.Launcher2.canIdx],
+                                                            LauncherConstants.LauncherCanBus,
+                                                            FlywheelConstants.RightConfig);
         }
 
         m_flywheelTuner = new ChaosTalonFxTuner("Launcher/Flywheel/Flywheel Motors", m_leftMainFlywheelMotor, m_rightFollowerFlywheelMotor).withAllConfigs();
@@ -48,7 +52,7 @@ public class Flywheel extends SubsystemBase {
         m_leftMainFlywheelMotor.applyConfig();
 
         if (Robot.isSimulation()) {
-            m_leftMainFlywheelMotor.attachMotorSim(FlywheelConstants.SimValues);
+            m_leftMainFlywheelMotor.attachMotorSim(FlywheelConstants.MakeDCMotorSim());
         }
 
         m_rightFollowerFlywheelMotor.setControl(new StrictFollower(m_leftMainFlywheelMotor.getDeviceID()));

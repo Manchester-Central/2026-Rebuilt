@@ -129,7 +129,7 @@ public final class LauncherConstants {
     public static final TalonFXConfiguration LeftConfig = GenerateFlywheelConfig(InvertedValue.CounterClockwise_Positive);
     public static final TalonFXConfiguration RightConfig = GenerateFlywheelConfig(InvertedValue.Clockwise_Positive);
 
-    private static TalonFXConfiguration GenerateFlywheelConfig(InvertedValue motorDirection) {
+    public static TalonFXConfiguration GenerateFlywheelConfig(InvertedValue motorDirection) {
       return new TalonFXConfiguration()
         .withMotorOutput(new MotorOutputConfigs()
             .withInverted(motorDirection)
@@ -165,6 +165,20 @@ public final class LauncherConstants {
       true,
       CtreMotorSimValues.chassisReferenceFromInvertedValue(LeftConfig.MotorOutput.Inverted),
       MotorType.KrakenX60);
+
+    public static CtreMotorSimValues MakeDCMotorSim() {
+      double MOI = SingleJointedArmSim.estimateMOI(FlywheelConstants.FlyWheelDiameter.in(Meters), FlywheelConstants.FlywheelMass.in(Kilograms));
+      DCMotor DcMotor = DCMotor.getKrakenX60(2);
+      DCMotorSim DcMotorSim = new DCMotorSim(
+          LinearSystemId.createDCMotorSystem(DcMotor, MOI, FlywheelConstants.SensorToMechanismRatio),
+          DcMotor);
+      return new CtreMotorSimValues(
+          DcMotorSim,
+          FlywheelConstants.SensorToMechanismRatio,
+          true,
+          CtreMotorSimValues.chassisReferenceFromInvertedValue(FlywheelConstants.LeftConfig.MotorOutput.Inverted),
+          MotorType.KrakenX60);
+    }
   }
 
   public static final class HoodConstants {

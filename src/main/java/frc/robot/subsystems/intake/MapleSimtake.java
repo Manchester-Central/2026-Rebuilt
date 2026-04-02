@@ -4,9 +4,12 @@
 
 package frc.robot.subsystems.intake;
 
+import static edu.wpi.first.units.Units.Degrees;
+
 import org.ironmaple.simulation.IntakeSimulation;
 import org.ironmaple.simulation.IntakeSimulation.IntakeSide;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
+import org.littletonrobotics.junction.Logger;
 
 import frc.robot.constants.ArenaConstants;
 import frc.robot.constants.IntakeConstants.PivotConstants;
@@ -41,8 +44,12 @@ public class MapleSimtake extends Intake {
 
   @Override
   public void periodic() {
-    super.periodic();
+    // parent version of periodic just calls Logger, so we can ignore it for our own
+    // super.periodic();
 
+    Logger.recordOutput("Robot"+m_id+"/IntakeTargetAngle", m_targetAngle.in(Degrees));
+    Logger.recordOutput("Robot"+m_id+"/IntakeCurrentAngle", getPivotAngle().in(Degrees));
+ 
     if (atTargetAngle(PivotConstants.DeployAngle.get())) {
       intakeSim.startIntake();
     } else {

@@ -18,6 +18,7 @@ public class Feeder extends AbstractFeeder {
     private ChaosTalonFxTuner m_flywheelTuner = new ChaosTalonFxTuner("Launcher/Feeder/Feeder Motors", m_topFeederMotor, m_bottomFeederMotor).withCurrentLimits();
 
     public Feeder(int id) {
+        super(id);
         m_topFeederMotor.applyConfig();
         m_bottomFeederMotor.applyConfig();
     }

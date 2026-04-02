@@ -33,14 +33,15 @@ public class Intake extends SubsystemBase {
   protected ChaosTalonFx m_pivotMotor;
   private SplineEncoder m_pivotEncoder;
 
-  @SuppressWarnings("unused")
   protected ChaosTalonFxTuner m_rollerTuner;
-  @SuppressWarnings("unused")
   protected ChaosTalonFxTuner m_pivotTuner;
-  private Angle m_targetAngle = PivotConstants.RetractAngle.get();
+  protected Angle m_targetAngle = PivotConstants.RetractAngle.get();
+
+  protected int m_id;
 
   /** Creates a new Intake. */
   public Intake(int id) {
+    m_id = id;
     if (GeneralConstants.currentMode != Mode.ARENA) {
       m_rollerMotor = new ChaosTalonFx(RollerConstants.RollerCanId, IntakeConstants.CanBus, RollerConstants.Config);
       m_pivotMotor = new ChaosTalonFx(PivotConstants.PivotCanId, IntakeConstants.CanBus, PivotConstants.TalonConfig);
@@ -59,7 +60,7 @@ public class Intake extends SubsystemBase {
     m_pivotEncoder.configure(PivotConstants.pivotEncoderConfig, ResetMode.kResetSafeParameters);
 
     if (Robot.isSimulation()) {
-      m_pivotMotor.attachMotorSim(PivotConstants.SimValues);
+      m_pivotMotor.attachMotorSim(PivotConstants.MakeDCMotorSim());
       m_pivotMotor.setSimAngle(PivotConstants.MinAngle);
     }
 

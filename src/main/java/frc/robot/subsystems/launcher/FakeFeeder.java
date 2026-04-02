@@ -9,7 +9,8 @@ public class FakeFeeder extends AbstractFeeder {
   protected double topspeed = 0;
   protected double bottomspeed = 0;
 
-  public FakeFeeder(Intake intake) {
+  public FakeFeeder(int id, Intake intake) {
+    super(id);
     this.intake = intake;
   }
 

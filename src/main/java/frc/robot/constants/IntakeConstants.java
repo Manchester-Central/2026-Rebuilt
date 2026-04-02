@@ -128,5 +128,19 @@ public final class IntakeConstants {
       true,
       CtreMotorSimValues.chassisReferenceFromInvertedValue(TalonConfig.MotorOutput.Inverted),
       MotorType.KrakenX60);
+
+    public static CtreMotorSimValues MakeDCMotorSim() {
+      double MOI = SingleJointedArmSim.estimateMOI(IntakeLength.in(Meters), IntakeMass.in(Kilograms));
+      DCMotor DcMotor = DCMotor.getKrakenX60(1);
+      DCMotorSim DcMotorSim = new DCMotorSim(
+        LinearSystemId.createSingleJointedArmSystem(DcMotor, MOI, SensorToMechanismRatio),
+        DcMotor);
+      return new CtreMotorSimValues(
+        DcMotorSim,
+        SensorToMechanismRatio,
+        true,
+        CtreMotorSimValues.chassisReferenceFromInvertedValue(TalonConfig.MotorOutput.Inverted),
+        MotorType.KrakenX60);
+    }
   }
 }
