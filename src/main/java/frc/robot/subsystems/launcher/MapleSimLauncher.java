@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.constants.ArenaConstants;
 import frc.robot.constants.RobotDimensions;
 import frc.robot.subsystems.MultiplayerSim.MultiplayerArena2026;
 import frc.robot.subsystems.intake.Intake;
@@ -22,8 +23,6 @@ import frc.robot.subsystems.interfaces.AbstractFeeder;
  * Leverages existing Flywheel behavior, but attaches 
  */
 public class MapleSimLauncher extends Launcher {
-    protected double ballLaunchInterval = 0.3;
-
     // Left Data
     protected Timer leftBallTimer = new Timer();
     protected Transform3d leftOffset = new Transform3d(
@@ -53,7 +52,7 @@ public class MapleSimLauncher extends Launcher {
     @Override
     public void periodic() {
         super.periodic();
-        if (atTargetFlywheelVelocity() && m_feeder.getFeederSpeed() > 0.05 && leftBallTimer.hasElapsed(ballLaunchInterval)) {
+        if (atTargetFlywheelVelocity() && m_feeder.getFeederSpeed() > 0.05 && leftBallTimer.hasElapsed(ArenaConstants.ballLaunchInterval)) {
             if (intake.claimGamePiece()) {
                 leftBallTimer.reset();
                 launchGamePiece(drive.getPose(), leftOffset, MetersPerSecond.of(10));

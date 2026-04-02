@@ -53,4 +53,5 @@ public final class ArenaConstants {
   };
 
   public static int HopperSize = 50;
+  public static double ballLaunchInterval = 0.1;
 }
