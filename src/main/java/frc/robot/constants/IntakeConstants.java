@@ -54,17 +54,30 @@ public final class IntakeConstants {
   public static final DashboardNumber OuttakeRollerSpeed = new DashboardNumber("Intake/OuttakeRollerSpeed", -0.8);
 
   public static final class RollerConstants {
-    public static final CanId RollerCanId = CanId.ID_30;
+    public static final CanId RightRollerCanId = CanId.ID_30;
+    public static final CanId LeftRollerCanId = CanId.ID_33;
 
-    public static final TalonFXConfiguration Config = new TalonFXConfiguration()
+    public static final TalonFXConfiguration LeftConfig = new TalonFXConfiguration()
       .withMotorOutput(new MotorOutputConfigs()
           .withInverted(InvertedValue.Clockwise_Positive)
           .withNeutralMode(NeutralModeValue.Coast)
       )
       .withCurrentLimits(new CurrentLimitsConfigs()
-          .withSupplyCurrentLimit(Amps.of(80)) // TODO: Double Check
-          .withStatorCurrentLimit(Amps.of(80)) // TODO: Double Check
-          .withSupplyCurrentLowerLimit(Amps.of(60))
+          .withSupplyCurrentLimit(Amps.of(40)) // TODO: Double Check
+          .withStatorCurrentLimit(Amps.of(40)) // TODO: Double Check
+          .withSupplyCurrentLowerLimit(Amps.of(30))
+          .withSupplyCurrentLimitEnable(true)
+          .withStatorCurrentLimitEnable(true)
+      );
+    public static final TalonFXConfiguration Rightconfig = new TalonFXConfiguration()
+        .withMotorOutput(new MotorOutputConfigs()
+            .withInverted(InvertedValue.CounterClockwise_Positive) 
+            .withNeutralMode(NeutralModeValue.Coast)
+      )
+      .withCurrentLimits(new CurrentLimitsConfigs()
+          .withSupplyCurrentLimit(Amps.of(40)) // TODO: Double Check
+          .withStatorCurrentLimit(Amps.of(40)) // TODO: Double Check
+          .withSupplyCurrentLowerLimit(Amps.of(30))
           .withSupplyCurrentLimitEnable(true)
           .withStatorCurrentLimitEnable(true)
       );
