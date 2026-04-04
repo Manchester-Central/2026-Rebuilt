@@ -1,7 +1,6 @@
 package frc.robot.subsystems.MultiplayerSim;
 
 import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
@@ -15,21 +14,17 @@ import org.ironmaple.simulation.seasonspecific.rebuilt2026.RebuiltFuelOnFly;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
-import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.RobotContainer;
 import frc.robot.constants.ArenaConstants;
-import frc.robot.subsystems.interfaces.AbstractDrive;
 
 public class MultiplayerArena2026 extends Arena2026Rebuilt {
   // Statics
@@ -38,30 +33,17 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
     Instance = new MultiplayerArena2026(MatchState.TRANSITION_SHIFT);
     SimulatedArena.overrideInstance(Instance);
   }
+  protected MatchTimerThread timerThread;
   @SuppressWarnings("unused")
   private ArrayList<LoggedDashboardChooser<Runnable>> arenaEnable;
-  
-  // Match Phase Times
-  public static final Time DurationAutonomous = Seconds.of(20);
-  public static final Time DurationPhasePause = Seconds.of(5); 
-  public static final Time DurationTransitionShift = Seconds.of(10);
-  public static final Time DurationShift1 = Seconds.of(25);
-  public static final Time DurationShift2 = Seconds.of(25);
-  public static final Time DurationShift3 = Seconds.of(25);
-  public static final Time DurationShift4 = Seconds.of(25);
-  public static final Time DurationEndGame = Seconds.of(30);
-  // match_state_lock
-  // match_thread_handler
 
   // Member Vars
-  private Timer phaseTimer;
-  private Timer matchTimer;
   private Pose3d winnerAnimationPoint = null;
 
   // Other Robots
   private RobotContainer[] robots;
 
-  private enum MatchState {
+  public static enum MatchState {
     PREPARE, /* matchRunning == false */
     WAITING,
     AUTONOMOUS, /* matchRunning == true */
@@ -81,8 +63,6 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
 
   private MultiplayerArena2026(MatchState startMode) {
     super(false);
-    phaseTimer = new Timer();
-    matchTimer = new Timer();
     setEfficiencyMode(true);
     setShouldRunClock(false);
     m_matchState = MatchState.WAITING;
@@ -92,6 +72,7 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
     // autonomous into this at some point, but I fear that would
     // require an external process to act as FMS.
     m_firstAlliance = Alliance.Blue;
+    timerThread = new MatchTimerThread(this);
   }
 
   /**
@@ -122,16 +103,12 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
 
   public void startMatch() {
     m_matchState = m_matchStartMode;
-    matchTimer.restart();
-    phaseTimer.restart();
   }
 
   public void startAutonomous() {
-    phaseTimer.restart();
   }
 
   public void startTeleop() {
-    phaseTimer.restart();
   }
 
   public void changePhase(MatchState newstate) {
@@ -141,12 +118,12 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
     }
 
     m_matchState = newstate;
-    phaseTimer.restart();
   }
 
   public void PhaseAutonomous() {
     setShouldRunClock(false);
-    if (phaseTimer.get() > DurationAutonomous.in(Seconds)) {
+    // phaseTimer.get() > DurationAutonomous.in(Seconds)
+    if (true) {
       // Auto is over, tally it up
       int score_diff = getScore(Alliance.Blue) - getScore(Alliance.Red);
       if (score_diff == 0) {
@@ -298,28 +275,28 @@ M    MMMMMMMMMMMMMMMMMMMMM:<$$$$c  "$ J$$$$$$$PF" ."$$$$$$$$P" .
     }
   }
 
-  /**
-   * 
-   * @param robot
-   * @param releaseVector
-   */
-  public void launchGamePiece(AbstractDrive robot, Matrix<N3, N1> releaseVector) {
-    addGamePieceProjectile(new RebuiltFuelOnFly(
-            // Obtain robot position from drive simulation
-            winnerAnimationPoint.getTranslation().toTranslation2d(),
-            // The scoring mechanism is installed at (0.46, 0) (meters) on the robot
-            new Translation2d(0.1, 0.0),
-            // Obtain robot speed from drive simulation
-            new ChassisSpeeds(),
-            // Release the fuel +/- 60 degrees from forward, remember to flip for red
-            new Rotation2d((2*Math.random()-1)*Math.PI/3 + (getWinner() == Alliance.Red ? 180 : 0)),
-            // The height at which the algae is ejected
-            Inches.of(22),
-            // The initial speed of the algae
-            MetersPerSecond.of(Math.random()*3+2.0),
-            // Chooses a random angle between 0 and 60 degrees
-            Degrees.of(Math.random()*Math.PI/3)));
-  }
+  // /**
+  //  * 
+  //  * @param robot
+  //  * @param releaseVector
+  //  */
+  // public void launchGamePiece(AbstractDrive robot, Matrix<N3, N1> releaseVector) {
+  //   addGamePieceProjectile(new RebuiltFuelOnFly(
+  //           // Obtain robot position from drive simulation
+  //           winnerAnimationPoint.getTranslation().toTranslation2d(),
+  //           // The scoring mechanism is installed at (0.46, 0) (meters) on the robot
+  //           new Translation2d(0.1, 0.0),
+  //           // Obtain robot speed from drive simulation
+  //           new ChassisSpeeds(),
+  //           // Release the fuel +/- 60 degrees from forward, remember to flip for red
+  //           new Rotation2d((2*Math.random()-1)*Math.PI/3 + (getWinner() == Alliance.Red ? 180 : 0)),
+  //           // The height at which the algae is ejected
+  //           Inches.of(22),
+  //           // The initial speed of the algae
+  //           MetersPerSecond.of(Math.random()*3+2.0),
+  //           // Chooses a random angle between 0 and 60 degrees
+  //           Degrees.of(Math.random()*Math.PI/3)));
+  // }
 
   /**
    * Creates a ball in the field for 
