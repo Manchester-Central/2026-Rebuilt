@@ -98,6 +98,8 @@ public final class LauncherConstants {
 
     public static final DashboardNumber LossFactor = new DashboardNumber("Launcher/LossFactor", 1);
 
+    public static final DashboardNumber FlywheelWarmUpSpeed = new DashboardNumber("Launcher/FlywheelWarmUpSpeed", 0.5);
+
     public static final double SensorToMechanismRatio = 1; // TODO check or change
 
     public static final boolean UseTorqueCurrentFOC = false;
