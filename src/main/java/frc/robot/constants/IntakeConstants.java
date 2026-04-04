@@ -54,10 +54,10 @@ public final class IntakeConstants {
   public static final DashboardNumber OuttakeRollerSpeed = new DashboardNumber("Intake/OuttakeRollerSpeed", -0.8);
 
   public static final class RollerConstants {
-    public static final CanId RightRollerCanId = CanId.ID_30;
-    public static final CanId LeftRollerCanId = CanId.ID_33;
+    public static final CanId InnerRollerCanId = CanId.ID_30;
+    public static final CanId OuterRollerCanId = CanId.ID_33;
 
-    public static final TalonFXConfiguration LeftConfig = new TalonFXConfiguration()
+    public static final TalonFXConfiguration InnerConfig = new TalonFXConfiguration()
       .withMotorOutput(new MotorOutputConfigs()
           .withInverted(InvertedValue.Clockwise_Positive)
           .withNeutralMode(NeutralModeValue.Coast)
@@ -69,9 +69,9 @@ public final class IntakeConstants {
           .withSupplyCurrentLimitEnable(true)
           .withStatorCurrentLimitEnable(true)
       );
-    public static final TalonFXConfiguration Rightconfig = new TalonFXConfiguration()
+    public static final TalonFXConfiguration OuterConfig = new TalonFXConfiguration()
         .withMotorOutput(new MotorOutputConfigs()
-            .withInverted(InvertedValue.CounterClockwise_Positive) 
+            .withInverted(InvertedValue.Clockwise_Positive) 
             .withNeutralMode(NeutralModeValue.Coast)
       )
       .withCurrentLimits(new CurrentLimitsConfigs()
