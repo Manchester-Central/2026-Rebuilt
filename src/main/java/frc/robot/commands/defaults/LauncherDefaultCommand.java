@@ -4,19 +4,24 @@
 
 package frc.robot.commands.defaults;
 
+import com.chaos131.gamepads.Gamepad;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.LauncherConstants.FeederConstants;
+import frc.robot.constants.LauncherConstants.FlywheelConstants;
 import frc.robot.subsystems.launcher.Launcher;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class LauncherDefaultCommand extends Command {
   /** Creates a new SimpleLauncherDefaultCommand. */
   private Launcher m_launcher;
+  private Gamepad m_operatorController;
 
-  public LauncherDefaultCommand(Launcher launcher) {
+  public LauncherDefaultCommand(Launcher launcher, Gamepad operatorController)  {
     // Use addRequirements() here to declare subsystem dependencies.=
     m_launcher = launcher;
     addRequirements(m_launcher);
+    m_operatorController = operatorController;
   }
 
   // Called when the command is initially scheduled.
@@ -27,13 +32,18 @@ public class LauncherDefaultCommand extends Command {
   @Override
   public void execute() {
     // TODO: determine logic while in auto mode
-    m_launcher.setFlywheelSpeed(0);
+    if (m_operatorController.povRight().getAsBoolean()){
+      m_launcher.setFlywheelSpeed(FlywheelConstants.FlywheelWarmUpSpeed.get());
+    } else {
+      m_launcher.setFlywheelSpeed(0);
+    }
     if (!m_launcher.doesFeederHaveFuel()) {
       m_launcher.setFeederSpeed(FeederConstants.PassiveFeederSpeed.get());
     } else {
       m_launcher.setFeederSpeed(0);
     }
     m_launcher.setFeederSpeed(0);
+    // TODO: John, what is this?
     m_launcher.setHoodSpeed(0);
   }
 
