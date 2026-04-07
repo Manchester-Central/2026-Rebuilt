@@ -119,17 +119,17 @@ public final class IntakeConstants {
 
     public static final DetachedEncoderConfig pivotEncoderConfig = new DetachedEncoderConfig()
         .inverted(true)
-        .dutyCycleOffset(Degrees.of(120).in(Rotations));
+        .dutyCycleOffset(Rotations.of(0.153).in(Rotations)); // per testing on 2026.04.07 [CER 2026.04.07]
 
     // Pivot Max / Min
-    public static final Angle MaxAngle = Degrees.of(177); // TODO: Double Check
-    public static final Angle MinAngle = Degrees.of(49); // TODO: Double Check
+    public static final Angle MaxAngle = Degrees.of(180); // TODO: Double Check
+    public static final Angle MinAngle = Degrees.of(75); // TODO: Double Check; super double check it actually [CER 2026.04.07]
 
     // Target Angles / Speeds
-    public static final DashboardUnit<AngleUnit,Angle> DeployAngle = new DashboardUnit<>("Intake/DeployAngle", Degrees.of(173)); // TODO: Double Check
-    public static final DashboardUnit<AngleUnit,Angle> RetractAngle = new DashboardUnit<>("Intake/RetractAngle", Degrees.of(110)); // TODO: Double Check
+    public static final DashboardUnit<AngleUnit,Angle> DeployAngle = new DashboardUnit<>("Intake/DeployAngle", Degrees.of(177)); // TODO: Double Check; changed from 173 to 177 per testing! [CER 2026.04.07]
+    public static final DashboardUnit<AngleUnit,Angle> RetractAngle = new DashboardUnit<>("Intake/RetractAngle", Degrees.of(90)); // TODO: Double Check
     public static final DashboardUnit<AngleUnit,Angle> BumpAngle = new DashboardUnit<>("Intake/BumpAngle", Degrees.of(150)); // TODO: Double Check
-    public static final DashboardUnit<AngleUnit,Angle> RetractDepAngle = new DashboardUnit<>("Intake/RetractDeepAngle", Degrees.of(60)); // TODO: Double Check
+    public static final DashboardUnit<AngleUnit,Angle> RetractDepAngle = new DashboardUnit<>("Intake/RetractDeepAngle", Degrees.of(90)); // TODO: Double Check
 
     public static final DashboardNumber JostleSpeed = new DashboardNumber("Intake/JostleSpeed", 63);
 
