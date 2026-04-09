@@ -54,8 +54,8 @@ public final class IntakeConstants {
   public static final DashboardNumber OuttakeRollerSpeed = new DashboardNumber("Intake/OuttakeRollerSpeed", -0.8);
 
   public static final class RollerConstants {
-    public static final CanId InnerRollerCanId = CanId.ID_30;
-    public static final CanId OuterRollerCanId = CanId.ID_33;
+    public static final CanId InnerRollerCanId = CanId.ID_33;
+    public static final CanId OuterRollerCanId = CanId.ID_30;
 
     public static final TalonFXConfiguration InnerConfig = new TalonFXConfiguration()
       .withMotorOutput(new MotorOutputConfigs()
@@ -118,7 +118,7 @@ public final class IntakeConstants {
         );
 
     public static final DetachedEncoderConfig pivotEncoderConfig = new DetachedEncoderConfig()
-        .inverted(true)
+        .inverted(false)
         .dutyCycleOffset(Rotations.of(0.153).in(Rotations)); // per testing on 2026.04.07 [CER 2026.04.07]
 
     // Pivot Max / Min

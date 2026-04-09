@@ -11,7 +11,6 @@ import org.littletonrobotics.junction.Logger;
 
 import com.chaos131.ctre.ChaosTalonFx;
 import com.chaos131.ctre.ChaosTalonFxTuner;
-import com.ctre.phoenix6.controls.StrictFollower;
 import com.revrobotics.ResetMode;
 import com.revrobotics.encoder.SplineEncoder;
 
@@ -51,7 +50,7 @@ public class Intake extends SubsystemBase {
       m_pivotMotor.setSimAngle(PivotConstants.MinAngle);
     }
     // TODO: Should follow?
-    m_outerRollerMotor.setControl(new StrictFollower(m_innerRollerMotor.getDeviceID()));
+    // m_outerRollerMotor.setControl(new StrictFollower(m_innerRollerMotor.getDeviceID()));
 
     m_pivotMotor.setPosition(getAbsolutePivotAngle());
   }
