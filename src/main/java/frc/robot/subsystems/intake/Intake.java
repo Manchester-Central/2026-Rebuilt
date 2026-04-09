@@ -25,13 +25,14 @@ import frc.robot.constants.IntakeConstants.RollerConstants;
 import frc.robot.constants.RobotDimensions;
 
 public class Intake extends SubsystemBase {
-  private ChaosTalonFx m_rollerMotor = new ChaosTalonFx(RollerConstants.RollerCanId, IntakeConstants.CanBus, RollerConstants.Config);
+  private ChaosTalonFx m_innerRollerMotor = new ChaosTalonFx(RollerConstants.InnerRollerCanId, IntakeConstants.CanBus, RollerConstants.InnerConfig);
+  private ChaosTalonFx m_outerRollerMotor = new ChaosTalonFx(RollerConstants.OuterRollerCanId, IntakeConstants.CanBus, RollerConstants.OuterConfig);
   // private ChaosTalonFx m_intakeKickerMotor = new ChaosTalonFx(IntakeConstants.IntakeKickerCanId, IntakeConstants.IntakeCanBus); TODO: delete if not added to robot
   private ChaosTalonFx m_pivotMotor = new ChaosTalonFx(PivotConstants.PivotCanId, IntakeConstants.CanBus, PivotConstants.TalonConfig);
   private SplineEncoder m_pivotEncoder = new SplineEncoder(PivotConstants.PivotCanCoderId.id);
 
   @SuppressWarnings("unused")
-  private ChaosTalonFxTuner m_rollerTuner = new ChaosTalonFxTuner("Intake/Roller Motor", m_rollerMotor).withCurrentLimits();
+  private ChaosTalonFxTuner m_rollerTuner = new ChaosTalonFxTuner("Intake/Roller Motor", m_innerRollerMotor,m_outerRollerMotor).withCurrentLimits();
   @SuppressWarnings("unused")
   private ChaosTalonFxTuner m_pivotTuner = new ChaosTalonFxTuner("Intake/Pivot Motor", m_pivotMotor).withAllConfigs();
   private Angle m_targetAngle = PivotConstants.RetractAngle.get();
@@ -40,7 +41,7 @@ public class Intake extends SubsystemBase {
   public Intake() {
 
     m_pivotMotor.applyConfig();
-    m_rollerMotor.applyConfig();
+    m_innerRollerMotor.applyConfig();
 
     m_pivotEncoder.configure(PivotConstants.pivotEncoderConfig, ResetMode.kResetSafeParameters);
 
@@ -48,6 +49,8 @@ public class Intake extends SubsystemBase {
       m_pivotMotor.attachMotorSim(PivotConstants.SimValues);
       m_pivotMotor.setSimAngle(PivotConstants.MinAngle);
     }
+    // TODO: Should follow?
+    // m_outerRollerMotor.setControl(new StrictFollower(m_innerRollerMotor.getDeviceID()));
 
     m_pivotMotor.setPosition(getAbsolutePivotAngle());
   }
@@ -56,7 +59,7 @@ public class Intake extends SubsystemBase {
    * Sets the speed of the intake between -1 and 1.
    */
   public void setRollerSpeed(double speed) {
-    m_rollerMotor.set(speed);
+    m_innerRollerMotor.set(speed);
     // m_intakeKickerMotor.set(speed);
   }
 
@@ -100,7 +103,7 @@ public class Intake extends SubsystemBase {
    * Returns the intake roller speed.
    */
   public double getRollerSpeed() {
-    return m_rollerMotor.get();
+    return m_innerRollerMotor.get();
   }
 
   /**
