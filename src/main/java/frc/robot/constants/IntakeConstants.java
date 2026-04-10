@@ -52,7 +52,7 @@ public final class IntakeConstants {
   public static final DashboardNumber ManualPivotSpeedMultiplier = new DashboardNumber("Intake/ManualPivotSpeedMultiplier", 0.4);
 
   // Speeds
-  public static final DashboardNumber IntakeRollerSpeed = new DashboardNumber("Intake/IntakeRollerSpeed", 0.85);
+  public static final DashboardNumber IntakeRollerSpeed = new DashboardNumber("Intake/IntakeRollerSpeed", 0.55);
   public static final DashboardNumber OuttakeRollerSpeed = new DashboardNumber("Intake/OuttakeRollerSpeed", -0.8);
 
   public static final class RollerConstants {
@@ -65,9 +65,9 @@ public final class IntakeConstants {
           .withNeutralMode(NeutralModeValue.Coast)
       )
       .withCurrentLimits(new CurrentLimitsConfigs()
-          .withSupplyCurrentLimit(Amps.of(40)) // TODO: Double Check
-          .withStatorCurrentLimit(Amps.of(40)) // TODO: Double Check
-          .withSupplyCurrentLowerLimit(Amps.of(30))
+          .withSupplyCurrentLimit(Amps.of(50)) // TODO: Double Check
+          .withStatorCurrentLimit(Amps.of(50)) // TODO: Double Check
+          .withSupplyCurrentLowerLimit(Amps.of(40))
           .withSupplyCurrentLimitEnable(true)
           .withStatorCurrentLimitEnable(true)
       );
@@ -77,9 +77,9 @@ public final class IntakeConstants {
             .withNeutralMode(NeutralModeValue.Coast)
       )
       .withCurrentLimits(new CurrentLimitsConfigs()
-          .withSupplyCurrentLimit(Amps.of(40)) // TODO: Double Check
-          .withStatorCurrentLimit(Amps.of(40)) // TODO: Double Check
-          .withSupplyCurrentLowerLimit(Amps.of(30))
+          .withSupplyCurrentLimit(Amps.of(50)) // TODO: Double Check
+          .withStatorCurrentLimit(Amps.of(50)) // TODO: Double Check
+          .withSupplyCurrentLowerLimit(Amps.of(40))
           .withSupplyCurrentLimitEnable(true)
           .withStatorCurrentLimitEnable(true)
       );
