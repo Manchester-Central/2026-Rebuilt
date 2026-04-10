@@ -17,13 +17,14 @@ public class IntakeDefaultCommand extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     m_intake = intake;
 
-
     addRequirements(m_intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_intake.setLowCurrentPivot();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -43,6 +44,7 @@ public class IntakeDefaultCommand extends Command {
   public void end(boolean interrupted) {
     m_intake.setRollerSpeed(0);
     // m_intake.setPivotSpeed(0);
+    m_intake.setHighCurrentPivot();
   }
 
   // Returns true when the command should end.

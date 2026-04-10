@@ -32,7 +32,9 @@ import com.revrobotics.encoder.config.DetachedEncoderConfig;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.units.AngleUnit;
+import edu.wpi.first.units.CurrentUnit;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Mass;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
@@ -89,15 +91,23 @@ public final class IntakeConstants {
 
     public static double SensorToMechanismRatio = 42.603; //TODO: tune 
 
+    public static final DashboardUnit<CurrentUnit, Current> pivotHighSupplyCurrentLimit = new DashboardUnit<>("pivotHigh/SupplyCurrentLimit", Amps.of(50));
+    public static final DashboardUnit<CurrentUnit, Current> pivotHighStatorCurrentLimit = new DashboardUnit<>("pivotHigh/StatorCurrentLimit", Amps.of(50));
+    public static final DashboardUnit<CurrentUnit, Current> pivotHighSupplyCurrentLowerLimit = new DashboardUnit<>("pivotHigh/SupplyCurrentLowerLimit", Amps.of(50));
+
+    public static final DashboardUnit<CurrentUnit, Current> pivotLowSupplyCurrentLimit = new DashboardUnit<>("pivotLow/SupplyCurrentLimit", Amps.of(10));
+    public static final DashboardUnit<CurrentUnit, Current> pivotLowStatorCurrentLimit = new DashboardUnit<>("pivotLow/StatorCurrentLimit", Amps.of(10));
+    public static final DashboardUnit<CurrentUnit, Current> pivotLowSupplyCurrentLowerLimit = new DashboardUnit<>("pivotLow/SupplyCurrentLowerLimit", Amps.of(10));
+
     public static final TalonFXConfiguration TalonConfig = new TalonFXConfiguration()
         .withMotorOutput(new MotorOutputConfigs()
             .withInverted(InvertedValue.CounterClockwise_Positive)
             .withNeutralMode(NeutralModeValue.Brake)
         )
         .withCurrentLimits(new CurrentLimitsConfigs()
-            .withSupplyCurrentLimit(Amps.of(50)) // TODO: Double Check
-            .withStatorCurrentLimit(Amps.of(50)) // TODO: Double Check
-            .withSupplyCurrentLowerLimit(Amps.of(60))
+            .withSupplyCurrentLimit(pivotHighSupplyCurrentLimit.get()) // TODO: Double Check
+            .withStatorCurrentLimit(pivotHighStatorCurrentLimit.get()) // TODO: Double Check
+            .withSupplyCurrentLowerLimit(pivotHighSupplyCurrentLowerLimit.get())
             .withSupplyCurrentLimitEnable(true)
             .withStatorCurrentLimitEnable(true)
         )

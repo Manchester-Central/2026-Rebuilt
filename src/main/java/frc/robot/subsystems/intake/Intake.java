@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.intake;
 
+import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Rotations;
 
@@ -154,6 +155,22 @@ public class Intake extends SubsystemBase {
       )
     };
     return poses;
+  }
+
+  public void setHighCurrentPivot() {
+    m_pivotMotor.Configuration.CurrentLimits.SupplyCurrentLimit = PivotConstants.pivotHighSupplyCurrentLimit.get().in(Amps);
+    m_pivotMotor.Configuration.CurrentLimits.StatorCurrentLimit = PivotConstants.pivotHighStatorCurrentLimit.get().in(Amps);
+    m_pivotMotor.Configuration.CurrentLimits.SupplyCurrentLowerLimit = PivotConstants.pivotHighSupplyCurrentLowerLimit.get().in(Amps);
+
+    m_pivotMotor.applyConfig();
+  }
+
+  public void setLowCurrentPivot() {
+    m_pivotMotor.Configuration.CurrentLimits.SupplyCurrentLimit = PivotConstants.pivotLowSupplyCurrentLimit.get().in(Amps);
+    m_pivotMotor.Configuration.CurrentLimits.StatorCurrentLimit = PivotConstants.pivotLowStatorCurrentLimit.get().in(Amps);
+    m_pivotMotor.Configuration.CurrentLimits.SupplyCurrentLowerLimit = PivotConstants.pivotLowSupplyCurrentLowerLimit.get().in(Amps);
+
+    m_pivotMotor.applyConfig();
   }
 
   @Override
