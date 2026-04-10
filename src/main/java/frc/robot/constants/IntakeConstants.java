@@ -136,7 +136,7 @@ public final class IntakeConstants {
     public static final Angle MinAngle = Degrees.of(75); // TODO: Double Check; super double check it actually [CER 2026.04.07]
 
     // Target Angles / Speeds
-    public static final DashboardUnit<AngleUnit,Angle> DeployAngle = new DashboardUnit<>("Intake/DeployAngle", Degrees.of(177)); // TODO: Double Check; changed from 173 to 177 per testing! [CER 2026.04.07]
+    public static final DashboardUnit<AngleUnit,Angle> DeployAngle = new DashboardUnit<>("Intake/DeployAngle", Degrees.of(180)); // TODO: Double Check; changed from 173 to 177 per testing! [CER 2026.04.07]
     public static final DashboardUnit<AngleUnit,Angle> RetractAngle = new DashboardUnit<>("Intake/RetractAngle", Degrees.of(90)); // TODO: Double Check
     public static final DashboardUnit<AngleUnit,Angle> BumpAngle = new DashboardUnit<>("Intake/BumpAngle", Degrees.of(150)); // TODO: Double Check
     public static final DashboardUnit<AngleUnit,Angle> RetractDepAngle = new DashboardUnit<>("Intake/RetractDeepAngle", Degrees.of(90)); // TODO: Double Check
