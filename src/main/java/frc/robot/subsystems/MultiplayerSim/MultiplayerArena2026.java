@@ -1,9 +1,9 @@
 package frc.robot.subsystems.MultiplayerSim;
 
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Seconds;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -19,10 +19,11 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.units.measure.Time;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 import frc.robot.constants.ArenaConstants;
 
@@ -30,22 +31,16 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
   // Statics
   public static MultiplayerArena2026 Instance;
   static {
-    Instance = new MultiplayerArena2026(MatchState.TRANSITION_SHIFT);
+    Instance = new MultiplayerArena2026();
     SimulatedArena.overrideInstance(Instance);
   }
   protected MatchTimerThread timerThread;
   @SuppressWarnings("unused")
   private ArrayList<LoggedDashboardChooser<Runnable>> arenaEnable;
 
-  // Member Vars
-  private Pose3d winnerAnimationPoint = null;
-
-  // Other Robots
-  private RobotContainer[] robots;
-
   public static enum MatchState {
-    PREPARE, /* matchRunning == false */
     WAITING,
+    PREPARE, /* matchRunning == false */
     AUTONOMOUS, /* matchRunning == true */
     PHASE_PAUSE,
     TRANSITION_SHIFT,
@@ -56,23 +51,41 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
     END_GAME,
     COMPLETED /* matchRunning == false */
   };
-  private MatchState m_matchState;
-  private MatchState m_matchStartMode;
-  private Alliance m_firstAlliance;
-  // TODO: Can we use a thread to drive the Robot state changes from Auto to Teleop?
+  private class MatchStartCommand extends Command {
+    @Override
+    public void initialize() {
+      startMatch();
+    }
 
-  private MultiplayerArena2026(MatchState startMode) {
+    @Override
+    public boolean runsWhenDisabled() {
+      return true;
+    }
+  }
+  private MatchStartCommand startButton;
+  private MatchState m_matchState;
+  private Alliance m_firstAlliance;
+  
+  // Member Vars
+  private Pose3d winnerAnimationPoint = null;
+  private Pose3d redScoringIndicator = new Pose3d(Inches.of(650.12-156.06), Inches.of(158.84), Inches.of(44.25), new Rotation3d());
+  private Pose3d blueScoringIndicator = new Pose3d(Inches.of(156.06), Inches.of(158.84), Inches.of(44.25), new Rotation3d());
+
+  // Other Robots
+  private RobotContainer[] robots;
+
+
+  private MultiplayerArena2026() {
     super(false);
     setEfficiencyMode(true);
     setShouldRunClock(false);
     m_matchState = MatchState.WAITING;
-    m_matchStartMode = startMode;
-    // Hard codeded to start with blue alliance by default.
-    // It would be nice if we could figure out how to integrate
-    // autonomous into this at some point, but I fear that would
-    // require an external process to act as FMS.
+    Logger.recordOutput("Arena/GameState", m_matchState);
+
     m_firstAlliance = Alliance.Blue;
-    timerThread = new MatchTimerThread(this);
+
+    startButton = new MatchStartCommand();
+    SmartDashboard.putData("Arena/StartMatch", startButton);
   }
 
   /**
@@ -101,45 +114,32 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
     resetFieldForAuto();
   }
 
-  public void startMatch() {
-    m_matchState = m_matchStartMode;
+  /**
+   * Triggered by the startButton / MatchStartCommand
+   */
+  private void startMatch() {
+    synchronized(this) {
+      if (timerThread == null) {
+        System.out.println("[DEBUG] Starting Match!");
+        timerThread = new MatchTimerThread(this);
+        timerThread.start();
+      }
+    }
   }
 
-  public void startAutonomous() {
-  }
-
-  public void startTeleop() {
+  /**
+   * Runs ever Arena loop, checks if it's done, and destroys the handler if so
+   */
+  private void matchThreadCleanup() {
+    synchronized(this) {
+      if (timerThread != null && !timerThread.isAlive()) {
+        timerThread = null;
+      }
+    }
   }
 
   public void changePhase(MatchState newstate) {
-    switch (m_matchState) {
-      default:
-        break;
-    }
-
-    m_matchState = newstate;
-  }
-
-  public void PhaseAutonomous() {
-    setShouldRunClock(false);
-    // phaseTimer.get() > DurationAutonomous.in(Seconds)
-    if (true) {
-      // Auto is over, tally it up
-      int score_diff = getScore(Alliance.Blue) - getScore(Alliance.Red);
-      if (score_diff == 0) {
-        // If the score is even after Auto, we pick a random team
-        if (new Random().nextBoolean()) {
-          m_firstAlliance = Alliance.Blue;
-        } else {
-          m_firstAlliance = Alliance.Red;
-        }
-      } else if (score_diff > 0) {
-        m_firstAlliance = Alliance.Blue;
-      } else {
-        m_firstAlliance = Alliance.Red;
-      }
-      // Finally, ChAAanGe PhAAsEEs!?!
-      /*
+    /* ChAAanGe PhAAsEEs!?!
                       .,,;;;;;!!!!!!!!!;;;,.
                 .,;;!!!!!!!!!!!!!!!!!!!!!!!!!!!;
           .,;!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!>
@@ -183,8 +183,52 @@ M    MMMMMMMMMMMMMMMMMMMMM:<$$$$c  "$ J$$$$$$$PF" ."$$$$$$$$P" .
                                       .,.`` `!!!!  "" -''!'' ,!
                                     ,!!!!!!!>;, `'\ <!>   ,;<!!!
       */
-      changePhase(MatchState.PHASE_PAUSE);
+    switch (m_matchState) {
+      case WAITING:
+      case PREPARE:
+      case AUTONOMOUS:
+      case TRANSITION_SHIFT:
+      case PHASE_PAUSE:
+      case END_GAME:
+        setShouldRunClock(false);
+        break;
+
+      case COMPLETED:
+        setShouldRunClock(false);
+        setWinnerAnimationPoint(getWinner());
+        break;
+
+      case TELEOP1:
+      case TELEOP2:
+      case TELEOP3:
+      case TELEOP4:
+        setShouldRunClock(true);
+        break;
     }
+
+    m_matchState = newstate;
+    Logger.recordOutput("Arena/GameState", m_matchState);
+  }
+
+  /**
+   * Should only be called from the MatchTimerThread, because that's what schedules
+   * the phase changes, not this class.
+   */
+  public void calculateAutoWinner() {
+    int score_diff = getScore(Alliance.Blue) - getScore(Alliance.Red);
+    if (score_diff == 0) {
+      // If the score is even after Auto, we pick a random team
+      if (new Random().nextBoolean()) {
+        m_firstAlliance = Alliance.Blue;
+      } else {
+        m_firstAlliance = Alliance.Red;
+      }
+    } else if (score_diff > 0) {
+      m_firstAlliance = Alliance.Blue;
+    } else {
+      m_firstAlliance = Alliance.Red;
+    }
+    blueIsOnClock = m_firstAlliance == Alliance.Blue;
   }
 
   /**
@@ -193,58 +237,18 @@ M    MMMMMMMMMMMMMMMMMMMMM:<$$$$c  "$ J$$$$$$$PF" ."$$$$$$$$P" .
   public void periodic() {
     switch (m_matchState) {
       case PREPARE:
-        // No-op staging environment, waiting for a match to begin
-        setShouldRunClock(false);
-        resetFieldForAuto();
-        break;
       case WAITING:
-        // No-op
-        break;
-
-      case AUTONOMOUS:
-        PhaseAutonomous();
-        break;
-
       case PHASE_PAUSE:
-        // Not sure, disable the robot somehow?
-        // Lets just skip the pause phase and jump to teleop
-        // In fact, maybe just start all matches in teleop
-        // That's a better idea...
-        setShouldRunClock(false);
-        changePhase(MatchState.TRANSITION_SHIFT);
-        break;
-
+      case AUTONOMOUS:
       case TRANSITION_SHIFT:
-        // Both hubs open
-        setShouldRunClock(false);
-        blueIsOnClock = m_firstAlliance == Alliance.Blue;
-        break;
-
       case TELEOP1:
-        setShouldRunClock(true);
-        // First alliance
-        break;
-
       case TELEOP2:
-        // Second alliance
-        break;
-
       case TELEOP3:
-        // First Alliance
-        break;
-
       case TELEOP4:
-        // Second Alliance
-        break;
-
       case END_GAME:
-        // Both teams again!
-        setShouldRunClock(false);
         break;
-
       case COMPLETED:
         // Now sit there quietly
-        setWinnerAnimationPoint(getWinner());
         spawnWinnerBall();
         break;
     }
@@ -256,6 +260,40 @@ M    MMMMMMMMMMMMMMMMMMMMM:<$$$$c  "$ J$$$$$$$PF" ."$$$$$$$$P" .
     arenaLogging();
   }
 
+  /**
+   * Helper function to indicate if we're in the alternative phase section of a match.
+   * This is critical to support isActive because isActive builds on the 
+   * @return true if in one of the 4 alternative phases
+   */
+  private boolean isTeamPhase() {
+    switch (m_matchState) {
+      case TELEOP1:
+      case TELEOP2:
+      case TELEOP3:
+      case TELEOP4:
+        return true;
+      
+      default:
+        return false;
+    }
+  }
+
+  /**
+   * Custom function to handle if a hub is active or not 
+   */
+  @Override
+  public boolean isActive(boolean isBlue) {
+    if (isBlue) {
+      return (blueIsOnClock && isTeamPhase()) || DriverStation.isAutonomous() || !DriverStation.isEnabled();
+    } else {
+      return (!blueIsOnClock && isTeamPhase()) || DriverStation.isAutonomous() || !DriverStation.isEnabled();
+    }
+  }
+
+  /**
+   * Determines which alliance won at the end of the event
+   * @return The alliance enum, or null if it's a tie!
+   */
   private Alliance getWinner() {
     if (getScore(Alliance.Blue) > getScore(Alliance.Red)) {
       return Alliance.Blue;
@@ -275,35 +313,12 @@ M    MMMMMMMMMMMMMMMMMMMMM:<$$$$c  "$ J$$$$$$$PF" ."$$$$$$$$P" .
     }
   }
 
-  // /**
-  //  * 
-  //  * @param robot
-  //  * @param releaseVector
-  //  */
-  // public void launchGamePiece(AbstractDrive robot, Matrix<N3, N1> releaseVector) {
-  //   addGamePieceProjectile(new RebuiltFuelOnFly(
-  //           // Obtain robot position from drive simulation
-  //           winnerAnimationPoint.getTranslation().toTranslation2d(),
-  //           // The scoring mechanism is installed at (0.46, 0) (meters) on the robot
-  //           new Translation2d(0.1, 0.0),
-  //           // Obtain robot speed from drive simulation
-  //           new ChassisSpeeds(),
-  //           // Release the fuel +/- 60 degrees from forward, remember to flip for red
-  //           new Rotation2d((2*Math.random()-1)*Math.PI/3 + (getWinner() == Alliance.Red ? 180 : 0)),
-  //           // The height at which the algae is ejected
-  //           Inches.of(22),
-  //           // The initial speed of the algae
-  //           MetersPerSecond.of(Math.random()*3+2.0),
-  //           // Chooses a random angle between 0 and 60 degrees
-  //           Degrees.of(Math.random()*Math.PI/3)));
-  // }
-
   /**
    * Creates a ball in the field for 
    */
   private void spawnWinnerBall() {
     if (winnerAnimationPoint == null) {
-      System.out.println("Can't spawn ball without spawn location...");
+      // System.out.println("Can't spawn ball without spawn location...");
       return;
     }
 
@@ -341,9 +356,14 @@ M    MMMMMMMMMMMMMMMMMMMMM:<$$$$c  "$ J$$$$$$$PF" ."$$$$$$$$P" .
     for (RobotContainer container : robots) {
       container.containerLogging();
     }
+    matchThreadCleanup();
+
+    Logger.recordOutput("Arena/ThreadActive", timerThread != null);
+    Logger.recordOutput("Arena/BlueActive", isActive(true) ? new Pose3d[]{blueScoringIndicator} : new Pose3d[0]);
+    Logger.recordOutput("Arena/RedActive", isActive(false) ? new Pose3d[]{redScoringIndicator} : new Pose3d[0]);
     Logger.recordOutput("Arena/ScoreBlue", getScore(Alliance.Blue));
     Logger.recordOutput("Arena/ScoreRed", getScore(Alliance.Red));
-    Logger.recordOutput("Arena/GameState", m_matchState);
+    // Logger.recordOutput("Arena/GameState", m_matchState);
     Logger.recordOutput("Arena/GamePieces", getGamePiecesArrayByType("Fuel"));
   }
 }

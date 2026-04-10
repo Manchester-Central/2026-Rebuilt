@@ -120,8 +120,8 @@ public class RobotContainer {
     this.id = id;
     m_driver = new Gamepad(id);
     
-    m_getDriverXTranslation = () -> m_driver.getLeftY();
-    m_getDriverYTranslation = () -> -m_driver.getLeftX();
+    m_getDriverXTranslation = id < 3 ? () ->  m_driver.getLeftY() : () -> -m_driver.getLeftY();
+    m_getDriverYTranslation = id < 3 ? () -> -m_driver.getLeftX() : () ->  m_driver.getLeftX();
     m_getDriverRotation = () -> -m_driver.getRightX();
     m_getDriverXTranslationSlow = () -> m_getDriverXTranslation.getAsDouble() * GeneralConstants.SlowModeMultiplier;
     m_getDriverYTranslationSlow = () -> m_getDriverYTranslation.getAsDouble() * GeneralConstants.SlowModeMultiplier;

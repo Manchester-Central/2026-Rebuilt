@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.ArenaConstants;
 import frc.robot.constants.GeneralConstants;
-import frc.robot.constants.GeneralConstants.Mode;
 import frc.robot.subsystems.MultiplayerSim.MultiplayerArena2026;
 
 /**
@@ -99,13 +98,12 @@ public class Robot extends LoggedRobot {
     // Threads.setCurrentThreadPriority(false, 10);
 
     Logger.recordOutput("Robot/hasEnabled", hasEnabled);
+    MultiplayerArena2026.Instance.periodic();
   }
 
   /** This function is called once when the robot is disabled. */
   @Override
   public void disabledInit() {
-    MultiplayerArena2026.Instance.prepareMatch();
-  
     if (!hasEnabled) {
       robotContainer.getCamera().setUseForOdometry(true);
     }
@@ -123,7 +121,6 @@ public class Robot extends LoggedRobot {
   @Override
   public void autonomousInit() {
     autonomousCommand = robotContainer.getAutonomousCommand();
-    if (GeneralConstants.currentMode == Mode.ARENA) MultiplayerArena2026.Instance.startMatch();
 
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {
@@ -136,14 +133,11 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {
-    MultiplayerArena2026.Instance.periodic();
-  }
+  public void autonomousPeriodic() {}
 
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    if (GeneralConstants.currentMode == Mode.ARENA) MultiplayerArena2026.Instance.startMatch();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -158,9 +152,7 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {
-    MultiplayerArena2026.Instance.periodic();
-  }
+  public void teleopPeriodic() {}
 
   /** This function is called once when test mode is enabled. */
   @Override

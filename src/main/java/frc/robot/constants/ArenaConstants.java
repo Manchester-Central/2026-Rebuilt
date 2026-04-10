@@ -4,6 +4,7 @@ import com.chaos131.can.CanConstants.CanId;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.subsystems.MultiplayerSim.MultiplayerArena2026.MatchState;
 
 public final class ArenaConstants {
   public enum MotorIDs {
@@ -21,7 +22,7 @@ public final class ArenaConstants {
     }
   };
 
-  public static final int numAdditionalRobots = 2;
+  public static final int numAdditionalRobots = 0; // max value should be 5
   public static CanId[][] motorCanIDs = new CanId[][] {
     {CanId.ID_20, CanId.ID_21, CanId.ID_22, CanId.ID_23, CanId.ID_24, CanId.ID_25, CanId.ID_26},
     {CanId.ID_27, CanId.ID_28, CanId.ID_29, CanId.ID_30, CanId.ID_31, CanId.ID_32, CanId.ID_33},
@@ -54,4 +55,8 @@ public final class ArenaConstants {
 
   public static int HopperSize = 50;
   public static double ballLaunchInterval = 0.1;
+
+  // Must be AUTONOMOUS to start a match in Autonomous Phase,
+  // otherwise it will jump to teleop. No starting in arbitrary phases for now!
+  public static final MatchState matchStartState = MatchState.AUTONOMOUS;
 }
