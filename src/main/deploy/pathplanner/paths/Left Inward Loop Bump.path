@@ -1,0 +1,118 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.419771754636234,
+        "y": 7.373579545454545
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.600689691272268,
+        "y": 7.127942182784797
+      },
+      "isLocked": false,
+      "linkedName": "MidLeftStart"
+    },
+    {
+      "anchor": {
+        "x": 6.264507845929015,
+        "y": 3.912082738950878
+      },
+      "prevControl": {
+        "x": 5.443997113903303,
+        "y": 4.516324512345044
+      },
+      "nextControl": {
+        "x": 6.7144480704498095,
+        "y": 3.5807370678045625
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.312539229666531,
+        "y": 4.7919115549280535
+      },
+      "prevControl": {
+        "x": 7.4907756663294895,
+        "y": 4.218874266089538
+      },
+      "nextControl": {
+        "x": 7.163113229787437,
+        "y": 5.272322134581968
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.68010663507109,
+        "y": 5.528755924170615
+      },
+      "prevControl": {
+        "x": 6.532049540868458,
+        "y": 5.660367728448084
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "LeftBump"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.6588486140724937,
+      "rotationDegrees": 95.0
+    },
+    {
+      "waypointRelativePos": 2.002132196162056,
+      "rotationDegrees": -125.889
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": 1.45,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "DeployIntake"
+        }
+      }
+    },
+    {
+      "name": "RetractBump",
+      "waypointRelativePos": 2.5,
+      "endWaypointRelativePos": 2.0,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "RetractBump"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": true
+  },
+  "goalEndState": {
+    "velocity": 3.0,
+    "rotation": -90.0
+  },
+  "reversed": false,
+  "folder": "Left",
+  "idealStartingState": {
+    "velocity": 3.0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}
