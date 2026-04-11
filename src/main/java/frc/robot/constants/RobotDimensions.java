@@ -27,7 +27,7 @@ public final class RobotDimensions {
   public static Distance IntakeRange = Inches.of(8);
 
   // Highly tunable angle that reflects how the ball releases from the hood
-  public static Angle FixedHoodAngle = Degrees.of(60);
+  public static Angle FixedHoodAngle = Degrees.of(65);
   // Intake Axle
   public static Translation3d IntakeOffset = new Translation3d(Meters.of(-0.275449), Meters.of(0), Meters.of(0.222401));
 

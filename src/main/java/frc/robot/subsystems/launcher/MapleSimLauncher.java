@@ -20,6 +20,7 @@ import frc.robot.subsystems.MultiplayerSim.MultiplayerArena2026;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.interfaces.AbstractDrive;
 import frc.robot.subsystems.interfaces.AbstractFeeder;
+import frc.robot.util.LauncherUtil;
 
 /**
  * Leverages existing Flywheel behavior, but attaches 
@@ -57,7 +58,7 @@ public class MapleSimLauncher extends Launcher {
         if (atTargetFlywheelVelocity() && m_feeder.getFeederSpeed() > 0.05 && leftBallTimer.hasElapsed(ArenaConstants.ballLaunchInterval)) {
             if (intake.claimGamePiece()) {
                 leftBallTimer.reset();
-                launchGamePiece(drive.getPose(), leftOffset, MetersPerSecond.of(10));
+                launchGamePiece(drive.getPose(), leftOffset, LauncherUtil.getScoringVelocitySetAngle(drive.getPose()));
             }
         }
     }
