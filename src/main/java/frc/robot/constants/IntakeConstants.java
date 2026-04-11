@@ -117,7 +117,7 @@ public final class IntakeConstants {
             .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor)
         )
         .withSlot0(new Slot0Configs() //TODO: CHECK THESE PLEASE
-            .withKP(60)
+            .withKP(45)
             .withKI(0)
             .withKD(0)
             .withKG(0.39)

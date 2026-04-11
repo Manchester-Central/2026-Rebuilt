@@ -81,7 +81,7 @@ public final class LauncherConstants {
   
   public static final DashboardUnit<TimeUnit, Time> AutoLaunchTime = new DashboardUnit<>("Launcher/AutoLaunchTime", Seconds.of(3.2));
 
-  public static final DashboardUnit<TimeUnit, Time> JostleDelay = new DashboardUnit<>("Launcher/JostleDelay", Seconds.of(0.8));
+  public static final DashboardUnit<TimeUnit, Time> JostleDelay = new DashboardUnit<>("Launcher/JostleDelay", Seconds.of(1.2));
 
   public static final class FlywheelConstants {
     public static final CanId LeftFlywheelCanId = CanId.ID_40;
