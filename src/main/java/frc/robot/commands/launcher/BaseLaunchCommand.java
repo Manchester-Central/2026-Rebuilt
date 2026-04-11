@@ -70,6 +70,23 @@ public abstract class BaseLaunchCommand extends Command {
     return targetAngle.isNear(currentAngle, LauncherConstants.AimYawTolerance.get());
   }
 
+  protected boolean isFacingLaunchTarget() {
+    var targetPose = getTargetPose();
+    var targetHeight = getTargetHeight();
+    if (targetPose.isEmpty() || targetHeight.isEmpty()) {
+      return true;
+    }
+
+    Pose2d currentPose = m_swerveDrive.getPose();
+    Angle currentAngle = currentPose.getRotation().getMeasure();
+    Angle targetAngle = m_launcher.getYawForTarget(m_swerveDrive, targetPose.get().getCurrentAlliancePose(), targetHeight.get());
+
+    Logger.recordOutput("Launcher/TargetAngle", targetAngle.in(Degrees));
+    Logger.recordOutput("Launcher/CurrentAngle", currentAngle.in(Degrees));
+    Logger.recordOutput("Launcher/AngleDif", targetAngle.minus(currentAngle).in(Degrees));
+    return targetAngle.isNear(currentAngle, 8.0);
+  }
+
   protected boolean isLauncherReady() {
     return m_launcher.atTargetFlywheelVelocity();
   }
@@ -91,7 +108,7 @@ public abstract class BaseLaunchCommand extends Command {
       m_launchTimer.start();
     }
 
-    if (isFacingTarget() && m_hasLaunched) {
+    if (isFacingLaunchTarget() && m_hasLaunched) {
       enableFeederForLauncher();
     } else {
       m_launcher.setFeederSpeed(0);
