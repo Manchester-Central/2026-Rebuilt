@@ -35,8 +35,7 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
     SimulatedArena.overrideInstance(Instance);
   }
   protected MatchTimerThread timerThread;
-  @SuppressWarnings("unused")
-  private ArrayList<LoggedDashboardChooser<Runnable>> arenaEnable;
+  private ArrayList<LoggedDashboardChooser<Runnable>> arenaEnable = new ArrayList<>();
 
   public static enum MatchState {
     WAITING,
@@ -62,11 +61,25 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
       return true;
     }
   }
+  private class MatchAbortCommand extends Command {
+    @Override
+    public void initialize() {
+      abortMatch();
+    }
+
+    @Override
+    public boolean runsWhenDisabled(){
+      return true;
+    }
+  }
   private MatchStartCommand startButton;
+  private MatchAbortCommand abortButton;
   private MatchState m_matchState;
+  private boolean runAutonomous;
+  private boolean runTeleop;
+
+  // Scoring
   private Alliance m_firstAlliance;
-  
-  // Member Vars
   private Pose3d winnerAnimationPoint = null;
   private Pose3d redScoringIndicator = new Pose3d(Inches.of(650.12-156.06), Inches.of(158.84), Inches.of(44.25), new Rotation3d());
   private Pose3d blueScoringIndicator = new Pose3d(Inches.of(156.06), Inches.of(158.84), Inches.of(44.25), new Rotation3d());
@@ -81,11 +94,15 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
     setShouldRunClock(false);
     m_matchState = MatchState.WAITING;
     Logger.recordOutput("Arena/GameState", m_matchState);
+    runAutonomous = true;
+    runTeleop = true;
 
     m_firstAlliance = Alliance.Blue;
 
     startButton = new MatchStartCommand();
     SmartDashboard.putData("Arena/StartMatch", startButton);
+    abortButton = new MatchAbortCommand();
+    SmartDashboard.putData("Arena/AbortMatch", abortButton);
   }
 
   /**
@@ -101,13 +118,33 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
       throw new RuntimeException("Too many additional robots declared, max number is 5!"); 
     
     robots = new RobotContainer[ArenaConstants.numAdditionalRobots];
-    ArrayList<LoggedDashboardChooser<Runnable>> arenaEnable = new ArrayList<>();
     for (int idx = 0; idx < ArenaConstants.numAdditionalRobots; idx++) {
       // Actual robot container is id 0, rest of player alliance is 1-2
       // opposition is 3-5.
       robots[idx] = new RobotContainer(idx+1, ArenaConstants.startingPoses[idx+1]);
       arenaEnable.add(addMultiplayerChooser(idx+1));
     }
+    // Also add the phase toggles to the 
+    arenaEnable.add(setupAutoToggle());
+    arenaEnable.add(setupTeleopToggle());
+  }
+
+  private LoggedDashboardChooser<Runnable> setupAutoToggle() {
+    var auto = new SendableChooser<Runnable>();
+    final Runnable disable = () -> runAutonomous = false;
+    final Runnable enable = () -> runAutonomous = true;
+    auto.setDefaultOption("Disable", disable);
+    auto.addOption("Enable", enable);
+    return new LoggedDashboardChooser<>("Arena/runAutonomous", auto);
+  }
+
+  private LoggedDashboardChooser<Runnable> setupTeleopToggle() {
+    var teleop = new SendableChooser<Runnable>();
+    final Runnable disable = () -> runAutonomous = false;
+    final Runnable enable = () -> runAutonomous = true;
+    teleop.setDefaultOption("Disable", disable);
+    teleop.addOption("Enable", enable);
+    return new LoggedDashboardChooser<>("Arena/runTeleop", teleop);
   }
 
   public void prepareMatch() {
@@ -123,6 +160,15 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
         System.out.println("[DEBUG] Starting Match!");
         timerThread = new MatchTimerThread(this);
         timerThread.start();
+      }
+    }
+  }
+
+  private void abortMatch() {
+    synchronized(this) {
+      if (timerThread != null) {
+        System.out.println("[DEBUG] Aborting Match!");
+        timerThread.interrupt();
       }
     }
   }
@@ -339,6 +385,13 @@ M    MMMMMMMMMMMMMMMMMMMMM:<$$$$c  "$ J$$$$$$$PF" ."$$$$$$$$P" .
             Degrees.of(Math.random()*Math.PI/3)));
   }
 
+  /**
+   * This is a function that should probably be in RobotContainer, but it's isolated into a helper function here to
+   * keep the RobotContainer free of changes that could be done somewhere else to reduce the chances of merge conflicts.
+   *
+   * @param robotId - 0 for original robot, max id of 5
+   * @return
+   */
   private LoggedDashboardChooser<Runnable> addMultiplayerChooser(int robotId) {
     var tmp = new SendableChooser<Runnable>();
     final Runnable disable = () -> robots[robotId].getSwerveDrive().setPose(ArenaConstants.waitingPoses[robotId]);
@@ -360,9 +413,9 @@ M    MMMMMMMMMMMMMMMMMMMMM:<$$$$c  "$ J$$$$$$$PF" ."$$$$$$$$P" .
 
     Logger.recordOutput("Arena/ThreadActive", timerThread != null);
     Logger.recordOutput("Arena/BlueActive", isActive(true) ? new Pose3d[]{blueScoringIndicator} : new Pose3d[0]);
+    Logger.recordOutput("Arena/BlueScore", getScore(Alliance.Blue));
     Logger.recordOutput("Arena/RedActive", isActive(false) ? new Pose3d[]{redScoringIndicator} : new Pose3d[0]);
-    Logger.recordOutput("Arena/ScoreBlue", getScore(Alliance.Blue));
-    Logger.recordOutput("Arena/ScoreRed", getScore(Alliance.Red));
+    Logger.recordOutput("Arena/RedScore", getScore(Alliance.Red));
     // Logger.recordOutput("Arena/GameState", m_matchState);
     Logger.recordOutput("Arena/GamePieces", getGamePiecesArrayByType("Fuel"));
   }

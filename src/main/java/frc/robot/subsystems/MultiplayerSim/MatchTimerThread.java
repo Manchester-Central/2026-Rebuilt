@@ -19,6 +19,7 @@ public class MatchTimerThread extends Thread {
   protected boolean is_running;
   protected MultiplayerArena2026 arena;
   protected MatchAudio audio;
+  protected boolean abortFlag;
 
   // Match Phase Times
   public static final Time DurationPrepare = Seconds.of(3);
@@ -38,6 +39,11 @@ public class MatchTimerThread extends Thread {
     this.audio = MatchAudio.getInstance();
     phases_timer = new Timer();
     is_running = false;
+    abortFlag = false;
+  }
+
+  public void abort() {
+    abortFlag = true;
   }
 
   @Override
@@ -73,6 +79,22 @@ public class MatchTimerThread extends Thread {
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
     }
+  }
+
+  /**
+   * We're ignoring half cycles and phase accumulation error here,
+   * technically this is irresponsible but I'm also lazy.
+   */
+  private boolean survivesPhase(Time phase_dur) {
+    Timer timer = new Timer();
+    timer.start();
+    while (!timer.hasElapsed(phase_dur)) {
+      try {
+        Thread.sleep(1000);
+      } catch (InterruptedException e) {
+      }
+    }
+    return true;
   }
 
   /**

@@ -1,3 +1,35 @@
+# Usage
+
+## Elastic
+
+This is required to control the simulation, it leverages many of the simulation gui mechanisms, but does so from its own control scheme. The issue is in interface simplicity, and it's easier to configure/control via Elastic than any other interface.
+
+Open up Elastic and add multiple widgets to the panel:
+
+| Arena/StartMatch | A button to start a match |
+| Arena/AbortMatch | A button to stop a match in its current state |
+| Robot#/Enabled | Toggle to enable or disable that robot |
+| Robot#/AutoChoice | A dropdown to select an auto for that robot to run |
+
+There are several optional widgets that can be added:
+
+| Arena/MatchActive | Red/Green indicator that as match thread is running |
+| Arena/MatchState | The name of the match phase (enum) |
+| Arena/RedScore | Score for the red team |
+| Arena/RedActive | If the red hub is active |
+| Arena/BlueScore | Score for the blue team |
+| Arena/BlueActive | If the blue hub is active |
+
+
+## AdvantageScope
+
+The simulation is handled within a robot loop, and the best way to display the simulation state/output is via AdvantageScope.
+
+Make sure to do this in a distinct 3D Field tab to not interfere with normal robot workflows. Add the following fields onto the Poses section at the bottom.
+
+| Robot#/Pose2d | Robot's pose on the field |
+| Robot#/Mech3d | Animated representation of the robot's moving mechanisms - Drop ONTO corresponding Pose2d, it will look indented if done correctly |
+
 # Integration
 
 This is the documentation for how MultiplayerArena was integrated into this year's robot code.
@@ -22,11 +54,5 @@ This is the documentation for how MultiplayerArena was integrated into this year
 
 ## Swerve Drive
 
-- It's far simpler to use the SwerveDriveSimulation provided by MapleSim than to integrate the CTRE motor sims at the same time. The two mechanisms conflict, and there's no support by MapleSim to make this work at the moment. There are open tasks for someone brave at hear to try it.
+- It's far simpler to use the SwerveDriveSimulation provided by MapleSim than to integrate the CTRE motor sims at the same time. The two mechanisms conflict, and there's no support by MapleSim to make this work at the moment. There are open tasks for someone brave at heart to try it.
 - This should use a shared abstract class with the CTRE simulated and real drive train. This allows both code bases to share module data and robot metrics both drive systems will us.
-
-# Gameification
-
-## Audio
-
-- Optional feature that was implemented for 2025, and has yet to return. It requires the addition of JavaFX which increases build and deployment time, which is why it's not integrated here.
