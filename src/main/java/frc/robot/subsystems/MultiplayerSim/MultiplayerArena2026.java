@@ -21,6 +21,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.simulation.DriverStationSim;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -87,7 +88,6 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
   // Other Robots
   private RobotContainer[] robots;
 
-
   private MultiplayerArena2026() {
     super(false);
     setEfficiencyMode(true);
@@ -95,7 +95,7 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
     m_matchState = MatchState.WAITING;
     Logger.recordOutput("Arena/GameState", m_matchState);
     runAutonomous = true;
-    runTeleop = true;
+    runTeleop = false;
 
     m_firstAlliance = Alliance.Blue;
 
@@ -169,8 +169,18 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
       if (timerThread != null) {
         System.out.println("[DEBUG] Aborting Match!");
         timerThread.interrupt();
+        resetFieldForAuto();
+        DriverStationSim.setEnabled(false);
+        DriverStationSim.notifyNewData();
       }
     }
+  }
+
+  public boolean playsAutonomous() {
+    return runAutonomous;
+  }
+  public boolean playsTeleop() {
+    return runTeleop;
   }
 
   /**
@@ -412,8 +422,10 @@ M    MMMMMMMMMMMMMMMMMMMMM:<$$$$c  "$ J$$$$$$$PF" ."$$$$$$$$P" .
     matchThreadCleanup();
 
     Logger.recordOutput("Arena/ThreadActive", timerThread != null);
+    Logger.recordOutput("Arena/BlueIndicator", isActive(true));
     Logger.recordOutput("Arena/BlueActive", isActive(true) ? new Pose3d[]{blueScoringIndicator} : new Pose3d[0]);
     Logger.recordOutput("Arena/BlueScore", getScore(Alliance.Blue));
+    Logger.recordOutput("Arena/RedIndicator", isActive(false));
     Logger.recordOutput("Arena/RedActive", isActive(false) ? new Pose3d[]{redScoringIndicator} : new Pose3d[0]);
     Logger.recordOutput("Arena/RedScore", getScore(Alliance.Red));
     // Logger.recordOutput("Arena/GameState", m_matchState);

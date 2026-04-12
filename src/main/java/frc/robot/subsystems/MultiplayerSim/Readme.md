@@ -20,6 +20,9 @@ There are several optional widgets that can be added:
 | Arena/BlueScore | Score for the blue team |
 | Arena/BlueActive | If the blue hub is active |
 
+### Alternatively...
+
+Add the included "Multiplayer" tab in the elastic-tab.json file into your teams elastic layout config. This should be placed inside the json `tabs` array. This comes pre-configured with all necessary auto choosers, indicators, and match buttons.
 
 ## AdvantageScope
 
@@ -29,6 +32,10 @@ Make sure to do this in a distinct 3D Field tab to not interfere with normal rob
 
 | Robot#/Pose2d | Robot's pose on the field |
 | Robot#/Mech3d | Animated representation of the robot's moving mechanisms - Drop ONTO corresponding Pose2d, it will look indented if done correctly |
+
+### Alternatively...
+
+Add the included "Arena" tab in the advantagescope-tab.json file into your teams AdvantageScope layout config. This should be placed inside the json `hubs[0]['state']['tabs']['tabs']` array. This comes pre-configured with all the necessary pose references, mechanism attachments, and match items and game pieces.
 
 # Integration
 

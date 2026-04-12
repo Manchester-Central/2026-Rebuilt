@@ -1,0 +1,153 @@
+{
+  "type": 3,
+  "title": "Arena",
+  "controller": {
+    "sources": [
+      {
+        "type": "gamePiece",
+        "logKey": "/RealOutputs/Arena/GamePieces",
+        "logType": "Pose3d[]",
+        "visible": true,
+        "options": {
+          "variant": "Fuel"
+        }
+      },
+      {
+        "type": "gamePiece",
+        "logKey": "/RealOutputs/Arena/RedActive",
+        "logType": "Pose3d[]",
+        "visible": true,
+        "options": {
+          "variant": "Fuel"
+        }
+      },
+      {
+        "type": "gamePiece",
+        "logKey": "/RealOutputs/Arena/BlueActive",
+        "logType": "Pose3d[]",
+        "visible": true,
+        "options": {
+          "variant": "Fuel"
+        }
+      },
+      {
+        "type": "robot",
+        "logKey": "/RealOutputs/Robot0/Pose2d",
+        "logType": "Pose2d",
+        "visible": true,
+        "options": {
+          "model": "robot2026"
+        }
+      },
+      {
+        "type": "component",
+        "logKey": "/RealOutputs/Robot0/Mech3d",
+        "logType": "Pose3d[]",
+        "visible": true,
+        "options": {}
+      },
+      {
+        "type": "ghost",
+        "logKey": "/RealOutputs/Robot1/Pose2d",
+        "logType": "Pose2d",
+        "visible": true,
+        "options": {
+          "model": "robot2026",
+          "color": "#0000ff"
+        }
+      },
+      {
+        "type": "component",
+        "logKey": "/RealOutputs/Robot1/Mech3d",
+        "logType": "Pose3d[]",
+        "visible": true,
+        "options": {}
+      },
+      {
+        "type": "ghost",
+        "logKey": "/RealOutputs/Robot2/Pose2d",
+        "logType": "Pose2d",
+        "visible": true,
+        "options": {
+          "model": "robot2026",
+          "color": "#00ffff"
+        }
+      },
+      {
+        "type": "component",
+        "logKey": "/RealOutputs/Robot2/Mech3d",
+        "logType": "Pose3d[]",
+        "visible": true,
+        "options": {}
+      },
+      {
+        "type": "ghost",
+        "logKey": "/RealOutputs/Robot3/Pose2d",
+        "logType": "Pose2d",
+        "visible": true,
+        "options": {
+          "model": "robot2026",
+          "color": "#ff0000"
+        }
+      },
+      {
+        "type": "component",
+        "logKey": "/RealOutputs/Robot3/Mech3d",
+        "logType": "Pose3d[]",
+        "visible": true,
+        "options": {}
+      },
+      {
+        "type": "ghost",
+        "logKey": "/RealOutputs/Robot4/Pose2d",
+        "logType": "Pose2d",
+        "visible": true,
+        "options": {
+          "model": "robot2026",
+          "color": "#ff8c00"
+        }
+      },
+      {
+        "type": "component",
+        "logKey": "/RealOutputs/Robot4/Mech3d",
+        "logType": "Pose3d[]",
+        "visible": true,
+        "options": {}
+      },
+      {
+        "type": "ghost",
+        "logKey": "/RealOutputs/Robot5/Pose2d",
+        "logType": "Pose2d",
+        "visible": true,
+        "options": {
+          "model": "robot2026",
+          "color": "#ff00ff"
+        }
+      },
+      {
+        "type": "component",
+        "logKey": "/RealOutputs/Robot5/Mech3d",
+        "logType": "Pose3d[]",
+        "visible": true,
+        "options": {}
+      }
+    ],
+    "game": "FRC:2026 Field"
+  },
+  "controllerUUID": "wgottz1wcght8y66xhx5hb6vw06itsij",
+  "renderer": {
+    "cameraIndex": -1,
+    "orbitFov": 50,
+    "cameraPosition": [
+      -8.131021906407103,
+      4.1107478147608685,
+      8.966557895536472
+    ],
+    "cameraTarget": [
+      -3.6906245199489884,
+      1.8418652057227556,
+      2.8701311756367787
+    ]
+  },
+  "controlsHeight": 252
+}

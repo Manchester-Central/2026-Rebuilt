@@ -6,7 +6,6 @@ import static edu.wpi.first.units.Units.Seconds;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.simulation.DriverStationSim;
-import frc.robot.constants.ArenaConstants;
 import frc.robot.subsystems.MultiplayerSim.MultiplayerArena2026.MatchState;
 
 /**
@@ -53,7 +52,7 @@ public class MatchTimerThread extends Thread {
       setPrepare();
       Thread.sleep((long)DurationPrepare.in(Millisecond));
       
-      if (ArenaConstants.matchStartState == MatchState.AUTONOMOUS) {
+      if (this.arena.playsAutonomous()) {
         setAutonomous();
         Thread.sleep((long)DurationAutonomous.in(Millisecond));
 
@@ -61,18 +60,20 @@ public class MatchTimerThread extends Thread {
         Thread.sleep((long)DurationPhasePause.in(Millisecond));
       }
 
-      setTeleop();
-      Thread.sleep((long)DurationTransitionShift.in(Millisecond));
-      setTeleopPhase(MatchState.TELEOP1);
-      Thread.sleep((long)DurationShift1.in(Millisecond));
-      setTeleopPhase(MatchState.TELEOP2);
-      Thread.sleep((long)DurationShift2.in(Millisecond));
-      setTeleopPhase(MatchState.TELEOP3);
-      Thread.sleep((long)DurationShift3.in(Millisecond));
-      setTeleopPhase(MatchState.TELEOP4);
-      Thread.sleep((long)DurationShift4.in(Millisecond));
-      setEndGame();
-      Thread.sleep((long)DurationEndGame.in(Millisecond));
+      if (this.arena.playsTeleop()) {
+        setTeleop();
+        Thread.sleep((long)DurationTransitionShift.in(Millisecond));
+        setTeleopPhase(MatchState.TELEOP1);
+        Thread.sleep((long)DurationShift1.in(Millisecond));
+        setTeleopPhase(MatchState.TELEOP2);
+        Thread.sleep((long)DurationShift2.in(Millisecond));
+        setTeleopPhase(MatchState.TELEOP3);
+        Thread.sleep((long)DurationShift3.in(Millisecond));
+        setTeleopPhase(MatchState.TELEOP4);
+        Thread.sleep((long)DurationShift4.in(Millisecond));
+        setEndGame();
+        Thread.sleep((long)DurationEndGame.in(Millisecond));
+      }
 
       matchOver();
       Thread.sleep((long)DurationCelebration.in(Millisecond));

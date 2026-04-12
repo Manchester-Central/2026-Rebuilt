@@ -4,7 +4,6 @@ import com.chaos131.can.CanConstants.CanId;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.robot.subsystems.MultiplayerSim.MultiplayerArena2026.MatchState;
 
 public final class ArenaConstants {
   public enum MotorIDs {
@@ -22,7 +21,7 @@ public final class ArenaConstants {
     }
   };
 
-  public static final int numAdditionalRobots = 0; // max value should be 5
+  public static final int numAdditionalRobots = 5; // max value should be 5
   public static CanId[][] motorCanIDs = new CanId[][] {
     {CanId.ID_20, CanId.ID_21, CanId.ID_22, CanId.ID_23, CanId.ID_24, CanId.ID_25, CanId.ID_26},
     {CanId.ID_27, CanId.ID_28, CanId.ID_29, CanId.ID_30, CanId.ID_31, CanId.ID_32, CanId.ID_33},
@@ -33,13 +32,13 @@ public final class ArenaConstants {
   };
   public static Pose2d[] startingPoses = new Pose2d[] {
     // 3 Blue
-    new Pose2d(2, 2, Rotation2d.k180deg),
-    new Pose2d(2, 4, Rotation2d.k180deg),
-    new Pose2d(2, 6, Rotation2d.k180deg),
+    new Pose2d(4.335, 0.743, Rotation2d.kCCW_90deg),
+    new Pose2d(3.585, 4, Rotation2d.kZero),
+    new Pose2d(4.335, 7.282, Rotation2d.kCW_90deg),
     // 3 Red
-    new Pose2d(14, 2, Rotation2d.kZero),
-    new Pose2d(14, 4, Rotation2d.kZero),
-    new Pose2d(14, 6, Rotation2d.kZero),
+    new Pose2d(12.204, 0.743, Rotation2d.kCCW_90deg),
+    new Pose2d(12.967, 4, Rotation2d.k180deg),
+    new Pose2d(12.204, 7.282, Rotation2d.kCW_90deg),
   };
 
   public static Pose2d[] waitingPoses = new Pose2d[] {
@@ -55,8 +54,4 @@ public final class ArenaConstants {
 
   public static int HopperSize = 50;
   public static double ballLaunchInterval = 0.1;
-
-  // Must be AUTONOMOUS to start a match in Autonomous Phase,
-  // otherwise it will jump to teleop. No starting in arbitrary phases for now!
-  public static final MatchState matchStartState = MatchState.AUTONOMOUS;
 }

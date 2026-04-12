@@ -214,32 +214,31 @@ public class RobotContainer {
     // We need Pathplanner's Autobuilder to run, but they do funky singleton stuff
     // So we catch the cases in RobotContainer
     if (id == 0) m_swerveDrive.setupAutoBuilder();
-    if (GeneralConstants.currentMode != Mode.ARENA || id == 0) {
-      // Runs in every mode, and when the first robot container is made in Arena mode
-      addAutos();
-    }
+    addAutos();
 
     // Configure the button bindings
     configureButtonBindings();
   }
 
   private void configureNamedCommands() {
-    NamedCommands.registerCommand("DeployOuttake", new DeployOuttake(m_intake));
-    NamedCommands.registerCommand("DeployIntake", new DeployIntake(m_intake));
-    NamedCommands.registerCommand("RetractIntake", new RetractIntake(m_intake));
-    NamedCommands.registerCommand("LaunchHub", new AimHubAndLaunchJostle(m_launcher, m_swerveDrive, m_intake)
-            .deadlineFor(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter)));
-    NamedCommands.registerCommand("LaunchPass", new AimPassAndLaunchSetAngle(m_launcher, m_swerveDrive, m_intake)
-            .deadlineFor(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
-    // NamedCommands.registerCommand("ClimbReach", new SetClimberHeight(m_climber, ClimberConstants.MaxExtension));
-    // NamedCommands.registerCommand("ClimbEngage", new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension));
+    if (GeneralConstants.currentMode != Mode.ARENA || id == 0) {
+      NamedCommands.registerCommand("DeployOuttake", new DeployOuttake(m_intake));
+      NamedCommands.registerCommand("DeployIntake", new DeployIntake(m_intake));
+      NamedCommands.registerCommand("RetractIntake", new RetractIntake(m_intake));
+      NamedCommands.registerCommand("LaunchHub", new AimHubAndLaunchJostle(m_launcher, m_swerveDrive, m_intake)
+              .deadlineFor(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter)));
+      NamedCommands.registerCommand("LaunchPass", new AimPassAndLaunchSetAngle(m_launcher, m_swerveDrive, m_intake)
+              .deadlineFor(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
+      // NamedCommands.registerCommand("ClimbReach", new SetClimberHeight(m_climber, ClimberConstants.MaxExtension));
+      // NamedCommands.registerCommand("ClimbEngage", new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension));
+    }
   }
 
   private void addAutos() {
     configureNamedCommands();
 
     // Set up auto routines
-    autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+    autoChooser = new LoggedDashboardChooser<>("Robot"+id+"/AutoChoices", AutoBuilder.buildAutoChooser());
 
     // Set up SysId routines
     autoChooser.addOption(

@@ -1,0 +1,389 @@
+{
+  "name": "Multiplayer",
+  "grid_layout": {
+    "layouts": [],
+    "containers": [
+      {
+        "title": "StartMatch",
+        "x": 256.0,
+        "y": 0.0,
+        "width": 256.0,
+        "height": 128.0,
+        "type": "Command",
+        "properties": {
+          "topic": "/SmartDashboard/Arena/StartMatch",
+          "period": 0.06,
+          "show_type": true,
+          "maximize_button_space": false
+        }
+      },
+      {
+        "title": "ThreadActive",
+        "x": 512.0,
+        "y": 0.0,
+        "width": 128.0,
+        "height": 128.0,
+        "type": "Boolean Box",
+        "properties": {
+          "topic": "/AdvantageKit/RealOutputs/Arena/ThreadActive",
+          "period": 0.06,
+          "data_type": "boolean",
+          "true_color": 4283215696,
+          "false_color": 4294198070,
+          "true_icon": "None",
+          "false_icon": "None"
+        }
+      },
+      {
+        "title": "AbortMatch",
+        "x": 768.0,
+        "y": 0.0,
+        "width": 256.0,
+        "height": 128.0,
+        "type": "Command",
+        "properties": {
+          "topic": "/SmartDashboard/Arena/AbortMatch",
+          "period": 0.06,
+          "show_type": true,
+          "maximize_button_space": false
+        }
+      },
+      {
+        "title": "runAutonomous",
+        "x": 0.0,
+        "y": 0.0,
+        "width": 256.0,
+        "height": 128.0,
+        "type": "Split Button Chooser",
+        "properties": {
+          "topic": "/SmartDashboard/Arena/runAutonomous",
+          "period": 0.06
+        }
+      },
+      {
+        "title": "runTeleop",
+        "x": 0.0,
+        "y": 128.0,
+        "width": 256.0,
+        "height": 128.0,
+        "type": "Split Button Chooser",
+        "properties": {
+          "topic": "/SmartDashboard/Arena/runTeleop",
+          "period": 0.06
+        }
+      },
+      {
+        "title": "BlueScore",
+        "x": 512.0,
+        "y": 128.0,
+        "width": 128.0,
+        "height": 128.0,
+        "type": "Text Display",
+        "properties": {
+          "topic": "/AdvantageKit/RealOutputs/Arena/BlueScore",
+          "period": 0.06,
+          "data_type": "int",
+          "show_submit_button": false
+        }
+      },
+      {
+        "title": "GameState",
+        "x": 640.0,
+        "y": 0.0,
+        "width": 128.0,
+        "height": 128.0,
+        "type": "Text Display",
+        "properties": {
+          "topic": "/AdvantageKit/RealOutputs/Arena/GameState",
+          "period": 0.06,
+          "data_type": "string",
+          "show_submit_button": false
+        }
+      },
+      {
+        "title": "RedScore",
+        "x": 640.0,
+        "y": 128.0,
+        "width": 128.0,
+        "height": 128.0,
+        "type": "Text Display",
+        "properties": {
+          "topic": "/AdvantageKit/RealOutputs/Arena/RedScore",
+          "period": 0.06,
+          "data_type": "int",
+          "show_submit_button": false
+        }
+      },
+      {
+        "title": "currentMode",
+        "x": 1152.0,
+        "y": 0.0,
+        "width": 128.0,
+        "height": 128.0,
+        "type": "Text Display",
+        "properties": {
+          "topic": "/AdvantageKit/RealOutputs/Robot/currentMode",
+          "period": 0.06,
+          "data_type": "string",
+          "show_submit_button": false
+        }
+      },
+      {
+        "title": "Enabled",
+        "x": 128.0,
+        "y": 384.0,
+        "width": 256.0,
+        "height": 128.0,
+        "type": "Split Button Chooser",
+        "properties": {
+          "topic": "/SmartDashboard/Robot1/Enabled",
+          "period": 0.06
+        }
+      },
+      {
+        "title": "Enabled",
+        "x": 128.0,
+        "y": 512.0,
+        "width": 256.0,
+        "height": 128.0,
+        "type": "Split Button Chooser",
+        "properties": {
+          "topic": "/SmartDashboard/Robot2/Enabled",
+          "period": 0.06
+        }
+      },
+      {
+        "title": "Enabled",
+        "x": 896.0,
+        "y": 256.0,
+        "width": 256.0,
+        "height": 128.0,
+        "type": "Split Button Chooser",
+        "properties": {
+          "topic": "/SmartDashboard/Robot3/Enabled",
+          "period": 0.06
+        }
+      },
+      {
+        "title": "Enabled",
+        "x": 896.0,
+        "y": 384.0,
+        "width": 256.0,
+        "height": 128.0,
+        "type": "Split Button Chooser",
+        "properties": {
+          "topic": "/SmartDashboard/Robot4/Enabled",
+          "period": 0.06
+        }
+      },
+      {
+        "title": "Enabled",
+        "x": 896.0,
+        "y": 512.0,
+        "width": 256.0,
+        "height": 128.0,
+        "type": "Split Button Chooser",
+        "properties": {
+          "topic": "/SmartDashboard/Robot5/Enabled",
+          "period": 0.06
+        }
+      },
+      {
+        "title": "ID",
+        "x": 1152.0,
+        "y": 256.0,
+        "width": 128.0,
+        "height": 128.0,
+        "type": "Text Display",
+        "properties": {
+          "topic": "/AdvantageKit/RealOutputs/Robot3/ID",
+          "period": 0.06,
+          "data_type": "int",
+          "show_submit_button": false
+        }
+      },
+      {
+        "title": "ID",
+        "x": 1152.0,
+        "y": 384.0,
+        "width": 128.0,
+        "height": 128.0,
+        "type": "Text Display",
+        "properties": {
+          "topic": "/AdvantageKit/RealOutputs/Robot4/ID",
+          "period": 0.06,
+          "data_type": "int",
+          "show_submit_button": false
+        }
+      },
+      {
+        "title": "ID",
+        "x": 1152.0,
+        "y": 512.0,
+        "width": 128.0,
+        "height": 128.0,
+        "type": "Text Display",
+        "properties": {
+          "topic": "/AdvantageKit/RealOutputs/Robot5/ID",
+          "period": 0.06,
+          "data_type": "int",
+          "show_submit_button": false
+        }
+      },
+      {
+        "title": "ID",
+        "x": 0.0,
+        "y": 256.0,
+        "width": 128.0,
+        "height": 128.0,
+        "type": "Text Display",
+        "properties": {
+          "topic": "/AdvantageKit/RealOutputs/Robot0/ID",
+          "period": 0.06,
+          "data_type": "int",
+          "show_submit_button": false
+        }
+      },
+      {
+        "title": "ID",
+        "x": 0.0,
+        "y": 384.0,
+        "width": 128.0,
+        "height": 128.0,
+        "type": "Text Display",
+        "properties": {
+          "topic": "/AdvantageKit/RealOutputs/Robot1/ID",
+          "period": 0.06,
+          "data_type": "int",
+          "show_submit_button": false
+        }
+      },
+      {
+        "title": "ID",
+        "x": 0.0,
+        "y": 512.0,
+        "width": 128.0,
+        "height": 128.0,
+        "type": "Text Display",
+        "properties": {
+          "topic": "/AdvantageKit/RealOutputs/Robot2/ID",
+          "period": 0.06,
+          "data_type": "int",
+          "show_submit_button": false
+        }
+      },
+      {
+        "title": "AutoChoices",
+        "x": 384.0,
+        "y": 256.0,
+        "width": 256.0,
+        "height": 128.0,
+        "type": "ComboBox Chooser",
+        "properties": {
+          "topic": "/SmartDashboard/Robot0/AutoChoices",
+          "period": 0.06,
+          "sort_options": false
+        }
+      },
+      {
+        "title": "AutoChoices",
+        "x": 384.0,
+        "y": 384.0,
+        "width": 256.0,
+        "height": 128.0,
+        "type": "ComboBox Chooser",
+        "properties": {
+          "topic": "/SmartDashboard/Robot1/AutoChoices",
+          "period": 0.06,
+          "sort_options": false
+        }
+      },
+      {
+        "title": "AutoChoices",
+        "x": 384.0,
+        "y": 512.0,
+        "width": 256.0,
+        "height": 128.0,
+        "type": "ComboBox Chooser",
+        "properties": {
+          "topic": "/SmartDashboard/Robot2/AutoChoices",
+          "period": 0.06,
+          "sort_options": false
+        }
+      },
+      {
+        "title": "AutoChoices",
+        "x": 640.0,
+        "y": 256.0,
+        "width": 256.0,
+        "height": 128.0,
+        "type": "ComboBox Chooser",
+        "properties": {
+          "topic": "/SmartDashboard/Robot3/AutoChoices",
+          "period": 0.06,
+          "sort_options": false
+        }
+      },
+      {
+        "title": "AutoChoices",
+        "x": 640.0,
+        "y": 384.0,
+        "width": 256.0,
+        "height": 128.0,
+        "type": "ComboBox Chooser",
+        "properties": {
+          "topic": "/SmartDashboard/Robot4/AutoChoices",
+          "period": 0.06,
+          "sort_options": false
+        }
+      },
+      {
+        "title": "AutoChoices",
+        "x": 640.0,
+        "y": 512.0,
+        "width": 256.0,
+        "height": 128.0,
+        "type": "ComboBox Chooser",
+        "properties": {
+          "topic": "/SmartDashboard/Robot5/AutoChoices",
+          "period": 0.06,
+          "sort_options": false
+        }
+      },
+      {
+        "title": "BlueIndicator",
+        "x": 384.0,
+        "y": 128.0,
+        "width": 128.0,
+        "height": 128.0,
+        "type": "Boolean Box",
+        "properties": {
+          "topic": "/AdvantageKit/RealOutputs/Arena/BlueIndicator",
+          "period": 0.06,
+          "data_type": "boolean",
+          "true_color": 4283215696,
+          "false_color": 4294198070,
+          "true_icon": "None",
+          "false_icon": "None"
+        }
+      },
+      {
+        "title": "RedIndicator",
+        "x": 768.0,
+        "y": 128.0,
+        "width": 128.0,
+        "height": 128.0,
+        "type": "Boolean Box",
+        "properties": {
+          "topic": "/AdvantageKit/RealOutputs/Arena/RedIndicator",
+          "period": 0.06,
+          "data_type": "boolean",
+          "true_color": 4283215696,
+          "false_color": 4294198070,
+          "true_icon": "None",
+          "false_icon": "None"
+        }
+      }
+    ]
+  }
+}
