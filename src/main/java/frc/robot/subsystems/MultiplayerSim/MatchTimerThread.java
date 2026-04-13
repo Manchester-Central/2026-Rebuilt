@@ -83,22 +83,6 @@ public class MatchTimerThread extends Thread {
   }
 
   /**
-   * We're ignoring half cycles and phase accumulation error here,
-   * technically this is irresponsible but I'm also lazy.
-   */
-  private boolean survivesPhase(Time phase_dur) {
-    Timer timer = new Timer();
-    timer.start();
-    while (!timer.hasElapsed(phase_dur)) {
-      try {
-        Thread.sleep(1000);
-      } catch (InterruptedException e) {
-      }
-    }
-    return true;
-  }
-
-  /**
    * Occurs during the countdown for a match
    */
   private void setPrepare() {

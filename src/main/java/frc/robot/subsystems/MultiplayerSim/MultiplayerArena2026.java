@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.simulation.DriverStationSim;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.RobotContainer;
 import frc.robot.constants.ArenaConstants;
 
@@ -55,6 +56,11 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
     @Override
     public void initialize() {
       startMatch();
+    }
+
+    @Override
+    public boolean isFinished() {
+      return !matchActive();
     }
 
     @Override
@@ -190,6 +196,23 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
     synchronized(this) {
       if (timerThread != null && !timerThread.isAlive()) {
         timerThread = null;
+        changePhase(MatchState.WAITING);
+      }
+    }
+  }
+
+  private boolean matchActive() {
+    return timerThread != null;
+  }
+
+  private void triggerAutonomousRoutines() {
+    for (var robot : robots) {
+      var cmd = robot.getAutonomousCommand();
+
+      // schedule the autonomous command (example)
+      System.out.println("[DEBUG] Robot"+robot.id+" initialized with "+cmd.getName());
+      if (cmd != null) {
+        CommandScheduler.getInstance().schedule(cmd);
       }
     }
   }
@@ -239,10 +262,14 @@ M    MMMMMMMMMMMMMMMMMMMMM:<$$$$c  "$ J$$$$$$$PF" ."$$$$$$$$P" .
                                       .,.`` `!!!!  "" -''!'' ,!
                                     ,!!!!!!!>;, `'\ <!>   ,;<!!!
       */
-    switch (m_matchState) {
+    switch (newstate) {
+      case AUTONOMOUS:
+        setShouldRunClock(false);
+        triggerAutonomousRoutines();
+        break;
+
       case WAITING:
       case PREPARE:
-      case AUTONOMOUS:
       case TRANSITION_SHIFT:
       case PHASE_PAUSE:
       case END_GAME:
@@ -335,7 +362,8 @@ M    MMMMMMMMMMMMMMMMMMMMM:<$$$$c  "$ J$$$$$$$PF" ."$$$$$$$$P" .
   }
 
   /**
-   * Custom function to handle if a hub is active or not 
+   * Override function to handle if a HUB is active or not,
+   * this should have been called isHubActive!
    */
   @Override
   public boolean isActive(boolean isBlue) {
@@ -363,7 +391,8 @@ M    MMMMMMMMMMMMMMMMMMMMM:<$$$$c  "$ J$$$$$$$PF" ."$$$$$$$$P" .
     if (winningAlliance == Alliance.Blue) {
       winnerAnimationPoint = new Pose3d(0, 4, 2.0, new Rotation3d());
     } else if (winningAlliance == Alliance.Red) {
-      winnerAnimationPoint =  new Pose3d(16, 4, 2.0, new Rotation3d());
+      winnerAnimationPoint =  new Pose3d(16, 4, 2.0, new Rotation3d(
+        Degrees.of(0), Degrees.of(0), Degrees.of(180)));
     } else {
       winnerAnimationPoint = null;
     }
@@ -386,7 +415,7 @@ M    MMMMMMMMMMMMMMMMMMMMM:<$$$$c  "$ J$$$$$$$PF" ."$$$$$$$$P" .
             // Obtain robot speed from drive simulation
             new ChassisSpeeds(),
             // Release the fuel +/- 60 degrees from forward, remember to flip for red
-            new Rotation2d((2*Math.random()-1)*Math.PI/3 + (getWinner() == Alliance.Red ? 180 : 0)),
+            new Rotation2d((2*Math.random()-1)*Math.PI/3),
             // The height at which the algae is ejected
             Meters.of(2.0),
             // The initial speed of the algae
@@ -421,7 +450,7 @@ M    MMMMMMMMMMMMMMMMMMMMM:<$$$$c  "$ J$$$$$$$PF" ."$$$$$$$$P" .
     }
     matchThreadCleanup();
 
-    Logger.recordOutput("Arena/ThreadActive", timerThread != null);
+    Logger.recordOutput("Arena/ThreadActive", matchActive());
     Logger.recordOutput("Arena/BlueIndicator", isActive(true));
     Logger.recordOutput("Arena/BlueActive", isActive(true) ? new Pose3d[]{blueScoringIndicator} : new Pose3d[0]);
     Logger.recordOutput("Arena/BlueScore", getScore(Alliance.Blue));

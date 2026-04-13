@@ -81,7 +81,7 @@ import frc.robot.subsystems.launcher.MapleSimLauncher;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  protected int id;
+  public final int id;
   // Subsystems
   private final AbstractDrive m_swerveDrive;
   private Quest m_quest;
