@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left MLS"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Far Loop Bump"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LB LL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchHub"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LL MLS"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Inward Loop Bump"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LB LL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchHub"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": false,
+  "folder": "Left",
+  "choreoAuto": false
+}

@@ -112,7 +112,7 @@ public abstract class BaseLaunchCommand extends Command {
     if (isFacingLaunchTarget() && m_hasLaunched) {
       enableFeederForLauncher();
     } else {
-      m_launcher.setFeederSpeed(0, FeederConstants.UnjamSpeed.get());
+      m_launcher.setFeederSpeed(FeederConstants.UnjamSpeed.get());
     }
   }
 

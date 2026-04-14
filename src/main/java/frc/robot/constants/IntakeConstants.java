@@ -32,7 +32,9 @@ import com.revrobotics.encoder.config.DetachedEncoderConfig;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.units.AngleUnit;
+import edu.wpi.first.units.CurrentUnit;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Mass;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
@@ -50,7 +52,8 @@ public final class IntakeConstants {
   public static final DashboardNumber ManualPivotSpeedMultiplier = new DashboardNumber("Intake/ManualPivotSpeedMultiplier", 0.4);
 
   // Speeds
-  public static final DashboardNumber IntakeRollerSpeed = new DashboardNumber("Intake/IntakeRollerSpeed", 0.85);
+  public static final DashboardNumber IntakeRollerSpeed = new DashboardNumber("Intake/IntakeRollerSpeed", 0.7
+  );
   public static final DashboardNumber OuttakeRollerSpeed = new DashboardNumber("Intake/OuttakeRollerSpeed", -0.8);
 
   public static final class RollerConstants {
@@ -63,9 +66,9 @@ public final class IntakeConstants {
           .withNeutralMode(NeutralModeValue.Coast)
       )
       .withCurrentLimits(new CurrentLimitsConfigs()
-          .withSupplyCurrentLimit(Amps.of(40)) // TODO: Double Check
-          .withStatorCurrentLimit(Amps.of(40)) // TODO: Double Check
-          .withSupplyCurrentLowerLimit(Amps.of(30))
+          .withSupplyCurrentLimit(Amps.of(50)) // TODO: Double Check
+          .withStatorCurrentLimit(Amps.of(50)) // TODO: Double Check
+          .withSupplyCurrentLowerLimit(Amps.of(40))
           .withSupplyCurrentLimitEnable(true)
           .withStatorCurrentLimitEnable(true)
       );
@@ -75,9 +78,9 @@ public final class IntakeConstants {
             .withNeutralMode(NeutralModeValue.Coast)
       )
       .withCurrentLimits(new CurrentLimitsConfigs()
-          .withSupplyCurrentLimit(Amps.of(40)) // TODO: Double Check
-          .withStatorCurrentLimit(Amps.of(40)) // TODO: Double Check
-          .withSupplyCurrentLowerLimit(Amps.of(30))
+          .withSupplyCurrentLimit(Amps.of(50)) // TODO: Double Check
+          .withStatorCurrentLimit(Amps.of(50)) // TODO: Double Check
+          .withSupplyCurrentLowerLimit(Amps.of(40))
           .withSupplyCurrentLimitEnable(true)
           .withStatorCurrentLimitEnable(true)
       );
@@ -89,15 +92,23 @@ public final class IntakeConstants {
 
     public static double SensorToMechanismRatio = 42.603; //TODO: tune 
 
+    public static final DashboardUnit<CurrentUnit, Current> pivotHighSupplyCurrentLimit = new DashboardUnit<>("pivotHigh/SupplyCurrentLimit", Amps.of(50));
+    public static final DashboardUnit<CurrentUnit, Current> pivotHighStatorCurrentLimit = new DashboardUnit<>("pivotHigh/StatorCurrentLimit", Amps.of(50));
+    public static final DashboardUnit<CurrentUnit, Current> pivotHighSupplyCurrentLowerLimit = new DashboardUnit<>("pivotHigh/SupplyCurrentLowerLimit", Amps.of(50));
+
+    public static final DashboardUnit<CurrentUnit, Current> pivotLowSupplyCurrentLimit = new DashboardUnit<>("pivotLow/SupplyCurrentLimit", Amps.of(10));
+    public static final DashboardUnit<CurrentUnit, Current> pivotLowStatorCurrentLimit = new DashboardUnit<>("pivotLow/StatorCurrentLimit", Amps.of(10));
+    public static final DashboardUnit<CurrentUnit, Current> pivotLowSupplyCurrentLowerLimit = new DashboardUnit<>("pivotLow/SupplyCurrentLowerLimit", Amps.of(10));
+
     public static final TalonFXConfiguration TalonConfig = new TalonFXConfiguration()
         .withMotorOutput(new MotorOutputConfigs()
             .withInverted(InvertedValue.CounterClockwise_Positive)
             .withNeutralMode(NeutralModeValue.Brake)
         )
         .withCurrentLimits(new CurrentLimitsConfigs()
-            .withSupplyCurrentLimit(Amps.of(50)) // TODO: Double Check
-            .withStatorCurrentLimit(Amps.of(50)) // TODO: Double Check
-            .withSupplyCurrentLowerLimit(Amps.of(60))
+            .withSupplyCurrentLimit(pivotHighSupplyCurrentLimit.get()) // TODO: Double Check
+            .withStatorCurrentLimit(pivotHighStatorCurrentLimit.get()) // TODO: Double Check
+            .withSupplyCurrentLowerLimit(pivotHighSupplyCurrentLowerLimit.get())
             .withSupplyCurrentLimitEnable(true)
             .withStatorCurrentLimitEnable(true)
         )
@@ -107,7 +118,7 @@ public final class IntakeConstants {
             .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor)
         )
         .withSlot0(new Slot0Configs() //TODO: CHECK THESE PLEASE
-            .withKP(60)
+            .withKP(45)
             .withKI(0)
             .withKD(0)
             .withKG(0.39)
@@ -119,19 +130,19 @@ public final class IntakeConstants {
 
     public static final DetachedEncoderConfig pivotEncoderConfig = new DetachedEncoderConfig()
         .inverted(false)
-        .dutyCycleOffset(Rotations.of(0.153).in(Rotations)); // per testing on 2026.04.07 [CER 2026.04.07]
+        .dutyCycleOffset(Rotations.of(0.49).in(Rotations)); // per testing on 2026.04.07 [CER 2026.04.07]
 
     // Pivot Max / Min
     public static final Angle MaxAngle = Degrees.of(180); // TODO: Double Check
     public static final Angle MinAngle = Degrees.of(75); // TODO: Double Check; super double check it actually [CER 2026.04.07]
 
     // Target Angles / Speeds
-    public static final DashboardUnit<AngleUnit,Angle> DeployAngle = new DashboardUnit<>("Intake/DeployAngle", Degrees.of(177)); // TODO: Double Check; changed from 173 to 177 per testing! [CER 2026.04.07]
+    public static final DashboardUnit<AngleUnit,Angle> DeployAngle = new DashboardUnit<>("Intake/DeployAngle", Degrees.of(180)); // TODO: Double Check; changed from 173 to 177 per testing! [CER 2026.04.07]
     public static final DashboardUnit<AngleUnit,Angle> RetractAngle = new DashboardUnit<>("Intake/RetractAngle", Degrees.of(90)); // TODO: Double Check
     public static final DashboardUnit<AngleUnit,Angle> BumpAngle = new DashboardUnit<>("Intake/BumpAngle", Degrees.of(150)); // TODO: Double Check
     public static final DashboardUnit<AngleUnit,Angle> RetractDepAngle = new DashboardUnit<>("Intake/RetractDeepAngle", Degrees.of(90)); // TODO: Double Check
 
-    public static final DashboardNumber JostleSpeed = new DashboardNumber("Intake/JostleSpeed", 63);
+    public static final DashboardNumber JostleSpeed = new DashboardNumber("Intake/JostleSpeed", 35);
 
     // Sim values
     public static final double MOI = SingleJointedArmSim.estimateMOI(IntakeLength.in(Meters), IntakeMass.in(Kilograms));

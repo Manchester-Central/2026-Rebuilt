@@ -54,7 +54,7 @@ public class Flywheel extends SubsystemBase {
         if (FlywheelConstants.UseTorqueCurrentFOC) {
             m_leftMainFlywheelMotor.moveAtVelocityFOC(angularVelocity);
         } else {
-            if (m_leftMainFlywheelMotor.getVelocity().getValue().minus(angularVelocity).in(RotationsPerSecond) > FlywheelConstants.BangBangLimit.get()) {
+            if (angularVelocity.minus(m_leftMainFlywheelMotor.getVelocity().getValue()).in(RotationsPerSecond) > FlywheelConstants.BangBangLimit.get()) {
                 m_leftMainFlywheelMotor.set(1);
             } else {
                 m_leftMainFlywheelMotor.moveAtVelocity(angularVelocity);

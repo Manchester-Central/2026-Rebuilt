@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center D"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "D CL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchHub"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CL O"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.8
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "O CL"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": false,
+  "folder": "Center",
+  "choreoAuto": false
+}
