@@ -1,9 +1,12 @@
 package frc.robot.subsystems.MultiplayerSim;
 
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static edu.wpi.first.units.Units.DegreesPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -15,19 +18,23 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.chaos131.util.DashboardActions;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.simulation.DriverStationSim;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
 import frc.robot.constants.ArenaConstants;
 
@@ -203,6 +210,29 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
     return timerThread != null;
   }
 
+  /*
+AutoBuilder.configure(
+    this::getPose,
+    this::setPose,
+    this::getChassisSpeeds,
+    this::runVelocity,
+    new PPHolonomicDriveController(
+        DriveConstants.TranslationalControlPIDConstants, DriveConstants.RotationalControlPIDConstants),
+    PP_CONFIG,
+    () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
+    this);
+   */
+  private Command autoCmd(RobotContainer container) {
+    return AutoBuilder.pathfindToPose(
+        new Pose2d(1.0, 2.0, Rotation2d.kZero), // Target Pose
+        new PathConstraints(MetersPerSecond.of(3.0),
+                            MetersPerSecondPerSecond.of(3),
+                            DegreesPerSecond.of(40),
+                            DegreesPerSecondPerSecond.of(30)), // Constraints
+        0.0 // Goal end velocity
+    );
+  }
+
   private void triggerAutonomousRoutines() {
     for (var robot : robots) {
       var cmd = robot.getAutonomousCommand();
@@ -210,9 +240,10 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
       // schedule the autonomous command (example)
       System.out.println("[DEBUG] Robot"+robot.id+" initialized with "+cmd.getName());
       if (cmd != null) {
+        var cmd2 = autoCmd(robot);
         CommandScheduler.getInstance().schedule(cmd);
-        Logger.recordOutput("Robot"+robot.id+"/SelectedAuto", cmd.getName());
-        System.out.println("cmd.getName() deployed? " + CommandScheduler.getInstance().isScheduled(cmd));
+        // Logger.recordOutput("Robot"+robot.id+"/SelectedAuto", cmd.getName());
+        // System.out.println("cmd.getName() deployed? " + CommandScheduler.getInstance().isScheduled(cmd));
       }
     }
   }

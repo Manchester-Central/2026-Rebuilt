@@ -4,7 +4,6 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import java.io.File;
 import java.util.HashMap;
-import java.util.Locale;
 
 import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.subsystems.interfaces.AudioInterface;
