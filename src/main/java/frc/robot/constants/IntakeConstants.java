@@ -100,6 +100,8 @@ public final class IntakeConstants {
     public static final DashboardUnit<CurrentUnit, Current> pivotLowStatorCurrentLimit = new DashboardUnit<>("pivotLow/StatorCurrentLimit", Amps.of(10));
     public static final DashboardUnit<CurrentUnit, Current> pivotLowSupplyCurrentLowerLimit = new DashboardUnit<>("pivotLow/SupplyCurrentLowerLimit", Amps.of(10));
 
+    public static final DashboardUnit<AngleUnit, Angle> NearPivotAngleTolerance = new DashboardUnit<>("Intake/nearPivotAngleTolerance", Degrees.of(15.0));
+    
     public static final TalonFXConfiguration TalonConfig = new TalonFXConfiguration()
         .withMotorOutput(new MotorOutputConfigs()
             .withInverted(InvertedValue.CounterClockwise_Positive)
