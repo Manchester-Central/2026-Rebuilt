@@ -213,6 +213,7 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
       System.out.println("[DEBUG] Robot"+robot.id+" initialized with "+cmd.getName());
       if (cmd != null) {
         CommandScheduler.getInstance().schedule(cmd);
+        System.out.println("cmd.getName() deployed? " + CommandScheduler.getInstance().isScheduled(cmd));
       }
     }
   }

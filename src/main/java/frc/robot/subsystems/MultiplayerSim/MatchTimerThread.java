@@ -3,10 +3,13 @@ package frc.robot.subsystems.MultiplayerSim;
 import static edu.wpi.first.units.Units.Millisecond;
 import static edu.wpi.first.units.Units.Seconds;
 
+import javax.sound.sampled.AudioInputStream;
+
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.simulation.DriverStationSim;
 import frc.robot.subsystems.MultiplayerSim.MultiplayerArena2026.MatchState;
+import frc.robot.subsystems.interfaces.AudioInterface;
 
 /**
  * Tightly coupled thread timer with the MultiplayerArena2026 class because
@@ -17,7 +20,7 @@ public class MatchTimerThread extends Thread {
   protected Timer phases_timer;
   protected boolean is_running;
   protected MultiplayerArena2026 arena;
-  protected MatchAudio audio;
+  protected AudioInterface audio;
   protected boolean abortFlag;
 
   // Match Phase Times
@@ -35,7 +38,7 @@ public class MatchTimerThread extends Thread {
   public MatchTimerThread(MultiplayerArena2026 arena) {
     super();
     this.arena = arena;
-    this.audio = MatchAudio.getInstance();
+    this.audio = AudioInterface.getInstance();
     phases_timer = new Timer();
     is_running = false;
     abortFlag = false;

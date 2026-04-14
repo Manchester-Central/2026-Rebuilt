@@ -7,8 +7,12 @@
 
 package frc.robot;
 
+import java.util.Locale;
+
 import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.subsystems.MultiplayerSim.MatchAudio;
+import frc.robot.subsystems.MultiplayerSim.MatchAudioOSX;
+import frc.robot.subsystems.interfaces.AudioInterface;
 import javafx.application.Platform;
 
 /**
@@ -25,7 +29,16 @@ public final class Main {
    * <p>If you change your main robot class, change the parameter type.
    */
   public static void main(String... args) {
-    Platform.startup(() -> MatchAudio.getInstance());
+    if (System.getProperty("os.name").toLowerCase(Locale.ENGLISH).contains("mac")) {
+      System.out.println("*** Initializing OSX Audio");
+      AudioInterface.instance = new MatchAudioOSX();
+    } else {
+      System.out.println("*** Initializing Windows Audio");
+      AudioInterface.instance = new MatchAudio();
+    }
+    if (!System.getProperty("os.name").toLowerCase(Locale.ENGLISH).contains("mac")) {
+      Platform.startup(() -> MatchAudio.getInstance());
+    }
     RobotBase.startRobot(Robot::new);
   }
 }

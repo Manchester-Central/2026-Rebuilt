@@ -4,23 +4,15 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import java.io.File;
 import java.util.HashMap;
+import java.util.Locale;
 
 import edu.wpi.first.wpilibj.Filesystem;
+import frc.robot.subsystems.interfaces.AudioInterface;
 
-public class MatchAudio {
-  public static final String START = "audio/start.wav";
-  public static final String RESUME = "audio/resume.wav";
-  public static final String ENDGAME = "audio/warning.wav";
-  public static final String WINNER = "audio/match_result.wav";
-
+public class MatchAudio extends AudioInterface {
   private HashMap<String, MediaPlayer> audioMap = new HashMap<>();
 
-  private static MatchAudio instance = new MatchAudio();
-  public static MatchAudio getInstance() {
-    return instance;
-  }
-
-  private MatchAudio() {
+  public MatchAudio() {
     addAudio(START);
     addAudio(ENDGAME);
     addAudio(RESUME);
