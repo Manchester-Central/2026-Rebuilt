@@ -14,6 +14,8 @@ import org.ironmaple.simulation.seasonspecific.rebuilt2026.RebuiltFuelOnFly;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
+import com.chaos131.util.DashboardActions;
+
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -136,21 +138,17 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
   }
 
   private LoggedDashboardChooser<Runnable> setupAutoToggle() {
-    var auto = new SendableChooser<Runnable>();
-    final Runnable disable = () -> runAutonomous = false;
-    final Runnable enable = () -> runAutonomous = true;
-    auto.setDefaultOption("Disable", disable);
-    auto.addOption("Enable", enable);
-    return new LoggedDashboardChooser<>("Arena/runAutonomous", auto);
+    var chooser = new DashboardActions("Arena/runAutonomous",
+      "Enable", () -> runAutonomous = true);
+    chooser.addOption("Disable", () -> runAutonomous = false);
+    return chooser;
   }
 
   private LoggedDashboardChooser<Runnable> setupTeleopToggle() {
-    var teleop = new SendableChooser<Runnable>();
-    final Runnable disable = () -> runAutonomous = false;
-    final Runnable enable = () -> runAutonomous = true;
-    teleop.setDefaultOption("Disable", disable);
-    teleop.addOption("Enable", enable);
-    return new LoggedDashboardChooser<>("Arena/runTeleop", teleop);
+    var chooser = new DashboardActions("Arena/runTeleop",
+      "Enable", () -> runTeleop = true);
+    chooser.addOption("Disable", () -> runTeleop = false);
+    return chooser;
   }
 
   public void prepareMatch() {
@@ -213,6 +211,7 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
       System.out.println("[DEBUG] Robot"+robot.id+" initialized with "+cmd.getName());
       if (cmd != null) {
         CommandScheduler.getInstance().schedule(cmd);
+        Logger.recordOutput("Robot"+robot.id+"/SelectedAuto", cmd.getName());
         System.out.println("cmd.getName() deployed? " + CommandScheduler.getInstance().isScheduled(cmd));
       }
     }
@@ -432,14 +431,13 @@ M    MMMMMMMMMMMMMMMMMMMMM:<$$$$c  "$ J$$$$$$$PF" ."$$$$$$$$P" .
    * @param robotId - 0 for original robot, max id of 5
    * @return
    */
-  private LoggedDashboardChooser<Runnable> addMultiplayerChooser(int robotId) {
-    var tmp = new SendableChooser<Runnable>();
-    final Runnable disable = () -> robots[robotId].getSwerveDrive().setPose(ArenaConstants.waitingPoses[robotId]);
-    final Runnable enable = () -> robots[robotId].getSwerveDrive().setPose(ArenaConstants.startingPoses[robotId]);
-    tmp.setDefaultOption("Disable", disable);
-    tmp.addOption("Enable", enable);
-
-    return new LoggedDashboardChooser<>("Robot"+robotId+"/Enabled", tmp);
+  private DashboardActions addMultiplayerChooser(int robotId) {
+    // This is weird because there's 5 robots in this list for 6 robots on the field.
+    // The odd pedestal status of robot 0 creates weird idiosyncrasies like this.
+    var chooser = new DashboardActions("Robot"+robotId+"/Enabled",
+      "Enable", () -> robots[robotId-1].getSwerveDrive().setPose(ArenaConstants.startingPoses[robotId]));
+    chooser.addOption("Disable", () -> robots[robotId-1].getSwerveDrive().setPose(ArenaConstants.waitingPoses[robotId]));
+    return chooser;
   }
 
   /**

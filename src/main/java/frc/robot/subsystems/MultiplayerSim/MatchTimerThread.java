@@ -89,18 +89,18 @@ public class MatchTimerThread extends Thread {
    * Occurs during the countdown for a match
    */
   private void setPrepare() {
+    DriverStationSim.setEnabled(false);
+    DriverStationSim.notifyNewData();
     // TODO: Play Countdown sound.
     this.arena.changePhase(MatchState.PREPARE);
     audio.playAudioFromStart(MatchAudio.START, 1.0);
-    DriverStationSim.setEnabled(false);
-    DriverStationSim.notifyNewData();
   }
 
   private void setAutonomous() {
-    this.arena.changePhase(MatchState.AUTONOMOUS);
     DriverStationSim.setAutonomous(true);
     DriverStationSim.setEnabled(true);
     DriverStationSim.notifyNewData();
+    this.arena.changePhase(MatchState.AUTONOMOUS);
   }
 
   private void setIntermission() {
@@ -109,12 +109,12 @@ public class MatchTimerThread extends Thread {
   }
 
   private void setTeleop() {
-    // We do this at the start of teleop for datarace and simplicity's sake.
-    this.arena.calculateAutoWinner();
-    audio.playAudioFromStart(MatchAudio.RESUME, 1.0);
     DriverStationSim.setAutonomous(false);
     DriverStationSim.setEnabled(true);
     DriverStationSim.notifyNewData();
+    // We do this at the start of teleop for datarace and simplicity's sake.
+    this.arena.calculateAutoWinner();
+    audio.playAudioFromStart(MatchAudio.RESUME, 1.0);
   }
 
   private void setTeleopPhase(MatchState phase) {
@@ -127,9 +127,9 @@ public class MatchTimerThread extends Thread {
   }
 
   private void matchOver() {
-    this.arena.changePhase(MatchState.COMPLETED);
-    audio.playAudioFromStart(MatchAudio.WINNER, 1.0);
     DriverStationSim.setEnabled(false);
     DriverStationSim.notifyNewData();
+    this.arena.changePhase(MatchState.COMPLETED);
+    audio.playAudioFromStart(MatchAudio.WINNER, 1.0);
   }
 }

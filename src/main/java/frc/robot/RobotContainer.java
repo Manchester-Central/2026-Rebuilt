@@ -234,6 +234,16 @@ public class RobotContainer {
     }
   }
 
+  public void configureMultiplayerNamedCommands() {
+    NamedCommands.registerCommand("DeployOuttake", new DeployOuttake(m_intake));
+    NamedCommands.registerCommand("DeployIntake", new DeployIntake(m_intake));
+    NamedCommands.registerCommand("RetractIntake", new RetractIntake(m_intake));
+    NamedCommands.registerCommand("LaunchHub", new AimHubAndLaunchJostle(m_launcher, m_swerveDrive, m_intake)
+            .deadlineFor(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter)));
+    NamedCommands.registerCommand("LaunchPass", new AimPassAndLaunchSetAngle(m_launcher, m_swerveDrive, m_intake)
+            .deadlineFor(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
+  }
+
   private void addAutos() {
     configureNamedCommands();
 
