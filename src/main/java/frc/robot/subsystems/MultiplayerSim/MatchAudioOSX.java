@@ -2,7 +2,6 @@ package frc.robot.subsystems.MultiplayerSim;
 
 import javafx.scene.media.MediaPlayer;
 import java.util.HashMap;
-import java.util.Locale;
 
 import frc.robot.subsystems.interfaces.AudioInterface;
 
@@ -14,13 +13,6 @@ public class MatchAudioOSX extends AudioInterface {
 
   @SuppressWarnings("unused")
   private HashMap<String, MediaPlayer> audioMap = new HashMap<>();
-
-  static {
-    if (System.getProperty("os.name").toLowerCase(Locale.ENGLISH).contains("mac")) {
-      System.out.println("*** Initializing OSX Audio");
-      instance = new MatchAudioOSX();
-    }
-  }
 
   public MatchAudioOSX() {
     addAudio(START);
