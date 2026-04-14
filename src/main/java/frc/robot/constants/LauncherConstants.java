@@ -67,7 +67,7 @@ public final class LauncherConstants {
 
   public static final DashboardNumber LauncherSpeed = new DashboardNumber("Launcher/ManualLaunchSpeed", 0.6); 
   public static final DashboardNumber UnjamSpeed = new DashboardNumber("Launcher/UnjamSpeed", -0.3); 
-  public static final DashboardUnit <AngleUnit, Angle> IntakePivotJostleAngle = new DashboardUnit<>("Launcher/Intake/IntakePivotJostleAngle", Degrees.of(110));
+  public static final DashboardUnit <AngleUnit, Angle> IntakePivotJostleAngle = new DashboardUnit<>("Launcher/Intake/IntakePivotJostleAngle", Degrees.of(105));
 
   public static final Distance LauncherToHubHeight = FieldDimensions.HubHeight.minus(LauncherHeight);
 
@@ -79,9 +79,9 @@ public final class LauncherConstants {
   public static final DashboardUnit<AngleUnit, Angle> AimYawTolerance = new DashboardUnit<>("Launcher/AimYawTolerance", Degrees.of(3.5)); // tested with 3
   public static final DashboardUnit<AngleUnit, Angle> LaunchYawTolerance = new DashboardUnit<>("Launcher/LaunchYawTolerance", Degrees.of(6));
   
-  public static final DashboardUnit<TimeUnit, Time> AutoLaunchTime = new DashboardUnit<>("Launcher/AutoLaunchTime", Seconds.of(3.2));
+  public static final DashboardUnit<TimeUnit, Time> AutoLaunchTime = new DashboardUnit<>("Launcher/AutoLaunchTime", Seconds.of(3.6));
 
-  public static final DashboardUnit<TimeUnit, Time> JostleDelay = new DashboardUnit<>("Launcher/JostleDelay", Seconds.of(1.2));
+  public static final DashboardUnit<TimeUnit, Time> JostleDelay = new DashboardUnit<>("Launcher/JostleDelay", Seconds.of(1.4));
 
   public static final class FlywheelConstants {
     public static final CanId LeftFlywheelCanId = CanId.ID_40;
@@ -94,7 +94,7 @@ public final class LauncherConstants {
 
     public static final DashboardUnit<LinearVelocityUnit, LinearVelocity> TunableLaunchVelocity = new DashboardUnit<>("Launcher/TunableLaunchVelocity", MetersPerSecond.of(20));
 
-    public static final DashboardNumber BangBangLimit = new DashboardNumber("Launcher/BangBangLimit", 10);
+    public static final DashboardNumber BangBangLimit = new DashboardNumber("Launcher/BangBangLimit", 4);
 
     public static final DashboardNumber LossFactor = new DashboardNumber("Launcher/LossFactor", 1);
 
@@ -230,8 +230,8 @@ public final class LauncherConstants {
 
     public static final DashboardNumber UnjamSpeed = new DashboardNumber("Launcher/Feeder/UnjamSpeed", -1.0);
     public static final DashboardNumber FeederSpeed = new DashboardNumber("Launcher/Feeder/FeederSpeed", 0.3);
-    public static final DashboardNumber BottomFeederSpeed = new DashboardNumber("Launcher/Feeder/BottomFeederSpeed", 0.6);
-    public static final DashboardNumber TopFeederSpeed = new DashboardNumber("Launcher/Feeder/TopFeederSpeed", 0.6);
+    public static final DashboardNumber BottomFeederSpeed = new DashboardNumber("Launcher/Feeder/BottomFeederSpeed", 1);
+    public static final DashboardNumber TopFeederSpeed = new DashboardNumber("Launcher/Feeder/TopFeederSpeed", 0.7);
     public static final DashboardNumber PassiveFeederSpeed = new DashboardNumber("Launcher/Feeder/PassiveFeederSpeed", 0.2);
     
 

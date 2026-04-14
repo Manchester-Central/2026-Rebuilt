@@ -52,7 +52,8 @@ public final class IntakeConstants {
   public static final DashboardNumber ManualPivotSpeedMultiplier = new DashboardNumber("Intake/ManualPivotSpeedMultiplier", 0.4);
 
   // Speeds
-  public static final DashboardNumber IntakeRollerSpeed = new DashboardNumber("Intake/IntakeRollerSpeed", 0.8);
+  public static final DashboardNumber IntakeRollerSpeed = new DashboardNumber("Intake/IntakeRollerSpeed", 0.7
+  );
   public static final DashboardNumber OuttakeRollerSpeed = new DashboardNumber("Intake/OuttakeRollerSpeed", -0.8);
 
   public static final class RollerConstants {
@@ -141,7 +142,7 @@ public final class IntakeConstants {
     public static final DashboardUnit<AngleUnit,Angle> BumpAngle = new DashboardUnit<>("Intake/BumpAngle", Degrees.of(150)); // TODO: Double Check
     public static final DashboardUnit<AngleUnit,Angle> RetractDepAngle = new DashboardUnit<>("Intake/RetractDeepAngle", Degrees.of(90)); // TODO: Double Check
 
-    public static final DashboardNumber JostleSpeed = new DashboardNumber("Intake/JostleSpeed", 63);
+    public static final DashboardNumber JostleSpeed = new DashboardNumber("Intake/JostleSpeed", 35);
 
     // Sim values
     public static final double MOI = SingleJointedArmSim.estimateMOI(IntakeLength.in(Meters), IntakeMass.in(Kilograms));
