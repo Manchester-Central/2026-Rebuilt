@@ -14,7 +14,10 @@ public class MatchAudioOSX extends AudioInterface {
   @SuppressWarnings("unused")
   private HashMap<String, MediaPlayer> audioMap = new HashMap<>();
 
-  public MatchAudioOSX() {
+  public MatchAudioOSX() {}
+
+  @Override
+  public void loadAudioFiles() {
     addAudio(START);
     addAudio(ENDGAME);
     addAudio(RESUME);

@@ -37,8 +37,9 @@ public final class Main {
       AudioInterface.instance = new MatchAudio();
     }
     if (!System.getProperty("os.name").toLowerCase(Locale.ENGLISH).contains("mac")) {
-      Platform.startup(() -> MatchAudio.getInstance());
+      Platform.startup(() -> AudioInterface.getInstance());
     }
+    AudioInterface.instance.loadAudioFiles();
     RobotBase.startRobot(Robot::new);
   }
 }

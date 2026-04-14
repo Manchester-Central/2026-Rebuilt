@@ -12,6 +12,7 @@ public abstract class AudioInterface {
   public static final String ENDGAME = "audio/warning.wav";
   public static final String WINNER = "audio/match_result.wav";
 
+  public abstract void loadAudioFiles();
   public abstract void addAudio(String name);
   public abstract void playAudio(String name);
   public abstract void playAudio(String name, double volume);

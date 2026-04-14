@@ -12,7 +12,10 @@ import frc.robot.subsystems.interfaces.AudioInterface;
 public class MatchAudio extends AudioInterface {
   private HashMap<String, MediaPlayer> audioMap = new HashMap<>();
 
-  public MatchAudio() {
+  public MatchAudio() {}
+
+  @Override
+  public void loadAudioFiles() {
     addAudio(START);
     addAudio(ENDGAME);
     addAudio(RESUME);
