@@ -130,7 +130,6 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
       // opposition is 3-5.
       robots[idx] = new RobotContainer(idx+1, ArenaConstants.startingPoses[idx+1]);
       arenaEnable.add(addMultiplayerChooser(idx+1));
-      robots[idx].createGenericPathChooser();
     }
     // Also add the phase toggles to the 
     arenaEnable.add(setupAutoToggle());

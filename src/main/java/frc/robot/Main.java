@@ -10,8 +10,8 @@ package frc.robot;
 import java.util.Locale;
 
 import edu.wpi.first.wpilibj.RobotBase;
-import frc.robot.subsystems.MultiplayerSim.MatchAudio;
-import frc.robot.subsystems.MultiplayerSim.MatchAudioOSX;
+import frc.robot.subsystems.MultiplayerSim.Audio.MatchAudio;
+import frc.robot.subsystems.MultiplayerSim.Audio.MatchAudioOSX;
 import frc.robot.subsystems.interfaces.AudioInterface;
 import javafx.application.Platform;
 

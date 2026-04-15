@@ -1,6 +1,6 @@
-package frc.robot.subsystems.MultiplayerSim;
+package frc.robot.subsystems.MultiplayerSim.Pathplanner;
 
-import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj2.command.*;
 import java.io.IOException;
@@ -14,23 +14,6 @@ public class MultiplayerCommandUtil {
 
   public MultiplayerCommandUtil(NamedCommandsInstance namedCmds) {
     storedNamedCommands = namedCmds;
-  }
-
-  /**
-   * Wraps a command with a functional command that calls the command's initialize, execute, end,
-   * and isFinished methods. This allows a command in the event map to be reused multiple times in
-   * different command groups
-   *
-   * @param eventCommand the command to wrap
-   * @return a functional command that wraps the given command
-   */
-  public Command wrappedEventCommand(Command eventCommand) {
-    return new FunctionalCommand(
-        eventCommand::initialize,
-        eventCommand::execute,
-        eventCommand::end,
-        eventCommand::isFinished,
-        eventCommand.getRequirements().toArray(Subsystem[]::new));
   }
 
   /**
@@ -78,7 +61,7 @@ public class MultiplayerCommandUtil {
     return storedNamedCommands.getCommand(name);
   }
 
-  private Command pathCommandFromData(
+  private static Command pathCommandFromData(
       JSONObject dataJson, boolean choreoPath, boolean mirror) throws IOException, ParseException {
     String pathName = (String) dataJson.get("pathName");
 

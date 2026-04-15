@@ -1,4 +1,4 @@
-package frc.robot.subsystems.MultiplayerSim;
+package frc.robot.subsystems.MultiplayerSim.Pathplanner;
 
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -52,6 +52,23 @@ public class NamedCommandsInstance {
   }
 
   /**
+   * Wraps a command with a functional command that calls the command's initialize, execute, end,
+   * and isFinished methods. This allows a command in the event map to be reused multiple times in
+   * different command groups
+   *
+   * @param eventCommand the command to wrap
+   * @return a functional command that wraps the given command
+   */
+  public Command wrappedEventCommand(Command eventCommand) {
+    return new FunctionalCommand(
+        eventCommand::initialize,
+        eventCommand::execute,
+        eventCommand::end,
+        eventCommand::isFinished,
+        eventCommand.getRequirements().toArray(Subsystem[]::new));
+  }
+
+  /**
    * Returns the command with the given name.
    *
    * @param name the name of the command to get
@@ -60,7 +77,7 @@ public class NamedCommandsInstance {
    */
   public Command getCommand(String name) {
     if (hasCommand(name)) {
-      return MultiplayerCommandUtil.wrappedEventCommand(namedCommands.get(name));
+      return wrappedEventCommand(namedCommands.get(name));
     } else {
       DriverStation.reportWarning(
           "PathPlanner attempted to create a command '"
