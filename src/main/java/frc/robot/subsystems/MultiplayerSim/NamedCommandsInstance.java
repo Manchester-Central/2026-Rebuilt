@@ -7,10 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.pathplanner.lib.auto.CommandUtil;
-
-/** Utility class for managing multiplayer sim named commands */
-public class MultiplayerNamedCommands {
+/** Utility class for managing named commands */
+public class NamedCommandsInstance {
   private final HashMap<String, Command> namedCommands = new HashMap<>();
 
   /**
@@ -62,7 +60,7 @@ public class MultiplayerNamedCommands {
    */
   public Command getCommand(String name) {
     if (hasCommand(name)) {
-      return CommandUtil.wrappedEventCommand(namedCommands.get(name));
+      return MultiplayerCommandUtil.wrappedEventCommand(namedCommands.get(name));
     } else {
       DriverStation.reportWarning(
           "PathPlanner attempted to create a command '"

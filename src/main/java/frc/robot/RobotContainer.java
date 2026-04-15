@@ -11,8 +11,14 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.DoubleSupplier;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
+import org.json.simple.parser.ParseException;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -24,17 +30,24 @@ import com.chaos131.vision.LimelightCamera;
 import com.chaos131.vision.LimelightCamera.LimelightVersion;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.FollowPathCommand;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
@@ -48,6 +61,7 @@ import frc.robot.commands.launcher.AimHubAndLaunchTable;
 import frc.robot.commands.launcher.AimPassAndLaunchSetAngle;
 import frc.robot.commands.manual.IntakeManualCommand;
 import frc.robot.commands.manual.LauncherManualCommand;
+import frc.robot.constants.DriveConstants;
 import frc.robot.constants.FieldDimensions;
 import frc.robot.constants.GeneralConstants;
 import frc.robot.constants.GeneralConstants.Mode;
@@ -55,6 +69,7 @@ import frc.robot.constants.LauncherConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Quest;
+import frc.robot.subsystems.MultiplayerSim.PathPlannerAutoMultiplayer;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveMapleSim;
 import frc.robot.subsystems.drive.GyroIO;
@@ -213,8 +228,10 @@ public class RobotContainer {
 
     // We need Pathplanner's Autobuilder to run, but they do funky singleton stuff
     // So we catch the cases in RobotContainer
-    if (id == 0) m_swerveDrive.setupAutoBuilder();
-    addAutos();
+    if (id == 0) {
+      m_swerveDrive.setupAutoBuilder();
+      addAutos();
+    }
 
     // Configure the button bindings
     configureButtonBindings();
@@ -234,14 +251,37 @@ public class RobotContainer {
     }
   }
 
-  public void configureMultiplayerNamedCommands() {
-    NamedCommands.registerCommand("DeployOuttake", new DeployOuttake(m_intake));
-    NamedCommands.registerCommand("DeployIntake", new DeployIntake(m_intake));
-    NamedCommands.registerCommand("RetractIntake", new RetractIntake(m_intake));
-    NamedCommands.registerCommand("LaunchHub", new AimHubAndLaunchJostle(m_launcher, m_swerveDrive, m_intake)
-            .deadlineFor(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter)));
-    NamedCommands.registerCommand("LaunchPass", new AimPassAndLaunchSetAngle(m_launcher, m_swerveDrive, m_intake)
-            .deadlineFor(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
+  public void createGenericPathChooser() {
+    List<String> autoNames = AutoBuilder.getAllAutoNames();
+
+    autoChooser = new LoggedDashboardChooser<>("Robot"+id+"/AutoChoices");
+    autoChooser.addDefaultOption("None", new InstantCommand());
+    for (String autoName : autoNames) {
+      List<PathPlannerPath> auto_list;
+      try {
+        auto_list = PathPlannerAuto.getPathGroupFromAutoFile(autoName);
+        SequentialCommandGroup auto_sequence = new SequentialCommandGroup();
+        for (PathPlannerPath path : auto_list) {
+          auto_sequence.addCommands(new FollowPathCommand(
+              path,
+              m_swerveDrive::getPose,
+              m_swerveDrive::getChassisSpeeds,
+              (speeds, feedforwards) -> m_swerveDrive.runVelocity(speeds),
+              new PPHolonomicDriveController(
+                  DriveConstants.TranslationalControlPIDConstants, DriveConstants.RotationalControlPIDConstants),
+              AbstractDrive.PP_CONFIG,
+              () -> DriverStation.getAlliance()
+                  .orElse(DriverStation.Alliance.Blue)
+                  .equals(DriverStation.Alliance.Red),
+              m_swerveDrive
+          ));
+        }
+
+        autoChooser.addOption(autoName, auto_sequence);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
   }
 
   private void addAutos() {
