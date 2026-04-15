@@ -147,6 +147,10 @@ public class Intake extends SubsystemBase {
     setPivotAngle(PivotConstants.BumpAngle.get());
   }
 
+  public boolean isNearAngle(Angle targetAngle) {
+    return getPivotAngle().isNear(targetAngle, PivotConstants.NearPivotAngleTolerance.get());
+  }
+
   public Pose3d[] generateMech3d() {
     Pose3d[] poses = new Pose3d[]{
       new Pose3d(

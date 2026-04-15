@@ -12,6 +12,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -49,6 +50,7 @@ import frc.robot.commands.intake.RetractIntake;
 import frc.robot.commands.launcher.AimHubAndLaunchJostle;
 import frc.robot.commands.launcher.AimHubAndLaunchTable;
 import frc.robot.commands.launcher.AimHubAndLaunchTunable;
+import frc.robot.commands.launcher.AimPassAndLaunchJostle;
 import frc.robot.commands.launcher.AimPassAndLaunchSetAngle;
 import frc.robot.commands.manual.IntakeManualCommand;
 import frc.robot.commands.manual.LauncherManualCommand;
@@ -279,9 +281,10 @@ public class RobotContainer {
     // LB: Aim and pass (if manual mode, only aim drive)
     m_driver.leftBumper().whileTrue(switchAutomaticOrManual(
       // Automatic
-      new DeployOuttake(m_intake).alongWith(new RunCommand(() -> m_launcher.setFeederSpeed(FeederConstants.UnjamSpeed.get(), 0), m_launcher)),
-      // Manual
-      new InstantCommand()  // getAimAtFieldPosesCommand(LauncherConstants.PassPoints)
+    new AimPassAndLaunchJostle(m_launcher, m_swerveDrive, m_intake)
+        .alongWith(getAimWithXCommand(() -> DriveDirection.Towards.getAllianceAngle().getMeasure())),
+      // manual
+      getAimAtAngleCommand(() -> DriveDirection.Towards.getAllianceAngle().getMeasure())
     ));
     // LT: Intake
     m_driver.leftTrigger().and(m_isAutomaticTrigger).whileTrue(switchAutomaticOrManual(
@@ -451,6 +454,15 @@ public class RobotContainer {
     );
   }
 
+  private Command getAimAtAngleCommand(Supplier<Angle> angle) {
+    return DriveCommands.joystickDriveAtAngle(
+        m_swerveDrive,
+        DriverStation.isAutonomous() ? () -> 0 :  m_getDriverXTranslation,
+        DriverStation.isAutonomous() ? () -> 0 : m_getDriverYTranslation,
+        () -> Rotation2d.fromDegrees(angle.get().in(Degrees))
+    );
+  }
+
   private Command getAimAtFieldPosesMovingCommand(FieldPose2026... poses) {
     return DriveCommands.joystickDriveAtAngle(
         m_swerveDrive,
@@ -482,12 +494,29 @@ public class RobotContainer {
       && m_getDriverYTranslation.getAsDouble() == 0;
   }
 
+  private boolean isAimedAtAngle(Angle angle) {
+    Angle currentAngle = m_swerveDrive.getPose().getRotation().getMeasure();
+    
+
+    return angle.isNear(currentAngle, LauncherConstants.AimYawTolerance.get()) 
+      && m_getDriverXTranslation.getAsDouble() == 0 
+      && m_getDriverYTranslation.getAsDouble() == 0;
+  }
+
   private Command getAimWithXCommand(FieldPose2026... poses) {
     return new RepeatedConditionalCommand(
       new InstantCommand(m_swerveDrive::stopWithX, m_swerveDrive),
       getAimAtFieldPosesMovingCommand(poses), 
       () -> isAimedAtPose(poses)).repeatedly(); 
   }
+
+  private Command getAimWithXCommand(Supplier<Angle> angle) {
+    return new RepeatedConditionalCommand(
+      new InstantCommand(m_swerveDrive::stopWithX, m_swerveDrive),
+      getAimAtAngleCommand(angle), 
+      () -> isAimedAtAngle(angle.get())).repeatedly(); 
+  }
+
 
   private Command resetPoseCommand(DriveDirection direction) {
     return Commands.runOnce(

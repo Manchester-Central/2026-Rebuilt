@@ -67,7 +67,7 @@ public final class LauncherConstants {
 
   public static final DashboardNumber LauncherSpeed = new DashboardNumber("Launcher/ManualLaunchSpeed", 0.6); 
   public static final DashboardNumber UnjamSpeed = new DashboardNumber("Launcher/UnjamSpeed", -0.3); 
-  public static final DashboardUnit <AngleUnit, Angle> IntakePivotJostleAngle = new DashboardUnit<>("Launcher/Intake/IntakePivotJostleAngle", Degrees.of(105));
+  public static final DashboardUnit <AngleUnit, Angle> IntakePivotJostleAngle = new DashboardUnit<>("Launcher/Intake/IntakePivotJostleAngle", Degrees.of(108));
 
   public static final Distance LauncherToHubHeight = FieldDimensions.HubHeight.minus(LauncherHeight);
 
@@ -231,7 +231,7 @@ public final class LauncherConstants {
     public static final DashboardNumber UnjamSpeed = new DashboardNumber("Launcher/Feeder/UnjamSpeed", -1.0);
     public static final DashboardNumber FeederSpeed = new DashboardNumber("Launcher/Feeder/FeederSpeed", 0.3);
     public static final DashboardNumber BottomFeederSpeed = new DashboardNumber("Launcher/Feeder/BottomFeederSpeed", 1);
-    public static final DashboardNumber TopFeederSpeed = new DashboardNumber("Launcher/Feeder/TopFeederSpeed", 0.7);
+    public static final DashboardNumber TopFeederSpeed = new DashboardNumber("Launcher/Feeder/TopFeederSpeed", 0.6);
     public static final DashboardNumber PassiveFeederSpeed = new DashboardNumber("Launcher/Feeder/PassiveFeederSpeed", 0.2);
     
 

@@ -2,6 +2,7 @@ package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.IntakeConstants;
+import frc.robot.constants.IntakeConstants.PivotConstants;
 import frc.robot.subsystems.intake.Intake;
 
 public class DeployIntake extends Command {
@@ -15,7 +16,12 @@ public void initialize(){}
 
 @Override
 public void execute(){
-    m_intake.setRollerSpeed(IntakeConstants.IntakeRollerSpeed.get());
+    if (m_intake.isNearAngle(PivotConstants.DeployAngle.get())) {
+      m_intake.setRollerSpeed(IntakeConstants.IntakeRollerSpeed.get());   
+    } else {
+      m_intake.setRollerSpeed(0);
+    }
+   
     m_intake.deploy();
 } 
 
