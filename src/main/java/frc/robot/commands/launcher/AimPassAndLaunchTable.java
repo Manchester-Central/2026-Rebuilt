@@ -41,7 +41,7 @@ public class AimPassAndLaunchTable extends BaseLaunchCommand {
 
   @Override
   protected void preExecute() {
-    m_flywheelTableRow = m_launcher.getLookupTableRow(); // TODO: might need to be a separate lookup table for hub launching
+    m_flywheelTableRow = m_launcher.getPassLookupTableRow(); // TODO: might need to be a separate lookup table for hub launching
   }
 
   @Override

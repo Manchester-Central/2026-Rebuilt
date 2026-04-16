@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 8.347631954350925,
-        "y": 2.7605420827389446
+        "x": 8.218245363766048,
+        "y": 2.8122967189728967
       },
       "prevControl": {
-        "x": 8.44973836256552,
-        "y": 2.32413067650666
+        "x": 8.320351771980643,
+        "y": 2.375885312740612
       },
       "nextControl": {
-        "x": 8.187758559072268,
-        "y": 3.44385446707091
+        "x": 8.058371968487391,
+        "y": 3.495609103304862
       },
       "isLocked": false,
       "linkedName": null
@@ -36,24 +36,24 @@
         "y": 3.6197469879518076
       },
       "prevControl": {
-        "x": 7.66297403578673,
-        "y": 3.6043137607201445
+        "x": 7.662794154594815,
+        "y": 3.638137440940731
       },
       "nextControl": {
-        "x": 6.486090047393366,
-        "y": 3.669620853080568
+        "x": 6.523281027104137,
+        "y": 3.5627389443651927
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.682268188302425,
-        "y": 2.398259629101284
+        "x": 5.7340228245363765,
+        "y": 2.6182168330955777
       },
       "prevControl": {
-        "x": 6.862215639810428,
-        "y": 2.3693009478672966
+        "x": 6.92437945791726,
+        "y": 2.4888302425106996
       },
       "nextControl": null,
       "isLocked": false,
@@ -68,15 +68,19 @@
     {
       "waypointRelativePos": 1.4099279423538822,
       "rotationDegrees": -10.0
+    },
+    {
+      "waypointRelativePos": 2.7249466950959373,
+      "rotationDegrees": 90.0
     }
   ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.3322079675894661,
-      "maxWaypointRelativePos": 2.2201215395003375,
+      "minWaypointRelativePos": 0.48615800135043513,
+      "maxWaypointRelativePos": 1.7906819716407845,
       "constraints": {
-        "maxVelocity": 2.0,
+        "maxVelocity": 2.4,
         "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,

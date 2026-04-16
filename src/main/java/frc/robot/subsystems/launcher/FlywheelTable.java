@@ -17,7 +17,7 @@ import edu.wpi.first.units.measure.Distance;
 /** Add your docs here. */
 public class FlywheelTable extends LookupTable<DistanceUnit, Distance, TableRow> {
 
-  private static final List<TableRow> Rows = List.of(
+  private static final List<TableRow> LaunchRows = List.of(
     new TableRow(Meters.of(2.21), MetersPerSecond.of(15.5), 0.29),
     new TableRow(Meters.of(2.6), MetersPerSecond.of(17), 0.24),
     new TableRow(Meters.of(3.08), MetersPerSecond.of(20), 0.25),
@@ -26,10 +26,24 @@ public class FlywheelTable extends LookupTable<DistanceUnit, Distance, TableRow>
     // new TableRow(Meters.of(3),  MetersPerSecond.of(38))
   );
 
-  private static final FlywheelTable m_instance = new FlywheelTable(Rows);
+  private static final List<TableRow> PassRows = List.of(
+    new TableRow(Meters.of(2.21), MetersPerSecond.of(16), 0.29),
+    new TableRow(Meters.of(2.6), MetersPerSecond.of(18), 0.24),
+    new TableRow(Meters.of(3.08), MetersPerSecond.of(21.5), 0.25),
+    new TableRow(Meters.of(3.4), MetersPerSecond.of(23), 0.25),
+    new TableRow(Meters.of(4), MetersPerSecond.of(29), 0.25)
+    // new TableRow(Meters.of(3),  MetersPerSecond.of(38))
+  );
 
-  public static FlywheelTable getInstance() {
-    return m_instance;
+  private static final FlywheelTable m_launchInstance = new FlywheelTable(LaunchRows);
+  private static final FlywheelTable m_passInstance = new FlywheelTable(PassRows);
+
+  public static FlywheelTable getLaunchInstance() {
+    return m_launchInstance;
+  }
+
+  public static FlywheelTable getPassInstance() {
+    return m_passInstance;
   }
 
   private FlywheelTable(List<TableRow> rows) {
