@@ -15,6 +15,8 @@ import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -25,11 +27,15 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.constants.DriveConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.MultiplayerSim.MultiplayerArena2026;
+import frc.robot.subsystems.MultiplayerSim.Pathplanner.MultiplayerAutoBuilder;
 import frc.robot.subsystems.interfaces.AbstractDrive;
 
 public class DriveMapleSim extends AbstractDrive {
@@ -47,12 +53,28 @@ public class DriveMapleSim extends AbstractDrive {
                           Meters.of(TunerConstants.FrontLeft.WheelRadius),
                           KilogramSquareMeters.of(0.005), //KilogramSquareMeters.of(TunerConstants.FrontLeft.SteerInertia),
                           1.2));
+  private int robotID;
   public SwerveDriveSimulation sim;
 
-  public DriveMapleSim(Pose2d initialPose) {
+  public DriveMapleSim(int id, Pose2d initialPose) {
+    robotID = id;
     sim = new SwerveDriveSimulation(m_swerveConfig, initialPose);
     // SimulatedArena.getInstance().addDriveTrainSimulation(sim);
     MultiplayerArena2026.Instance.addDriveTrainSimulation(sim);
+  }
+
+  public void setupAutoBuilder() {
+    autobuilder = new MultiplayerAutoBuilder();
+    autobuilder.configure(
+        this::getPose,
+        this::setPose,
+        this::getChassisSpeeds,
+        this::runVelocity,
+        new PPHolonomicDriveController(
+            DriveConstants.TranslationalControlPIDConstants, DriveConstants.RotationalControlPIDConstants),
+        PP_CONFIG,
+        () -> DriverStation.getAlliance().orElse(Alliance.Blue) == (robotID > 2 ? Alliance.Blue : Alliance.Red),
+        this);
   }
 
   @Override

@@ -69,6 +69,7 @@ import frc.robot.constants.LauncherConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Quest;
+import frc.robot.subsystems.MultiplayerSim.Pathplanner.MultiplayerAutoBuilder;
 import frc.robot.subsystems.MultiplayerSim.Pathplanner.MultiplayerCommandUtil;
 import frc.robot.subsystems.MultiplayerSim.Pathplanner.MultiplayerPathPlannerAuto;
 import frc.robot.subsystems.MultiplayerSim.Pathplanner.NamedCommandsInstance;
@@ -131,9 +132,6 @@ public class RobotContainer {
   private final Trigger m_isAutomaticTrigger = m_isManualTrigger.negate();
   // Dashboard inputs
   private LoggedDashboardChooser<Command> autoChooser;
-  // Multiplayer Autonomous
-  private NamedCommandsInstance namedCommandsInstance;
-  private MultiplayerCommandUtil multiplayerCommandUtil;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer(int id, Pose2d startPose) {
@@ -198,7 +196,7 @@ public class RobotContainer {
         break;
 
       case ARENA:
-        var drive = new DriveMapleSim(startPose);
+        var drive = new DriveMapleSim(id, startPose);
         m_intake = new MapleSimtake(id, drive.sim);
         m_launcher = new MapleSimLauncher(new Flywheel(id), new FakeFeeder(id, m_intake), new Hood(id), drive, m_intake);
         m_swerveDrive = drive;
@@ -233,8 +231,8 @@ public class RobotContainer {
 
     // We need Pathplanner's Autobuilder to run, but they do funky singleton stuff
     // So we catch the cases in RobotContainer
-    if (id == 0) {
-      m_swerveDrive.setupAutoBuilder();
+    m_swerveDrive.setupAutoBuilder();
+    if (GeneralConstants.currentMode != Mode.ARENA) {
       addAutos();
     } else {
       createGenericPathChooser();
@@ -260,7 +258,7 @@ public class RobotContainer {
 
   public void createGenericPathChooser() {
     // Generate Named Commands
-    namedCommandsInstance = new NamedCommandsInstance();
+    NamedCommandsInstance namedCommandsInstance = new NamedCommandsInstance();
     namedCommandsInstance.registerCommand("DeployOuttake", new DeployOuttake(m_intake));
     namedCommandsInstance.registerCommand("DeployIntake", new DeployIntake(m_intake));
     namedCommandsInstance.registerCommand("RetractIntake", new RetractIntake(m_intake));
@@ -269,7 +267,7 @@ public class RobotContainer {
     namedCommandsInstance.registerCommand("LaunchPass", new AimPassAndLaunchSetAngle(m_launcher, m_swerveDrive, m_intake)
             .deadlineFor(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
     // Util to wrap and generate paths using those named commands
-    multiplayerCommandUtil = new MultiplayerCommandUtil(namedCommandsInstance);
+    MultiplayerCommandUtil multiplayerCommandUtil = new MultiplayerCommandUtil(namedCommandsInstance, m_swerveDrive.autobuilder);
 
     // Generate Chooser now
     List<String> autoNames = AutoBuilder.getAllAutoNames();
@@ -278,7 +276,7 @@ public class RobotContainer {
     autoChooser.addDefaultOption("None", new InstantCommand());
     for (String autoName : autoNames) {
       try {
-        var auto_sequence = new MultiplayerPathPlannerAuto(autoName, multiplayerCommandUtil);
+        var auto_sequence = new MultiplayerPathPlannerAuto(autoName, multiplayerCommandUtil, m_swerveDrive.autobuilder);
         autoChooser.addOption(autoName, auto_sequence);
       } catch (Exception e) {
         e.printStackTrace();

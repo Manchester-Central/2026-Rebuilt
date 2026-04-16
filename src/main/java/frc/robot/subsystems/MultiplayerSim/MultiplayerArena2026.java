@@ -40,6 +40,9 @@ public class MultiplayerArena2026 extends Arena2026Rebuilt {
   protected MatchTimerThread timerThread;
   private ArrayList<LoggedDashboardChooser<Runnable>> arenaEnable = new ArrayList<>();
 
+  private final String ENABLESTR = "Enable";
+  private final String DISABLESTR = "Disable";
+
   public static enum MatchState {
     WAITING,
     PREPARE, /* matchRunning == false */
@@ -434,8 +437,8 @@ M    MMMMMMMMMMMMMMMMMMMMM:<$$$$c  "$ J$$$$$$$PF" ."$$$$$$$$P" .
     // This is weird because there's 5 robots in this list for 6 robots on the field.
     // The odd pedestal status of robot 0 creates weird idiosyncrasies like this.
     var chooser = new DashboardActions("Robot"+robotId+"/Enabled",
-      "Enable", () -> robots[robotId-1].getSwerveDrive().setPose(ArenaConstants.startingPoses[robotId]));
-    chooser.addOption("Disable", () -> robots[robotId-1].getSwerveDrive().setPose(ArenaConstants.waitingPoses[robotId]));
+      ENABLESTR, () -> robots[robotId-1].getSwerveDrive().setPose(ArenaConstants.startingPoses[robotId]));
+    chooser.addOption(DISABLESTR, () -> robots[robotId-1].getSwerveDrive().setPose(ArenaConstants.waitingPoses[robotId]));
     return chooser;
   }
 

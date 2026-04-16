@@ -50,7 +50,7 @@ public class MapleSimtake extends Intake {
     Logger.recordOutput("Robot"+m_id+"/IntakeTargetAngle", m_targetAngle.in(Degrees));
     Logger.recordOutput("Robot"+m_id+"/IntakeCurrentAngle", getPivotAngle().in(Degrees));
  
-    if (atTargetAngle(PivotConstants.DeployAngle.get())) {
+    if (atTargetAngle(PivotConstants.DeployAngle.get()) && getRollerSpeed() > 0.1) {
       intakeSim.startIntake();
     } else {
       intakeSim.stopIntake();

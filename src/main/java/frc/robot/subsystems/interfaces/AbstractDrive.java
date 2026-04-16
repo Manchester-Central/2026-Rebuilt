@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.constants.DriveConstants;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.MultiplayerSim.Pathplanner.MultiplayerAutoBuilder;
 import frc.robot.util.LocalADStarAK;
 
 public abstract class AbstractDrive extends SubsystemBase {
@@ -76,28 +77,8 @@ public abstract class AbstractDrive extends SubsystemBase {
               1),
           getModuleTranslations());
 
-    public void setupAutoBuilder() {
-        // Configure AutoBuilder for PathPlanner
-        AutoBuilder.configure(
-            this::getPose,
-            this::setPose,
-            this::getChassisSpeeds,
-            this::runVelocity,
-            new PPHolonomicDriveController(
-                DriveConstants.TranslationalControlPIDConstants, DriveConstants.RotationalControlPIDConstants),
-            PP_CONFIG,
-            () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
-            this);
-        Pathfinding.setPathfinder(new LocalADStarAK());
-        PathPlannerLogging.setLogActivePathCallback(
-            (activePath) -> {
-            Logger.recordOutput("Odometry/Trajectory", activePath.toArray(new Pose2d[0]));
-            });
-        PathPlannerLogging.setLogTargetPoseCallback(
-            (targetPose) -> {
-            Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);
-            });
-    }
+    public MultiplayerAutoBuilder autobuilder;
+    public abstract void setupAutoBuilder();
 
     public abstract double[] getWheelRadiusCharacterizationPositions();
     public abstract double getFFCharacterizationVelocity();

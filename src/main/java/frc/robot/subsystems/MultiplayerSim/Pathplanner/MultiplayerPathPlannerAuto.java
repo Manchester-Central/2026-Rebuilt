@@ -3,7 +3,6 @@ package frc.robot.subsystems.MultiplayerSim.Pathplanner;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Seconds;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.AutoBuilderException;
 import com.pathplanner.lib.events.*;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -34,6 +33,7 @@ import org.json.simple.parser.ParseException;
 /** A command that loads and runs an autonomous routine built using PathPlanner. */
 public class MultiplayerPathPlannerAuto extends Command {
   protected MultiplayerCommandUtil commandUtil;
+  protected MultiplayerAutoBuilder autobuilder;
   /** The currently running path name. Used to handle activePath triggers */
   public static String currentPathName = "";
 
@@ -58,8 +58,8 @@ public class MultiplayerPathPlannerAuto extends Command {
    * @throws AutoBuilderException if AutoBuilder is not configured before attempting to load the
    *     autonomous routine
    */
-  public MultiplayerPathPlannerAuto(String autoName, MultiplayerCommandUtil cmdUtil) {
-    this(autoName, false, cmdUtil);
+  public MultiplayerPathPlannerAuto(String autoName, MultiplayerCommandUtil cmdUtil, MultiplayerAutoBuilder builder) {
+    this(autoName, false, cmdUtil, builder);
   }
 
   /**
@@ -72,8 +72,9 @@ public class MultiplayerPathPlannerAuto extends Command {
    * @throws AutoBuilderException if AutoBuilder is not configured before attempting to load the
    *     autonomous routine
    */
-  public MultiplayerPathPlannerAuto(String autoName, boolean mirror, MultiplayerCommandUtil cmdUtil) {
+  public MultiplayerPathPlannerAuto(String autoName, boolean mirror, MultiplayerCommandUtil cmdUtil, MultiplayerAutoBuilder builder) {
     commandUtil = cmdUtil;
+    autobuilder = builder;
 
     try (BufferedReader br =
         new BufferedReader(
@@ -342,7 +343,7 @@ public class MultiplayerPathPlannerAuto extends Command {
           }
 
           for (Translation2d pos : eventStartPositions.get(eventName)) {
-            if (AutoBuilder.getCurrentPose().getTranslation().getDistance(pos) <= distanceMeters) {
+            if (autobuilder.getCurrentPose().getTranslation().getDistance(pos) <= distanceMeters) {
               return true;
             }
           }
@@ -379,7 +380,7 @@ public class MultiplayerPathPlannerAuto extends Command {
           }
 
           for (Translation2d pos : eventEndPositions.get(eventName)) {
-            if (AutoBuilder.getCurrentPose().getTranslation().getDistance(pos) <= distanceMeters) {
+            if (autobuilder.getCurrentPose().getTranslation().getDistance(pos) <= distanceMeters) {
               return true;
             }
           }
@@ -433,7 +434,7 @@ public class MultiplayerPathPlannerAuto extends Command {
   public Trigger nearFieldPosition(Translation2d fieldPosition, double toleranceMeters) {
     return condition(
         () ->
-            AutoBuilder.getCurrentPose().getTranslation().getDistance(fieldPosition)
+            autobuilder.getCurrentPose().getTranslation().getDistance(fieldPosition)
                 <= toleranceMeters);
   }
 
@@ -464,11 +465,11 @@ public class MultiplayerPathPlannerAuto extends Command {
     Translation2d redFieldPosition = FlippingUtil.flipFieldPosition(blueFieldPosition);
     return condition(
         () -> {
-          if (AutoBuilder.shouldFlip()) {
-            return AutoBuilder.getCurrentPose().getTranslation().getDistance(redFieldPosition)
+          if (autobuilder.shouldFlip()) {
+            return autobuilder.getCurrentPose().getTranslation().getDistance(redFieldPosition)
                 <= toleranceMeters;
           } else {
-            return AutoBuilder.getCurrentPose().getTranslation().getDistance(blueFieldPosition)
+            return autobuilder.getCurrentPose().getTranslation().getDistance(blueFieldPosition)
                 <= toleranceMeters;
           }
         });
@@ -506,7 +507,7 @@ public class MultiplayerPathPlannerAuto extends Command {
 
     return condition(
         () -> {
-          Pose2d currentPose = AutoBuilder.getCurrentPose();
+          Pose2d currentPose = autobuilder.getCurrentPose();
           return currentPose.getX() >= boundingBoxMin.getX()
               && currentPose.getY() >= boundingBoxMin.getY()
               && currentPose.getX() <= boundingBoxMax.getX()
@@ -539,8 +540,8 @@ public class MultiplayerPathPlannerAuto extends Command {
 
     return condition(
         () -> {
-          Pose2d currentPose = AutoBuilder.getCurrentPose();
-          if (AutoBuilder.shouldFlip()) {
+          Pose2d currentPose = autobuilder.getCurrentPose();
+          if (autobuilder.shouldFlip()) {
             return currentPose.getX() >= blueBoundingBoxMin.getX()
                 && currentPose.getY() >= blueBoundingBoxMin.getY()
                 && currentPose.getX() <= blueBoundingBoxMax.getX()
@@ -649,7 +650,7 @@ public class MultiplayerPathPlannerAuto extends Command {
       if (mirror) {
         path0 = path0.mirrorPath();
       }
-      if (AutoBuilder.isHolonomic()) {
+      if (autobuilder.isHolonomic()) {
         this.startingPose =
             new Pose2d(path0.getPoint(0).position, path0.getIdealStartingState().rotation());
       } else {
@@ -660,7 +661,7 @@ public class MultiplayerPathPlannerAuto extends Command {
     }
 
     if (resetOdom) {
-      this.autoCommand = Commands.sequence(AutoBuilder.resetOdom(this.startingPose), cmd);
+      this.autoCommand = Commands.sequence(autobuilder.resetOdom(this.startingPose), cmd);
     } else {
       this.autoCommand = cmd;
     }

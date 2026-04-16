@@ -1,6 +1,5 @@
 package frc.robot.subsystems.MultiplayerSim.Pathplanner;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj2.command.*;
 import java.io.IOException;
@@ -11,9 +10,11 @@ import org.json.simple.parser.ParseException;
 /** Utility class for building commands used in autos */
 public class MultiplayerCommandUtil {
   protected NamedCommandsInstance storedNamedCommands;
+  protected MultiplayerAutoBuilder autobuilder;
 
-  public MultiplayerCommandUtil(NamedCommandsInstance namedCmds) {
+  public MultiplayerCommandUtil(NamedCommandsInstance namedCmds, MultiplayerAutoBuilder builder) {
     storedNamedCommands = namedCmds;
+    autobuilder = builder;
   }
 
   /**
@@ -61,7 +62,7 @@ public class MultiplayerCommandUtil {
     return storedNamedCommands.getCommand(name);
   }
 
-  private static Command pathCommandFromData(
+  private Command pathCommandFromData(
       JSONObject dataJson, boolean choreoPath, boolean mirror) throws IOException, ParseException {
     String pathName = (String) dataJson.get("pathName");
 
@@ -72,7 +73,7 @@ public class MultiplayerCommandUtil {
     if (mirror) {
       path = path.mirrorPath();
     }
-    return AutoBuilder.followPath(path);
+    return autobuilder.followPath(path);
   }
 
   private Command sequentialGroupFromData(

@@ -97,8 +97,6 @@ public class Drive extends AbstractDrive {
     // Start odometry thread
     PhoenixOdometryThread.getInstance().start();
 
-    setupAutoBuilder();
-
     // Configure SysId
     sysId =
         new SysIdRoutine(
@@ -109,6 +107,30 @@ public class Drive extends AbstractDrive {
                 (state) -> Logger.recordOutput("Drive/SysIdState", state.toString())),
             new SysIdRoutine.Mechanism(
                 (voltage) -> runCharacterization(voltage.in(Volts)), null, this));
+  }
+
+  @Override
+  public void setupAutoBuilder() {
+    // Configure AutoBuilder for PathPlanner
+    AutoBuilder.configure(
+        this::getPose,
+        this::setPose,
+        this::getChassisSpeeds,
+        this::runVelocity,
+        new PPHolonomicDriveController(
+            DriveConstants.TranslationalControlPIDConstants, DriveConstants.RotationalControlPIDConstants),
+        PP_CONFIG,
+        () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
+        this);
+    Pathfinding.setPathfinder(new LocalADStarAK());
+    PathPlannerLogging.setLogActivePathCallback(
+        (activePath) -> {
+        Logger.recordOutput("Odometry/Trajectory", activePath.toArray(new Pose2d[0]));
+        });
+    PathPlannerLogging.setLogTargetPoseCallback(
+        (targetPose) -> {
+        Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);
+        });
   }
 
   @Override

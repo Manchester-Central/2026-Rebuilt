@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 
 /** Utility class used to build auto routines */
 public class MultiplayerAutoBuilder {
-  private static Globals globals = new Globals();
+  private Globals globals = new Globals();
 
   /**
    * Configures the AutoBuilder for using PathPlanner's built-in commands.
@@ -47,7 +47,7 @@ public class MultiplayerAutoBuilder {
    *     the field. This will maintain a global blue alliance origin.
    * @param driveRequirements the subsystem requirements for the robot's drive train
    */
-  public static void configure(
+  public void configure(
       Supplier<Pose2d> poseSupplier,
       Consumer<Pose2d> resetPose,
       Supplier<ChassisSpeeds> robotRelativeSpeedsSupplier,
@@ -119,7 +119,7 @@ public class MultiplayerAutoBuilder {
    *     the field. This will maintain a global blue alliance origin.
    * @param driveRequirements the subsystem requirements for the robot's drive train
    */
-  public static void configure(
+  public void configure(
       Supplier<Pose2d> poseSupplier,
       Consumer<Pose2d> resetPose,
       Supplier<ChassisSpeeds> robotRelativeSpeedsSupplier,
@@ -145,7 +145,7 @@ public class MultiplayerAutoBuilder {
    * <p>This class exists to ensure that {@link #resetForTesting()} resets all static state in
    * AutoBuilder.
    */
-  private static class Globals {
+  private class Globals {
     boolean configured = false;
 
     Supplier<Pose2d> poseSupplier;
@@ -174,7 +174,7 @@ public class MultiplayerAutoBuilder {
    *     must be handled in your command.
    * @param isHolonomic Does the robot have a holonomic drivetrain
    */
-  public static void configureCustom(
+  public void configureCustom(
       Function<PathPlannerPath, Command> pathFollowingCommandBuilder,
       Supplier<Pose2d> poseSupplier,
       Consumer<Pose2d> resetPose,
@@ -205,7 +205,7 @@ public class MultiplayerAutoBuilder {
    * @param resetPose a consumer for resetting the robot's pose
    * @param isHolonomic Does the robot have a holonomic drivetrain
    */
-  public static void configureCustom(
+  public void configureCustom(
       Function<PathPlannerPath, Command> pathFollowingCommandBuilder,
       Supplier<Pose2d> poseSupplier,
       Consumer<Pose2d> resetPose,
@@ -218,7 +218,7 @@ public class MultiplayerAutoBuilder {
    *
    * @return true if the AutoBuilder has been configured, false otherwise
    */
-  public static boolean isConfigured() {
+  public boolean isConfigured() {
     return globals.configured;
   }
 
@@ -227,7 +227,7 @@ public class MultiplayerAutoBuilder {
    *
    * @return true if the AutoBuilder has been configured for pathfinding, false otherwise
    */
-  public static boolean isPathfindingConfigured() {
+  public boolean isPathfindingConfigured() {
     return globals.pathfindingConfigured;
   }
 
@@ -236,7 +236,7 @@ public class MultiplayerAutoBuilder {
    *
    * <p>This method should not be called during a competition.
    */
-  public static void resetForTesting() {
+  public void resetForTesting() {
     globals = new Globals();
   }
 
@@ -245,7 +245,7 @@ public class MultiplayerAutoBuilder {
    *
    * @return Current robot pose
    */
-  public static Pose2d getCurrentPose() {
+  public Pose2d getCurrentPose() {
     return globals.poseSupplier.get();
   }
 
@@ -254,7 +254,7 @@ public class MultiplayerAutoBuilder {
    *
    * @return True if path/positions should be flipped
    */
-  public static boolean shouldFlip() {
+  public boolean shouldFlip() {
     return globals.shouldFlipPath.getAsBoolean();
   }
 
@@ -266,7 +266,7 @@ public class MultiplayerAutoBuilder {
    * @return a path following command with for the given path
    * @throws AutoBuilderException if the AutoBuilder has not been configured
    */
-  public static Command followPath(PathPlannerPath path) {
+  public Command followPath(PathPlannerPath path) {
     if (!isConfigured()) {
       throw new AutoBuilderException(
           "Auto builder was used to build a path following command before being configured");
@@ -284,7 +284,7 @@ public class MultiplayerAutoBuilder {
    * @param goalEndVelocity The goal end velocity of the robot when reaching the target pose
    * @return A command to pathfind to a given pose
    */
-  public static Command pathfindToPose(
+  public Command pathfindToPose(
       Pose2d pose, PathConstraints constraints, double goalEndVelocity) {
     if (!isPathfindingConfigured()) {
       throw new AutoBuilderException(
@@ -303,7 +303,7 @@ public class MultiplayerAutoBuilder {
    * @param goalEndVelocity The goal end velocity of the robot when reaching the target pose
    * @return A command to pathfind to a given pose
    */
-  public static Command pathfindToPose(
+  public Command pathfindToPose(
       Pose2d pose, PathConstraints constraints, LinearVelocity goalEndVelocity) {
     return pathfindToPose(pose, constraints, goalEndVelocity.in(MetersPerSecond));
   }
@@ -316,7 +316,7 @@ public class MultiplayerAutoBuilder {
    * @param constraints The constraints to use while pathfinding
    * @return A command to pathfind to a given pose
    */
-  public static Command pathfindToPose(Pose2d pose, PathConstraints constraints) {
+  public Command pathfindToPose(Pose2d pose, PathConstraints constraints) {
     return pathfindToPose(pose, constraints, 0);
   }
 
@@ -331,7 +331,7 @@ public class MultiplayerAutoBuilder {
    * @param goalEndVelocity The goal end velocity of the robot when reaching the target pose
    * @return A command to pathfind to a given pose
    */
-  public static Command pathfindToPoseFlipped(
+  public Command pathfindToPoseFlipped(
       Pose2d pose, PathConstraints constraints, double goalEndVelocity) {
     return Commands.either(
         pathfindToPose(FlippingUtil.flipFieldPose(pose), constraints, goalEndVelocity),
@@ -350,7 +350,7 @@ public class MultiplayerAutoBuilder {
    * @param goalEndVelocity The goal end velocity of the robot when reaching the target pose
    * @return A command to pathfind to a given pose
    */
-  public static Command pathfindToPoseFlipped(
+  public Command pathfindToPoseFlipped(
       Pose2d pose, PathConstraints constraints, LinearVelocity goalEndVelocity) {
     return pathfindToPoseFlipped(pose, constraints, goalEndVelocity.in(MetersPerSecond));
   }
@@ -365,7 +365,7 @@ public class MultiplayerAutoBuilder {
    * @param constraints The constraints to use while pathfinding
    * @return A command to pathfind to a given pose
    */
-  public static Command pathfindToPoseFlipped(Pose2d pose, PathConstraints constraints) {
+  public Command pathfindToPoseFlipped(Pose2d pose, PathConstraints constraints) {
     return pathfindToPoseFlipped(pose, constraints, 0);
   }
 
@@ -377,7 +377,7 @@ public class MultiplayerAutoBuilder {
    * @param pathfindingConstraints The constraints to use while pathfinding
    * @return A command to pathfind to a given path, then follow the path
    */
-  public static Command pathfindThenFollowPath(
+  public Command pathfindThenFollowPath(
       PathPlannerPath goalPath, PathConstraints pathfindingConstraints) {
     if (!isPathfindingConfigured()) {
       throw new AutoBuilderException(
@@ -393,7 +393,7 @@ public class MultiplayerAutoBuilder {
    *
    * @return SendableChooser populated with all autos
    */
-  public static SendableChooser<Command> buildAutoChooser() {
+  public SendableChooser<Command> buildAutoChooser() {
     return buildAutoChooser("");
   }
 
@@ -405,7 +405,7 @@ public class MultiplayerAutoBuilder {
    *     Commands.none()
    * @return SendableChooser populated with all autos
    */
-  public static SendableChooser<Command> buildAutoChooser(String defaultAutoName) {
+  public SendableChooser<Command> buildAutoChooser(String defaultAutoName) {
     return buildAutoChooserWithOptionsModifier(defaultAutoName, (stream) -> stream);
   }
 
@@ -417,7 +417,7 @@ public class MultiplayerAutoBuilder {
    *     into the AutoChooser
    * @return SendableChooser populated with all autos
    */
-  public static SendableChooser<Command> buildAutoChooserWithOptionsModifier(
+  public SendableChooser<Command> buildAutoChooserWithOptionsModifier(
       Function<Stream<PathPlannerAuto>, Stream<PathPlannerAuto>> optionsModifier) {
     return buildAutoChooserWithOptionsModifier("", optionsModifier);
   }
@@ -432,7 +432,7 @@ public class MultiplayerAutoBuilder {
    *     into the AutoChooser
    * @return SendableChooser populated with all autos
    */
-  public static SendableChooser<Command> buildAutoChooserWithOptionsModifier(
+  public SendableChooser<Command> buildAutoChooserWithOptionsModifier(
       String defaultAutoName,
       Function<Stream<PathPlannerAuto>, Stream<PathPlannerAuto>> optionsModifier) {
     if (!isConfigured()) {
@@ -475,7 +475,7 @@ public class MultiplayerAutoBuilder {
    *
    * @return List of all auto names
    */
-  public static List<String> getAllAutoNames() {
+  public List<String> getAllAutoNames() {
     File[] autoFiles = new File(Filesystem.getDeployDirectory(), "pathplanner/autos").listFiles();
 
     if (autoFiles == null) {
@@ -495,7 +495,7 @@ public class MultiplayerAutoBuilder {
    *
    * @return True if holonomic
    */
-  public static boolean isHolonomic() {
+  public boolean isHolonomic() {
     if (!isConfigured()) {
       throw new RuntimeException("AutoBuilder was not configured before use");
     }
@@ -509,7 +509,7 @@ public class MultiplayerAutoBuilder {
    * @param autoName the name of the auto to build
    * @return an auto command for the given auto name
    */
-  public static Command buildAuto(String autoName) {
+  public Command buildAuto(String autoName) {
     return new PathPlannerAuto(autoName);
   }
 
@@ -519,7 +519,7 @@ public class MultiplayerAutoBuilder {
    * @param bluePose The pose to reset to, relative to blue alliance origin
    * @return Command to reset the robot's odometry
    */
-  public static Command resetOdom(Pose2d bluePose) {
+  public Command resetOdom(Pose2d bluePose) {
     if (!isConfigured()) {
       throw new RuntimeException("AutoBuilder was not configured before use");
     }
