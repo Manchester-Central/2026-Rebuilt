@@ -8,40 +8,40 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.530104168184486,
-        "y": 1.4756872502685066
+        "x": 8.72923160749279,
+        "y": 1.3945083808758916
       },
       "isLocked": false,
       "linkedName": "MidRightStart"
     },
     {
       "anchor": {
-        "x": 8.218245363766048,
-        "y": 2.8122967189728967
+        "x": 8.244122681883024,
+        "y": 2.7346647646219684
       },
       "prevControl": {
-        "x": 8.320351771980643,
-        "y": 2.375885312740612
+        "x": 8.313488696253348,
+        "y": 2.419790840018514
       },
       "nextControl": {
-        "x": 8.058371968487391,
-        "y": 3.495609103304862
+        "x": 8.13179589032678,
+        "y": 3.2445510254442445
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.384855421686748,
-        "y": 3.6197469879518076
+        "x": 7.092582025677602,
+        "y": 3.2522111269614835
       },
       "prevControl": {
-        "x": 7.662794154594815,
-        "y": 3.638137440940731
+        "x": 7.339182953698586,
+        "y": 3.2932961887137773
       },
       "nextControl": {
-        "x": 6.523281027104137,
-        "y": 3.5627389443651927
+        "x": 6.498942103704109,
+        "y": 3.1533074729945674
       },
       "isLocked": false,
       "linkedName": null
@@ -52,8 +52,8 @@
         "y": 2.6182168330955777
       },
       "prevControl": {
-        "x": 6.92437945791726,
-        "y": 2.4888302425106996
+        "x": 6.259891378823871,
+        "y": 2.5028678965791347
       },
       "nextControl": null,
       "isLocked": false,
@@ -94,7 +94,7 @@
     {
       "name": "Intake",
       "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": 2.65,
+      "endWaypointRelativePos": 2.0013504388926417,
       "command": {
         "type": "named",
         "data": {
@@ -104,7 +104,7 @@
     },
     {
       "name": "RetractBump",
-      "waypointRelativePos": 2.7,
+      "waypointRelativePos": 2.6657663740715734,
       "endWaypointRelativePos": 3.0,
       "command": {
         "type": "named",

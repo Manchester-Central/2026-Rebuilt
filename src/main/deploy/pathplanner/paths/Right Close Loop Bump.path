@@ -86,7 +86,7 @@
     {
       "name": "Intake",
       "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": 2.55,
+      "endWaypointRelativePos": 2.0094530722484816,
       "command": {
         "type": "named",
         "data": {

@@ -281,10 +281,9 @@ public class RobotContainer {
     // LB: Aim and pass (if manual mode, only aim drive)
     m_driver.leftBumper().whileTrue(switchAutomaticOrManual(
       // Automatic
-    new AimPassAndLaunchJostle(m_launcher, m_swerveDrive, m_intake)
-        .alongWith(getAimWithXCommand(() -> DriveDirection.Towards.getAllianceAngle().getMeasure())),
+      new RunCommand(() -> m_intake.setRollerSpeed(IntakeConstants.OuttakeRollerSpeed.get()), m_intake),
       // manual
-      getAimAtAngleCommand(() -> DriveDirection.Towards.getAllianceAngle().getMeasure())
+      new InstantCommand() // getAimAtAngleCommand(() -> DriveDirection.Towards.getAllianceAngle().getMeasure())
     ));
     // LT: Intake
     m_driver.leftTrigger().and(m_isAutomaticTrigger).whileTrue(switchAutomaticOrManual(
@@ -357,7 +356,13 @@ public class RobotContainer {
       new AimHubAndLaunchTunable(m_launcher, m_swerveDrive, m_intake)
     ));
     // LB: Unjam intake (automatic and manual mode)
-    m_operator.leftBumper().whileTrue(new RunCommand(() -> m_intake.setRollerSpeed(IntakeConstants.OuttakeRollerSpeed.get()), m_intake));
+    m_operator.leftBumper().whileTrue(switchAutomaticOrManual(
+      // Automatic
+      new AimPassAndLaunchJostle(m_launcher, m_swerveDrive, m_intake)
+        .alongWith(getAimWithXCommand(() -> DriveDirection.Towards.getAllianceAngle().getMeasure())),
+      // manual
+      new RunCommand(() -> m_intake.setRollerSpeed(IntakeConstants.OuttakeRollerSpeed.get()), m_intake)
+    ));
     // LT: controls manually running the intake rollers
     m_operator.leftTrigger().whileTrue(switchAutomaticOrManual(
       // automatic
