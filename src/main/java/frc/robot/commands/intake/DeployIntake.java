@@ -19,7 +19,7 @@ public void execute(){
     if (m_intake.isNearAngle(PivotConstants.DeployAngle.get())) {
       m_intake.setRollerSpeed(IntakeConstants.IntakeRollerSpeed.get());   
     } else {
-      m_intake.setRollerSpeed(0);
+      m_intake.setRollerSpeed(IntakeConstants.DeployNetRollerSpeed.get());
     }
    
     m_intake.deploy();

@@ -11,6 +11,8 @@ import static edu.wpi.first.units.Units.Seconds;
 
 import java.util.Optional;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.chaos131.poses.FieldPose;
 import com.chaos131.poses.FieldPose2026;
 import com.chaos131.util.DriveDirection;
@@ -75,6 +77,11 @@ public class AimPassAndLaunchJostle extends BaseLaunchCommand {
   protected boolean isFacingLaunchTarget() {
     Angle targetAngle =  DriveDirection.Towards.getAllianceAngle().getMeasure();
     Angle currentAngle = m_swerveDrive.getRotation().getMeasure();
+
+    Logger.recordOutput("Launcher/TargetAngle", targetAngle.in(Degrees));
+    Logger.recordOutput("Launcher/CurrentAngle", currentAngle.in(Degrees));
+    Logger.recordOutput("Launcher/AngleDif", targetAngle.minus(currentAngle).in(Degrees));
+
     // TODO Auto-generated method stub
     return targetAngle.minus(currentAngle).lt(LauncherConstants.LaunchYawTolerance.get());
   }
@@ -83,6 +90,11 @@ public class AimPassAndLaunchJostle extends BaseLaunchCommand {
   protected boolean isFacingTarget() {
     Angle targetAngle =  DriveDirection.Towards.getAllianceAngle().getMeasure();
     Angle currentAngle = m_swerveDrive.getRotation().getMeasure();
+
+    Logger.recordOutput("Launcher/TargetAngle", targetAngle.in(Degrees));
+    Logger.recordOutput("Launcher/CurrentAngle", currentAngle.in(Degrees));
+    Logger.recordOutput("Launcher/AngleDif", targetAngle.minus(currentAngle).in(Degrees));
+    
     // TODO Auto-generated method stub
     return targetAngle.minus(currentAngle).lt(LauncherConstants.AimYawTolerance.get());
   }
