@@ -265,7 +265,7 @@ public class RobotContainer {
     ));
 
     m_launcher.setDefaultCommand(switchAutomaticOrManual(
-      new LauncherDefaultCommand(m_launcher), // automatic
+      new LauncherDefaultCommand(m_launcher,m_operator), // automatic
       new LauncherManualCommand(m_launcher)   // manual
     ));
   }
@@ -389,13 +389,8 @@ public class RobotContainer {
    
     // // POV left:
     // m_operator.povLeft();
-    // // POV right: moves to the climb position
-    // m_operator.povRight().whileTrue(switchAutomaticOrManual(
-    //   // automatic
-    //   new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension),
-    //   // manual
-    //   new InstantCommand()
-    // ));
+    // POV right: prepare flywheel inside default command
+    m_operator.povRight();
     // // POV down: controls climber to down position (with manaual fixed move too)
      m_operator.povDown().whileTrue(new InstantCommand(
       ()-> m_launcher.decreaseFlywheelMultiplier()
