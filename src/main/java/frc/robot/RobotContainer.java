@@ -281,7 +281,7 @@ public class RobotContainer {
     // LB: Aim and pass (if manual mode, only aim drive)
     m_driver.leftBumper().whileTrue(switchAutomaticOrManual(
       // Automatic
-      new RunCommand(() -> m_intake.setRollerSpeed(IntakeConstants.OuttakeRollerSpeed.get()), m_intake),
+      new DeployOuttake(m_intake).alongWith(new RunCommand(() -> m_launcher.setFeederSpeed(-0.8), m_launcher)),
       // manual
       new InstantCommand() // getAimAtAngleCommand(() -> DriveDirection.Towards.getAllianceAngle().getMeasure())
     ));
