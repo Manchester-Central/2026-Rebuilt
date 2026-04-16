@@ -199,7 +199,7 @@ public class RobotContainer {
 
   private void configureNamedCommands() {
     NamedCommands.registerCommand("DeployOuttake", new DeployOuttake(m_intake));
-    NamedCommands.registerCommand("DeployIntake", new DeployIntake(m_intake));
+    NamedCommands.registerCommand("DeployIntake", new DeployIntake(m_intake, m_launcher));
     NamedCommands.registerCommand("RetractIntake", new RetractIntake(m_intake));
     NamedCommands.registerCommand("RetractBump", new RetractBump(m_intake));
     NamedCommands.registerCommand("LaunchHub", new AimHubAndLaunchJostle(m_launcher, m_swerveDrive, m_intake)
@@ -281,14 +281,14 @@ public class RobotContainer {
     // LB: Aim and pass (if manual mode, only aim drive)
     m_driver.leftBumper().whileTrue(switchAutomaticOrManual(
       // Automatic
-      new DeployOuttake(m_intake).alongWith(new RunCommand(() -> m_launcher.setFeederSpeed(-0.8), m_launcher)),
+      new DeployOuttake(m_intake).alongWith(new RunCommand(() -> m_launcher.setFeederSpeed(FeederConstants.OuttakeSpeed.get()), m_launcher)),
       // manual
       new InstantCommand() // getAimAtAngleCommand(() -> DriveDirection.Towards.getAllianceAngle().getMeasure())
     ));
     // LT: Intake
     m_driver.leftTrigger().and(m_isAutomaticTrigger).whileTrue(switchAutomaticOrManual(
       // Automatic
-      new DeployIntake(m_intake).alongWith(new RunCommand(() -> m_launcher.setFeederSpeed(0, FeederConstants.UnjamSpeed.get()), m_launcher)),
+      new DeployIntake(m_intake, m_launcher),
       // Manual
       new InstantCommand()
     ));
