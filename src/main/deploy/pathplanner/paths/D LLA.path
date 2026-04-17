@@ -8,7 +8,7 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6971611982881585,
+        "x": 1.6971611982881583,
         "y": 5.930513552068473
       },
       "isLocked": false,
@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 3.0165422077922077,
-        "y": 6.51224025974026
+        "x": 1.7359771754636228,
+        "y": 4.714279600570615
       },
       "prevControl": {
-        "x": 2.809885877318117,
-        "y": 6.176348074179743
+        "x": 2.188830242510699,
+        "y": 5.82700427960057
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "LeftLaunch"
+      "linkedName": "LeftLaunchAssist"
     }
   ],
   "rotationTargets": [],
@@ -68,7 +68,7 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": -56.619427259952374
+    "rotation": -14.260711583026575
   },
   "reversed": false,
   "folder": "Left",
