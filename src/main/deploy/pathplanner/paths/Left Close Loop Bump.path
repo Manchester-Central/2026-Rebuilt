@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 6.668779620853082,
-        "y": 4.292914691943127
+        "x": 6.717360912981454,
+        "y": 4.106162624821684
       },
       "prevControl": {
-        "x": 7.732660078450526,
-        "y": 4.280543988947809
+        "x": 7.781241370578899,
+        "y": 4.093791921826365
       },
       "nextControl": {
-        "x": 5.744585308056874,
-        "y": 4.303661137440757
+        "x": 5.793166600185247,
+        "y": 4.116909070319314
       },
       "isLocked": false,
       "linkedName": null
@@ -70,7 +70,7 @@
     {
       "name": "Intake",
       "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": 1.1397704253882508,
+      "endWaypointRelativePos": 1.4422687373396275,
       "command": {
         "type": "named",
         "data": {
@@ -80,7 +80,7 @@
     },
     {
       "name": "RetractBump",
-      "waypointRelativePos": 1.5,
+      "waypointRelativePos": 1.5827143821742022,
       "endWaypointRelativePos": 2.0,
       "command": {
         "type": "named",
