@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.694404685731094,
-        "y": 6.758098858766655
+        "x": 8.062981455064193,
+        "y": 7.314950071326677
       },
       "isLocked": false,
       "linkedName": "MidLeftStart"
@@ -90,7 +90,7 @@
     {
       "name": "Intake",
       "waypointRelativePos": 0,
-      "endWaypointRelativePos": 1.7663740715732605,
+      "endWaypointRelativePos": 2.1877110060769818,
       "command": {
         "type": "named",
         "data": {
