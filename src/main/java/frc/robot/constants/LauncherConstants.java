@@ -67,7 +67,7 @@ public final class LauncherConstants {
 
   public static final DashboardNumber LauncherSpeed = new DashboardNumber("Launcher/ManualLaunchSpeed", 0.6); 
   public static final DashboardNumber UnjamSpeed = new DashboardNumber("Launcher/UnjamSpeed", -0.3); 
-  public static final DashboardUnit <AngleUnit, Angle> IntakePivotJostleAngle = new DashboardUnit<>("Launcher/Intake/IntakePivotJostleAngle", Degrees.of(108));
+  public static final DashboardUnit <AngleUnit, Angle> IntakePivotJostleAngle = new DashboardUnit<>("Launcher/Intake/IntakePivotJostleAngle", Degrees.of(140));
 
   public static final Distance LauncherToHubHeight = FieldDimensions.HubHeight.minus(LauncherHeight);
 
@@ -77,7 +77,7 @@ public final class LauncherConstants {
   public static final FieldPose2026[] PassPoints = new FieldPose2026[] {LeftPassPoint, RightPassPoint};
 
   public static final DashboardUnit<AngleUnit, Angle> AimYawTolerance = new DashboardUnit<>("Launcher/AimYawTolerance", Degrees.of(3.5)); // tested with 3
-  public static final DashboardUnit<AngleUnit, Angle> LaunchYawTolerance = new DashboardUnit<>("Launcher/LaunchYawTolerance", Degrees.of(6));
+  public static final DashboardUnit<AngleUnit, Angle> LaunchYawTolerance = new DashboardUnit<>("Launcher/LaunchYawTolerance", Degrees.of(8));
   
   public static final DashboardUnit<TimeUnit, Time> AutoLaunchTime = new DashboardUnit<>("Launcher/AutoLaunchTime", Seconds.of(3.6));
 
@@ -229,6 +229,7 @@ public final class LauncherConstants {
     public static final int SensorIndex = 1;
 
     public static final DashboardNumber UnjamSpeed = new DashboardNumber("Launcher/Feeder/UnjamSpeed", -1.0);
+    public static final DashboardNumber OuttakeSpeed = new DashboardNumber("Launcher/Feeder/OuttakeSpeed", -0.4);
     public static final DashboardNumber FeederSpeed = new DashboardNumber("Launcher/Feeder/FeederSpeed", 0.3);
     public static final DashboardNumber BottomFeederSpeed = new DashboardNumber("Launcher/Feeder/BottomFeederSpeed", 1);
     public static final DashboardNumber TopFeederSpeed = new DashboardNumber("Launcher/Feeder/TopFeederSpeed", 0.6);

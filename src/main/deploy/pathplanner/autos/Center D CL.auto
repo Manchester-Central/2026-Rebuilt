@@ -21,24 +21,6 @@
           "data": {
             "name": "LaunchHub"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "CL O"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 2.8
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "O CL"
-          }
         }
       ]
     }

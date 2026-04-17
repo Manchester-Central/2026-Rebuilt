@@ -40,7 +40,7 @@ public class Launcher extends SubsystemBase {
 
   Debouncer m_fallingDebouncer = new Debouncer(10.0, DebounceType.kFalling);
   boolean m_atVelocityDebouced = false;
-  double m_flywheelMarkiplier = 1.0;
+  double m_flywheelMarkiplier = 1.005;
 
 
 
@@ -294,8 +294,13 @@ public class Launcher extends SubsystemBase {
     return FieldPose.getDistanceFromLocations(launcherPose, FieldPose2026.HubCenter.getCurrentAlliancePose());
   }
 
-  public TableRow getLookupTableRow() {
-    var lookedUpSpeed = FlywheelTable.getInstance().performLookup(getDisplacementFromHub());
+  public TableRow getLaunchLookupTableRow() {
+    var lookedUpSpeed = FlywheelTable.getLaunchInstance().performLookup(getDisplacementFromHub());
+    return lookedUpSpeed;
+  }
+
+  public TableRow getPassLookupTableRow() {
+    var lookedUpSpeed = FlywheelTable.getPassInstance().performLookup(getDisplacementFromHub());
     return lookedUpSpeed;
   }
 

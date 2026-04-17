@@ -52,9 +52,10 @@ public final class IntakeConstants {
   public static final DashboardNumber ManualPivotSpeedMultiplier = new DashboardNumber("Intake/ManualPivotSpeedMultiplier", 0.4);
 
   // Speeds
-  public static final DashboardNumber IntakeRollerSpeed = new DashboardNumber("Intake/IntakeRollerSpeed", 1
-  );
+  public static final DashboardNumber IntakeRollerSpeed = new DashboardNumber("Intake/IntakeRollerSpeed", 1);
+  public static final DashboardNumber DeployNetRollerSpeed = new DashboardNumber("Intake/DeployNetRollerSpeed", -0.15);
   public static final DashboardNumber OuttakeRollerSpeed = new DashboardNumber("Intake/OuttakeRollerSpeed", -0.8);
+  public static final DashboardNumber LaunchingRollerSpeed = new DashboardNumber("Intake/LaunchingRollerSpeed", 0.2);
 
   public static final class RollerConstants {
     public static final CanId InnerRollerCanId = CanId.ID_33;

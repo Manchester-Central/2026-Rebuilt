@@ -8,7 +8,7 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.133352353780314,
+        "x": 1.7877318116975744,
         "y": 5.878758915834522
       },
       "isLocked": false,
@@ -16,19 +16,24 @@
     },
     {
       "anchor": {
-        "x": 1.9537831325301207,
-        "y": 2.6362530120481926
+        "x": 1.8653637660485018,
+        "y": 2.5535235378031382
       },
       "prevControl": {
-        "x": 2.175891583452211,
-        "y": 3.0322539229671905
+        "x": 2.589928673323822,
+        "y": 2.592339514978602
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "CenterLaunch"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.6908315565031976,
+      "rotationDegrees": -90.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],

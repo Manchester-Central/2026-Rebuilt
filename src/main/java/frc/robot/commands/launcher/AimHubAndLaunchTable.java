@@ -54,7 +54,7 @@ public class AimHubAndLaunchTable extends BaseLaunchCommand {
 
   @Override
   protected void preExecute() {
-    m_flywheelTableRow = m_launcher.getLookupTableRow();
+    m_flywheelTableRow = m_launcher.getLaunchLookupTableRow();
   }
 
   @Override

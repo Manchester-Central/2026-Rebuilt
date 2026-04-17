@@ -101,7 +101,7 @@ public abstract class BaseLaunchCommand extends Command {
   public void execute() {
     preExecute();
     prepLauncher();
-    m_intake.setRollerSpeed(IntakeConstants.IntakeRollerSpeed.get());
+    m_intake.setRollerSpeed(IntakeConstants.LaunchingRollerSpeed.get());
     m_intake.setPivotAngle(getIntakePivotAngle()); // TODO: Testing only
 
     if (isFacingTarget() && isLauncherReady()) {
