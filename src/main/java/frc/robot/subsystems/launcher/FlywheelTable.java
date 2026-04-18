@@ -18,11 +18,11 @@ import edu.wpi.first.units.measure.Distance;
 public class FlywheelTable extends LookupTable<DistanceUnit, Distance, TableRow> {
 
   private static final List<TableRow> LaunchRows = List.of(
-    new TableRow(Meters.of(2.21), MetersPerSecond.of(15.5), 0.29),
+    new TableRow(Meters.of(2.21), MetersPerSecond.of(15), 0.29), //15
     new TableRow(Meters.of(2.6), MetersPerSecond.of(17), 0.24),
-    new TableRow(Meters.of(3.08), MetersPerSecond.of(20), 0.25),
-    new TableRow(Meters.of(3.4), MetersPerSecond.of(21.4), 0.25),
-    new TableRow(Meters.of(4), MetersPerSecond.of(28), 0.25)
+    new TableRow(Meters.of(3.08), MetersPerSecond.of(20), 0.25), //20
+    new TableRow(Meters.of(3.4), MetersPerSecond.of(22), 0.25), //21
+    new TableRow(Meters.of(4), MetersPerSecond.of(30), 0.25) //28
     // new TableRow(Meters.of(3),  MetersPerSecond.of(38))
   );
 

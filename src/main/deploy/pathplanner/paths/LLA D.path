@@ -3,36 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.6361911554921535,
-        "y": 5.943452211126962
+        "x": 1.7359771754636228,
+        "y": 4.714279600570615
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6971611982881585,
-        "y": 5.930513552068473
+        "x": 2.201768901569186,
+        "y": 5.594108416547789
       },
       "isLocked": false,
-      "linkedName": "Depot"
+      "linkedName": "LeftLaunchAssist"
     },
     {
       "anchor": {
-        "x": 3.0165422077922077,
-        "y": 6.51224025974026
+        "x": 0.6361911554921535,
+        "y": 5.943452211126962
       },
       "prevControl": {
-        "x": 2.809885877318117,
-        "y": 6.176348074179743
+        "x": 2.227646219686162,
+        "y": 6.046961483594864
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "LeftLaunch"
+      "linkedName": "Depot"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.6289978678038358,
+      "rotationDegrees": 0.0
+    }
+  ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.7908979089790895,
+      "minWaypointRelativePos": 0.8993923024983114,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.0,
@@ -48,8 +53,8 @@
   "eventMarkers": [
     {
       "name": "Intake",
-      "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": 0.3702337023370234,
+      "waypointRelativePos": 0.3911439114391146,
+      "endWaypointRelativePos": 1.0,
       "command": {
         "type": "named",
         "data": {
@@ -68,13 +73,13 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": -56.619427259952374
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Left",
   "idealStartingState": {
     "velocity": 1.0,
-    "rotation": 0.0
+    "rotation": -14.260711583026575
   },
   "useDefaultConstraints": true
 }

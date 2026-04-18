@@ -93,9 +93,9 @@ public final class IntakeConstants {
 
     public static double SensorToMechanismRatio = 42.603; //TODO: tune 
 
-    public static final DashboardUnit<CurrentUnit, Current> pivotHighSupplyCurrentLimit = new DashboardUnit<>("pivotHigh/SupplyCurrentLimit", Amps.of(50));
-    public static final DashboardUnit<CurrentUnit, Current> pivotHighStatorCurrentLimit = new DashboardUnit<>("pivotHigh/StatorCurrentLimit", Amps.of(50));
-    public static final DashboardUnit<CurrentUnit, Current> pivotHighSupplyCurrentLowerLimit = new DashboardUnit<>("pivotHigh/SupplyCurrentLowerLimit", Amps.of(50));
+    public static final DashboardUnit<CurrentUnit, Current> pivotHighSupplyCurrentLimit = new DashboardUnit<>("pivotHigh/SupplyCurrentLimit", Amps.of(60));
+    public static final DashboardUnit<CurrentUnit, Current> pivotHighStatorCurrentLimit = new DashboardUnit<>("pivotHigh/StatorCurrentLimit", Amps.of(70));
+    public static final DashboardUnit<CurrentUnit, Current> pivotHighSupplyCurrentLowerLimit = new DashboardUnit<>("pivotHigh/SupplyCurrentLowerLimit", Amps.of(60));
 
     public static final DashboardUnit<CurrentUnit, Current> pivotLowSupplyCurrentLimit = new DashboardUnit<>("pivotLow/SupplyCurrentLimit", Amps.of(10));
     public static final DashboardUnit<CurrentUnit, Current> pivotLowStatorCurrentLimit = new DashboardUnit<>("pivotLow/StatorCurrentLimit", Amps.of(10));

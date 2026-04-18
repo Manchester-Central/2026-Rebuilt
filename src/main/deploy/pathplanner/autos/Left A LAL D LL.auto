@@ -5,21 +5,27 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "Left MLS"
+            "waitTime": 2.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Left Far Loop Bump"
+            "pathName": "Left A MLS"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "LB LL"
+            "pathName": "Left Assist Loop Bump"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LB LLA"
           }
         },
         {
@@ -31,37 +37,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LL MLS"
+            "pathName": "LLA D"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Left Close Loop Bump"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "LB LL"
+            "pathName": "D LLA"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "LaunchHub"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "LL MLS"
           }
         }
       ]
     }
   },
-  "resetOdom": false,
+  "resetOdom": true,
   "folder": "Left",
   "choreoAuto": false
 }

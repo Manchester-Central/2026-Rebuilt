@@ -32,16 +32,16 @@
     },
     {
       "anchor": {
-        "x": 6.518329383886257,
-        "y": 3.75559241706161
+        "x": 6.639728958630526,
+        "y": 3.937960057061342
       },
       "prevControl": {
-        "x": 6.755500208398885,
-        "y": 3.8346493585658195
+        "x": 6.8875765861480405,
+        "y": 3.970694649374976
       },
       "nextControl": {
-        "x": 5.68010663507109,
-        "y": 3.476184834123222
+        "x": 5.953980028530669,
+        "y": 3.8473894436519256
       },
       "isLocked": false,
       "linkedName": null
@@ -69,8 +69,8 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.3403106009453074,
-      "maxWaypointRelativePos": 1.4503713706954762,
+      "minWaypointRelativePos": 0.8183659689399034,
+      "maxWaypointRelativePos": 2.3254557731262744,
       "constraints": {
         "maxVelocity": 2.4,
         "maxAcceleration": 3.0,
@@ -86,7 +86,7 @@
     {
       "name": "Intake",
       "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": 2.0094530722484816,
+      "endWaypointRelativePos": 2.390276839972988,
       "command": {
         "type": "named",
         "data": {
@@ -96,7 +96,7 @@
     },
     {
       "name": "RetractBump",
-      "waypointRelativePos": 2.6,
+      "waypointRelativePos": 2.714382174206612,
       "endWaypointRelativePos": 3.0,
       "command": {
         "type": "named",
