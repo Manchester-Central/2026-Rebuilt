@@ -278,7 +278,7 @@
 //    * @param pathJson Updated JSONObject for the path
 //    */
 //   public void hotReload(JSONObject pathJson) {
-//     PathPlannerPath updatedPath = PathPlannerPath.fromJson(pathJson);
+//     MultiplayerPathPlannerPath updatedPath = MultiplayerPathPlannerPath.fromJson(pathJson);
 
 //     this.waypoints = updatedPath.waypoints;
 //     this.rotationTargets = updatedPath.rotationTargets;
@@ -305,7 +305,7 @@
 //    * @throws ParseException If the JSON cannot be parsed
 //    * @throws FileVersionException If the file version does not match the expected version
 //    */
-//   public static PathPlannerPath fromPathFile(String pathName)
+//   public MultiplayerPathPlannerPath fromPathFile(String pathName)
 //       throws IOException, ParseException, FileVersionException {
 //     if (pathCache.containsKey(pathName)) {
 //       return pathCache.get(pathName);
@@ -332,15 +332,15 @@
 //         throw new FileVersionException(version, "2025.X", pathName + ".path");
 //       }
 
-//       PathPlannerPath path = PathPlannerPath.fromJson(json);
+//       MultiplayerPathPlannerPath path = MultiplayerPathPlannerPath.fromJson(json);
 //       path.name = pathName;
-//       PPLibTelemetry.registerHotReloadPath(pathName, path);
+//       // PPLibTelemetry.registerHotReloadPath(pathName, path);
 //       pathCache.put(pathName, path);
 //       return path;
 //     }
 //   }
 
-//   private static void loadChoreoTrajectoryIntoCache(String trajectoryName)
+//   private void loadChoreoTrajectoryIntoCache(String trajectoryName)
 //       throws IOException, ParseException, FileVersionException {
 //     try (BufferedReader br =
 //         new BufferedReader(
@@ -445,7 +445,7 @@
 //       fullEvents.sort(Comparator.comparingDouble(Event::getTimestampSeconds));
 
 //       // Add the full path to the cache
-//       PathPlannerPath fullPath = new PathPlannerPath();
+//       MultiplayerPathPlannerPath fullPath = new MultiplayerPathPlannerPath();
 //       fullPath.globalConstraints = PathConstraints.unlimitedConstraints(12.0);
 //       fullPath.idealStartingState =
 //           new IdealStartingState(
@@ -506,7 +506,7 @@
 //           }
 //         }
 
-//         PathPlannerPath path = new PathPlannerPath();
+//         MultiplayerPathPlannerPath path = new MultiplayerPathPlannerPath();
 //         path.globalConstraints = PathConstraints.unlimitedConstraints(12.0);
 //         path.idealStartingState =
 //             new IdealStartingState(
@@ -545,7 +545,7 @@
 //    * @throws ParseException If the JSON cannot be parsed
 //    * @throws FileVersionException If the file version does not match the expected version
 //    */
-//   public static PathPlannerPath fromChoreoTrajectory(String trajectoryName, int splitIndex)
+//   public MultiplayerPathPlannerPath fromChoreoTrajectory(String trajectoryName, int splitIndex)
 //       throws IOException, ParseException, FileVersionException {
 //     String cacheName = trajectoryName + "." + splitIndex;
 
@@ -570,7 +570,7 @@
 //    * @throws ParseException If the JSON cannot be parsed
 //    * @throws FileVersionException If the file version does not match the expected version
 //    */
-//   public static PathPlannerPath fromChoreoTrajectory(String trajectoryName)
+//   public MultiplayerPathPlannerPath fromChoreoTrajectory(String trajectoryName)
 //       throws IOException, ParseException, FileVersionException {
 //     if (choreoPathCache.containsKey(trajectoryName)) {
 //       return choreoPathCache.get(trajectoryName);
@@ -597,12 +597,12 @@
 //   }
 
 //   /** Clear the cache of previously loaded paths. */
-//   public static void clearCache() {
+//   public void clearCache() {
 //     pathCache.clear();
 //     choreoPathCache.clear();
 //   }
 
-//   private static PathPlannerPath fromJson(JSONObject pathJson) {
+//   private MultiplayerPathPlannerPath fromJson(JSONObject pathJson) {
 //     List<Waypoint> waypoints = waypointsFromJson((JSONArray) pathJson.get("waypoints"));
 //     PathConstraints globalConstraints =
 //         PathConstraints.fromJson((JSONObject) pathJson.get("globalConstraints"));
@@ -631,7 +631,7 @@
 //       eventMarkers.add(EventMarker.fromJson((JSONObject) markerJson));
 //     }
 
-//     return new PathPlannerPath(
+//     return new MultiplayerPathPlannerPath(
 //         waypoints,
 //         rotationTargets,
 //         pointTowardsZones,
@@ -1172,14 +1172,14 @@
 //    *
 //    * @return The flipped path
 //    */
-//   public PathPlannerPath flipPath() {
+//   public MultiplayerPathPlannerPath flipPath() {
 //     Optional<PathPlannerTrajectory> flippedTraj = Optional.empty();
 //     if (idealTrajectory.isPresent()) {
 //       // Flip the ideal trajectory
 //       flippedTraj = Optional.of(idealTrajectory.get().flip());
 //     }
 
-//     PathPlannerPath path = new PathPlannerPath();
+//     MultiplayerPathPlannerPath path = new MultiplayerPathPlannerPath();
 //     path.waypoints = waypoints.stream().map(Waypoint::flip).toList();
 //     path.rotationTargets = rotationTargets.stream().map(RotationTarget::flip).toList();
 //     path.pointTowardsZones = pointTowardsZones.stream().map(PointTowardsZone::flip).toList();
@@ -1213,8 +1213,8 @@
 //    *
 //    * @return The mirrored path
 //    */
-//   public PathPlannerPath mirrorPath() {
-//     PathPlannerPath path = new PathPlannerPath();
+//   public MultiplayerPathPlannerPath mirrorPath() {
+//     MultiplayerPathPlannerPath path = new MultiplayerPathPlannerPath();
 
 //     Optional<PathPlannerTrajectory> mirroredTraj = Optional.empty();
 //     if (idealTrajectory.isPresent()) {
@@ -1390,7 +1390,7 @@
 //   public boolean equals(Object o) {
 //     if (this == o) return true;
 //     if (o == null || getClass() != o.getClass()) return false;
-//     PathPlannerPath that = (PathPlannerPath) o;
+//     MultiplayerPathPlannerPath that = (MultiplayerPathPlannerPath) o;
 //     return Objects.equals(waypoints, that.waypoints)
 //         && Objects.equals(rotationTargets, that.rotationTargets)
 //         && Objects.equals(pointTowardsZones, that.pointTowardsZones)
