@@ -114,6 +114,7 @@ public class Launcher extends SubsystemBase {
     return m_hood.atTargetHoodAngle();
   }
 
+
   /**
    * Returns true if flywheel velocity and hood angle are within the proper tolerances.
    */

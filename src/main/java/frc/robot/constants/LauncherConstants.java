@@ -182,10 +182,13 @@ public final class LauncherConstants {
     public static final DashboardNumber ManualHoodSpeedMultiplier = new DashboardNumber("Launcher/Hood/ManualHoodSpeedMultiplier", 0.08);
     public static final Distance HoodRadius = Inches.of(9);
     public static final Mass HoodMass = Kilogram.of(2.26796); 
-    public static final Angle HoodMinAngle = Degrees.of(40);
+    public static final Angle HoodMinAngle = Degrees.of(50);
     public static final Angle HoodMaxAngle = Degrees.of(85); 
 
-    public static final double SensorToMechanismRatio = 19; // TODO check or change
+    public static final double PulleyTeethIn = 18;
+    public static final double PulleyTeethOut = 18;
+
+    public static final double SensorToMechanismRatio = 19*(PulleyTeethOut/PulleyTeethIn); // TODO check or change
     public static final TalonFXConfiguration HoodConfig = new TalonFXConfiguration()
         .withMotorOutput(new MotorOutputConfigs()
             .withInverted(InvertedValue.Clockwise_Positive) // TODO: check
