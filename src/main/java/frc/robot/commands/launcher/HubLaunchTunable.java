@@ -18,9 +18,9 @@ import frc.robot.subsystems.launcher.Launcher;
 /**
  * Creates a launch command using values from the dashboard
  */
-public class AimHubAndLaunchTunable extends BaseLaunchCommand {
+public class HubLaunchTunable extends BaseLaunchCommand {
 
-  public AimHubAndLaunchTunable(Launcher launcher, Drive swerveDrive, Intake intake) {
+  public HubLaunchTunable(Launcher launcher, Drive swerveDrive, Intake intake) {
     super(launcher, swerveDrive, intake);
   }
 

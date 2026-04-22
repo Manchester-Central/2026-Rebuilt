@@ -12,12 +12,8 @@ import java.util.Optional;
 import com.chaos131.poses.FieldPose;
 import com.chaos131.poses.FieldPose2026;
 
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.wpilibj.Timer;
-import frc.robot.constants.FieldDimensions;
-import frc.robot.constants.IntakeConstants;
-import frc.robot.constants.LauncherConstants.FeederConstants;
+import frc.robot.constants.LauncherConstants;
 import frc.robot.constants.LauncherConstants.HoodConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
@@ -25,56 +21,45 @@ import frc.robot.subsystems.launcher.Launcher;
 import frc.robot.subsystems.launcher.TableRow;
 
 /**
- * Creates a launch command using the lookup table
+ * Creates a launch command that passes to a pass point using a lookup table
  */
-public class AimHubAndLaunchTable extends BaseLaunchCommand {
+public class PassLaunchNoJostle extends BaseLaunchCommand {
   private TableRow m_flywheelTableRow = new TableRow(Inches.of(0), MetersPerSecond.of(0), 0.0);
 
-  private Timer m_intakeTimer = new Timer();
-
-  public AimHubAndLaunchTable(Launcher launcher, Drive swerveDrive, Intake intake) {
+  public PassLaunchNoJostle(Launcher launcher, Drive swerveDrive, Intake intake) {
     super(launcher, swerveDrive, intake);
   }
 
   @Override
-  public void initialize() {
-    super.initialize();
-    m_intakeTimer.restart();
-  }
-
-
-  @Override
   protected Optional<FieldPose> getTargetPose() {
-    return Optional.of(FieldPose2026.HubCenter);
+    return Optional.of(FieldPose2026.getClosestPose(m_swerveDrive.getPose(), LauncherConstants.PassPoints));
   }
 
   @Override
   protected Optional<Distance> getTargetHeight() {
-    return Optional.of(FieldDimensions.HubHeight);
+    return Optional.of(Inches.of(0));
   }
 
   @Override
   protected void preExecute() {
-    m_flywheelTableRow = m_launcher.getLaunchLookupTableRow();
+    m_flywheelTableRow = m_launcher.getPassLookupTableRow(); // TODO: might need to be a separate lookup table for hub launching
   }
 
   @Override
   protected void prepLauncher() {
     m_launcher.setFlywheelVelocity(m_flywheelTableRow.getLaunchSpeed());
-    m_launcher.setHoodAngle(HoodConstants.HoodMaxAngle); 
+    m_launcher.setHoodAngle(HoodConstants.HoodMinAngle);
   }
 
   @Override
   protected void enableFeederForLauncher() {
-    m_launcher.setFeederSpeed(FeederConstants.BottomFeederSpeed.get(), FeederConstants.TopFeederSpeed.get()); 
+    m_launcher.setFeederSpeed(m_flywheelTableRow.getFeederSpeed());
   }
 
   @Override
-  public Angle getIntakePivotAngle(){
-    return IntakeConstants.PivotConstants.DeployAngle.get();
-   
-    
-   
+  public void end(boolean interrupted) {
+    // TODO Auto-generated method stub
+    super.end(interrupted);
+    m_launcher.setHoodAngle(HoodConstants.HoodMaxAngle);
   }
-
 }

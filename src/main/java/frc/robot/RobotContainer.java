@@ -47,10 +47,10 @@ import frc.robot.commands.intake.DeployIntake;
 import frc.robot.commands.intake.DeployOuttake;
 import frc.robot.commands.intake.RetractBump;
 import frc.robot.commands.intake.RetractIntake;
-import frc.robot.commands.launcher.AimHubAndLaunchJostle;
-import frc.robot.commands.launcher.AimHubAndLaunchTable;
-import frc.robot.commands.launcher.AimHubAndLaunchTunable;
-import frc.robot.commands.launcher.AimPassAndLaunchJostle;
+import frc.robot.commands.launcher.HubLaunch;
+import frc.robot.commands.launcher.HubLaunchNoJostle;
+import frc.robot.commands.launcher.HubLaunchTunable;
+import frc.robot.commands.launcher.PassLaunch;
 import frc.robot.commands.manual.IntakeManualCommand;
 import frc.robot.commands.manual.LauncherManualCommand;
 import frc.robot.constants.FieldDimensions;
@@ -201,9 +201,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("DeployIntake", new DeployIntake(m_intake, m_launcher));
     NamedCommands.registerCommand("RetractIntake", new RetractIntake(m_intake));
     NamedCommands.registerCommand("RetractBump", new RetractBump(m_intake));
-    NamedCommands.registerCommand("LaunchHub", new AimHubAndLaunchJostle(m_launcher, m_swerveDrive, m_intake)
+    NamedCommands.registerCommand("LaunchHub", new HubLaunch(m_launcher, m_swerveDrive, m_intake)
             .deadlineFor(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter)));
-    NamedCommands.registerCommand("LaunchPass", new AimPassAndLaunchJostle(m_launcher, m_swerveDrive, m_intake)
+    NamedCommands.registerCommand("LaunchPass", new PassLaunch(m_launcher, m_swerveDrive, m_intake)
             .deadlineFor(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
   }
 
@@ -294,7 +294,7 @@ public class RobotContainer {
     // RT: Aim and score in hub (if manual mode, only aim drive)
     m_driver.rightTrigger().whileTrue(switchAutomaticOrManual(
       // automatic
-      new AimHubAndLaunchJostle(m_launcher, m_swerveDrive, m_intake)
+      new HubLaunch(m_launcher, m_swerveDrive, m_intake)
         .alongWith(getAimWithXCommand(FieldPose2026.HubCenter)),
       // manual
       getAimAtFieldPosesCommand(FieldPose2026.HubCenter)
@@ -309,7 +309,7 @@ public class RobotContainer {
     ));
     // B: 
     m_driver.b().whileTrue(switchAutomaticOrManual(
-    new AimHubAndLaunchTable(m_launcher, m_swerveDrive, m_intake)
+    new HubLaunchNoJostle(m_launcher, m_swerveDrive, m_intake)
     .alongWith(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter)),
      getAimAtFieldPosesCommand(FieldPose2026.HubCenter))); 
     // X: Set drive to X mode (defensive position)
@@ -344,18 +344,18 @@ public class RobotContainer {
     // RT: manually run flywheels and feeder
     m_operator.rightTrigger().whileTrue(switchAutomaticOrManual(
       // automatic
-      new AimHubAndLaunchTunable(m_launcher, m_swerveDrive, m_intake),
+      new HubLaunchTunable(m_launcher, m_swerveDrive, m_intake),
       // manual
       // new RunCommand(() -> {
       //   m_launcher.setFeederSpeed(FeederConstants.FeederSpeed.get());
       //   m_launcher.setFlywheelSpeed(LauncherConstants.LauncherSpeed.get());
       // }, m_launcher) 
-      new AimHubAndLaunchTunable(m_launcher, m_swerveDrive, m_intake)
+      new HubLaunchTunable(m_launcher, m_swerveDrive, m_intake)
     ));
     // LB: Unjam intake (automatic and manual mode)
     m_operator.leftBumper().whileTrue(switchAutomaticOrManual(
       // Automatic
-      new AimPassAndLaunchJostle(m_launcher, m_swerveDrive, m_intake)
+      new PassLaunch(m_launcher, m_swerveDrive, m_intake)
         .alongWith(getAimWithXCommand(() -> DriveDirection.Towards.getAllianceAngle().getMeasure())),
       // manual
       new RunCommand(() -> m_intake.setRollerSpeed(IntakeConstants.OuttakeRollerSpeed.get()), m_intake)
