@@ -67,7 +67,7 @@ public class AimPassAndLaunchJostle extends BaseLaunchCommand {
   protected void prepLauncher() {
     m_launcher.setFlywheelVelocity(m_flywheelTableRow.getLaunchSpeed());
     m_launcher.setHoodAngle(HoodConstants.HoodMinAngle);
-  }
+   }
 
   @Override
   protected void enableFeederForLauncher() {
