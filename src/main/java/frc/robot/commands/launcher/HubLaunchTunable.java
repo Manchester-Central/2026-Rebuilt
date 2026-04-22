@@ -8,7 +8,9 @@ import java.util.Optional;
 
 import com.chaos131.poses.FieldPose;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
+import frc.robot.constants.IntakeConstants;
 import frc.robot.constants.LauncherConstants.FeederConstants;
 import frc.robot.constants.LauncherConstants.FlywheelConstants;
 import frc.robot.subsystems.drive.Drive;
@@ -42,5 +44,10 @@ public class HubLaunchTunable extends BaseLaunchCommand {
   @Override
   protected void enableFeederForLauncher() {
     m_launcher.setFeederSpeed(FeederConstants.BottomFeederSpeed.get(), FeederConstants.TopFeederSpeed.get());
+  }
+
+  @Override
+  public Angle getIntakePivotAngle(){
+    return IntakeConstants.PivotConstants.DeployAngle.get();
   }
 }

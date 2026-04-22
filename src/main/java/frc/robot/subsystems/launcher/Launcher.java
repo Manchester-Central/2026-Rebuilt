@@ -301,7 +301,7 @@ public class Launcher extends SubsystemBase {
   }
 
   public TableRow getPassLookupTableRow() {
-    var lookedUpSpeed = FlywheelTable.getPassInstance().performLookup(getDisplacementFromHub());
+    var lookedUpSpeed = FlywheelTable.getPassInstance().performLookup(getDisplacementFromHub()); // TODO: Displacement from HUB seems wrong here
     return lookedUpSpeed;
   }
 

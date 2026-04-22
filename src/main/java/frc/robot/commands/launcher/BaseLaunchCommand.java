@@ -33,6 +33,7 @@ public abstract class BaseLaunchCommand extends Command {
   protected Drive m_swerveDrive;
   protected Intake m_intake;
   protected Timer m_launchTimer = new Timer();
+  protected Timer m_intakeTimer = new Timer();
   protected boolean m_hasLaunched = false;
 
   /** Creates a new BaseLaunchCommand. */
@@ -49,12 +50,13 @@ public abstract class BaseLaunchCommand extends Command {
     m_hasLaunched = false;
     m_launchTimer.stop();
     m_launchTimer.reset();
+    m_intakeTimer.restart();
   }
 
   /** This function can be override to allow setting variables before the abstract functions are called in each execute() loop */
   protected void preExecute() {}
 
-  protected boolean isFacingTarget() {
+  protected boolean isFacingTarget(Angle tolerance) {
     var targetPose = getTargetPose();
     var targetHeight = getTargetHeight();
     if (targetPose.isEmpty() || targetHeight.isEmpty()) {
@@ -68,24 +70,7 @@ public abstract class BaseLaunchCommand extends Command {
     Logger.recordOutput("Launcher/TargetAngle", targetAngle.in(Degrees));
     Logger.recordOutput("Launcher/CurrentAngle", currentAngle.in(Degrees));
     Logger.recordOutput("Launcher/AngleDif", targetAngle.minus(currentAngle).in(Degrees));
-    return targetAngle.isNear(currentAngle, LauncherConstants.AimYawTolerance.get());
-  }
-
-  protected boolean isFacingLaunchTarget() {
-    var targetPose = getTargetPose();
-    var targetHeight = getTargetHeight();
-    if (targetPose.isEmpty() || targetHeight.isEmpty()) {
-      return true;
-    }
-
-    Pose2d currentPose = m_swerveDrive.getPose();
-    Angle currentAngle = currentPose.getRotation().getMeasure();
-    Angle targetAngle = m_launcher.getYawForTarget(m_swerveDrive, targetPose.get().getCurrentAlliancePose(), targetHeight.get());
-
-    Logger.recordOutput("Launcher/TargetAngle", targetAngle.in(Degrees));
-    Logger.recordOutput("Launcher/CurrentAngle", currentAngle.in(Degrees));
-    Logger.recordOutput("Launcher/AngleDif", targetAngle.minus(currentAngle).in(Degrees));
-    return targetAngle.isNear(currentAngle, LauncherConstants.LaunchYawTolerance.get());
+    return targetAngle.isNear(currentAngle, tolerance);
   }
 
   protected boolean isLauncherReady() {
@@ -96,6 +81,15 @@ public abstract class BaseLaunchCommand extends Command {
    return PivotConstants.DeployAngle.get(); 
   }
 
+  protected Angle getJostleAngle() {
+    double seconds = m_intakeTimer.get();
+    int newstep = (int)seconds;
+    if(newstep% 2 == 0){
+      return IntakeConstants.PivotConstants.DeployAngle.get();
+    } else {
+      return LauncherConstants.IntakePivotJostleAngle.get();
+    }
+  }
 
   @Override
   public void execute() {
@@ -104,12 +98,12 @@ public abstract class BaseLaunchCommand extends Command {
     m_intake.setRollerSpeed(IntakeConstants.LaunchingRollerSpeed.get());
     m_intake.setPivotAngle(getIntakePivotAngle()); // TODO: Testing only
 
-    if (isFacingTarget() && isLauncherReady()) {
+    if (isFacingTarget(LauncherConstants.AimYawTolerance.get()) && isLauncherReady()) {
       m_hasLaunched = true;
       m_launchTimer.start();
     }
 
-    if (isFacingLaunchTarget() && m_hasLaunched) {
+    if (isFacingTarget(LauncherConstants.AlreadyLaunchingYawTolerance.get()) && m_hasLaunched) {
       enableFeederForLauncher();
     } else {
       m_launcher.setFeederSpeed(FeederConstants.UnjamSpeed.get());

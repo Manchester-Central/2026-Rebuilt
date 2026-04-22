@@ -77,7 +77,7 @@ public final class LauncherConstants {
   public static final FieldPose2026[] PassPoints = new FieldPose2026[] {LeftPassPoint, RightPassPoint};
 
   public static final DashboardUnit<AngleUnit, Angle> AimYawTolerance = new DashboardUnit<>("Launcher/AimYawTolerance", Degrees.of(3.5)); // tested with 3
-  public static final DashboardUnit<AngleUnit, Angle> LaunchYawTolerance = new DashboardUnit<>("Launcher/LaunchYawTolerance", Degrees.of(8));
+  public static final DashboardUnit<AngleUnit, Angle> AlreadyLaunchingYawTolerance = new DashboardUnit<>("Launcher/AlreadyLaunchingYawTolerance", Degrees.of(8));
   
   public static final DashboardUnit<TimeUnit, Time> AutoLaunchTime = new DashboardUnit<>("Launcher/AutoLaunchTime", Seconds.of(3.6));
 
