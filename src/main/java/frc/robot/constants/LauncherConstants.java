@@ -179,24 +179,24 @@ public final class LauncherConstants {
     public static final DashboardNumber NotReachedMaxSpeed = new DashboardNumber("Launcher/Hood/NotReachedMaxSpeed", 0.02);
     public static final DashboardUnit<AngleUnit, Angle> TargetAngleTolerance = new DashboardUnit<>("Launcher/Hood/TargetAngleTolerance", Degrees.of(1));
     public static final DashboardUnit<AngleUnit, Angle> TunableLaunchAngle = new DashboardUnit<>("Launcher/Hood/TunableLaunchAngle", Degrees.of(75));
-    public static final DashboardNumber ManualHoodSpeedMultiplier = new DashboardNumber("Launcher/Hood/ManualHoodSpeedMultiplier", 0.08);
+    public static final DashboardNumber ManualHoodSpeedMultiplier = new DashboardNumber("Launcher/Hood/ManualHoodSpeedMultiplier", 0.1);
     public static final Distance HoodRadius = Inches.of(9);
     public static final Mass HoodMass = Kilogram.of(2.26796); 
     public static final Angle HoodMinAngle = Degrees.of(50);
     public static final Angle HoodMaxAngle = Degrees.of(85); 
 
-    public static final double PulleyTeethIn = 18;
+    public static final double PulleyTeethIn = 24;
     public static final double PulleyTeethOut = 18;
 
-    public static final double SensorToMechanismRatio = 19*(PulleyTeethOut/PulleyTeethIn); // TODO check or change
+    public static final double SensorToMechanismRatio = 53.5*(PulleyTeethOut/PulleyTeethIn); // TODO check or change
     public static final TalonFXConfiguration HoodConfig = new TalonFXConfiguration()
         .withMotorOutput(new MotorOutputConfigs()
             .withInverted(InvertedValue.Clockwise_Positive) // TODO: check
             .withNeutralMode(NeutralModeValue.Brake))
         .withCurrentLimits(new CurrentLimitsConfigs()
-            .withSupplyCurrentLimit(Amps.of(20)) // TODO: Double CHek
-            .withStatorCurrentLimit(Amps.of(20)) // TODO: Double Check
-            .withSupplyCurrentLowerLimit(Amps.of(40))
+            .withSupplyCurrentLimit(Amps.of(30)) // TODO: Double CHek
+            .withStatorCurrentLimit(Amps.of(30)) // TODO: Double Check
+            .withSupplyCurrentLowerLimit(Amps.of(20))
             .withSupplyCurrentLimitEnable(true)
             .withStatorCurrentLimitEnable(true))
         .withFeedback(new FeedbackConfigs()
