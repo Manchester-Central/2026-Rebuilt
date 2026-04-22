@@ -51,7 +51,6 @@ import frc.robot.commands.launcher.AimHubAndLaunchJostle;
 import frc.robot.commands.launcher.AimHubAndLaunchTable;
 import frc.robot.commands.launcher.AimHubAndLaunchTunable;
 import frc.robot.commands.launcher.AimPassAndLaunchJostle;
-import frc.robot.commands.launcher.AimPassAndLaunchSetAngle;
 import frc.robot.commands.manual.IntakeManualCommand;
 import frc.robot.commands.manual.LauncherManualCommand;
 import frc.robot.constants.FieldDimensions;
@@ -204,10 +203,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("RetractBump", new RetractBump(m_intake));
     NamedCommands.registerCommand("LaunchHub", new AimHubAndLaunchJostle(m_launcher, m_swerveDrive, m_intake)
             .deadlineFor(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter)));
-    NamedCommands.registerCommand("LaunchPass", new AimPassAndLaunchSetAngle(m_launcher, m_swerveDrive, m_intake)
+    NamedCommands.registerCommand("LaunchPass", new AimPassAndLaunchJostle(m_launcher, m_swerveDrive, m_intake)
             .deadlineFor(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
-    // NamedCommands.registerCommand("ClimbReach", new SetClimberHeight(m_climber, ClimberConstants.MaxExtension));
-    // NamedCommands.registerCommand("ClimbEngage", new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension));
   }
 
   private void addAutos() {
