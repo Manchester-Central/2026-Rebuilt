@@ -23,6 +23,7 @@ import frc.robot.constants.FieldDimensions;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.constants.LauncherConstants;
 import frc.robot.constants.LauncherConstants.FeederConstants;
+import frc.robot.constants.LauncherConstants.HoodConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.launcher.Launcher;
@@ -65,6 +66,7 @@ public class AimPassAndLaunchJostle extends BaseLaunchCommand {
   @Override
   protected void prepLauncher() {
     m_launcher.setFlywheelVelocity(m_flywheelTableRow.getLaunchSpeed());
+    m_launcher.setHoodAngle(HoodConstants.HoodMinAngle);
   }
 
   @Override
@@ -119,5 +121,12 @@ public class AimPassAndLaunchJostle extends BaseLaunchCommand {
     } else {
       return LauncherConstants.IntakePivotJostleAngle.get();
     }
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    // TODO Auto-generated method stub
+    super.end(interrupted);
+    m_launcher.setHoodAngle(HoodConstants.HoodMaxAngle);
   }
 }

@@ -203,6 +203,10 @@ public final class LauncherConstants {
             .withRotorToSensorRatio(1) // TODO: Double Check
             .withSensorToMechanismRatio(SensorToMechanismRatio) // TODO: Double Check
             .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor))
+        .withVoltage(new VoltageConfigs()
+            .withPeakForwardVoltage(1) 
+            .withPeakReverseVoltage(-1)
+        )
         .withSlot0(new Slot0Configs() // TODO: CHECK THESE PLEASE
             .withKP(0) // 20.0 tested in sim
             .withKI(0)

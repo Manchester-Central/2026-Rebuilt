@@ -14,6 +14,7 @@ import com.chaos131.poses.FieldPose2026;
 
 import edu.wpi.first.units.measure.Distance;
 import frc.robot.constants.LauncherConstants;
+import frc.robot.constants.LauncherConstants.HoodConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.launcher.Launcher;
@@ -47,10 +48,18 @@ public class AimPassAndLaunchTable extends BaseLaunchCommand {
   @Override
   protected void prepLauncher() {
     m_launcher.setFlywheelVelocity(m_flywheelTableRow.getLaunchSpeed());
+    m_launcher.setHoodAngle(HoodConstants.HoodMinAngle);
   }
 
   @Override
   protected void enableFeederForLauncher() {
     m_launcher.setFeederSpeed(m_flywheelTableRow.getFeederSpeed());
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    // TODO Auto-generated method stub
+    super.end(interrupted);
+    m_launcher.setHoodAngle(HoodConstants.HoodMaxAngle);
   }
 }
