@@ -4,46 +4,50 @@
 
 package frc.robot.commands.launcher;
 
-import static edu.wpi.first.units.Units.Inches;
-
 import java.util.Optional;
 
 import com.chaos131.poses.FieldPose;
-import com.chaos131.poses.FieldPose2026;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
-import frc.robot.constants.LauncherConstants;
+import frc.robot.constants.IntakeConstants;
 import frc.robot.constants.LauncherConstants.FeederConstants;
+import frc.robot.constants.LauncherConstants.FlywheelConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.launcher.Launcher;
 
 /**
- * Creates a launch command that passes to a pass point using physics WITHOUT a moving hood
+ * Creates a launch command using values from the dashboard
  */
-public class AimPassAndLaunchSetAngle extends BaseLaunchCommand {
+public class HubLaunchTunable extends BaseLaunchCommand {
 
-  public AimPassAndLaunchSetAngle(Launcher launcher, Drive swerveDrive, Intake intake) {
+  public HubLaunchTunable(Launcher launcher, Drive swerveDrive, Intake intake) {
     super(launcher, swerveDrive, intake);
   }
 
   @Override
   protected Optional<FieldPose> getTargetPose() {
-    return Optional.of(FieldPose2026.getClosestPose(m_swerveDrive.getPose(), LauncherConstants.PassPoints));
+    return Optional.empty();
   }
 
   @Override
   protected Optional<Distance> getTargetHeight() {
-    return Optional.of(Inches.of(0));
+    return Optional.empty();
   }
 
   @Override
   protected void prepLauncher() {
-    m_launcher.setFlywheelVelocity(m_launcher.getPassVelocitySetAngle(m_swerveDrive.getPose()));
+    m_launcher.setFlywheelVelocity(FlywheelConstants.TunableLaunchVelocity.get());
   }
 
   @Override
   protected void enableFeederForLauncher() {
-    m_launcher.setFeederSpeed(FeederConstants.FeederSpeed.get());
+    m_launcher.setFeederSpeed(FeederConstants.BottomFeederSpeed.get(), FeederConstants.TopFeederSpeed.get());
+  }
+
+  @Override
+  public Angle getIntakePivotAngle(){
+    return IntakeConstants.PivotConstants.DeployAngle.get();
   }
 }
