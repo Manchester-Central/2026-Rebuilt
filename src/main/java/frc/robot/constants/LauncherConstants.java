@@ -182,7 +182,7 @@ public final class LauncherConstants {
     public static final DashboardNumber ManualHoodSpeedMultiplier = new DashboardNumber("Launcher/Hood/ManualHoodSpeedMultiplier", 0.1);
     public static final Distance HoodRadius = Inches.of(9);
     public static final Mass HoodMass = Kilogram.of(2.26796); 
-    public static final Angle HoodMinAngle = Degrees.of(50);
+    public static final Angle HoodMinAngle = Degrees.of(65);
     public static final Angle HoodMaxAngle = Degrees.of(85); 
 
     public static final double PulleyTeethIn = 24;

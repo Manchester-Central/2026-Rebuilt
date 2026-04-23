@@ -21,6 +21,7 @@ import com.chaos131.poses.FieldPose2026;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
@@ -295,13 +296,20 @@ public class Launcher extends SubsystemBase {
     return FieldPose.getDistanceFromLocations(launcherPose, FieldPose2026.HubCenter.getCurrentAlliancePose());
   }
 
+  public Distance getDisplacementFromPassPoint() {
+    var launcherPose = m_swerveDrive.getPose().transformBy(LauncherConstants.LauncherDisplacement);
+    var passPose = LauncherConstants.LeftPassPoint.getCurrentAlliancePose();
+    return FieldPose.getDistanceFromLocations(launcherPose, new Pose2d(passPose.getX(), launcherPose.getY(), Rotation2d.kZero));
+  }
+
+
   public TableRow getLaunchLookupTableRow() {
     var lookedUpSpeed = FlywheelTable.getLaunchInstance().performLookup(getDisplacementFromHub());
     return lookedUpSpeed;
   }
 
   public TableRow getPassLookupTableRow() {
-    var lookedUpSpeed = FlywheelTable.getPassInstance().performLookup(getDisplacementFromHub()); // TODO: Displacement from HUB seems wrong here
+    var lookedUpSpeed = FlywheelTable.getPassInstance().performLookup(getDisplacementFromPassPoint()); // TODO: Displacement from HUB seems wrong here
     return lookedUpSpeed;
   }
 
