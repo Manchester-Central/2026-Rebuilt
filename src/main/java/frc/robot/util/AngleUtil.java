@@ -16,11 +16,11 @@ public class AngleUtil {
     double toleranceDegrees = tolerance.in(Degrees);
 
     if (angleDegrees1 < 0) {
-      angleDegrees1 += 180;
+      angleDegrees1 += 360;
     }
 
     if (angleDegrees2 < 0) {
-      angleDegrees2 += 180;
+      angleDegrees2 += 360;
     }
 
     return Math.abs(angleDegrees1 - angleDegrees2) < toleranceDegrees;
