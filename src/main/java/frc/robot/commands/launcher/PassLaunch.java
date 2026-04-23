@@ -23,6 +23,7 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.launcher.Launcher;
 import frc.robot.subsystems.launcher.TableRow;
+import frc.robot.util.AngleUtil;
 
 /**
  * Creates a launch command using the lookup table
@@ -64,14 +65,15 @@ public class PassLaunch extends BaseLaunchCommand {
 
   @Override
   protected boolean isFacingTarget(Angle tolerance) {
-    Angle targetAngle =  DriveDirection.Towards.getAllianceAngle().getMeasure().plus(Degrees.of(-5));
+    Angle targetAngle =  DriveDirection.Towards.getAllianceAngle().getMeasure();
     Angle currentAngle = m_swerveDrive.getRotation().getMeasure();
 
     Logger.recordOutput("Launcher/TargetAngle", targetAngle.in(Degrees));
     Logger.recordOutput("Launcher/CurrentAngle", currentAngle.in(Degrees));
     Logger.recordOutput("Launcher/AngleDif", targetAngle.minus(currentAngle).in(Degrees));
 
-    return targetAngle.isNear(currentAngle, tolerance);
+    return AngleUtil.isNearWrapped(targetAngle, currentAngle, tolerance);
+    // return targetAngle.isNear(currentAngle, tolerance);
   }
 
   @Override
