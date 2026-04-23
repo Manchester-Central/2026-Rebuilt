@@ -64,7 +64,7 @@ public class PassLaunch extends BaseLaunchCommand {
 
   @Override
   protected boolean isFacingTarget(Angle tolerance) {
-    Angle targetAngle =  DriveDirection.Towards.getAllianceAngle().getMeasure();
+    Angle targetAngle =  DriveDirection.Towards.getAllianceAngle().getMeasure().plus(Degrees.of(-5));
     Angle currentAngle = m_swerveDrive.getRotation().getMeasure();
 
     Logger.recordOutput("Launcher/TargetAngle", targetAngle.in(Degrees));
