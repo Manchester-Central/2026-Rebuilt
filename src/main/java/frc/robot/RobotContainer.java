@@ -278,9 +278,10 @@ public class RobotContainer {
     // LB: Aim and pass (if manual mode, only aim drive)
     m_driver.leftBumper().whileTrue(switchAutomaticOrManual(
       // Automatic
-      new DeployOuttake(m_intake).alongWith(new RunCommand(() -> m_launcher.setFeederSpeed(FeederConstants.OuttakeSpeed.get()), m_launcher)),
+      new PassLaunch(m_launcher, m_swerveDrive, m_intake)
+        .alongWith(getAimWithXCommand(() -> DriveDirection.Towards.getAllianceAngle().getMeasure())),
       // manual
-      new InstantCommand() // getAimAtAngleCommand(() -> DriveDirection.Towards.getAllianceAngle().getMeasure())
+      new InstantCommand()
     ));
     // LT: Intake
     m_driver.leftTrigger().and(m_isAutomaticTrigger).whileTrue(switchAutomaticOrManual(
@@ -315,7 +316,12 @@ public class RobotContainer {
     // X: Set drive to X mode (defensive position)
     m_driver.x().onTrue(Commands.runOnce(m_swerveDrive::stopWithX, m_swerveDrive));
     // Y: Drive to the safe launch point
-    m_driver.y().whileTrue(getAimForwardCommand());
+    m_driver.y().whileTrue(switchAutomaticOrManual(
+      // Automatic
+      new DeployOuttake(m_intake).alongWith(new RunCommand(() -> m_launcher.setFeederSpeed(FeederConstants.OuttakeSpeed.get()), m_launcher)),
+      // manual
+      new InstantCommand() // getAimAtAngleCommand(() -> DriveDirection.Towards.getAllianceAngle().getMeasure())
+    ));
 
     // Left or Right stick press: toggles slow mode
     m_driver.leftStick().or(m_driver.rightStick()).toggleOnTrue(
