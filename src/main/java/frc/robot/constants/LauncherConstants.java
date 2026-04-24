@@ -77,7 +77,7 @@ public final class LauncherConstants {
   public static final FieldPose2026[] PassPoints = new FieldPose2026[] {LeftPassPoint, RightPassPoint};
 
   public static final DashboardUnit<AngleUnit, Angle> AimYawTolerance = new DashboardUnit<>("Launcher/AimYawTolerance", Degrees.of(3.5)); // tested with 3
-  public static final DashboardUnit<AngleUnit, Angle> LaunchYawTolerance = new DashboardUnit<>("Launcher/LaunchYawTolerance", Degrees.of(8));
+  public static final DashboardUnit<AngleUnit, Angle> AlreadyLaunchingYawTolerance = new DashboardUnit<>("Launcher/AlreadyLaunchingYawTolerance", Degrees.of(8));
   
   public static final DashboardUnit<TimeUnit, Time> AutoLaunchTime = new DashboardUnit<>("Launcher/AutoLaunchTime", Seconds.of(3.6));
 
@@ -179,33 +179,40 @@ public final class LauncherConstants {
     public static final DashboardNumber NotReachedMaxSpeed = new DashboardNumber("Launcher/Hood/NotReachedMaxSpeed", 0.02);
     public static final DashboardUnit<AngleUnit, Angle> TargetAngleTolerance = new DashboardUnit<>("Launcher/Hood/TargetAngleTolerance", Degrees.of(1));
     public static final DashboardUnit<AngleUnit, Angle> TunableLaunchAngle = new DashboardUnit<>("Launcher/Hood/TunableLaunchAngle", Degrees.of(75));
-    public static final DashboardNumber ManualHoodSpeedMultiplier = new DashboardNumber("Launcher/Hood/ManualHoodSpeedMultiplier", 0.08);
+    public static final DashboardNumber ManualHoodSpeedMultiplier = new DashboardNumber("Launcher/Hood/ManualHoodSpeedMultiplier", 0.1);
     public static final Distance HoodRadius = Inches.of(9);
     public static final Mass HoodMass = Kilogram.of(2.26796); 
-    public static final Angle HoodMinAngle = Degrees.of(40);
+    public static final Angle HoodMinAngle = Degrees.of(65);
     public static final Angle HoodMaxAngle = Degrees.of(85); 
 
-    public static final double SensorToMechanismRatio = 19; // TODO check or change
+    public static final double PulleyTeethIn = 24;
+    public static final double PulleyTeethOut = 18;
+
+    public static final double SensorToMechanismRatio = 53.5*(PulleyTeethOut/PulleyTeethIn); // TODO check or change
     public static final TalonFXConfiguration HoodConfig = new TalonFXConfiguration()
         .withMotorOutput(new MotorOutputConfigs()
             .withInverted(InvertedValue.Clockwise_Positive) // TODO: check
             .withNeutralMode(NeutralModeValue.Brake))
         .withCurrentLimits(new CurrentLimitsConfigs()
-            .withSupplyCurrentLimit(Amps.of(20)) // TODO: Double CHek
-            .withStatorCurrentLimit(Amps.of(20)) // TODO: Double Check
-            .withSupplyCurrentLowerLimit(Amps.of(40))
+            .withSupplyCurrentLimit(Amps.of(30)) // TODO: Double CHek
+            .withStatorCurrentLimit(Amps.of(30)) // TODO: Double Check
+            .withSupplyCurrentLowerLimit(Amps.of(20))
             .withSupplyCurrentLimitEnable(true)
             .withStatorCurrentLimitEnable(true))
         .withFeedback(new FeedbackConfigs()
             .withRotorToSensorRatio(1) // TODO: Double Check
             .withSensorToMechanismRatio(SensorToMechanismRatio) // TODO: Double Check
             .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor))
+        .withVoltage(new VoltageConfigs()
+            .withPeakForwardVoltage(3) 
+            .withPeakReverseVoltage(-3)
+        )
         .withSlot0(new Slot0Configs() // TODO: CHECK THESE PLEASE
-            .withKP(0) // 20.0 tested in sim
+            .withKP(150) // 20.0 tested in sim
             .withKI(0)
             .withKD(0)
             .withKG(0)
-            .withKS(0)
+            .withKS(0.55)
             .withKV(0)
             .withKA(0));
 

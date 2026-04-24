@@ -5,6 +5,7 @@
 package frc.robot.commands.defaults;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.LauncherConstants.HoodConstants;
 import frc.robot.subsystems.launcher.Launcher;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -28,7 +29,7 @@ public class LauncherDefaultCommand extends Command {
     // TODO: determine logic while in auto mode
     m_launcher.setFlywheelSpeed(0.3);
     m_launcher.setFeederSpeed(0);
-    m_launcher.setHoodSpeed(0);
+    m_launcher.setHoodAngle(HoodConstants.HoodMaxAngle);
   }
 
   // Called once the command ends or is interrupted.
@@ -36,7 +37,7 @@ public class LauncherDefaultCommand extends Command {
   public void end(boolean interrupted) {
     m_launcher.setFlywheelSpeed(0);
     m_launcher.setFeederSpeed(0);
-    m_launcher.setHoodSpeed(0);
+    m_launcher.setHoodAngle(HoodConstants.HoodMaxAngle);
   }
 
   // Returns true when the command should end.
