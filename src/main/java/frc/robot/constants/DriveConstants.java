@@ -14,6 +14,7 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 
+import com.chaos131.util.DashboardNumber;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.path.PathConstraints;
 
@@ -37,9 +38,9 @@ public final class DriveConstants {
    */
   public static final class DriveCommandConstants {
     public static final double Deadband = 0.1;
-    public static final double RotationKp = 5.0;
-    public static final double RotationKi = 0.0;
-    public static final double RotationKd = 0.4;
+    public static final DashboardNumber RotationKp = new DashboardNumber("AutoAim/Kp", 10);
+    public static final DashboardNumber RotationKi = new DashboardNumber("AutoAim/Ki", 0.0);
+    public static final DashboardNumber RotationKd = new DashboardNumber("AutoAim/Kd", 1);
     public static final AngularVelocity RotationMaxVelocity = RadiansPerSecond.of(8.0);
     public static final AngularAcceleration RotationMaxAcceleration = RadiansPerSecondPerSecond.of(20.0);
     public static final Time FeedForwardStartDelay = Seconds.of(2.0); // Secs

@@ -7,6 +7,16 @@
 
 package frc.robot.commands;
 
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecondPerSecond;
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -24,16 +34,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.constants.DriveConstants.DriveCommandConstants;
 import frc.robot.subsystems.drive.Drive;
-
-import static edu.wpi.first.units.Units.RadiansPerSecond;
-import static edu.wpi.first.units.Units.RadiansPerSecondPerSecond;
-
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
 
 public class DriveCommands {
 
@@ -106,14 +106,19 @@ public class DriveCommands {
     // Create PID controller
     ProfiledPIDController angleController =
         new ProfiledPIDController(
-            DriveCommandConstants.RotationKp,
-            DriveCommandConstants.RotationKi,
-            DriveCommandConstants.RotationKd,
+            DriveCommandConstants.RotationKp.get(),
+            DriveCommandConstants.RotationKi.get(),
+            DriveCommandConstants.RotationKd.get(),
             new TrapezoidProfile.Constraints(DriveCommandConstants.RotationMaxVelocity.in(RadiansPerSecond), DriveCommandConstants.RotationMaxAcceleration.in(RadiansPerSecondPerSecond)));
     angleController.enableContinuousInput(-Math.PI, Math.PI);
 
     // Construct command
-    return Commands.run(
+    return Commands.startRun(
+            () -> {
+               angleController.setP(DriveCommandConstants.RotationKp.get());
+               angleController.setI(DriveCommandConstants.RotationKi.get());
+               angleController.setD(DriveCommandConstants.RotationKd.get());
+             },
             () -> {
               // Get linear velocity
               Translation2d linearVelocity =
