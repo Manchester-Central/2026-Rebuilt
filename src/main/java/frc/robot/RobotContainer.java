@@ -396,14 +396,16 @@ public class RobotContainer {
      ));
    
     // // POV left:
+     m_operator.povLeft().whileTrue (new InstantCommand(
+     ()-> m_launcher.decreaseflywheelPassingMultiplier()
+     ));
+
+
     // m_operator.povLeft();
     // // POV right: moves to the climb position
-    // m_operator.povRight().whileTrue(switchAutomaticOrManual(
-    //   // automatic
-    //   new SetClimberHeight(m_climber, ClimberConstants.ClimbExtension),
-    //   // manual
-    //   new InstantCommand()
-    // ));
+     m_operator.povRight().whileTrue (new InstantCommand(
+     ()-> m_launcher.increaseFlywheelPassingMultiplier()
+     ));
     // // POV down: controls climber to down position (with manaual fixed move too)
      m_operator.povDown().whileTrue(new InstantCommand(
       ()-> m_launcher.decreaseFlywheelMultiplier()

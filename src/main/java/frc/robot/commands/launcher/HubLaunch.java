@@ -49,7 +49,7 @@ public class HubLaunch extends BaseLaunchCommand {
 
   @Override
   protected void prepLauncher() {
-    m_launcher.setFlywheelVelocity(m_flywheelTableRow.getLaunchSpeed());
+    m_launcher.setFlywheelVelocity(m_flywheelTableRow.getLaunchSpeed(), false);
     m_launcher.setHoodAngle(HoodConstants.HoodMaxAngle);
   }
 

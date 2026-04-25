@@ -42,6 +42,7 @@ public class Launcher extends SubsystemBase {
   Debouncer m_fallingDebouncer = new Debouncer(10.0, DebounceType.kFalling);
   boolean m_atVelocityDebouced = false;
   double m_flywheelMarkiplier = 1.05;
+  double m_flywheelPassingMarkiplier = 1.05;
 
 
 
@@ -86,13 +87,26 @@ public class Launcher extends SubsystemBase {
     m_flywheelMarkiplier /= 1.05;
   }
 
+  public void increaseFlywheelPassingMultiplier(){
+    m_flywheelPassingMarkiplier *= 1.05;
+  }
+
+  public void decreaseflywheelPassingMultiplier(){
+    m_flywheelPassingMarkiplier /= 1.05; 
+  }
+
+
   
   public void setFeederSpeed(double bottomeSpeed, double topSpeed) {
     m_feeder.setFeederSpeed(bottomeSpeed, topSpeed);
   }
 
-  public void setFlywheelVelocity(LinearVelocity velocity) {
-    m_flywheel.setFlywheelVelocity(velocity.times(m_flywheelMarkiplier));
+  public void setFlywheelVelocity(LinearVelocity velocity, boolean isPassing) {
+    if (isPassing){
+      m_flywheel.setFlywheelVelocity(velocity.times(m_flywheelPassingMarkiplier)); 
+    } else {
+      m_flywheel.setFlywheelVelocity(velocity.times(m_flywheelMarkiplier));
+    } 
   }
 
   public LinearVelocity getFlywheelVelocity() {
@@ -126,8 +140,8 @@ public class Launcher extends SubsystemBase {
   /**
    * Sets the flywheel velocity and hood angle.
    */
-  public void setTargets(LinearVelocity velocity, Angle angle) {
-    setFlywheelVelocity(velocity);
+  public void setTargets(LinearVelocity velocity, Angle angle, boolean isPassing) {
+    setFlywheelVelocity(velocity, isPassing);
     setHoodAngle(angle);
   }
 
@@ -319,6 +333,6 @@ public class Launcher extends SubsystemBase {
     Logger.recordOutput("Launcher/DisplacementFromHub", getDisplacementFromHub().in(Meters));
 
     Logger.recordOutput("Launcher/flywheelMultiplier", m_flywheelMarkiplier);
-
+    Logger.recordOutput("Launcher/flywheelPassingMultiplier", m_flywheelPassingMarkiplier);
   }
 } 
