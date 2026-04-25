@@ -239,7 +239,7 @@ public final class LauncherConstants {
     public static final DashboardNumber OuttakeSpeed = new DashboardNumber("Launcher/Feeder/OuttakeSpeed", -0.4);
     public static final DashboardNumber FeederSpeed = new DashboardNumber("Launcher/Feeder/FeederSpeed", 0.3);
     public static final DashboardNumber BottomFeederSpeed = new DashboardNumber("Launcher/Feeder/BottomFeederSpeed", 1);
-    public static final DashboardNumber TopFeederSpeed = new DashboardNumber("Launcher/Feeder/TopFeederSpeed", 0.6);
+    public static final DashboardNumber TopFeederSpeed = new DashboardNumber("Launcher/Feeder/TopFeederSpeed", 0.8);
     public static final DashboardNumber PassiveFeederSpeed = new DashboardNumber("Launcher/Feeder/PassiveFeederSpeed", 0.2);
     
 
@@ -247,7 +247,7 @@ public final class LauncherConstants {
 
     public static final TalonFXConfiguration TopConfig = new TalonFXConfiguration()
       .withMotorOutput(new MotorOutputConfigs()
-          .withInverted(InvertedValue.Clockwise_Positive)
+          .withInverted(InvertedValue.CounterClockwise_Positive)
           .withNeutralMode(NeutralModeValue.Brake)
       )
       .withCurrentLimits(new CurrentLimitsConfigs()

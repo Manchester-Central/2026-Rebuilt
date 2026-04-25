@@ -54,7 +54,7 @@ public class PassLaunch extends BaseLaunchCommand {
 
   @Override
   protected void prepLauncher() {
-    m_launcher.setFlywheelVelocity(m_flywheelTableRow.getLaunchSpeed());
+    m_launcher.setFlywheelVelocity(m_flywheelTableRow.getLaunchSpeed(), true);
     m_launcher.setHoodAngle(HoodConstants.HoodMinAngle);
    }
 

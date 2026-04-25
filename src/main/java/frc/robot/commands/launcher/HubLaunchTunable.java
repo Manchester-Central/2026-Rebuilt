@@ -38,7 +38,7 @@ public class HubLaunchTunable extends BaseLaunchCommand {
 
   @Override
   protected void prepLauncher() {
-    m_launcher.setFlywheelVelocity(FlywheelConstants.TunableLaunchVelocity.get());
+    m_launcher.setFlywheelVelocity(FlywheelConstants.TunableLaunchVelocity.get(), false);
   }
 
   @Override
