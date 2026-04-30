@@ -184,5 +184,9 @@ public class Intake extends SubsystemBase {
     Logger.recordOutput("Intake/RollerSpeed", getRollerSpeed());
     Logger.recordOutput("Intake/targetAngle", m_targetAngle.in(Degrees));
     Logger.recordOutput("Intake/Mech3d", generateMech3d());
+
+    Logger.recordOutput("Intake/AreAngleSensorsClose", getPivotAngle().isNear(
+      getAbsolutePivotAngle(),
+      PivotConstants.AreAngleSensorsCloseTolerence.get()));
   }
 }
