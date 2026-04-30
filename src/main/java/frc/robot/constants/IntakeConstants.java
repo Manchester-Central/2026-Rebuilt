@@ -102,6 +102,7 @@ public final class IntakeConstants {
     public static final DashboardUnit<CurrentUnit, Current> pivotLowSupplyCurrentLowerLimit = new DashboardUnit<>("pivotLow/SupplyCurrentLowerLimit", Amps.of(10));
 
     public static final DashboardUnit<AngleUnit, Angle> NearPivotAngleTolerance = new DashboardUnit<>("Intake/nearPivotAngleTolerance", Degrees.of(15.0));
+    public static final DashboardUnit<AngleUnit, Angle> AreAngleSensorsCloseTolerence = new DashboardUnit<>("Intake/AreAngleSensorsCloseTolerence", Degrees.of(1.0));
     
     public static final TalonFXConfiguration TalonConfig = new TalonFXConfiguration()
         .withMotorOutput(new MotorOutputConfigs()
