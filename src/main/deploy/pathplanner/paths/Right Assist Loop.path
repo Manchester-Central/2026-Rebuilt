@@ -1,0 +1,134 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.497491883116883,
+        "y": 0.739131493506493
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 8.693125567371286,
+        "y": 1.508760479000315
+      },
+      "isLocked": false,
+      "linkedName": "MidRightStart"
+    },
+    {
+      "anchor": {
+        "x": 8.422987951805903,
+        "y": 3.729024096384289
+      },
+      "prevControl": {
+        "x": 8.422987951805903,
+        "y": 2.8279507606206664
+      },
+      "nextControl": {
+        "x": 8.422987951805903,
+        "y": 4.089638554215614
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.45042168674566,
+        "y": 4.428397590360192
+      },
+      "prevControl": {
+        "x": 7.968136848021306,
+        "y": 4.836327201809611
+      },
+      "nextControl": {
+        "x": 6.951129745800709,
+        "y": 4.034984411252894
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.850470756062768,
+        "y": 0.7679885877318122
+      },
+      "prevControl": {
+        "x": 7.972410841654779,
+        "y": 0.5739087018544946
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "MidRightEnd"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5850622406638962,
+      "rotationDegrees": -100.0
+    },
+    {
+      "waypointRelativePos": 2.4373443983402567,
+      "rotationDegrees": 70.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.812903225806452,
+      "maxWaypointRelativePos": 2.2124069478908193,
+      "constraints": {
+        "maxVelocity": 2.4,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 2.742431761786601,
+      "maxWaypointRelativePos": 3.0,
+      "constraints": {
+        "maxVelocity": 2.8,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "DeployIntake"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": true
+  },
+  "goalEndState": {
+    "velocity": 3.0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "Right",
+  "idealStartingState": {
+    "velocity": 3.0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

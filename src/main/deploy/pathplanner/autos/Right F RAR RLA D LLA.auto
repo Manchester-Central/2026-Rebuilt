@@ -13,19 +13,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Assist MRS"
+            "pathName": "Right MRS"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Right Cross Field Bump"
+            "pathName": "Right Assist Loop"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "LB LLA"
+            "pathName": "MRE RLA"
           }
         },
         {
@@ -37,7 +37,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LLA D"
+            "pathName": "RLA D"
           }
         },
         {
@@ -55,7 +55,7 @@
       ]
     }
   },
-  "resetOdom": true,
+  "resetOdom": false,
   "folder": "Right",
   "choreoAuto": false
 }
