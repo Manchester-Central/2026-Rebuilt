@@ -48,6 +48,7 @@ public abstract class BaseLaunchCommand extends Command {
   @Override
   public void initialize() {
     m_hasLaunched = false;
+    Logger.recordOutput("HasLaunched", m_hasLaunched);
     m_launchTimer.stop();
     m_launchTimer.reset();
     m_intakeTimer.restart();
@@ -100,13 +101,14 @@ public abstract class BaseLaunchCommand extends Command {
 
     if (isFacingTarget(LauncherConstants.AimYawTolerance.get()) && isLauncherReady()) {
       m_hasLaunched = true;
+      Logger.recordOutput("HasLaunched", m_hasLaunched);
       m_launchTimer.start();
     }
 
     if (isFacingTarget(LauncherConstants.AlreadyLaunchingYawTolerance.get()) && m_hasLaunched) {
       enableFeederForLauncher();
     } else {
-      m_launcher.setFeederSpeed(FeederConstants.UnjamSpeed.get());
+      m_launcher.setFeederSpeed(0, FeederConstants.UnjamSpeed.get());
     }
   }
 

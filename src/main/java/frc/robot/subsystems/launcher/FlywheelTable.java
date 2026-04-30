@@ -27,11 +27,10 @@ public class FlywheelTable extends LookupTable<DistanceUnit, Distance, TableRow>
   );
 
   private static final List<TableRow> PassRows = List.of(
-    new TableRow(Meters.of(2.21), MetersPerSecond.of(15.5), 0.29),
-    new TableRow(Meters.of(2.6), MetersPerSecond.of(17.4), 0.24),
-    new TableRow(Meters.of(3.08), MetersPerSecond.of(20.9), 0.25),
-    new TableRow(Meters.of(3.4), MetersPerSecond.of(22.2), 0.25),
-    new TableRow(Meters.of(4), MetersPerSecond.of(28), 0.25)
+    new TableRow(Meters.of(2.21), MetersPerSecond.of(12), 0.29),
+    new TableRow(Meters.of(3.5), MetersPerSecond.of(16), 0.24),
+    new TableRow(Meters.of(5), MetersPerSecond.of(21), 0.25),
+    new TableRow(Meters.of(8), MetersPerSecond.of(28), 0.25)
     // new TableRow(Meters.of(3),  MetersPerSecond.of(38))
   );
 

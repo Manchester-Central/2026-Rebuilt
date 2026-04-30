@@ -28,7 +28,7 @@ public void execute(){
       m_intake.setRollerSpeed(IntakeConstants.DeployNetRollerSpeed.get());
     }
 
-    m_launcher.setFeederSpeed(FeederConstants.OuttakeSpeed.get());
+    m_launcher.setFeederSpeed(0, FeederConstants.OuttakeSpeed.get());
    
     m_intake.deploy();
 } 

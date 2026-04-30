@@ -67,7 +67,7 @@ public final class LauncherConstants {
 
   public static final DashboardNumber LauncherSpeed = new DashboardNumber("Launcher/ManualLaunchSpeed", 0.6); 
   public static final DashboardNumber UnjamSpeed = new DashboardNumber("Launcher/UnjamSpeed", -0.3); 
-  public static final DashboardUnit <AngleUnit, Angle> IntakePivotJostleAngle = new DashboardUnit<>("Launcher/Intake/IntakePivotJostleAngle", Degrees.of(140));
+  public static final DashboardUnit <AngleUnit, Angle> IntakePivotJostleAngle = new DashboardUnit<>("Launcher/Intake/IntakePivotJostleAngle", Degrees.of(125));
 
   public static final Distance LauncherToHubHeight = FieldDimensions.HubHeight.minus(LauncherHeight);
 
@@ -90,7 +90,7 @@ public final class LauncherConstants {
     public static final Distance FlyWheelDiameter = Inches.of(6); //  TODO: Double Check
     public static final Mass FlywheelMass = Pounds.of(0.4);
 
-    public static final DashboardUnit<LinearVelocityUnit, LinearVelocity> TargetVelocityTolerance = new DashboardUnit<>("Launcher/TargetVelocityTolerance", MetersPerSecond.of(1)); // TODO: Tested with 2
+    public static final DashboardUnit<LinearVelocityUnit, LinearVelocity> TargetVelocityTolerance = new DashboardUnit<>("Launcher/TargetVelocityTolerance", MetersPerSecond.of(2.5)); // TODO: Tested with 2
 
     public static final DashboardUnit<LinearVelocityUnit, LinearVelocity> TunableLaunchVelocity = new DashboardUnit<>("Launcher/TunableLaunchVelocity", MetersPerSecond.of(20));
 
@@ -141,9 +141,9 @@ public final class LauncherConstants {
             .withNeutralMode(NeutralModeValue.Coast)
         )
         .withCurrentLimits(new CurrentLimitsConfigs()
-            .withSupplyCurrentLimit(Amps.of(80))
+            .withSupplyCurrentLimit(Amps.of(70))
             .withStatorCurrentLimit(Amps.of(80))
-            .withSupplyCurrentLowerLimit(Amps.of(80))
+            .withSupplyCurrentLowerLimit(Amps.of(70))
             .withSupplyCurrentLimitEnable(true)
             .withStatorCurrentLimitEnable(true)
         )
@@ -182,7 +182,7 @@ public final class LauncherConstants {
     public static final DashboardNumber ManualHoodSpeedMultiplier = new DashboardNumber("Launcher/Hood/ManualHoodSpeedMultiplier", 0.1);
     public static final Distance HoodRadius = Inches.of(9);
     public static final Mass HoodMass = Kilogram.of(2.26796); 
-    public static final Angle HoodMinAngle = Degrees.of(65);
+    public static final Angle HoodMinAngle = Degrees.of(55);
     public static final Angle HoodMaxAngle = Degrees.of(85); 
 
     public static final double PulleyTeethIn = 24;
@@ -236,10 +236,10 @@ public final class LauncherConstants {
     public static final int SensorIndex = 1;
 
     public static final DashboardNumber UnjamSpeed = new DashboardNumber("Launcher/Feeder/UnjamSpeed", -1.0);
-    public static final DashboardNumber OuttakeSpeed = new DashboardNumber("Launcher/Feeder/OuttakeSpeed", -0.4);
+    public static final DashboardNumber OuttakeSpeed = new DashboardNumber("Launcher/Feeder/OuttakeSpeed", -0.2);
     public static final DashboardNumber FeederSpeed = new DashboardNumber("Launcher/Feeder/FeederSpeed", 0.3);
-    public static final DashboardNumber BottomFeederSpeed = new DashboardNumber("Launcher/Feeder/BottomFeederSpeed", 1);
-    public static final DashboardNumber TopFeederSpeed = new DashboardNumber("Launcher/Feeder/TopFeederSpeed", 0.8);
+    public static final DashboardNumber BottomFeederSpeed = new DashboardNumber("Launcher/Feeder/BottomFeederSpeed", 0.7);
+    public static final DashboardNumber TopFeederSpeed = new DashboardNumber("Launcher/Feeder/TopFeederSpeed", 0.85);
     public static final DashboardNumber PassiveFeederSpeed = new DashboardNumber("Launcher/Feeder/PassiveFeederSpeed", 0.2);
     
 
@@ -257,20 +257,20 @@ public final class LauncherConstants {
           .withSupplyCurrentLimitEnable(true)
           .withStatorCurrentLimitEnable(true)
       )
-      .withOpenLoopRamps(new OpenLoopRampsConfigs().withDutyCycleOpenLoopRampPeriod(0.1));
+      .withOpenLoopRamps(new OpenLoopRampsConfigs().withDutyCycleOpenLoopRampPeriod(0.3));
      public static final TalonFXConfiguration BottomConfig = new TalonFXConfiguration()
       .withMotorOutput(new MotorOutputConfigs()
           .withInverted(InvertedValue.Clockwise_Positive)
           .withNeutralMode(NeutralModeValue.Brake)
       )
       .withCurrentLimits(new CurrentLimitsConfigs()
-          .withSupplyCurrentLimit(Amps.of(60)) // TODO: Double Check
+          .withSupplyCurrentLimit(Amps.of(50)) // TODO: Double Check
           .withStatorCurrentLimit(Amps.of(60)) // TODO: Double Check
-          .withSupplyCurrentLowerLimit(Amps.of(80))
+          .withSupplyCurrentLowerLimit(Amps.of(50))
           .withSupplyCurrentLimitEnable(true)
           .withStatorCurrentLimitEnable(true)
       )
-      .withOpenLoopRamps(new OpenLoopRampsConfigs().withDutyCycleOpenLoopRampPeriod(0.1));
+      .withOpenLoopRamps(new OpenLoopRampsConfigs().withDutyCycleOpenLoopRampPeriod(0.3));
       
   }
 }
