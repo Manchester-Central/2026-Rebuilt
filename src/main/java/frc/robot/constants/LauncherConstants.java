@@ -257,7 +257,7 @@ public final class LauncherConstants {
           .withSupplyCurrentLimitEnable(true)
           .withStatorCurrentLimitEnable(true)
       )
-      .withOpenLoopRamps(new OpenLoopRampsConfigs().withDutyCycleOpenLoopRampPeriod(0.3));
+      .withOpenLoopRamps(new OpenLoopRampsConfigs().withDutyCycleOpenLoopRampPeriod(0.1));
      public static final TalonFXConfiguration BottomConfig = new TalonFXConfiguration()
       .withMotorOutput(new MotorOutputConfigs()
           .withInverted(InvertedValue.Clockwise_Positive)

@@ -15,6 +15,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.GeneralConstants;
@@ -75,6 +76,12 @@ public class Robot extends LoggedRobot {
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
+  }
+
+  @Override
+  public void robotInit() {
+    RobotController.setBrownoutVoltage(6.3);
+    Logger.recordOutput("BrownoutVoltage", RobotController.getBrownoutVoltage());
   }
 
   /** This function is called periodically during all modes. */
