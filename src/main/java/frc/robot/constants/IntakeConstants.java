@@ -20,6 +20,7 @@ import com.chaos131.util.DashboardUnit;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.OpenLoopRampsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -84,7 +85,8 @@ public final class IntakeConstants {
           .withSupplyCurrentLowerLimit(Amps.of(40))
           .withSupplyCurrentLimitEnable(true)
           .withStatorCurrentLimitEnable(true)
-      );
+      )
+      .withOpenLoopRamps(new OpenLoopRampsConfigs().withDutyCycleOpenLoopRampPeriod(0.2));
   }
 
   public static final class PivotConstants {

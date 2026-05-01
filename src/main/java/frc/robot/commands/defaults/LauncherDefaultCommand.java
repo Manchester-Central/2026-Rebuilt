@@ -27,7 +27,7 @@ public class LauncherDefaultCommand extends Command {
   @Override
   public void execute() {
     // TODO: determine logic while in auto mode
-    m_launcher.setFlywheelSpeed(0.3);
+    m_launcher.setFlywheelSpeed(0.5);
     m_launcher.setFeederSpeed(0);
     m_launcher.setHoodAngle(HoodConstants.HoodMaxAngle);
   }
