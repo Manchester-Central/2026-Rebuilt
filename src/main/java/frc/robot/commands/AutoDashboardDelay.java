@@ -24,7 +24,6 @@ public class AutoDashboardDelay extends Command {
   @Override
   public void initialize() {
     m_delayTimer.restart();
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.

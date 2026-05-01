@@ -63,18 +63,18 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.4556016597510074,
-      "rotationDegrees": 135.0
+      "rotationDegrees": 115.0
     },
     {
       "waypointRelativePos": 1.2446808510638299,
-      "rotationDegrees": 70.0
+      "rotationDegrees": 55.0
     }
   ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.6239027683997325,
-      "maxWaypointRelativePos": 1.7,
+      "minWaypointRelativePos": 0.5925558312655079,
+      "maxWaypointRelativePos": 1.5692307692307792,
       "constraints": {
         "maxVelocity": 2.2,
         "maxAcceleration": 3.0,
@@ -90,7 +90,7 @@
     {
       "name": "Intake",
       "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": 2.690074274139089,
+      "endWaypointRelativePos": 2.9151364764267984,
       "command": {
         "type": "named",
         "data": {
@@ -100,7 +100,7 @@
     },
     {
       "name": "RetractBump",
-      "waypointRelativePos": 2.76299797434166,
+      "waypointRelativePos": 2.9508684863523564,
       "endWaypointRelativePos": 3.0,
       "command": {
         "type": "named",
@@ -116,7 +116,7 @@
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
-    "unlimited": true
+    "unlimited": false
   },
   "goalEndState": {
     "velocity": 3.0,

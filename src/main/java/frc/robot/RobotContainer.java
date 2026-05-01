@@ -206,7 +206,7 @@ public class RobotContainer {
             .deadlineFor(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter)));
     NamedCommands.registerCommand("LaunchPass", new PassLaunch(m_launcher, m_swerveDrive, m_intake)
             .deadlineFor(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
-    NamedCommands.registerCommand("DashboardDelay",new AutoDashboardDelay());
+    NamedCommands.registerCommand("DashboardDelay", new AutoDashboardDelay());
   }
 
   private void addAutos() {

@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.696975748930099,
-        "y": 1.3890442225392303
+        "x": 8.95844578313253,
+        "y": 1.6964698795180722
       },
       "isLocked": false,
       "linkedName": "MidRightStart"
@@ -62,8 +62,8 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.26226012793177117,
-      "rotationDegrees": -135.0
+      "waypointRelativePos": 0.40580912863070295,
+      "rotationDegrees": -105.00000000000001
     },
     {
       "waypointRelativePos": 1.4099279423538822,
@@ -94,7 +94,7 @@
     {
       "name": "Intake",
       "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": 2.1796083727211224,
+      "endWaypointRelativePos": 2.8436724565756775,
       "command": {
         "type": "named",
         "data": {
@@ -104,7 +104,7 @@
     },
     {
       "name": "RetractBump",
-      "waypointRelativePos": 2.6657663740715734,
+      "waypointRelativePos": 2.8972704714640205,
       "endWaypointRelativePos": 3.0,
       "command": {
         "type": "named",
@@ -120,7 +120,7 @@
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
-    "unlimited": true
+    "unlimited": false
   },
   "goalEndState": {
     "velocity": 3.0,

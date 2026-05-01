@@ -39,7 +39,7 @@ public final class GeneralConstants {
   public static final double MoveLaunchDriveMultiplier = 0.35;
 
 
-  public static final DashboardUnit<TimeUnit, Time> AutoDelay = new DashboardUnit<>("AutoDelay", Seconds.of(0));
+  public static final DashboardUnit<TimeUnit, Time> AutoDelay = new DashboardUnit<>("AutoDelay", Seconds.of(2));
 
   public static enum Mode {
     /** Running on a real robot. */

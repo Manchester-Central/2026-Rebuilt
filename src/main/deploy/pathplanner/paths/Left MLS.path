@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "DeployIntake",
-      "waypointRelativePos": 0.7940580688723827,
+      "waypointRelativePos": 0.727543424317618,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -60,7 +60,7 @@
   "folder": "Left",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -95.7021584776189
+    "rotation": -104.90765270212786
   },
   "useDefaultConstraints": true
 }

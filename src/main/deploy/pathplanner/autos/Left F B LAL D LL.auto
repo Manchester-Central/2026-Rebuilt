@@ -5,9 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 2.0
+            "name": "DashboardDelay"
           }
         },
         {
@@ -55,7 +55,7 @@
       ]
     }
   },
-  "resetOdom": true,
+  "resetOdom": false,
   "folder": "Left",
   "choreoAuto": false
 }
