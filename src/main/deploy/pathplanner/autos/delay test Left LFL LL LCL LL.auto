@@ -19,13 +19,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left Assist Loop"
+            "pathName": "Left Far Loop"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "MLE LLA"
+            "pathName": "MLE LL"
           }
         },
         {
@@ -37,13 +37,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LLA D"
+            "pathName": "LL MLS"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "D LLA"
+            "pathName": "Left Close Loop"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MLE LL"
           }
         },
         {
@@ -56,6 +62,6 @@
     }
   },
   "resetOdom": false,
-  "folder": "Left",
+  "folder": "Test",
   "choreoAuto": false
 }
