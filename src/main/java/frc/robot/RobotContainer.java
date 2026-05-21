@@ -39,6 +39,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.commands.AutoDashboardDelay;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.RepeatedConditionalCommand;
 import frc.robot.commands.defaults.IntakeDefaultCommand;
@@ -205,6 +206,7 @@ public class RobotContainer {
             .deadlineFor(getAimAtFieldPosesMovingCommand(FieldPose2026.HubCenter)));
     NamedCommands.registerCommand("LaunchPass", new PassLaunch(m_launcher, m_swerveDrive, m_intake)
             .deadlineFor(getAimAtFieldPosesCommand(LauncherConstants.PassPoints)));
+    NamedCommands.registerCommand("DashboardDelay", new AutoDashboardDelay());
   }
 
   private void addAutos() {

@@ -70,7 +70,7 @@
     {
       "name": "Intake",
       "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": 1.4422687373396275,
+      "endWaypointRelativePos": 1.8243176178660045,
       "command": {
         "type": "named",
         "data": {
@@ -80,7 +80,7 @@
     },
     {
       "name": "RetractBump",
-      "waypointRelativePos": 1.5827143821742022,
+      "waypointRelativePos": 1.9434243176178656,
       "endWaypointRelativePos": 2.0,
       "command": {
         "type": "named",

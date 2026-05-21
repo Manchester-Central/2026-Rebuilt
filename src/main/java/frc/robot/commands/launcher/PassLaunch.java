@@ -13,6 +13,7 @@ import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
 
 import com.chaos131.poses.FieldPose;
+import com.chaos131.util.AngleUtil;
 import com.chaos131.util.DriveDirection;
 
 import edu.wpi.first.units.measure.Angle;
@@ -23,7 +24,7 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.launcher.Launcher;
 import frc.robot.subsystems.launcher.TableRow;
-import frc.robot.util.AngleUtil;
+
 
 /**
  * Creates a launch command using the lookup table

@@ -5,8 +5,13 @@
 package frc.robot.constants;
 
 import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
+import static edu.wpi.first.units.Units.Seconds;
 
+import com.chaos131.util.DashboardUnit;
+
+import edu.wpi.first.units.TimeUnit;
 import edu.wpi.first.units.measure.LinearAcceleration;
+import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /*
@@ -32,6 +37,9 @@ public final class GeneralConstants {
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
   public static final double SlowModeMultiplier = 0.5;
   public static final double MoveLaunchDriveMultiplier = 0.35;
+
+
+  public static final DashboardUnit<TimeUnit, Time> AutoDelay = new DashboardUnit<>("AutoDelay", Seconds.of(3));
 
   public static enum Mode {
     /** Running on a real robot. */
