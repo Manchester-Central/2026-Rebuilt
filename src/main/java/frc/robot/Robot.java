@@ -7,6 +7,10 @@
 
 package frc.robot;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -14,8 +18,16 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.GeneralConstants;
@@ -31,6 +43,10 @@ public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
   private boolean hasEnabled = false;
+
+  public String m_autoName = "";
+  public String m_newAutoName = "";
+  private Field2d m_field = new Field2d();
 
   public Robot() {
     // Record metadata
@@ -118,7 +134,32 @@ public class Robot extends LoggedRobot {
     if (!hasEnabled && robotContainer.getQuest() != null) {
       robotContainer.getQuest().resetPose(new Pose3d(robotContainer.getSwerveDrive().getPose()));
     }
+    m_newAutoName = robotContainer.getAutonomousCommand().getName();
+    if (m_autoName != m_newAutoName) {
+      m_autoName = m_newAutoName;
+      if (AutoBuilder.getAllAutoNames().contains(m_autoName)) {
+        System.out.println("Displaying " + m_autoName);
+        List<PathPlannerPath> pathPlannerPaths;
+        try {
+          pathPlannerPaths = PathPlannerAuto.getPathGroupFromAutoFile(m_autoName);
+        } catch (Exception e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+          return;
+        }
+        List<Pose2d> poses = new ArrayList<>();
+        for (PathPlannerPath path : pathPlannerPaths) {
+          poses.addAll(path.getAllPathPoints().stream().map(point -> new Pose2d(point.position.getX(), point.position.getY(), new Rotation2d())).collect(Collectors.toList()));
+        }
+        m_field.getObject("path").setPoses(poses);
+      } else {
+        m_field.getObject("path").setPoses(new ArrayList<>());
+      }
+    }
+    
+    SmartDashboard.putData(m_field);
   }
+  
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
