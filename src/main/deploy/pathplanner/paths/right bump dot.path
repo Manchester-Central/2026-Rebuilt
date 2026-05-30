@@ -8,47 +8,30 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9720778438429045,
-        "y": 2.745969762165545
+        "x": 6.889124999999999,
+        "y": 2.530204545454545
       },
       "isLocked": false,
       "linkedName": "RightBump"
     },
     {
       "anchor": {
-        "x": 1.2216265060240963,
-        "y": 2.4832650602409636
+        "x": 8.228772727272727,
+        "y": 0.7471249999999998
       },
       "prevControl": {
-        "x": 1.6141964285714288,
-        "y": 2.1130032467532462
+        "x": 6.631215909090908,
+        "y": 1.6850454545454545
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "RightLaunchAssist"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.25,
-      "rotationDegrees": 90.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "RetractBump",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": 0.75,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "DeployIntake"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -59,12 +42,12 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 24.93692733391175
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Right",
+  "folder": "Left",
   "idealStartingState": {
-    "velocity": 3.0,
+    "velocity": 0,
     "rotation": 90.0
   },
   "useDefaultConstraints": true
