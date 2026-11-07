@@ -431,14 +431,11 @@ public class RobotContainer {
     m_operator.x().whileTrue(new RunCommand(() -> {
       m_launcher.setFeederSpeed(FeederConstants.UnjamSpeed.get());
       m_launcher.setFlywheelSpeed(LauncherConstants.UnjamSpeed.get());
-    }, m_launcher));
+      }, m_launcher));
     // Y: resets quest and odometry pose to limelight pose
    // Around line 434: Change your Y button to this clean line
-m_operator.y().whileTrue(new RunCommand(() -> 
+    m_operator.y().whileTrue(new RunCommand(() -> 
       syncLimelightAndQuest()).ignoringDisable(true));
-
-
-
 
     // Start: enables manual mode
     m_operator.start().onTrue(new InstantCommand((() -> m_isManual = true)));
@@ -485,15 +482,6 @@ m_operator.y().whileTrue(new RunCommand(() ->
     );
   }
 
-  private Command getAimForwardCommand() {
-    return DriveCommands.joystickDriveAtAngle(
-        m_swerveDrive,
-        DriverStation.isAutonomous() ? () -> 0 :  m_getDriverXTranslation,
-        DriverStation.isAutonomous() ? () -> 0 : m_getDriverYTranslation,
-        DriveDirection.Away::getAllianceAngle
-    );
-  }
-
   private boolean isAimedAtPose(FieldPose2026... poses) {
     Angle currentAngle = m_swerveDrive.getPose().getRotation().getMeasure();
     FieldPose targetPose = FieldPose.getClosestPose(m_swerveDrive.getPose(), poses);
@@ -507,7 +495,6 @@ m_operator.y().whileTrue(new RunCommand(() ->
   private boolean isAimedAtAngle(Angle angle) {
     Angle currentAngle = m_swerveDrive.getPose().getRotation().getMeasure();
     
-
     return angle.isNear(currentAngle, LauncherConstants.AimYawTolerance.get()) 
       && m_getDriverXTranslation.getAsDouble() == 0 
       && m_getDriverYTranslation.getAsDouble() == 0;
@@ -526,7 +513,6 @@ m_operator.y().whileTrue(new RunCommand(() ->
       getAimAtAngleCommand(angle), 
       () -> isAimedAtAngle(angle.get())).repeatedly(); 
   }
-
 
   private Command resetPoseCommand(DriveDirection direction) {
     return Commands.runOnce(
