@@ -433,13 +433,11 @@ public class RobotContainer {
       m_launcher.setFlywheelSpeed(LauncherConstants.UnjamSpeed.get());
     }, m_launcher));
     // Y: resets quest and odometry pose to limelight pose
-    m_operator.y().whileTrue(new RunCommand(() -> {
-      var botpose = m_camera.getBotPose3d();
-      if (botpose != null && !botpose.equals(new Pose3d())){
-        m_quest.resetPose(botpose);
-        m_swerveDrive.setPose(botpose.toPose2d());
-      }
-    }).ignoringDisable(true));
+   // Around line 434: Change your Y button to this clean line
+m_operator.y().whileTrue(new RunCommand(() -> 
+      syncLimelightAndQuest()).ignoringDisable(true));
+
+
 
 
     // Start: enables manual mode
@@ -537,6 +535,16 @@ public class RobotContainer {
         m_swerveDrive)
         .ignoringDisable(true);
   }
+
+   // Put this at the very bottom of RobotContainer.java
+  public void syncLimelightAndQuest() {
+    var botpose = m_camera.getBotPose3d();
+    if (botpose != null && !botpose.equals(new Pose3d())) {
+      m_quest.resetPose(botpose);
+      m_swerveDrive.setPose(botpose.toPose2d());
+    }
+  }
+ // This is the very last bracket of the file
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

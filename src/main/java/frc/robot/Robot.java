@@ -26,6 +26,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -43,6 +44,7 @@ public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
   private boolean hasEnabled = false;
+  private final Timer m_disabledSyncTimer = new Timer();
 
   public String m_autoName = "";
   public String m_newAutoName = "";
@@ -124,8 +126,10 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledInit() {
     if (!hasEnabled) {
-      robotContainer.getCamera().setUseForOdometry(true);
+      robotContainer.getCamera().setUseForOdometry(true); 
     }
+    m_disabledSyncTimer.reset();     
+    m_disabledSyncTimer.start();
   }
 
   /** This function is called periodically when disabled. */
@@ -133,7 +137,11 @@ public class Robot extends LoggedRobot {
   public void disabledPeriodic() {
     if (!hasEnabled && robotContainer.getQuest() != null) {
       robotContainer.getQuest().resetPose(new Pose3d(robotContainer.getSwerveDrive().getPose()));
+      if(m_disabledSyncTimer.hasElapsed(5.0)){}
+      robotContainer.syncLimelightAndQuest();
+      m_disabledSyncTimer.reset();
     }
+    
     m_newAutoName = robotContainer.getAutonomousCommand().getName();
     if (m_autoName != m_newAutoName) {
       m_autoName = m_newAutoName;
