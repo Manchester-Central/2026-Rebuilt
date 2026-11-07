@@ -91,7 +91,7 @@ public class RobotContainer {
   // private IClimber m_climber;
   // @SuppressWarnings("unused")
   // // private ClimberMech2D m_climberMech2d;
-  // @SuppressWarnings("unused")
+  @SuppressWarnings("unused")
   private IntakeMech2D m_intakeMech2d;
   @SuppressWarnings("unused")
   private LauncherMech2D m_launcherMech2D;
