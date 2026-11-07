@@ -136,7 +136,7 @@ public final class IntakeConstants {
 
     public static final DetachedEncoderConfig pivotEncoderConfig = new DetachedEncoderConfig()
         .inverted(false)
-        .dutyCycleOffset(Rotations.of(0.32).in(Rotations)); // per testing on 2026.10.22 [CER 2026.10.22]
+        .dutyCycleOffset(Rotations.of(0.13).in(Rotations)); // per testing on 2026.11.03 [AEM]
 
     // Pivot Max / Min
     public static final Angle MaxAngle = Degrees.of(180); // TODO: Double Check
